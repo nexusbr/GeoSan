@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[Connection.vbp]
+SCC_Aux_Path =\\Servidor01\Documentos\02.Producao\vss
+SCC_Project_Name =this project is not under source code control

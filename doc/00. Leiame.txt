@@ -1,0 +1,109 @@
+Geosan 6.0.2 - Notas de Liberação
+Código Fonte
+
+22/06/2011
+
+Alteração do login inserindo a opção de SQL Server 2008.
+
+02/03/2011
+
+
+Nesta pasta encontram-se todos os arquivos do código fonte do Geosan. O Geosan foi programado utilizando a linguagem de programação Visual Basic 6 (VB 6).
+
+O projeto do Geosan é composto por:
+
+- GeoSan.vbp -> Projeto principal
+- \Projeto_ExportEpaNe\EpanetExport.vbp -> Projeto do módulo Export Epanet (Exporta para o formato de software Epanet)
+- \Projeto_NSecurity\NSecurity.vbp -> Projeto do módulo NSecurity (Conexão banco de dados)
+- \Projeto_NxConnection\Connection.vbp -> Projeto do módulo Connection (Conexão banco de dados)
+- \Projeto_NxUsers\NexusUsers.vbp -> Projeto do módulo NexusUsers (Conexão banco de dados)
+- \Projeto_NxViewmanager\NxViewManager.vbp -> Projeto do módulo NXViewManager (Temas, vistas do usuário)
+- \Projeto_PManager4\PManager4.vbp -> Projeto do módulo PManager4 (Gerenciador de Propriedades das Redes de água, esgoto, drenagem)
+
+
+1 - Para utilização do Código Fonte, deve-se primeiramente instalar o Visual Basic 6 no computador.
+
+Para instalação do VB6, faça download do aplicativo e verifique instruções de instalação no site oficial da microsoft.
+
+
+2 - O projeto do Geosan necessita que seja instalados os seguintes componentes nesta ordem abaixo:
+
+        2.1 - Instalar o aplicativo: - WindowsInstaller 3.1-v2-x86.exe (Caso o computador já tenha uma versão mais recente
+        deste aplicativo, é lançado uma mensagem de erro que é normal.)
+
+        2.2 - Instalar o aplicativo: - Vcredist_x86.exe
+
+	2.3 - Instalar o aplicativo: - Componente C++ Geosan.exe
+
+	2.4 - Desinstalar todas as versoções do Terracomponents (Painel de controle), caso ja exista. 
+	    Instalar o aplicativo: - TerraComponents 3.3.1.13.msi
+
+        2.5 - Instalar o aplicativo: - MDAC_TYP.EXE
+
+        2.6 - Instalar o aplicativo: - Psqlodbc.msi (Apenas se for utilizar banco de dados POSTGRESQL 
+
+      
+Quando o software for executado apenas via VB6, deve-se criar manualmente as pastas GeoSan e Controles em C:\Arquivos de programas\GeoSan\Controles. 
+
+Todos os arquivos apresentados abaixo estão disponíveis na pasta \05 - Código Fonte\DLL´s		
+
+Crie as pastas GeoSan e Controles em C:\Arquivos de programas\GeoSan\Controles e copie os arquivos dos components de acordo com as instruções de registro 				apresentadas. 
+
+
+As dll's abaixo deverão ser registradas:
+
+Pasta C:\Arquivos de programas\GeoSan\Controles:
+		 
+		 - NexusConnection.dll
+		 - NexusPM4.ocx
+		 - NSecurity.dll
+		 - NUsers.dll
+		 - NxViewManager.ocx
+
+		Pasta C:\Arquivos de programas\Funcate:
+		 
+		 - TeComCanvas.dll
+		 - TeComConnection.dll
+		 - TeComDatabase.dll
+		 - TeComExport.dll
+		 - TeComImport.dll
+		 - TeComNetwork.dll
+		 - TeComOdExport.dll
+		 - TeComOdImport.dll
+		 - TeComPrinter.dll
+		 - TeComViewDatabase.dll
+		 - TeComViewManager.dll
+
+
+As DLL´s também poderão ser encontradas na pasta \05 - Código Fonte\Projeto GeoSan 6.0.2, dentro da pasta de cada projeto:		
+
+		- NSecurity.dll - Projeto_NSecurity
+		- NexusConnection.dll - Projeto_NxConnection
+		- NUsers.dll - Projeto_NxUsers
+		- NxViewManager.ocx - Projeto_NxViewmanager
+		- NexusPM4.ocx - Projeto_PManager4
+
+
+
+Instruções de configuração do código no vb ***********************
+
+
+Colocar também a dll LoozeXP.ocx encontrada na pasta DLL's na pasta controles e dentro da pasta raíz do código VB do GeoSan, não na pasta Controles.
+
+Depois colocar o executável gerado pelo projeto Projeto_ExportEpaNet, Exporte EPANet.exe, dentro da raíz da pasta GeoSan, não na pasta controle.
+
+
+Para operação de aplicação o banco de dados deverá ser configurado e disponibilizado conforme instruções da pasta \Banco de Dados.
+
+3 - Quando o software for executado pela primeira vez pedirá informações de conexão com banco de dados, caso seja SQL Server ou Oracle seguir instruções (1) abaixo, caso seja PostgreSQL seguir instruções (2) abaixo, e depois o software fechará e o usuário precisará executar novamento o software para iniciar a aplicação.
+
+
+3.1 SQL Server/ Oracle:
+Dentro da pasta C:\Arquivos de programas\GeoSan\Controles será gerado um arquivo chamado GeoSan.ini, este arquivo deverá ser colocado dentro da pasta raíz do software em VB6 COntroles. Após isso poderá executar o projeto principal novamente e continuar a executar o software normalmente.
+
+
+3.2 PostgreSQL:
+Dentro da pasta C:\Arquivos de programas\GeoSan\Controles será gerado um arquivo chamado GeoSan.ini, este arquivo deverá ser colocado dentro da pasta raíz do software em VB6 Controles. Quando o GeoSan for executado pela segunda vez será solicitado nome de usuário e senha, depois disso o usuário deverá clicar em Novo Canvas, após isso, ele deverá copiar o arquivo GeoSan.ini da pasta raíz Controles para C:\Arquivos de programas\GeoSan\Controles e continuar a executar o software normalmente.
+
+
+Após seguir estas instruções, o software poderá ser executado e/ou editado no ambiente de desenvolvimento VB 6.

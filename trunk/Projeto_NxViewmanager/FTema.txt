@@ -1,0 +1,14 @@
+432;limite_municipio;
+444;peças água;
+446;peças esgoto;
+443;redes água;
+445;rede esgoto;
+447;Ortofoto_2007;
+448;ramais_agua;
+449;ruas_textos;
+451;MAPA_FEV_10_V6_N-QUADRA;
+452;MAPA_FEV_10_V6_N-LOTE;
+453;MAPA_FEV_10_V6_N-CASA;
+455;MAPA_FEV_10_V6_MATRICULA;
+456;MAPA_FEV_10_V6_QUADRA;
+730;LOTES_PREF;

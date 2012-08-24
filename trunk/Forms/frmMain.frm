@@ -1,0 +1,2553 @@
+VERSION 5.00
+Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TECOMV~2.DLL"
+Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TECOMD~1.DLL"
+Object = "{2CCABA93-B681-4E7F-8047-BD4D623301BA}#1.0#0"; "TECOMI~1.DLL"
+Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TECOMC~1.DLL"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
+Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager.ocx"
+Begin VB.MDIForm FrmMain 
+   BackColor       =   &H8000000C&
+   Caption         =   "NEXUS - GeoSan"
+   ClientHeight    =   9210
+   ClientLeft      =   165
+   ClientTop       =   855
+   ClientWidth     =   12720
+   Icon            =   "frmMain.frx":0000
+   LinkTopic       =   "FrmMain"
+   StartUpPosition =   3  'Windows Default
+   Tag             =   "0"
+   WindowState     =   2  'Maximized
+   Begin MSComDlg.CommonDialog Cdl 
+      Left            =   4305
+      Top             =   2430
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
+   End
+   Begin VB.PictureBox pctSfondo 
+      Align           =   4  'Align Right
+      BorderStyle     =   0  'None
+      Height          =   7020
+      Left            =   8775
+      ScaleHeight     =   7020
+      ScaleWidth      =   3945
+      TabIndex        =   1
+      Top             =   1770
+      Width           =   3945
+      Begin NxViewManager.ViewManager ViewManager1 
+         Height          =   1335
+         Left            =   480
+         TabIndex        =   11
+         Top             =   3720
+         Width           =   1575
+         _ExtentX        =   2778
+         _ExtentY        =   2355
+      End
+      Begin TECOMIMPORTLibCtl.TeImport TeImport1 
+         Left            =   720
+         OleObjectBlob   =   "frmMain.frx":08CA
+         Top             =   5640
+      End
+      Begin MSComDlg.CommonDialog cmmSalvaImg 
+         Left            =   1590
+         Top             =   7605
+         _ExtentX        =   847
+         _ExtentY        =   847
+         _Version        =   393216
+      End
+      Begin PManager4.Manager Manager1 
+         Height          =   615
+         Left            =   495
+         TabIndex        =   9
+         Top             =   1725
+         Width           =   885
+         _ExtentX        =   1561
+         _ExtentY        =   1085
+      End
+      Begin VB.CommandButton cmdClose 
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   3660
+         Picture         =   "frmMain.frx":08EE
+         Style           =   1  'Graphical
+         TabIndex        =   8
+         Top             =   0
+         Width           =   285
+      End
+      Begin VB.PictureBox picSplitter 
+         BackColor       =   &H00808080&
+         BorderStyle     =   0  'None
+         FillColor       =   &H00808080&
+         Height          =   7200
+         Left            =   2250
+         ScaleHeight     =   3135.189
+         ScaleMode       =   0  'User
+         ScaleWidth      =   780
+         TabIndex        =   2
+         Top             =   -90
+         Visible         =   0   'False
+         Width           =   72
+      End
+      Begin VB.Frame FrameEscala 
+         Height          =   615
+         Left            =   240
+         TabIndex        =   4
+         Top             =   240
+         Width           =   3675
+         Begin VB.TextBox txtEscala 
+            Height          =   285
+            Left            =   1890
+            TabIndex        =   5
+            Top             =   210
+            Width           =   1635
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Escala de Visualização:"
+            Height          =   195
+            Left            =   90
+            TabIndex        =   6
+            Top             =   240
+            Width           =   1755
+         End
+      End
+      Begin MSComctlLib.TabStrip TabStrip1 
+         Height          =   315
+         Left            =   240
+         TabIndex        =   3
+         Top             =   960
+         Width           =   4095
+         _ExtentX        =   7223
+         _ExtentY        =   556
+         MultiRow        =   -1  'True
+         MultiSelect     =   -1  'True
+         _Version        =   393216
+         BeginProperty Tabs {1EFB6598-857C-11D1-B16A-00C0F0283628} 
+            NumTabs         =   2
+            BeginProperty Tab1 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
+               Caption         =   "Temas"
+               ImageVarType    =   2
+            EndProperty
+            BeginProperty Tab2 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
+               Caption         =   "Propriedades"
+               ImageVarType    =   2
+            EndProperty
+         EndProperty
+      End
+      Begin TECOMDATABASELibCtl.TeDatabase TeDatabase1 
+         Left            =   2880
+         OleObjectBlob   =   "frmMain.frx":0C60
+         Top             =   3720
+      End
+      Begin TeComConnectionLibCtl.TeAcXConnection TeAcXConnection1 
+         Left            =   2400
+         OleObjectBlob   =   "frmMain.frx":0C84
+         Top             =   1680
+      End
+      Begin TeComViewDatabaseLibCtl.TeViewDatabase TeViewDatabase1 
+         Left            =   3120
+         OleObjectBlob   =   "frmMain.frx":0CA8
+         Top             =   4920
+      End
+      Begin VB.Image imgSplitter 
+         Height          =   7380
+         Left            =   0
+         MousePointer    =   9  'Size W E
+         Top             =   0
+         Width           =   150
+      End
+   End
+   Begin MSComctlLib.StatusBar sbStatusBar 
+      Align           =   2  'Align Bottom
+      Height          =   420
+      Left            =   0
+      TabIndex        =   0
+      Top             =   8790
+      Width           =   12720
+      _ExtentX        =   22437
+      _ExtentY        =   741
+      _Version        =   393216
+      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
+         NumPanels       =   4
+         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   8819
+            MinWidth        =   8819
+            Text            =   "Status"
+            TextSave        =   "Status"
+         EndProperty
+         BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Style           =   6
+            AutoSize        =   2
+            TextSave        =   "15/7/2011"
+         EndProperty
+         BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Style           =   5
+            AutoSize        =   2
+            TextSave        =   "15:14"
+         EndProperty
+         BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            AutoSize        =   2
+         EndProperty
+      EndProperty
+   End
+   Begin MSComctlLib.Toolbar tbToolBar 
+      Align           =   1  'Align Top
+      Height          =   1770
+      Left            =   0
+      TabIndex        =   7
+      Top             =   0
+      Width           =   12720
+      _ExtentX        =   22437
+      _ExtentY        =   3122
+      ButtonWidth     =   1032
+      ButtonHeight    =   1005
+      ImageList       =   "ImageList3"
+      _Version        =   393216
+      BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
+         NumButtons      =   38
+         BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "knew"
+            Object.ToolTipText     =   "Novo"
+            ImageIndex      =   11
+         EndProperty
+         BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "ksave"
+            Object.ToolTipText     =   "Salvar"
+            ImageIndex      =   19
+         EndProperty
+         BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kselection"
+            Object.ToolTipText     =   "Selecionar"
+            ImageIndex      =   25
+            Style           =   1
+         EndProperty
+         BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kplotview"
+            Object.ToolTipText     =   "Atualizar"
+            ImageIndex      =   14
+         EndProperty
+         BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "krecompose"
+            Object.ToolTipText     =   "Recompor"
+            ImageIndex      =   7
+         EndProperty
+         BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "mnuPoligono"
+            Object.ToolTipText     =   "Poligono de Seleção"
+            ImageIndex      =   2
+         EndProperty
+         BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "KFindCoordenadas"
+            Object.ToolTipText     =   "Localizar Coordenada"
+            ImageIndex      =   13
+         EndProperty
+         BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "KEncontraTexto"
+            Object.ToolTipText     =   "Encontrar Textos"
+            ImageIndex      =   4
+         EndProperty
+         BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "KEncontraConsumidor"
+            Object.ToolTipText     =   "Encontrar Consumidores"
+            ImageIndex      =   3
+         EndProperty
+         BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button14 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kzoomarea"
+            Object.ToolTipText     =   "Zoom Área"
+            ImageIndex      =   24
+            Style           =   1
+         EndProperty
+         BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kpan"
+            Object.ToolTipText     =   "Mover Visualização"
+            ImageIndex      =   15
+            Style           =   1
+         EndProperty
+         BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kundoview"
+            Object.ToolTipText     =   "Voltar Visualização"
+            ImageIndex      =   5
+         EndProperty
+         BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kredoview"
+            Object.ToolTipText     =   "Avançar Visualização"
+            ImageIndex      =   6
+         EndProperty
+         BeginProperty Button18 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button19 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kzoomin"
+            Object.ToolTipText     =   "Menos Zoom"
+            ImageIndex      =   23
+         EndProperty
+         BeginProperty Button20 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kzoomout"
+            Object.ToolTipText     =   "Mais Zoom"
+            ImageIndex      =   22
+         EndProperty
+         BeginProperty Button21 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button22 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kdrawnetworkline"
+            Object.ToolTipText     =   "Desenhar Rede"
+            ImageIndex      =   12
+            Style           =   1
+         EndProperty
+         BeginProperty Button23 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kmovenetworknode"
+            Object.ToolTipText     =   "Mover Componente com Rede"
+            ImageIndex      =   18
+            Style           =   1
+         EndProperty
+         BeginProperty Button24 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kinsertnetworknode"
+            Object.ToolTipText     =   "Desenhar Componente na Rede"
+            ImageIndex      =   17
+            Style           =   1
+         EndProperty
+         BeginProperty Button25 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
+            Style           =   3
+         EndProperty
+         BeginProperty Button26 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Key             =   "kdrawtext"
+            Object.ToolTipText     =   "Desenhar Texto - Amarração"
+            Style           =   1
+         EndProperty
+         BeginProperty Button27 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Key             =   "kdrawline"
+            Object.ToolTipText     =   "Desenhar Linha - Amarração"
+         EndProperty
+         BeginProperty Button28 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Key             =   "kdrawpoint"
+            Object.ToolTipText     =   "Desenhar Ponto - Amarração"
+         EndProperty
+         BeginProperty Button29 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Style           =   3
+         EndProperty
+         BeginProperty Button30 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
+            Object.Visible         =   0   'False
+            Style           =   3
+         EndProperty
+         BeginProperty Button31 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kinsertdoc"
+            Object.ToolTipText     =   "Inserir Documento(s)"
+            ImageIndex      =   9
+            Style           =   1
+         EndProperty
+         BeginProperty Button32 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kdrawramal"
+            Object.ToolTipText     =   "Inserir Ramal"
+            ImageIndex      =   10
+         EndProperty
+         BeginProperty Button33 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kdelete"
+            Object.ToolTipText     =   "Excluir"
+            ImageIndex      =   1
+         EndProperty
+         BeginProperty Button34 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "ksearchinnetwork"
+            Object.ToolTipText     =   "Encontrar válvulas a partir da rede selecionada"
+            ImageIndex      =   8
+         EndProperty
+         BeginProperty Button35 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Key             =   "ksearchattribute"
+            Object.ToolTipText     =   "Pesquisa Geral"
+         EndProperty
+         BeginProperty Button36 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Style           =   3
+         EndProperty
+         BeginProperty Button37 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Key             =   "kdrawintersection"
+         EndProperty
+         BeginProperty Button38 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.Visible         =   0   'False
+            Key             =   "kConsumoLote"
+            Object.ToolTipText     =   "Apresenta Consumo"
+         EndProperty
+      EndProperty
+      Begin MSComctlLib.ProgressBar ProgressBar1 
+         Height          =   285
+         Left            =   9120
+         TabIndex        =   10
+         Top             =   60
+         Visible         =   0   'False
+         Width           =   1890
+         _ExtentX        =   3334
+         _ExtentY        =   503
+         _Version        =   393216
+         Appearance      =   1
+         Min             =   1e-4
+         Scrolling       =   1
+      End
+   End
+   Begin MSComctlLib.ImageList ImageList1 
+      Left            =   4830
+      Top             =   2370
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   16
+      ImageHeight     =   16
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   31
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":0CCC
+            Key             =   "new_window"
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":101E
+            Key             =   "zoom_area"
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1370
+            Key             =   "zoom_in"
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":16C2
+            Key             =   "zoon_out"
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1A14
+            Key             =   "undo_view"
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1D66
+            Key             =   "redo_view"
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":20B8
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":260A
+            Key             =   "delete"
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":295C
+            Key             =   "save"
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":2CAE
+            Key             =   "fit"
+         EndProperty
+         BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":3000
+            Key             =   "insertramal"
+         EndProperty
+         BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":3352
+            Key             =   "foto"
+         EndProperty
+         BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":36A4
+            Key             =   "fonte"
+         EndProperty
+         BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":39F6
+            Key             =   "fiti"
+         EndProperty
+         BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":3D48
+            Key             =   "sair"
+         EndProperty
+         BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":409A
+            Key             =   "seta"
+         EndProperty
+         BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":43EC
+            Key             =   "world"
+         EndProperty
+         BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":473E
+            Key             =   "find_user"
+         EndProperty
+         BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":4A90
+            Key             =   "insert_point"
+         EndProperty
+         BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":4DE2
+            Key             =   "attach"
+         EndProperty
+         BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5134
+            Key             =   "draw_network"
+         EndProperty
+         BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5486
+            Key             =   "find_valvula"
+         EndProperty
+         BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":57D8
+            Key             =   "declivity"
+         EndProperty
+         BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5B2A
+            Key             =   "reflesh"
+         EndProperty
+         BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5E7C
+            Key             =   "move_point"
+         EndProperty
+         BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":61CE
+            Key             =   "pan"
+         EndProperty
+         BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":6520
+            Key             =   "registro"
+         EndProperty
+         BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":6872
+            Key             =   "point"
+         EndProperty
+         BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":6BC4
+            Key             =   "point2"
+         EndProperty
+         BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":6F8F
+            Key             =   "line"
+         EndProperty
+         BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":72E1
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
+   Begin MSComctlLib.ImageList ImageList2 
+      Left            =   5400
+      Top             =   2370
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   16
+      ImageHeight     =   16
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   32
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":7733
+            Key             =   "new_window"
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":7A85
+            Key             =   "zoom_area"
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":7DD7
+            Key             =   "zoom_in"
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":8129
+            Key             =   "zoon_out"
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":847B
+            Key             =   "undo_view"
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":87CD
+            Key             =   "redo_view"
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":8B1F
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":9071
+            Key             =   "delete"
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":93C3
+            Key             =   "save"
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":9715
+            Key             =   "fit"
+         EndProperty
+         BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":9A67
+            Key             =   "insertramal"
+         EndProperty
+         BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":9DB9
+            Key             =   "foto"
+         EndProperty
+         BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":A10B
+            Key             =   "fonte"
+         EndProperty
+         BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":A45D
+            Key             =   "fiti"
+         EndProperty
+         BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":A7AF
+            Key             =   "sair"
+         EndProperty
+         BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":AB01
+            Key             =   "seta"
+         EndProperty
+         BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":AE53
+            Key             =   "world"
+         EndProperty
+         BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":B1A5
+            Key             =   "find_user"
+         EndProperty
+         BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":B4F7
+            Key             =   "insert_point"
+         EndProperty
+         BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":B849
+            Key             =   "attach"
+         EndProperty
+         BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":BB9B
+            Key             =   "draw_network"
+         EndProperty
+         BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":BEED
+            Key             =   "find_valvula"
+         EndProperty
+         BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":C23F
+            Key             =   "declivity"
+         EndProperty
+         BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":C591
+            Key             =   "reflesh"
+         EndProperty
+         BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":C8E3
+            Key             =   "move_point"
+         EndProperty
+         BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":CC35
+            Key             =   "pan"
+         EndProperty
+         BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":CF87
+            Key             =   "registro"
+         EndProperty
+         BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":D2D9
+            Key             =   "point"
+         EndProperty
+         BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":D62B
+            Key             =   "point2"
+         EndProperty
+         BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":D9F6
+            Key             =   "line"
+         EndProperty
+         BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":DD48
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":E19A
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
+   Begin MSComctlLib.ImageList ImageList3 
+      Left            =   4320
+      Top             =   3960
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   32
+      ImageHeight     =   32
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   25
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":E7C4
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":EC27
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":13779
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":167CB
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1981D
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1C86F
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1F8C1
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":21743
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":21B61
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":2DBB3
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":39C05
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":45C57
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":51CA9
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5DCFB
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":69D4D
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":6A99F
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":769F1
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":82A43
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":8EA95
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":9AAE7
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":A6B39
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":A9B8B
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":A9FCF
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":AA403
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":AA83C
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
+   Begin VB.Menu Mnu_Arquive 
+      Caption         =   "&Arquivo"
+      Begin VB.Menu mnuExport 
+         Caption         =   "Exportar"
+         Begin VB.Menu mnuImagem 
+            Caption         =   "Área Visualizada para Imagem"
+         End
+         Begin VB.Menu mnuExportLocalNos 
+            Caption         =   "Localização de Nós com Cota"
+         End
+         Begin VB.Menu mnuExpAutoCad 
+            Caption         =   "DXF"
+         End
+         Begin VB.Menu mnuExpCon 
+            Caption         =   "Localização de Consumidores e Consumo"
+         End
+         Begin VB.Menu OdImport 
+            Caption         =   "Novo DXF com OdImport"
+            Visible         =   0   'False
+         End
+      End
+      Begin VB.Menu mnusep01001 
+         Caption         =   "-"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuImport 
+         Caption         =   "Importar"
+         Begin VB.Menu mnuImportSIG 
+            Caption         =   "SIG"
+         End
+         Begin VB.Menu mnuImportDXF 
+            Caption         =   "DXF"
+         End
+         Begin VB.Menu mnuImpCotas 
+            Caption         =   "Cotas"
+         End
+      End
+      Begin VB.Menu mnusep011101 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuUpdate_Demand 
+         Caption         =   "Atualizar Consumos e Distribuir Demandas"
+      End
+      Begin VB.Menu mnuAutoLogin 
+         Caption         =   "Logar Automaticamente"
+      End
+      Begin VB.Menu mnuChangePassword 
+         Caption         =   "Alterar Senha"
+      End
+      Begin VB.Menu mnuFileClose 
+         Caption         =   "Fechar"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuFileBar0 
+         Caption         =   "-"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuFileProperties 
+         Caption         =   "Propriedades"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuFileBar2 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuFileExit 
+         Caption         =   "Sair"
+      End
+   End
+   Begin VB.Menu mnuEdit 
+      Caption         =   "&Editar"
+      Begin VB.Menu mnuSelect 
+         Caption         =   "Selecionar"
+      End
+      Begin VB.Menu mnu_Reflesh 
+         Caption         =   "Atualizar"
+      End
+      Begin VB.Menu mnuRecompose 
+         Caption         =   "Recompor"
+      End
+      Begin VB.Menu mnuFileBar71 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuZoom 
+         Caption         =   "Zoom Área"
+         Shortcut        =   ^Z
+      End
+      Begin VB.Menu mnuMove 
+         Caption         =   "Mover Visualização"
+      End
+      Begin VB.Menu mnuUndoView 
+         Caption         =   "Voltar Visualização"
+      End
+      Begin VB.Menu mnuRedoView 
+         Caption         =   "Avançar Visualização"
+      End
+      Begin VB.Menu mnuFileBar72 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuMinusZoom 
+         Caption         =   "Menos Zoom"
+      End
+      Begin VB.Menu mnuMoreZoom 
+         Caption         =   "Mais Zoom"
+      End
+      Begin VB.Menu mnuFileBar73 
+         Caption         =   "-"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuDeleteInc 
+         Caption         =   "Excluir Pontos Inconcistentes"
+         Visible         =   0   'False
+      End
+   End
+   Begin VB.Menu mnuMapa 
+      Caption         =   "&Mapa"
+      Begin VB.Menu mnuDrawLineWater 
+         Caption         =   "Desenhar Rede Água"
+         Shortcut        =   ^L
+      End
+      Begin VB.Menu mnuMovePointWithLines 
+         Caption         =   "Mover Componente c/ Rede"
+      End
+      Begin VB.Menu mnuDrawPointInLineWater 
+         Caption         =   "Desenhar Componente na Rede"
+         Shortcut        =   ^R
+      End
+      Begin VB.Menu mnuEditBar30 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuInsertDocs 
+         Caption         =   "Inserir Documentos"
+         Shortcut        =   ^D
+      End
+      Begin VB.Menu mnuEditBar80 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuDrawRamal 
+         Caption         =   "Desenhar Ramal"
+      End
+      Begin VB.Menu mnusep1234 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuDeleteLineWater 
+         Caption         =   "Excluir"
+         Shortcut        =   ^X
+      End
+      Begin VB.Menu mnusep9999 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuCalcArea 
+         Caption         =   "Calcular Área (m²)"
+      End
+      Begin VB.Menu mnuCalibrarZoom 
+         Caption         =   "Calibrar Zoom"
+      End
+      Begin VB.Menu mnuDesenhaPoligono 
+         Caption         =   "Desenhar Poligono"
+      End
+      Begin VB.Menu mnuCarregaPoligono 
+         Caption         =   "Carregar Polígono"
+      End
+      Begin VB.Menu mnuDefEscala 
+         Caption         =   "Definir Escala"
+      End
+      Begin VB.Menu mnuFixaIcone 
+         Caption         =   "Fixar Ícone"
+      End
+      Begin VB.Menu mnusep0001 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnu_Find_Object 
+         Caption         =   "Encontrar Objeto"
+      End
+      Begin VB.Menu mnuEncontraTexto 
+         Caption         =   "Encontrar Textos"
+      End
+      Begin VB.Menu mnuEncontraCoordenada 
+         Caption         =   "Localizar Coordenadas"
+      End
+      Begin VB.Menu mnuLocConsumidores 
+         Caption         =   "Localizar Consumidores"
+      End
+      Begin VB.Menu mnusep10000 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuSalvaImgMapa 
+         Caption         =   "Salvar Imagem"
+         Begin VB.Menu mnuBitmap 
+            Caption         =   "BMP"
+         End
+         Begin VB.Menu mnuGIF 
+            Caption         =   "GIF"
+         End
+         Begin VB.Menu mnuJPG 
+            Caption         =   "JPG"
+         End
+         Begin VB.Menu mnuPNG 
+            Caption         =   "PNG"
+         End
+         Begin VB.Menu mnuTIF 
+            Caption         =   "TIF"
+         End
+      End
+   End
+   Begin VB.Menu mnuCadastros 
+      Caption         =   "&Cadastros"
+      Begin VB.Menu mnuTypes 
+         Caption         =   "Tipos"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuSuppliers 
+         Caption         =   "Fornecedores"
+      End
+      Begin VB.Menu mnuManufacters 
+         Caption         =   "Fabricantes"
+      End
+   End
+   Begin VB.Menu mnuRel 
+      Caption         =   "Relatórios"
+      Begin VB.Menu MnuRelWl 
+         Caption         =   "Rede de Água"
+      End
+      Begin VB.Menu MnuRelSl 
+         Caption         =   "Rede de Esgoto"
+      End
+      Begin VB.Menu mnuRelRegistros 
+         Caption         =   "Válvulas"
+      End
+      Begin VB.Menu mnuRelComponentesAgua 
+         Caption         =   "Componentes de Água"
+      End
+      Begin VB.Menu mnuRelComponentesEsgoto 
+         Caption         =   "Componentes de Esgoto"
+      End
+   End
+   Begin VB.Menu mnuAdmin 
+      Caption         =   "Administrar"
+      Begin VB.Menu mnuRemoverPlano 
+         Caption         =   "Remover Plano"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuUsers 
+         Caption         =   "Usuários"
+      End
+      Begin VB.Menu mnuSep113 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuSelectDatabase 
+         Caption         =   "Banco de Dados"
+      End
+      Begin VB.Menu s999999 
+         Caption         =   "-"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnudiagRede 
+         Caption         =   "Diagnóstico de rede"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnusep 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuProdutividade 
+         Caption         =   "Indicador de Produtividade"
+         Begin VB.Menu mnuRedesAgua 
+            Caption         =   "Redes de Água"
+         End
+         Begin VB.Menu mnuRamaisAgua 
+            Caption         =   "Ligações de Água"
+         End
+         Begin VB.Menu mnusep1 
+            Caption         =   "-"
+         End
+         Begin VB.Menu mnuRedesEsgoto 
+            Caption         =   "Redes de Esgoto"
+         End
+      End
+   End
+   Begin VB.Menu mnuView 
+      Caption         =   "&Janela"
+      Begin VB.Menu mnuViewStatusBar 
+         Caption         =   "Barra de Status"
+         Checked         =   -1  'True
+         Shortcut        =   ^B
+      End
+      Begin VB.Menu mnuViewToolbar 
+         Caption         =   "Barra de Ferramentas"
+         Checked         =   -1  'True
+      End
+      Begin VB.Menu mnuLayers 
+         Caption         =   "Layers e Propriedades"
+         Checked         =   -1  'True
+      End
+      Begin VB.Menu mnuSep016 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuMultProperteis 
+         Caption         =   "Propriedades Multiplas"
+      End
+      Begin VB.Menu mnuLoadAttributeByReference 
+         Caption         =   "Carregar Attributos por Referência"
+         Checked         =   -1  'True
+      End
+      Begin VB.Menu mnusep100 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuWindowCascade 
+         Caption         =   "Cascata"
+      End
+      Begin VB.Menu mnuWindowTileHorizontal 
+         Caption         =   "Alinhamento Horizontal"
+      End
+      Begin VB.Menu mnuWindowTileVertical 
+         Caption         =   "Alinhamento Vertical"
+      End
+   End
+   Begin VB.Menu mnuHelp 
+      Caption         =   "&Ajuda"
+      Begin VB.Menu mnuHelpContents 
+         Caption         =   "Conteúdo"
+         Shortcut        =   ^H
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuHelpBar0 
+         Caption         =   "-"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuHelpAbout 
+         Caption         =   "Sobre"
+         Shortcut        =   {F1}
+      End
+   End
+End
+Attribute VB_Name = "FrmMain"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+Private TCanvas As frmCanvas
+Const sglSplitLimit = 0
+
+Private mbMoving        As Boolean
+Private mstrprevfunc    As String
+Private msngStartX      As Single
+Dim conee As TeAcXConnection
+Dim Abertura As Integer
+Dim teac As TeAcXConnection
+Dim a1 As TeImport
+Dim a2 As TeDatabase
+
+
+
+Private Sub cmdClose_Click()
+
+   pctSfondo.Visible = False: mnuLayers.Checked = False
+   
+End Sub
+
+
+
+
+Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    msngStartX = x
+    
+    With imgSplitter
+        picSplitter.Move .Left, .Top, .Width \ 2, .Height - 20
+    End With
+    
+    picSplitter.Visible = True
+    picSplitter.Height = pctSfondo.Height
+    mbMoving = True
+    
+End Sub
+
+Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    Dim sglPos As Single
+    
+    If mbMoving Then
+        sglPos = x + imgSplitter.Left
+        If sglPos < sglSplitLimit Then
+        
+            picSplitter.Left = sglSplitLimit
+        ElseIf sglPos > Me.Width - sglSplitLimit Then
+            picSplitter.Left = Me.Width - sglSplitLimit
+        Else
+            picSplitter.Left = sglPos
+        End If
+    End If
+    
+End Sub
+
+Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    pctSfondo.Width = pctSfondo.Width + msngStartX - x
+    pctSfondo.Refresh
+    picSplitter.Visible = False
+    mbMoving = False
+    MDIForm_Resize
+    TabStrip1.Refresh
+    
+End Sub
+
+
+
+Private Sub MDIForm_Activate()
+
+   'MDIForm_Resize
+   
+End Sub
+
+Private Sub MDIForm_Load()
+
+   '''LoozeXP1.InitSubClassing
+   Manager1.InitConn Conn, CInt(typeconnection)
+   Manager1.GridVisibled False
+   
+End Sub
+
+Private Sub mnu_Find_Object_Click()
+On Error GoTo Trata_Erro
+   
+   
+   
+   Dim Object_id_ As String, xmin As Double, ymin As Double, xmax As Double, ymax As Double
+   
+   Object_id_ = ""
+   
+   Object_id_ = InputBox("Informe o identificador do objeto", "Encontrar Objeto")
+   
+   If Trim(Object_id_) <> "" Then
+      
+      With ActiveForm.TCanvas
+         .Normal
+         If .addSelectObjectIds(Object_id_) = 1 Then
+            .getSelectBox xmin, ymin, xmax, ymax
+            .setWorld xmin - 1000, ymin - 1000, xmax + 1000, ymax + 1000
+            .Select
+            .setScale 1000
+         Else
+            MsgBox "Não foi encontrado a geometria referente ao atributo selecionado", vbExclamation
+         End If
+      End With
+      
+   End If
+   
+Trata_Erro:
+
+If Err.Number = 0 Or Err.Number = 20 Then
+   Resume Next
+ElseIf Err.Number = 91 Then
+    MsgBox "Não há mapa ativo.", vbInformation, "Geosan"
+Else
+   
+   PrintErro CStr(Me.Name), "Private Sub mnu_Find_Object_Click", CStr(Err.Number), CStr(Err.Description), True
+   
+End If
+   
+End Sub
+
+
+Private Sub mnuAutoLogin_Click()
+   
+   Close #1
+   Open App.path & "\controles\AutoLogin.txt" For Output As #1
+   Print #1, strUser
+   Close #1
+   MsgBox "Definido login automático para " & strUser, vbInformation, ""
+   
+End Sub
+
+
+
+Private Sub mnuCalcArea_Click()
+   
+   ActiveForm.TCanvas.ToolTipText = ""
+   
+   ActiveForm.TCanvas.calculateArea
+   
+   
+   
+End Sub
+
+Private Sub mnuCalibrarZoom_Click()
+   Dim calibrazoom As New frmCalibrarZoom
+   calibrazoom.Show 1
+End Sub
+
+
+
+Private Sub mnuEncontraCoordenada_Click()
+On Error GoTo Trata_Erro
+    Dim x As Double, y As Double
+   
+    x = InputBox("Informe a Coordena X ")
+    y = InputBox("Informe a Coordena Y ")
+    
+    If x <> 0 And y <> 0 Then
+        ActiveForm.TCanvas.setWorld x - 50, y - 50, x + 50, y + 50
+        ActiveForm.TCanvas.plotView
+    End If
+
+Trata_Erro:
+If Err.Number = 0 Or Err.Number = 20 Then
+   Resume Next
+
+ElseIf Err.Number = 91 Or Err.Number = 13 Then
+    'MsgBox "Não há mapa ativo.", vbInformation, "Geosan"
+    Exit Sub
+Else
+   
+   PrintErro CStr(Me.Name), "Public Function EncontraCoord()", CStr(Err.Number), CStr(Err.Description), True
+   
+
+End If
+
+End Sub
+
+
+Private Sub mnu_PatternCurves_Click()
+
+   Dim frm As New frmEPANavegator
+   
+   frm.init
+   Set frm = Nothing
+   
+End Sub
+
+Private Sub mnu_Reflesh_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kplotview")
+   
+End Sub
+
+Private Sub mnuExpCon_Click()
+Dim CAMINHO, SQL As String
+ Dim rs As New ADODB.Recordset
+  Dim rs2 As New ADODB.Recordset
+    Dim rs3 As New ADODB.Recordset
+CAMINHO = App.path & "\EXPCONSUMO.txt"
+Dim TB_GEOMETRIA As String
+    Dim mPROVEDOR As String
+Dim mSERVIDOR As String
+Dim mPORTA As String
+Dim mBANCO As String
+Dim mUSUARIO As String
+Dim Senha As String
+Dim decriptada As String
+Dim conexao As New ADODB.connection
+Dim strConn As String
+Dim nStr As String
+Dim count2 As Integer
+
+If frmCanvas.TipoConexao = 4 Then
+If count2 <> 10 Then
+
+mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
+mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
+mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
+mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
+Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
+nStr = frmCanvas.FunDecripta(Senha)
+decriptada = frmCanvas.Senha
+strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + nStr + "; ByteaAsLongVarBinary=1;"
+
+conexao.Open strConn
+count2 = 10
+    
+End If
+End If
+
+
+
+
+If frmCanvas.TipoConexao <> 4 Then
+SQL = "SELECT * FROM NXGS_V_LIG_COMERCIAL_CONSUMO N INNER JOIN RAMAIS_AGUA_LIGACAO R on R.NRO_LIGACAO=N.NRO_LIGACAO inner join NXGS_V_LIG_COMERCIAL F on  R.NRO_LIGACAO = F.NRO_LIGACAO ORDER BY R.NRO_LIGACAO ASC"
+ rs.Open SQL, Conn, adOpenDynamic, adLockReadOnly
+  
+
+Else
+
+SQL = "SELECT * FROM " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N INNER JOIN " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " R on CAST(R." + """" + "NRO_LIGACAO" + """" + " AS INTEGER)=N." + """" + "NRO_LIGACAO" + """" + "inner join " + """" + "NXGS_V_LIG_COMERCIAL" + """" + "F ON R." + """" + "NRO_LIGACAO" + """" + "=F." + """" + "NRO_LIGACAO" + """" + " ORDER BY R." + """" + "NRO_LIGACAO" + """" + " ASC"
+ rs.Open SQL, conexao, adOpenDynamic, adLockReadOnly
+
+End If
+
+If frmCanvas.TipoConexao <> 4 Then
+ rs3.Open "SELECT * FROM lines1 T INNER JOIN RAMAIS_AGUA R ON R.OBJECT_ID_TRECHO = T.OBJECT_ID ORDER BY R.OBJECT_ID_TRECHO ASC", Conn, adOpenDynamic, adLockReadOnly
+  
+
+  
+
+Else
+
+rs3.Open "SELECT * FROM " + """" + "lines1" + """" + " T INNER JOIN " + """" + "RAMAIS_AGUA" + """" + " R ON R." + """" + "OBJECT_ID_TRECHO" + """" + " = T." + """" + "object_id" + """" + " ORDER BY R." + """" + "OBJECT_ID_TRECHO" + """" + " ASC", conexao, adOpenDynamic, adLockReadOnly
+
+End If
+
+
+'MsgBox "ARQUIVO DEBUG SALVO"
+' WritePrivateProfileString "A", "A", SQL, App.path & "\DEBUG.INI"
+
+
+  'sql = "SELECT * FROM NXGS_V_LIG_COMERCIAL_CONSUMO N UNION RAMAIS_AGUA INNER JOIN RAMAIS_AGUA_LIGACAO R on R.NRO_LIGACAO=N.NRO_LIGACAO UNION SELECT * FROM " & TB_GEOMETRIA & " P JOIN WATERLINES W ON P.OBJECT_ID = W.OBJECT_ID_"
+ 
+
+
+If frmCanvas.TipoConexao <> 4 Then
+
+Open CAMINHO For Output As #1
+      Print #1, "CONSUMIDOR;NRO_LIGACAO;CONSUMO;LOWER_X;UPPER_X;LOWER_Y;UPPER_Y;MES,ANO"
+      Do While Not rs.EOF = True
+         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!consumo_medido & ";" & rs3!lower_x & ";" & rs3!upper_x & ";" & rs3!lower_y & ";" & rs3!upper_y & ";" & rs!Mes & ";" & rs!ano
+         rs.MoveNext
+      Loop
+   Close #1
+   rs.Close
+   
+   'MousePointer = vbDefault
+   Else
+   
+   
+Open CAMINHO For Output As #1
+      Print #1, "CONSUMIDOR;NRO_LIGACAO;CONSUMO;COORDENADAS ESPACIAIS;MES,ANO"
+      Do While Not rs.EOF = True
+         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!consumo_medido & ";" & rs3!spatial_data & ";" & rs!Mes & ";" & rs!ano
+         rs.MoveNext
+      Loop
+   Close #1
+   rs.Close
+   
+   
+   
+   End If
+   
+   
+   
+   MsgBox "Arquivo exportado em " & CAMINHO & ".", vbInformation, "Exportação Concluída!"
+
+
+
+
+End Sub
+
+Private Sub mnuExportLocalNos_Click()
+On Error GoTo Trata_Erro
+
+   Dim CAMINHO As String
+   Dim rs As New ADODB.Recordset
+   Dim TB_GEOMETRIA As String
+   Dim a As String
+Dim b As String
+Dim c As String
+Dim d As String
+Dim e As String
+Dim f As String
+Dim g As String
+Dim h As String
+Dim i As String
+Dim j As String
+Dim k As String
+Dim l As String
+a = "geom_table"
+b = "te_representation"
+c = "geom_type"
+d = "layer_id"
+e = "te_layer"
+f = "name"
+g = "WATERCOMPONENTS"
+
+   
+   If frmCanvas.TipoConexao <> 4 Then
+   
+   'retornar a tabela de geometria de pontos
+   rs.Open "SELECT GEOM_TABLE FROM TE_REPRESENTATION WHERE GEOM_TYPE = 4 AND LAYER_ID IN (SELECT LAYER_ID FROM TE_LAYER WHERE NAME = 'WATERCOMPONENTS')", Conn, adOpenDynamic, adLockReadOnly
+   If rs.EOF = False Then
+      TB_GEOMETRIA = rs!GEOM_TABLE
+   Else
+      MsgBox "Não foi encontrada a tabela de Geometrias.", vbInformation, ""
+      Exit Sub
+   End If
+   Else
+   'SELECT "geom_table" FROM "te_representation" WHERE "geom_type" = '4' AND "layer_id" IN (SELECT "layer_id" FROM "te_layer" WHERE "name" = 'WATERCOMPONENTS')
+   rs.Open "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '4' AND " + """" + d + """" + " IN (SELECT " + """" + d + """" + " FROM " + """" + e + """" + " WHERE " + """" + f + """" + " = 'WATERCOMPONENTS')", Conn, adOpenDynamic, adLockOptimistic
+   If rs.EOF = False Then
+      TB_GEOMETRIA = rs!GEOM_TABLE
+   Else
+      MsgBox "Não foi encontrada a tabela de Geometrias.", vbInformation, ""
+      Exit Sub
+      End If
+   End If
+   
+   
+   rs.Close
+   
+    If frmCanvas.TipoConexao = 1 Then
+   'SELECIONA DO BANCO DE DADOS O CÓDIGO DO NÓ, COORDENADAS E COTA ATUAL
+   
+   
+ 
+   
+   rs.Open "SELECT W.GROUNDHEIGHT AS " + """" + "COTA" + """" + ", LEN(P.OBJECT_ID) AS " + """" + "TAM" + """" + ", P.OBJECT_ID ,P.X,P.Y FROM " & TB_GEOMETRIA & " P JOIN WATERCOMPONENTS W ON P.OBJECT_ID = W.OBJECT_ID_ ORDER BY TAM, OBJECT_ID"
+   
+   ElseIf frmCanvas.TipoConexao = 2 Then
+   
+    rs.Open "SELECT W.GROUNDHEIGHT AS " + """" + "COTA" + """" + ", P.OBJECT_ID AS " + """" + "TAM" + """" + ", P.OBJECT_ID ,P.X,P.Y FROM " & TB_GEOMETRIA & " P JOIN WATERCOMPONENTS W ON P.OBJECT_ID = W.OBJECT_ID_ ORDER BY TAM, OBJECT_ID"
+   
+   
+   
+   Else
+   a = "INITIALGROUNDHEIGHT"
+b = "object_id"
+c = "x"
+d = "y"
+e = "WATERCOMPONENTS"
+f = LCase(TB_GEOMETRIA)
+g = "OBJECT_ID_"
+
+
+
+    rs.Open "SELECT " + """" + e + """" + "." + """" + a + """" + " AS " + """" + "COTA" + """" + ", " + """" + f + """" + "." + """" + b + """" + " AS " + """" + "TAM" + """" + ", " + """" + f + """" + "." + """" + b + """" + " ," + """" + f + """" + "." + """" + c + """" + ", " + """" + f + """" + "." + """" + d + """" + " FROM  " + """" + f + """" + " JOIN " + """" + e + """" + "ON" + """" + f + """" + "." + """" + b + """" + " = " + """" + e + """" + "." + """" + g + """" + " ORDER BY " + """" + "TAM" + """" + ", " + """" + b + """" + "", Conn, adOpenDynamic, adLockOptimistic
+   End If
+   
+   
+   MousePointer = vbHourglass
+   
+   CAMINHO = App.path & "\LOCALIZAÇÃO_NOS_REDE_AGUA.txt"
+  
+   Open CAMINHO For Output As #1
+      Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
+      Do While Not rs.EOF = True
+         Print #1, rs!object_id & ";" & rs!x & ";" & rs!y & ";" & rs!cota
+         rs.MoveNext
+      Loop
+   Close #1
+   rs.Close
+   
+   MousePointer = vbDefault
+   
+   MsgBox "Arquivo exportado em " & CAMINHO & ".", vbInformation, "Exportação Concluída!"
+   
+Trata_Erro:
+If Err.Number = 0 Or Err.Number = 20 Then
+   Resume Next
+Else
+   MousePointer = vbDefault
+   
+   PrintErro CStr(Me.Name), "Private Sub mnuExportLocalNos_Click()", CStr(Err.Number), CStr(Err.Description), True
+   
+   
+End If
+   
+End Sub
+
+Private Sub mnuBitmap_Click()
+   SalvaImagem "BMP"
+End Sub
+
+Private Sub mnuLocConsumidores_Click()
+   frmEncontraConsumidor.Show 1
+End Sub
+
+Private Sub mnuPNG_Click()
+   SalvaImagem "PNG"
+End Sub
+
+Private Sub mnuGIF_Click()
+   SalvaImagem "GIF"
+End Sub
+
+Private Sub mnuJPG_Click()
+   SalvaImagem "JPG"
+End Sub
+
+Private Sub mnuTIF_Click()
+   SalvaImagem "TIF"
+End Sub
+
+Private Function SalvaImagem(tipo As String)
+On Error GoTo saida
+
+
+
+
+
+If FrmMain.Tag = "0" Then
+   
+   MsgBox "É necessário um mapa para realizar esta função.", vbInformation, ""
+   GoTo saida
+End If
+
+Dim TP As ImageType
+Dim strCaminho As String
+   
+   'TP = "a"
+   
+   'PREPARA O FILTRO DO COMPONENTE DE LOCALIZAÇÃO DE ARQUIVOS
+   If tipo = "BMP" Then
+      Me.cmmSalvaImg.Filter = ".BMP|*.BMP"
+      TP = 1 '= BMP
+   ElseIf tipo = "GIF" Then
+      Me.cmmSalvaImg.Filter = ".GIF|*.GIF"
+      TP = 2 '= GIF
+   ElseIf tipo = "JPG" Then
+      Me.cmmSalvaImg.Filter = ".JPG|*.JPG"
+      TP = 3 '= JPG
+   ElseIf tipo = "PNG" Then
+      Me.cmmSalvaImg.Filter = ".PNG|*.PNG"
+      TP = 4 '= PNG
+   ElseIf tipo = "TIF" Then
+      Me.cmmSalvaImg.Filter = ".TIF|*.TIF"
+      TP = 5 '= TIF
+   End If
+   
+   'ABRE O CPMPONENTE DE LOCALIZAÇÃO DE ARQUIVOS
+   Me.cmmSalvaImg.ShowOpen
+   
+   strCaminho = Me.cmmSalvaImg.FileName
+         
+   'SE NÃO FOI DEFINIDO UM CAMINHO, SAI DA FUNÇÃO
+   If Trim(strCaminho) = "" Then
+      GoTo saida
+   End If
+   
+   'SALVA O ARQUIVO DE ACORDO COM O TIPO ESCOLHIDO
+   'If tipo = "JPG" Then
+      If TCanvas.TCanvas.saveImageToFile(strCaminho, TP) Then
+         MsgBox "Imagem salva com sucesso!"
+
+      Else
+         MsgBox "Falha ao salvar imagem!"
+      End If
+   
+saida:
+   If Err.Number = 0 Or Err.Number = 20 Then
+      Resume Next
+   Else
+      
+      PrintErro CStr(Me.Name), "Private Function SalvaImagem(tipo As String)", CStr(Err.Number), CStr(Err.Description), True
+      Err.Clear
+
+   End If
+End Function
+
+Private Sub mnuFixaIcone_Click()
+On Error GoTo Trata_Erro
+
+    With ActiveForm.TCanvas
+        
+        If .fixedPoint = False Then
+            .fixedPoint = True
+            
+            mnuFixaIcone.Checked = True
+            
+            Call WriteINI("MAPA", "FIXAR_ICONE", "SIM", App.path & "\CONTROLES\GEOSAN.INI")
+            
+        Else
+            .fixedPoint = False
+            mnuFixaIcone.Checked = False
+            
+            Call WriteINI("MAPA", "FIXAR_ICONE", "NAO", App.path & "\CONTROLES\GEOSAN.INI")
+            
+        End If
+        .plotView
+        
+    End With
+Trata_Erro:
+
+End Sub
+
+
+Private Sub mnuDefEscala_Click()
+On Error GoTo Trata_Erro
+
+   Dim Scala As String
+   
+   Scala = InputBox("Informe o valor: ", "Definição de Escala")
+   
+   If IsNumeric(Scala) Then
+      canvasScale = CDbl(Scala)
+   Else
+      MsgBox "Valor inválido.", vbInformation, ""
+   End If
+
+
+Trata_Erro:
+If Err.Number = 0 Or Err.Number = 20 Then
+   Resume Next
+Else
+   MsgBox Err.Number & " - " & Err.Description
+End If
+
+End Sub
+
+
+Private Sub mnuCalcularRede_Click()
+
+   Dim MyComponents As String
+   
+   With ActiveForm.TCanvas
+      If .getCurrentLayer = "WATERLINES" Then
+         If .getSelectCount(2) > 0 Then
+            If obtemRede(ActiveForm.TCanvas) = True Then
+               openForm
+            End If
+         Else
+            MsgBox "Selecione a rede a ser calculada", vbExclamation
+         End If
+      Else
+         .setCurrentLayer "WATERLINES"
+         MsgBox "Somente é possivel calcular a rede selecionando os tubos", vbExclamation
+      End If
+   End With
+
+End Sub
+
+Private Sub mnuChangePassword_Click()
+
+    
+    frmTrocaSenha.txtUsuario.Text = strUser
+    frmTrocaSenha.txtUsuario.Locked = True
+    frmTrocaSenha.Show 1
+
+'   Set Sec = CreateObject("NSecurity.AppMode")
+'   If Sec.OpenUserChangePwd(Conn, Usuario.UsrId) Then
+'      MsgBox "Senha alterada com sucesso", vbInformation
+'   End If
+'   Set Sec = Nothing
+'
+End Sub
+
+Private Sub mnuDeleteInc_Click()
+
+   ActiveForm.CorrigeBug
+   
+End Sub
+
+Private Sub mnuDeleteLineWater_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kdelete")
+   
+End Sub
+
+Private Sub mnuDrawLineWater_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kdrawnetworkline")
+   
+End Sub
+
+Private Sub mnuDrawPointInLineWater_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kinsertnetworknode")
+   
+End Sub
+
+Private Sub mnuDrawRamal_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kdrawramal")
+   
+End Sub
+
+Private Sub mnuEncontraTexto_Click()
+    'frmCanvas.TimerSetWorld.Enabled = True
+    frmEncontraTexto.Show 1
+    
+End Sub
+
+Private Sub mnuExpAutoCad_Click()
+
+    Dim frm As New FrmExport
+   
+    'Se nao houver canvas aberto não é possivel exportar nada...
+    If FrmMain.Tag > 0 Then
+        frm.init Conn, ActiveForm.TCanvas, Me
+    Else
+        MsgBox "Não é possível exportar quando não existe uma área de trabalho do mapa.", vbInformation, "Atenção!"
+    End If
+   
+    'Set frm = Nothing
+   
+End Sub
+
+Private Sub mnuExpCRD_Click()
+On Error GoTo mnuExpCRD_Click_err
+
+   Shell App.path & "\Ferramentas\Exporte EPANet.exe", vbNormalFocus
+   Exit Sub
+
+
+mnuExpCRD_Click_err:
+   MsgBox "Programa Exporte EPANet.exe não encontrado", vbExclamation, ""
+   'Resume
+End Sub
+
+Private Sub mnuFileExit_Click()
+
+   End
+   Close
+   
+End Sub
+
+
+
+Private Sub mnuGroups_Click()
+
+   Set Sec = CreateObject("NSecurity.AppMode")
+   Sec.OpenGroups Conn
+   Set Sec = Nothing
+   
+End Sub
+
+Private Sub mnuHelpAbout_Click()
+
+   frmAbout.Show
+   
+End Sub
+
+Private Sub mnuImagem_Click()
+
+    'Se nao houver canvas aberto não é possivel exportar nada...
+    If FrmMain.Tag > 0 Then
+        With CDL
+           .FileName = ""
+           .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
+           .ShowOpen
+           If .FileName <> "" Then
+              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
+           End If
+        End With
+    Else
+        MsgBox "Não é possível exportar quando não existe uma área de trabalho do mapa.", vbInformation, "Atenção!"
+    End If
+   
+End Sub
+
+Private Sub mnuImpCotas_Click()
+   frmImportarCotas.Show 1
+End Sub
+
+Public Function Conecta()
+
+Dim mPROVEDOR As String
+Dim mSERVIDOR As String
+Dim mPORTA As String
+Dim mBANCO As String
+Dim mUSUARIO As String
+Dim Senha As String
+Dim decriptada As String
+If frmCanvas.TipoConexao <> 4 Then
+
+   
+   
+   TeImport1.Provider = typeconnection
+   TeImport1.connection = Conn
+   
+   TeDatabase1.Provider = typeconnection
+   TeDatabase1.connection = Conn
+
+Else
+
+
+
+
+'Set teac = TeAcXConnection1
+If frmCanvas.POSTB <> 10 Then
+mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
+mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
+mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
+mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
+Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
+frmCanvas.FunDecripta (Senha)
+decriptada = frmCanvas.Senha
+
+'If TeAcXConnection1.Open = False Then
+
+ TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
+ ' End If
+
+ 
+ TeImport1.Provider = typeconnection
+   TeImport1.connection = TeAcXConnection1.objectConnection_
+   
+   TeDatabase1.Provider = typeconnection
+   TeDatabase1.connection = TeAcXConnection1.objectConnection_
+  frmCanvas.POST2B (10)
+'   Else
+   
+  '' a1.Provider = typeconnection
+  ' a1.connection = teac.objectConnection_
+   
+  ' a2.Provider = typeconnection
+  ' a2.connection = teac.objectConnection_
+   End If
+End If
+
+End Function
+
+Private Sub mnuImportDXF_Click()
+   
+
+  ' Set a1 = TeImport1
+ ' Set a2 = TeDatabase1
+   
+Dim frm As New frmImportDxf
+
+Conecta
+
+   
+        frm.init Conn, TeImport1, TeDatabase1
+   Set frm = Nothing
+   'changeSelIntersectionPoint
+End Sub
+
+Private Sub mnuImportSIG_Click()
+   
+   Dim frm As New frmImportFile
+   
+   'Dim a1 As TeImport
+  ' Dim a2 As TeDatabase
+  ' Set a1 = TeImport1
+ ' Set a2 = TeDatabase1
+   
+
+   
+Conecta
+   
+
+      frm.init Conn, TeImport1, TeDatabase1
+   Set frm = Nothing
+   
+End Sub
+
+Private Sub mnuInsertDocs_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kinsertdoc")
+   
+End Sub
+
+Private Sub mnuInsertLabel_Click()
+
+   FrmCreatTextForLayer.init
+   
+End Sub
+
+Private Sub mnuLayers_Click()
+   
+   Dim rs As ADODB.Recordset
+Dim a, b, c As String
+   Set rs = New ADODB.Recordset
+a = "USRLOG"
+b = "USRFUN"
+c = "SYSTEMUSERS"
+
+
+
+   If frmCanvas.TipoConexao <> 4 Then
+   rs.Open "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG", Conn, adOpenDynamic, adLockReadOnly
+   Else
+   rs.Open "SELECT " + """" + a + """" + "," + """" + b + """" + " FROM " + """" + c + """" + " WHERE " + """" + a + """" + " = '" & strUser & "' ORDER BY " + """" + a + """" + "", Conn, adOpenDynamic, adLockOptimistic
+   End If
+   If rs.EOF = False Then
+      If rs!UsrFun = 4 Then  'VISUALIZADOR
+         
+         frmLoginTema.Show 1
+                  
+         'pctSfondo.Visible = True
+      Else
+      
+         pctSfondo.Visible = Not mnuLayers.Checked
+         mnuLayers.Checked = Not mnuLayers.Checked
+      
+      End If
+   End If
+   rs.Close
+   
+
+   
+End Sub
+
+Private Sub mnuLoadAttributeByReference_Click()
+
+   mnuLoadAttributeByReference.Checked = Not mnuLoadAttributeByReference.Checked
+   
+End Sub
+
+Private Sub mnuManufacters_Click()
+
+   FrmManufactures.Show
+   
+End Sub
+
+Private Sub mnuMinusZoom_Click()
+ 
+   tbToolBar_ButtonClick tbToolBar.Buttons("kzoomin")
+   
+End Sub
+
+Private Sub mnuMoreZoom_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kzoomout")
+   
+End Sub
+
+Private Sub mnuMove_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kpan")
+   
+End Sub
+
+Private Sub mnuMovePointWithLines_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kmovenetworknode")
+   
+End Sub
+
+Private Sub mnuMultProperteis_Click()
+
+   mnuMultProperteis.Checked = Not mnuMultProperteis.Checked
+   
+End Sub
+
+
+
+
+Private Sub mnuRecompose_Click()
+   tbToolBar_ButtonClick tbToolBar.Buttons("krecompose")
+End Sub
+
+Private Sub mnuRamaisAgua_Click()
+    frmIndicProdutRamaisAgua.Show 1
+End Sub
+
+Private Sub mnuRedesAgua_Click()
+    
+    frmIndicProdutRedesDeAgua.TipoRede = "AGUA"
+    frmIndicProdutRedesDeAgua.Show 1
+    
+    
+End Sub
+
+Private Sub mnuRedesEsgoto_Click()
+    
+    frmIndicProdutRedesDeAgua.TipoRede = "ESGOTO"
+    frmIndicProdutRedesDeAgua.Show 1
+    
+End Sub
+
+Private Sub mnuRedoView_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kredoview")
+   
+End Sub
+
+Private Sub mnuRelComponentesAgua_Click()
+
+   GeraRelatorioHtm ComponentsRede, "watercomponents"
+   
+End Sub
+
+Private Sub mnuRelComponentesEsgoto_Click()
+
+   GeraRelatorioHtm ComponentsRede, "sewercomponents"
+   
+End Sub
+
+Private Sub mnuRelComponentsWaterFilter_Click()
+
+   GeraRelatorioHtm ComponentsRede, "watercomponents", True
+   
+End Sub
+
+Private Sub mnuRelRegistros_Click()
+
+   GeraRelatorioHtm RegistrosEstadoEstado, ""
+   
+End Sub
+
+Private Sub MnuRelSl_Click()
+
+   OpenReport "sewer"
+   
+End Sub
+
+Private Sub MnuRelWl_Click()
+
+   OpenReport "water"
+   
+End Sub
+
+Private Sub mnuRemoverPlano_Click()
+
+   FrmRemoverPlano.Show vbModal
+   
+End Sub
+
+Private Sub mnuSELECT_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kselection")
+   
+End Sub
+
+Private Sub mnuSELECTDatabase_Click()
+
+On Error GoTo Trata_Erro
+
+    'FrmConnection.Show (1)
+
+   Dim cn As ADODB.connection, nC As Object
+   
+   Set nC = CreateObject("NexusConnection.App")
+   If nC.appNewRegistry(App.EXEName, cn) Then
+      Conn.Close
+      'Set Conn = cn
+      'Shell App.path & "\" & App.EXEName & ".exe"
+      MsgBox "Banco de dados redirecionado com sucesso." & Chr(13) & Chr(13) & "Reinicie o sistema para ativar.", vbInformation
+      'Set cn = Nothing
+      End
+   End If
+   
+Trata_Erro:
+If Err.Number = 0 Or Err.Number = 20 Then
+   Resume Next
+Else
+
+   PrintErro CStr(Me.Name), "Private Sub mnuSELECTDatabase_Click()", CStr(Err.Number), CStr(Err.Description), True
+   
+
+End If
+
+End Sub
+
+Private Sub mnuSuppliers_Click()
+
+   FrmSuppliers.Show
+   
+End Sub
+
+
+
+Private Sub mnuTypes_Click()
+
+   FrmSelectTypes.init
+   
+End Sub
+
+Private Sub mnuUndoView_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kundoview")
+   
+End Sub
+
+Private Sub mnuUpdate_Demand_Click()
+
+Dim cgeo As New clsGeoReference
+
+'If frmCanvas.TipoConexao = 1 Then
+
+   
+   frmAtualizacaoConsumo.Show 1
+
+'Else
+'
+'   cgeo.Update_Demand_Node
+'
+'End If
+
+
+'UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = NXGS.CONSUMO_MEDIDO FROM RAMAIS_AGUA_LIGACAO AS RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO AS NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO
+
+'Se ao invés do consumo medido for utilizado o consumo faturado, o comando é:
+
+'UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = NXGS.CONSUMO_FATURADO FROM RAMAIS_AGUA_LIGACAO AS RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO AS NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO
+
+
+Set cgeo = Nothing
+
+End Sub
+
+Private Sub mnuUsers_Click()
+
+'   Set Sec = CreateObject("NSecurity.AppMode")
+'   Sec.OpenUsers Conn
+'   Set Sec = Nothing
+   
+   frmUserControle.Show 1
+   'FrmUser.Show 1
+   
+End Sub
+
+Private Sub mnuViewStatusBar_Click()
+
+   sbStatusBar.Visible = Not mnuViewStatusBar.Checked
+   mnuViewStatusBar.Checked = Not mnuViewStatusBar.Checked
+   
+End Sub
+
+Private Sub mnuViewToolbar_Click()
+
+   tbToolBar.Visible = Not mnuViewToolbar.Checked
+   mnuViewToolbar.Checked = Not mnuViewToolbar.Checked
+   
+End Sub
+
+Private Sub mnuWindowCascade_Click()
+
+   Me.Arrange vbCascade
+   
+End Sub
+
+Private Sub mnuWindowTileHorizontal_Click()
+
+   Me.Arrange vbTileHorizontal
+   
+End Sub
+
+Private Sub mnuWindowTileVertical_Click()
+
+   Me.Arrange vbTileVertical
+   
+End Sub
+
+Private Sub mnuZoom_Click()
+
+   tbToolBar_ButtonClick tbToolBar.Buttons("kzoomarea")
+   
+End Sub
+
+Private Sub OdImport_Click()
+   
+   Form1.Show 1
+   
+End Sub
+
+Private Sub pctSfondo_Resize()
+
+   SizeControls
+   
+End Sub
+
+Private Sub MDIForm_Resize()
+
+   SizeControls
+   
+End Sub
+
+
+Public Sub SizeControls()
+On Error GoTo Trata_Erro
+   
+   With TabStrip1
+      .Height = IIf(pctSfondo.Height < .Top, 100, pctSfondo.Height - .Top)
+      .Width = IIf(pctSfondo.Width < .Left, 100, pctSfondo.Width - .Left)
+   End With
+   With Manager1
+      .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
+      .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
+      .Resize pctSfondo.Width - 400, pctSfondo.Height - 1400
+      .Top = 1340
+      .Left = 300
+   End With
+   With ViewManager1
+      .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
+      .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
+      .Top = 1350
+      .Left = 300
+   End With
+   picSplitter.Height = pctSfondo.Height
+   imgSplitter.Height = pctSfondo.Height
+   
+   cmdClose.Left = pctSfondo.Width - 300
+   cmdClose.Top = pctSfondo.Top - 350
+   FrameEscala.Width = pctSfondo.Width - 300
+   txtEscala.Width = pctSfondo.Width - 2350
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    ElseIf Err.Number = 380 Then
+         Exit Sub
+    Else
+    
+      PrintErro CStr(Me.Name), "Public Sub SizeControls()", CStr(Err.Number), CStr(Err.Description), True
+      
+      
+    End If
+
+End Sub
+
+Private Sub MDIForm_Unload(Cancel As Integer)
+
+On Error GoTo Trata_Erro
+    
+    
+   If FrmMain.ViewManager1.mConn.State = 1 Then
+      FrmMain.ViewManager1.mConn.Close
+   End If
+    
+    If Conn.State = 1 Then
+      Conn.Close
+    End If
+    
+
+    Set Conn = Nothing
+    'LoozeXP1.EndWinXPCSubClassing
+    End
+   
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+    
+         'PrintErro CStr(Me.Name), "Private Sub MDIForm_Unload", CStr(Err.Number), CStr(Err.Description), True
+         
+    
+    End If
+
+End Sub
+
+Private Sub mnuOpen_Click()
+
+
+   Set TCanvas = New frmCanvas
+   TCanvas.init Conn, usuario.UseName
+   
+End Sub
+
+Private Sub TabStrip1_Click()
+
+   If TabStrip1.SelectedItem.index = 2 Then
+      Manager1.Visible = True
+      'Tv.Visible = False
+      ViewManager1.Visible = False
+   Else
+      Manager1.Visible = False
+      'Tv.Visible = True
+      ViewManager1.Visible = True
+   End If
+   
+End Sub
+
+Public Sub tbToolBar_ButtonClick(ByVal Button As MSComctlLib.Button)
+
+''******** MONITORAMENTO DE EVENTOS ********
+'If blnMonitorar = True Then
+'    Close #2
+'    Open App.path & "\UserMonitor.txt" For Append As #2
+'    Print #2, Now & " frmMain - Public Sub tbToolBar_ButtonClick"
+'    Close #2
+'End If
+''**************** FIM *********************
+
+On Error GoTo Trata_Erro
+'Evento de clique na barra de ferramentas
+    Select Case Button.key
+        Case "knew", ""
+           mnuOpen_Click
+        Case Else
+           If Not ActiveForm Is Nothing Then
+              If ActiveForm.Name = "frmCanvas" Then
+                  ActiveForm.Tb_SELECT Button.key
+              End If
+           End If
+    End Select
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    ElseIf Err.Number = 91 Then
+        Err.Clear
+        Exit Sub
+    Else
+         
+         PrintErro CStr(Me.Name), "Public Sub tbToolBar_ButtonClick()", CStr(Err.Number), CStr(Err.Description), True
+         
+        
+    End If
+End Sub
+
+
+Private Sub TePrinter_Click()
+
+   'frmPrint As New frm1TePrinter
+
+   frmTePrinter.Show 1
+   
+
+End Sub
+Private Sub txtEscala_KeyPress(KeyAscii As Integer)
+
+'AO RECEBER UM COMANDO ENTER, É FORÇADO UM LOST_FOCUS
+
+If KeyAscii = 13 Then
+   
+   txtEscala_LostFocus
+   
+End If
+
+End Sub
+
+Private Sub txtEscala_LostFocus()
+
+   If IsNumeric(Me.txtEscala.Text) = True Then
+ 
+      canvasScale = CDbl(Me.txtEscala.Text)
+   
+   End If
+   
+End Sub
+
+Private Sub ViewManager1_onReset(ViewName As String)
+On Error GoTo Trata_Erro
+
+   Dim a As Integer, LayerNameStr As String
+   
+   For a = 1 To tbToolBar.Buttons.count
+      If tbToolBar.Buttons.Item(a).Style = tbrCheck Then
+         tbToolBar.Buttons(a).value = tbrUnpressed
+      End If
+   Next
+   
+   
+   strLayerAtivo = TCanvas.TCanvas.getCurrentLayer
+   
+   With Me.ActiveForm.TCanvas
+      For a = 0 To .getLayersToSnapCount() - 1
+         If .getLayerToSnap(a, LayerNameStr) = 1 Then
+            .removeLayerToSnap LayerNameStr
+         End If
+      Next
+   End With
+   
+   tbToolBar.Buttons("kselection").value = tbrPressed
+   
+   Me.ActiveForm.Caption = "Vista: " & ViewName
+   sbStatusBar.Panels(1).Text = "Modo de seleção: Selecione um objeto do plano referente ao tema ativo"
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        
+        PrintErro CStr(Me.Name), "Private Sub ViewManager1_onReset", CStr(Err.Number), CStr(Err.Description), True
+        
+        
+    End If
+End Sub
+
+Private Sub mnuCarregaPoligono_Click()
+
+
+On Error GoTo Trata_Erro
+
+   Dim rs As ADODB.Recordset
+   Dim strsql As String
+   
+   blnPoligonoVirtual = False
+   Dim a, b, c, d, e, f As String
+   Set rs = New ADODB.Recordset
+a = "layer_id"
+b = "geom_table"
+c = "te_representation"
+d = "geom_type"
+e = "te_layer"
+f = "name"
+
+
+
+
+     If frmCanvas.TipoConexao <> 4 Then
+   strsql = "SELECT TL.LAYER_ID,TL.NAME,TR.GEOM_TABLE FROM TE_LAYER TL INNER JOIN TE_REPRESENTATION TR ON TL.LAYER_ID = TR.LAYER_ID WHERE TR.GEOM_TYPE = 1 AND TL.NAME = '" & strLayerAtivo & "'"
+   Else
+   strsql = "SELECT " + """" + e + """" + "." + """" + a + """" + "," + """" + e + """" + "." + """" + f + """" + "," + """" + c + """" + "." + """" + b + """" + " FROM " + """" + e + """" + " INNER JOIN " + """" + c + """" + " ON " + """" + e + """" + "." + """" + a + """" + " = " + """" + c + """" + "." + """" + a + """" + " WHERE " + """" + c + """" + "." + """" + d + """" + " = '1' AND " + """" + e + """" + "." + """" + f + """" + "= '" & strLayerAtivo & "'"
+   End If
+   
+   
+   
+'MsgBox "ARQUIVO DEBUG SALVO"
+ 'WritePrivateProfileString "A", "A", strsql, App.path & "\DEBUG.INI"
+ 
+   rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
+   
+   If rs.EOF = False Then
+   
+a = "object_id"
+b = LCase(rs!GEOM_TABLE)
+
+
+
+      If frmCanvas.TipoConexao <> 4 Then
+      strsql = "SELECT COUNT(OBJECT_ID) AS " + """" + "QTD" + """" + " FROM " & rs!GEOM_TABLE
+      Else
+      strsql = "SELECT COUNT(" + """" + a + """" + ") AS " + """" + "QTD" + """" + " FROM " + """" + b + """" + ""
+      End If
+      rs.Close
+      rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
+      If rs!qtd = 0 Then
+         MsgBox "O plano ativo não possui polígonos.", vbInformation, ""
+         rs.Close
+         Exit Sub
+      End If
+      rs.Close
+      Me.MousePointer = vbHourglass
+      frmAtualizarSetores.Show 1
+      Me.MousePointer = vbDefault
+   
+   Else
+      MsgBox "O plano ativo não possui polígonos.", vbInformation, ""
+      rs.Close
+   End If
+   
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+         
+         PrintErro CStr(Me.Name), "mnuCarregaPoligono_Click()", CStr(Err.Number), CStr(Err.Description), True
+         
+        
+    End If
+
+End Sub
+
+
+Private Sub mnuDesenhaPoligono_Click()
+
+
+
+
+ If ActiveForm.Name = "frmCanvas" Then
+                  ActiveForm.Tb_SELECT "mnuPoligono"
+                  
+                  
+              End If
+
+
+
+End Sub
+
+
+
+
+
+
+
+

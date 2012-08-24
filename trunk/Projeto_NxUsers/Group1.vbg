@@ -1,0 +1,4 @@
+VBGROUP 5.0
+StartupProject=..\GeoSan.vbp
+Project=..\Projeto_NSecurity\NSecurity.vbp
+Project=NexusUsers.vbp

@@ -1,0 +1,68 @@
+-----------------------------------------------------------------------------------------------------
+
+DATA           10/2/2012 15:37:30 
+USUÁRIO        laboratorio
+VERSÃO         6.0.6
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         35601
+DESCRIÇÃO      Element not found
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           10/2/2012 15:39:03 
+USUÁRIO        laboratorio
+VERSÃO         6.0.6
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         35601
+DESCRIÇÃO      Element not found
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           10/2/2012 15:42:54 
+USUÁRIO        laboratorio
+VERSÃO         6.0.6
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         35601
+DESCRIÇÃO      Element not found
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           10/2/2012 15:44:12 
+USUÁRIO        laboratorio
+VERSÃO         6.0.6
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         35601
+DESCRIÇÃO      Element not found
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           10/2/2012 15:50:17 
+USUÁRIO        laboratorio
+VERSÃO         6.0.6
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         35601
+DESCRIÇÃO      Element not found
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           16/7/2012 14:54:10 
+USUÁRIO        Administrador
+VERSÃO         6.0.7
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
+
+-----------------------------------------------------------------------------------------------------
+

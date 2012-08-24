@@ -1,0 +1,9 @@
+clsDepartaments = 22, 29, 698, 654, 
+clsGroups = 176, 232, 1340, 884, 
+clsResources = 110, 145, 900, 553, 
+clsResourcesGroups = 132, 174, 922, 582, 
+clsUsers = 22, 29, 610, 654, 
+clsUsersFunctions = 66, 87, 742, 712, 
+clsUsersGroups = 88, 116, 878, 524, 
+Form1 = 22, 29, 1186, 561, , 110, 145, 1380, 797, C
+Module1 = 176, 232, 1348, 884, 
