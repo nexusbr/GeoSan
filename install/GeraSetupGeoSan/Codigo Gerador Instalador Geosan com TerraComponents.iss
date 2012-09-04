@@ -1,10 +1,18 @@
+#define SetupBaseName   "SetupGeoSan-v."
+#define AppVersionFile  "06.00.07.04"
+
 [Setup]
 AppName=GeoSan
 Compression=lzma
 AllowNoIcons=no
 AlwaysRestart=no
 AlwaysShowComponentsList=yes
-AppVerName=GeoSan 06.00.07.04
+; equivale ao Product Version em propriedades do Setup gerado
+AppVerName=GeoSan {#AppVersionFile}
+; equivale ao file version em propriedades do Setup gerado
+VersionInfoVersion={#AppVersionFile} 
+VersionInfoTextVersion=GeoSan {#AppVersionFile}
+AppCopyright=NEXUS GeoEngenharia
 
 DefaultDirName=C:\Arquivos de Programas\GeoSan
 DefaultGroupName=GeoSan
@@ -13,6 +21,7 @@ AppMutex=GeoSan
 
 SolidCompression=yes
 OutputDir=Output
+OutputBaseFilename={#SetupBaseName + AppVersionFile}
 
 [Language]
 MessagesFile=compiler:BrazilianPortuguese.isl
