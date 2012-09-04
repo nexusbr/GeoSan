@@ -1,7 +1,14 @@
-GeoSan 06.00.07.03 - Notas de Liberação
+GeoSan - Notas de Liberação
 Versão para Windows
 
-03-09-2012
+04-09-2012 - GeoSan 06.00.07.04
+Atualizada a querie que distribui as demandas de consumo médio do software comercial para os ramais das ligações de água.
+Gerado novo executável para instalação do GeoSan.
+
+03-09-2012 - GeoSan 06.00.07.03
+Atualizada a querie que distribui o consumo médio nos ramais
+A mesma continha um innerJoin que não era necessário e tornava
+a execução da mesma mais lenta.
 
 
 

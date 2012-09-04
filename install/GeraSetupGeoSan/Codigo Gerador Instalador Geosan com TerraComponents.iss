@@ -4,7 +4,7 @@ Compression=lzma
 AllowNoIcons=no
 AlwaysRestart=no
 AlwaysShowComponentsList=yes
-AppVerName=GeoSan 06.00.07.03
+AppVerName=GeoSan 06.00.07.04
 
 DefaultDirName=C:\Arquivos de Programas\GeoSan
 DefaultGroupName=GeoSan
@@ -26,7 +26,7 @@ MessagesFile=compiler:BrazilianPortuguese.isl
 Source: "ArquivosInstGeoSan\GeoSan.exe";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 ;Source: "ArquivosInstGeoSan\GeoSan.bat";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 ;Source: "ArquivosInstGeoSan\Instruções para configuração de atualizador automatico de versões.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\Leiame 06.00.07.03.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\Leiame.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 
 Source: "ArquivosInstGeoSan\Exporte EPANet.exe";  DestDir: "{app}"; CopyMode: alwaysoverwrite;
 Source: "ArquivosInstGeoSan\NSecurity.dll";       DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
