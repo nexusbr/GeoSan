@@ -66,3 +66,47 @@ DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           03/09/2012 17:13:54 
+USUÁRIO        
+VERSÃO         
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         429
+DESCRIÇÃO      ActiveX component can't create object
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           03/09/2012 17:14:00 
+USUÁRIO        
+VERSÃO         
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         429
+DESCRIÇÃO      ActiveX component can't create object
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           03/09/2012 17:41:53 
+USUÁRIO        
+VERSÃO         
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         429
+DESCRIÇÃO      ActiveX component can't create object
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           03/09/2012 17:52:56 
+USUÁRIO        
+VERSÃO         
+MÓDULO         Global
+EVENTO         Public Sub Main
+LINHA          0
+MOTIVO         429
+DESCRIÇÃO      ActiveX component can't create object
+
+-----------------------------------------------------------------------------------------------------
+

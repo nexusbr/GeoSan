@@ -4,7 +4,7 @@ Compression=lzma
 AllowNoIcons=no
 AlwaysRestart=no
 AlwaysShowComponentsList=yes
-AppVerName=GeoSan 06.00.07.02
+AppVerName=GeoSan 06.00.07.03
 
 DefaultDirName=C:\Arquivos de Programas\GeoSan
 DefaultGroupName=GeoSan
@@ -23,10 +23,10 @@ MessagesFile=compiler:BrazilianPortuguese.isl
 ; CopyMode: alwaysoverwrite para sobrescrever tudo
 
 ;ARQUIVOS NEXUS - *************************************************************************************************************************
-Source: "ArquivosInstGeoSan\GeoSan 6.0.7.exe";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\GeoSan.exe";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 ;Source: "ArquivosInstGeoSan\GeoSan.bat";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 ;Source: "ArquivosInstGeoSan\Instruções para configuração de atualizador automatico de versões.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\Leiame 6.0.7.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\Leiame 06.00.07.03.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 
 Source: "ArquivosInstGeoSan\Exporte EPANet.exe";  DestDir: "{app}"; CopyMode: alwaysoverwrite;
 Source: "ArquivosInstGeoSan\NSecurity.dll";       DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
@@ -79,5 +79,5 @@ Source: "ArquivosInstGeoSan\VB6STKIT.DLL"; DestDir: "{sys}"; CopyMode: alwaysski
 
 [Icons]
 ;Name: "{group}\My Program"; Filename: "{app}\MyProg.exe"
-Name: "{commonprograms}\GeoSan"; Filename: "{app}\GeoSan 6.0.7.exe"
-Name: "{commondesktop}\GeoSan";  Filename: "{app}\GeoSan 6.0.7.exe"
+Name: "{commonprograms}\GeoSan"; Filename: "{app}\GeoSan.exe"
+Name: "{commondesktop}\GeoSan";  Filename: "{app}\GeoSan.exe"

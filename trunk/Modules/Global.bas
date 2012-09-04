@@ -281,7 +281,7 @@ On Error GoTo Trata_Erro
    End If
    
    Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-   Versao_Geo = "6.0.7"
+   Versao_Geo = "06.00.07.03"
    'Valida o perfil do usuário -
 
    Set rs = New ADODB.Recordset
