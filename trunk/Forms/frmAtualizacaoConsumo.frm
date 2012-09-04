@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmAtualizacaoConsumo 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Atualizações de Consumo"
@@ -172,8 +172,9 @@ On Error GoTo Trata_Erro
         'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIDO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
          
          'updated with consumo_medio in 2012-08-21
-         Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
-   
+         'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
+         Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE NRO_LIGACAO = NXGS.NRO_LIGACAO")
+
    ' if the database is oracle
    ElseIf frmCanvas.TipoConexao = 2 Then
   
@@ -197,6 +198,7 @@ On Error GoTo Trata_Erro
         'WritePrivateProfileString "A", "A", "UPDATE " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " SET " + """" + "CONSUMO_LPS" + """" + " = (N." + """" + "CONSUMO_MEDIDO" + """" + " * 0.00038580246) FROM " + """" + "RAMAIS_AGUA_LIGACAO" + """" + "  as R INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N  ON R." + """" + "NRO_LIGACAO" + """" + " = N." + """" + "NRO_LIGACAO" + """" + "", App.path & "\DEBUG.INI"
                                                                                                                                                                                                                                                                                                                  ' "CAST(" + """" + d4 + """" + "." + """" + e4 + """" + " AS INTEGER)"
         'Please verify this querie, is problably is wrong because it updates de consumo_medido instead of consumo_medio - 2012-08-21
+        'It is not necessary the inerjoin, please look at the SQLServer querie that was tested
         Conn.execute ("UPDATE " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " SET " + """" + "CONSUMO_LPS" + """" + " = (N." + """" + "CONSUMO_MEDIDO" + """" + " * 0.00038580246) FROM " + """" + "RAMAIS_AGUA_LIGACAO" + """" + "  as R INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N  ON CAST(R" + "." + """" + "NRO_LIGACAO" + """" + "AS INTEGER) = CAST(N." + """" + "NRO_LIGACAO" + """" + "AS INTEGER)" + "")
       
         'Conn.execute ("UPDATE " + """" + a + """" + " SET " + """" + b + """" + " = (" + """" + d + """" + "." + """" + c + """" + " * '0.00038580246') FROM " + """" + a + """" + " INNER JOIN( " + """" + d + """" + " ON " + """" + a + """" + "." + """" + e + """" + " = " + """" + d + """" + "." + """" + e + """" + ")'")
