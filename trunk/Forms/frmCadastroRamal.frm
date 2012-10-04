@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form FrmCadastroRamal 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Cadastro de Ramal de Água"
@@ -536,237 +536,219 @@ Attribute VB_Exposed = False
 Option Explicit
 Private object_id_ramal As String
 Private tcs As TeCanvas, tdbramais As TeDatabase, tdbtrecho As TeDatabase, object_id_lote As String, Object_id_trecho As String
-
-
 Private rs As ADODB.Recordset
-
 Dim blnCancelar As Boolean
 Dim i As Long
 Dim j As Long
 Dim blnBotaoFechar As Boolean
 Dim intKeyAscii As Integer
-
 Dim iniAtivado As String 'ARMAZENA A INFORMACAO SE A PESQUISA POR LOTE ESTA ATIVADA
 Dim iniTabela As String
 Dim iniREF_IPTU As String
 Dim iniREF_NROLIGACAO As String
-
 Dim TB_Ramais As String
 Dim TB_Ligacoes As String
 Dim TB_comercial As String
-
 Dim PESQUISA As String
 Dim VALOR As String
-      Dim va As String
-         Dim ve As String
-         Dim vi As String
-         Dim vo As String
-         Dim vu As String
-         Dim vc As String
-          Dim vd As String
-          Dim vm As String
-          Dim vf As String
-          Dim count2, count3 As Integer
+Dim va As String
+Dim ve As String
+Dim vi As String
+Dim vo As String
+Dim vu As String
+Dim vc As String
+Dim vd As String
+Dim vm As String
+Dim vf As String
+Dim count2, count3 As Integer
 
 Public Sub init(TipoRamal As String, m_object_id_ramal As String, m_tcs As TeCanvas, m_tdbramais As TeDatabase, m_tdbtrecho As TeDatabase, m_object_id_lote As String, m_object_id_trecho As String)
 
 On Error GoTo Trata_Erro
 
-   
-
-   
-   If ReadINI("RamaisFiltroLotes", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
-      Me.chkExecFiltroPorLote.value = 0
-   Else
-      Me.chkExecFiltroPorLote.value = 1
-  
-   End If
+    'Verifica se os ramais estão associados aos polígonos dos lotes. Antigamente o GeoSan tinha as ligações associadas aos lotes
+    If ReadINI("RamaisFiltroLotes", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
+        'Não, as ligações não estão associadas ao polígono do lote
+        Me.chkExecFiltroPorLote.value = 0
+    Else
+        'Sim, as ligações estão associadas ao polígono do lote
+        Me.chkExecFiltroPorLote.value = 1
+    End If
       
-   If ReadINI("RamaisFiltro", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
-      Me.chkExecPreFiltro.value = 0
-   Else
-      Me.chkExecPreFiltro.value = 1
-   End If
+    'Verifica se existe algum tipo de filtro ativado para ramais
+    If ReadINI("RamaisFiltro", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
+        'Não existem filtros ativados para ramais
+        Me.chkExecPreFiltro.value = 0
+    Else
+        'Sim, existem filtros ativados para ramais
+        Me.chkExecPreFiltro.value = 1
+    End If
 
-   VALOR = ReadINI("RAMAIS", "CONSULTAR_LIGAÇÕES", App.path & "\CONTROLES\GEOSAN.ini")
-   If VALOR = "" Or VALOR <> "SIM" Or VALOR <> "NÃO" Then
-      Call WriteINI("RAMAIS", "CONSULTAR_LIGAÇÕES", "NÃO", App.path & "\CONTROLES\GEOSAN.ini")
-      VALOR = "NÃO"
-   End If
+    'Verifica se as ligações serão consultadas pela associação das mesmas aos lotes
+    VALOR = ReadINI("RAMAIS", "CONSULTAR_LIGAÇÕES", App.path & "\CONTROLES\GEOSAN.ini")
+    
+    'Caso tenha sido retornado um valor válido sobre a forma de consulta das ligações, se serão pelo lote ou não
+    If VALOR = "" Or VALOR <> "SIM" Or VALOR <> "NÃO" Then
+        'Salva no arquivo de inicilização do GeoSan que elas não são consultadas pelo lote
+        Call WriteINI("RAMAIS", "CONSULTAR_LIGAÇÕES", "NÃO", App.path & "\CONTROLES\GEOSAN.ini")
+        
+        'Avisa que a consulta das ligações não será pelo polígono do lote
+        VALOR = "NÃO"
+    End If
    
-   If VALOR = "NÃO" Then 'no caso de SQL consutar ligações está desabilitado
-      cmdConsultarLigacoes.Visible = False
-   End If
+    'Configura a visulização da caixa de diálogo de ligações pelo lote
+    If VALOR = "NÃO" Then 'no caso de SQL consutar ligações está desabilitado
+        cmdConsultarLigacoes.Visible = False
+    End If
 
-   'MUDA OS NOMES DAS TABELAS EQUIPARANDO COM OS TIPOS
-
-   If TipoRamal = "ESGOTO" Then
-      
+    'MUDA OS NOMES DAS TABELAS EQUIPARANDO COM OS TIPOS
+    'Configura o nome das tabelas que serão acessadas, no caso de esgoto e no caso de água
+    If TipoRamal = "ESGOTO" Then
+      'Tabelas de esgoto a serem consultadas
       TB_Ramais = "RAMAIS_ESGOTO"
       TB_Ligacoes = "RAMAIS_ESGOTO_LIGACAO"
       TB_comercial = "NXGS_V_LIG_COMERCIAL_E"
       Me.Frame5.Visible = False 'CADASTRO DE LIGAÇÕES FICTÍCIAS
       Me.Caption = "Cadastro de Ramal de Esgoto"
       Me.cmdConsultarLigacoes.Visible = False
-   
-   Else
-      
-      TB_Ramais = "RAMAIS_AGUA"
-      TB_Ligacoes = "RAMAIS_AGUA_LIGACAO"
-      TB_comercial = "NXGS_V_LIG_COMERCIAL"
-   
-   End If
+    Else
+      'Tabelas de água a serem consultadas
+      TB_Ramais = "RAMAIS_AGUA"                 'Informações sobre os ramais
+      TB_Ligacoes = "RAMAIS_AGUA_LIGACAO"       'Informações sobre as ligações de água
+      TB_comercial = "NXGS_V_LIG_COMERCIAL"     'Informações sobre os dados das ligações de água. Geralmente uma vista para o sistema comercial
+    End If
 
-
-  Dim ga As String
-Dim ge As String
-Dim gi As String
-Dim go As String
-Dim gu As String
-ga = "USRLOG"
-ge = "USRFUN"
-gi = "SYSTEMUSERS"
-go = "OBJECT_ID_"
-
-
-   'DESABILITA SALVAR SE O USUÁRIO É UM VISITANTE
-   Set rs = New ADODB.Recordset
-   If frmCanvas.TipoConexao <> 4 Then
-   rs.Open "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG", Conn, adOpenDynamic, adLockReadOnly
-   Else
-   rs.Open "SELECT " + """" + ga + """" + ", " + """" + ge + """" + " FROM " + """" + gi + """" + "  WHERE " + """" + ga + """" + "  = '" & strUser & "' ORDER BY " + """" + ga + """" + " ", Conn, adOpenDynamic, adLockOptimistic
-   End If
-   If rs.EOF = False Then
-      If rs!UsrFun = 3 Or rs!UsrFun = 4 Then 'VISITANTE OU VISUALIZADOR
-         
-         Me.cmdConfirmar.Enabled = False 'DESABILITA O BOTÃO SALVAR
-         
-      End If
-   End If
-   rs.Close
-
-
-   'LoozeXP1.InitIDESubClassing
-   object_id_lote = m_object_id_lote
-   object_id_ramal = m_object_id_ramal
-   Object_id_trecho = m_object_id_trecho
-   Set tcs = m_tcs
-   Set tdbramais = m_tdbramais
-   Set tdbtrecho = m_tdbtrecho
-   
-   If object_id_ramal <> "" Then ' RAMAL EXISTENTE
-      'RETORNA ATRIBUTOS DO RAMAL
-      
-      Me.Caption = Me.Caption & " - Cod.: " & object_id_ramal
-      
-      Set rs = New ADODB.Recordset
-      
-      If frmCanvas.TipoConexao <> 4 Then
-      
-      rs.Open ("SELECT * FROM  " & TB_Ramais & "  WHERE OBJECT_ID_ = '" & object_id_ramal & "'"), Conn, adOpenForwardOnly, adLockReadOnly
-      Else
-       rs.Open ("SELECT * FROM  " + """" + TB_Ramais + """" + "  WHERE " + """" + go + """" + "  = '" & object_id_ramal & "'"), Conn, adOpenDynamic, adLockOptimistic
-      End If
-      
-      If rs.EOF = False Then
-         txtDistanciaLado.Text = IIf(IsNull(rs!Distancia_Lado), 0, rs!Distancia_Lado)
-         txtDistanciaTestada.Text = IIf(IsNull(rs!Distancia_Testada), 0, rs!Distancia_Testada)
-         txtProfundidade.Text = IIf(IsNull(rs!Profundidade_RAMAL), 0, rs!Profundidade_RAMAL)
-         txtComprimentoRamal.Text = IIf(IsNull(rs!COMPRIMENTO_RAMAL), 0, rs!COMPRIMENTO_RAMAL)
-         
-         Select Case rs!posicionamento_lote
-            Case 1
-               optDesconhecido = True
-            Case 2
-               optEsquerdo = True
-            Case 3
-               optCentro = True
-            Case 4
-               optDireito = True
-         End Select
-      
-         Me.lblRede.Caption = rs!Object_id_trecho
-         
-         Me.lblUsuarioData.Caption = "Cadastrado por: " & rs.Fields("USUARIO_LOG").value & " em " & rs.Fields("DATA_LOG").value
-      
-      End If
-      rs.Close
-      Set rs = Nothing
+        'Faz a verificação de que tipo de usuário está acessando o sistema para poder habilitar ou desabilitar a opção de alterar/salvar os dados da caixa de diálogo
+        Dim ga As String
+        Dim ge As String
+        Dim gi As String
+        Dim go As String
+        Dim gu As String
+        
+        ga = "USRLOG"
+        ge = "USRFUN"
+        gi = "SYSTEMUSERS"
+        go = "OBJECT_ID_"
     
-      CarregaLigacoes
-   
-   Else
-      Me.lblRede.Caption = ramal_Object_id_trecho
-      optDesconhecido = True
-   End If
-   
-   If Me.lvLigacoes.ListItems.count > 0 Then
-        'Me.cmdConsultarLigacoes.Enabled = True 'DESATIVADO PARA CORRECÇÃO DAS QUERYS DO SQL SERVER
-   Else
-         
-      If Me.chkExecPreFiltro.value = 1 Then
-         
-         PESQUISA = ReadINI("RamaisFiltro", "PESQUISA", App.path & "\CONTROLES\GEOSAN.ini")
-         VALOR = ReadINI("RamaisFiltro", "VALOR", App.path & "\CONTROLES\GEOSAN.ini")
-      
-         If PESQUISA = "NUM_LIGAÇÃO" Then
-            
-            Me.optNumLigacao.value = True
-            Me.txtNumLigacao = VALOR
-         
-         ElseIf PESQUISA = "INSCRIÇÃO" Then
-            
-            Me.optInscricao.value = True
-            Me.txtInscricao.Text = VALOR
-         
-         
-         ElseIf PESQUISA = "ENDEREÇO" Then
-            
-            Me.optEndereço.value = True
-            Me.txtEndereco.Text = VALOR
-         
-         
-         ElseIf PESQUISA = "CONSUMIDOR" Then
-            
-            Me.optConsumidor.value = True
-            Me.txtConsumidor.Text = VALOR
-         
-         
-         End If
-           
-         Me.cmdConsultarLigacoes.Enabled = False
-      
-      End If
-   
-      'CARREGA OS TEXTOS COM O FILTRO PRÉ DETERMINADO
-      
-      If Me.chkExecFiltroPorLote.value = 0 Then
-         Carrega_PreFiltro (False)
-      Else
-         Carrega_PreFiltro (True)
-      End If
-   
-   
-   End If
-   
-   
-   Me.Show vbModal
-   'LoozeXP1.EndWinXPCSubClassing
-   Exit Sub
+        'Se o usuário for um visitante ele não pode alterar/salvar os dados da caixa de diálogo, somente pode consultar
+        Set rs = New ADODB.Recordset
+        
+        If frmCanvas.TipoConexao <> 4 Then
+            'Se for banco de dados Postgres
+            rs.Open "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG", Conn, adOpenDynamic, adLockReadOnly
+        Else
+            'Se for banco de dados SQLServer ou Oracle
+            rs.Open "SELECT " + """" + ga + """" + ", " + """" + ge + """" + " FROM " + """" + gi + """" + "  WHERE " + """" + ga + """" + "  = '" & strUser & "' ORDER BY " + """" + ga + """" + " ", Conn, adOpenDynamic, adLockOptimistic
+        End If
+        
+        'Verifica que tipo de usuário é
+        If rs.EOF = False Then
+            If rs!UsrFun = 3 Or rs!UsrFun = 4 Then
+                'É visitante ou visualizador apenas
+                Me.cmdConfirmar.Enabled = False 'DESABILITA O BOTÃO SALVAR
+            End If
+        End If
+        rs.Close
 
+    'LoozeXP1.InitIDESubClassing
+    object_id_lote = m_object_id_lote
+    object_id_ramal = m_object_id_ramal
+    Object_id_trecho = m_object_id_trecho
+    Set tcs = m_tcs
+    Set tdbramais = m_tdbramais
+    Set tdbtrecho = m_tdbtrecho
+   
+    If object_id_ramal <> "" Then ' RAMAL EXISTENTE
+        'RETORNA ATRIBUTOS DO RAMAL
+        Me.Caption = Me.Caption & " - Cod.: " & object_id_ramal
+        Set rs = New ADODB.Recordset
+        
+        'Como a tabela que contem os ramais não possui os números das ligações, primeiro procura o número dos ramais. Aqui abre a conexão para consultar os ramais
+        If frmCanvas.TipoConexao <> 4 Then
+            'Procura em um banco Postgres
+            rs.Open ("SELECT * FROM  " & TB_Ramais & "  WHERE OBJECT_ID_ = '" & object_id_ramal & "'"), Conn, adOpenForwardOnly, adLockReadOnly
+        Else
+            'Procura em um banco SQLServer ou Oracle
+            rs.Open ("SELECT * FROM  " + """" + TB_Ramais + """" + "  WHERE " + """" + go + """" + "  = '" & object_id_ramal & "'"), Conn, adOpenDynamic, adLockOptimistic
+        End If
+      
+        'Caso tenha encontrado algum ramal
+        If rs.EOF = False Then
+            'Obtem alguns dados do ramal
+            txtDistanciaLado.Text = IIf(IsNull(rs!Distancia_Lado), 0, rs!Distancia_Lado)
+            txtDistanciaTestada.Text = IIf(IsNull(rs!Distancia_Testada), 0, rs!Distancia_Testada)
+            txtProfundidade.Text = IIf(IsNull(rs!Profundidade_RAMAL), 0, rs!Profundidade_RAMAL)
+            txtComprimentoRamal.Text = IIf(IsNull(rs!COMPRIMENTO_RAMAL), 0, rs!COMPRIMENTO_RAMAL)
+         
+            'Obtem o posicionamento do ramal com relação a frente do lote
+            Select Case rs!posicionamento_lote
+                Case 1
+                    optDesconhecido = True
+                Case 2
+                    optEsquerdo = True
+                Case 3
+                    optCentro = True
+                Case 4
+                    optDireito = True
+            End Select
+      
+            Me.lblRede.Caption = rs!Object_id_trecho
+            Me.lblUsuarioData.Caption = "Cadastrado por: " & rs.Fields("USUARIO_LOG").value & " em " & rs.Fields("DATA_LOG").value
+        End If
+        
+        rs.Close
+        Set rs = Nothing
+        'Agora vamos carregar os dados das ligações para serem apresentados na caixa de diálogo
+        CarregaLigacoes
+    Else
+        Me.lblRede.Caption = ramal_Object_id_trecho
+        optDesconhecido = True
+    End If
+   
+    If Me.lvLigacoes.ListItems.count > 0 Then
+        'Me.cmdConsultarLigacoes.Enabled = True 'DESATIVADO PARA CORRECÇÃO DAS QUERYS DO SQL SERVER
+    Else
+        If Me.chkExecPreFiltro.value = 1 Then
+            PESQUISA = ReadINI("RamaisFiltro", "PESQUISA", App.path & "\CONTROLES\GEOSAN.ini")
+            VALOR = ReadINI("RamaisFiltro", "VALOR", App.path & "\CONTROLES\GEOSAN.ini")
+            
+            If PESQUISA = "NUM_LIGAÇÃO" Then
+                Me.optNumLigacao.value = True
+                Me.txtNumLigacao = VALOR
+            ElseIf PESQUISA = "INSCRIÇÃO" Then
+                    Me.optInscricao.value = True
+                    Me.txtInscricao.Text = VALOR
+            ElseIf PESQUISA = "ENDEREÇO" Then
+                Me.optEndereço.value = True
+                Me.txtEndereco.Text = VALOR
+            ElseIf PESQUISA = "CONSUMIDOR" Then
+                Me.optConsumidor.value = True
+                Me.txtConsumidor.Text = VALOR
+            End If
+            
+            Me.cmdConsultarLigacoes.Enabled = False
+        End If
+                
+        'CARREGA OS TEXTOS COM O FILTRO PRÉ DETERMINADO
+        If Me.chkExecFiltroPorLote.value = 0 Then
+            Carrega_PreFiltro (False)
+        Else
+            Carrega_PreFiltro (True)
+        End If
+    End If
+    Me.Show vbModal
+    'LoozeXP1.EndWinXPCSubClassing
+    Exit Sub
+    
 Trata_Erro:
 If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
+    Resume Next
 ElseIf Err.Number = -2147467259 Then
-
-   PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
-   End
+    PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
+    End
 Else
-   
-   PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
-   
+    PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
 End If
-
 End Sub
 
 
@@ -1500,8 +1482,8 @@ Private Sub cmdConfirmar_Click()
    Dim rsCria As ADODB.Recordset
    Dim a As Integer
    Dim cgeo As New clsGeoReference
-   Dim x As Double
-   Dim y As Double
+   Dim X As Double
+   Dim Y As Double
    Dim str As String
    
    Dim strNroL As String 'NÚMERO DA LIGACAO
@@ -1610,13 +1592,13 @@ Set rsCria = New ADODB.Recordset
         
         tdbramais.setCurrentLayer TB_Ramais '"RAMAIS_AGUA"
         'RETORNA EM X E Y A COORDENADA DO FINAL DA LINHA
-        tdbramais.getPointOfLine 0, object_id_ramal, 1, x, y
+        tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y
         
         'INSERE PONTO NO FINAL DA LINHA
-        tdbramais.addPoint object_id_ramal, x, y
+        tdbramais.addPoint object_id_ramal, X, Y
 
         
-        tdbramais.getPointOfLine 0, object_id_ramal, 0, x, y
+        tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y
         'tdb.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
         
         Object_id_trecho = ramal_Object_id_trecho 'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK
@@ -2047,165 +2029,159 @@ Private Sub SubInsereFicticios()
    End If
 
 End Sub
-
+'Carrega os dados das ligações para apresentar na caixa de diálogo para o usuário
 Private Sub CarregaLigacoes()
-Dim intlocalerro As Integer
-   On Error GoTo Trata_Erro
-   Dim NRO_LIGACOES As String, INSCRICOES_LOTES As String, msg As String
-   Dim rsAssociados As ADODB.Recordset, str As String, itmx As ListItem, a As Integer, Qtde As Integer
-   'RECUPERA TODAS AS INSCRICOES DE TODOS LOTE
-   str = GetQueryProcess(3)
-   INSCRICOES_LOTES = "''"
-   If Trim(object_id_lote) = "" Then
-      str = Replace(str, "@OBJECT_ID_", "''")
-   Else
-      str = Replace(str, "@OBJECT_ID_", object_id_lote)
-   End If
-   intlocalerro = 1
-   Set rs = Conn.execute(str)
-   While Not rs.EOF
-      If INSCRICOES_LOTES = "''" Then
-         INSCRICOES_LOTES = "'" & rs(0).value & "'"
-      Else
-         INSCRICOES_LOTES = INSCRICOES_LOTES & ",'" & rs(0).value & "'"
-      End If
-      rs.MoveNext
-   Wend
-   rs.Close
-      
-   intlocalerro = 2
-   'RECUPERA TODOS AS LIGAÇÕES JÁ ASSOCIADAS
-   vi = "OBJECT_ID_"
-   Set rsAssociados = New ADODB.Recordset
-    If frmCanvas.TipoConexao <> 4 Then
-   str = "SELECT * FROM " & TB_Ligacoes & " WHERE OBJECT_ID_ = '" & object_id_ramal & "'"
-   
-   Else
-   str = "SELECT * FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vi + """" + " = '" & object_id_ramal & "'"
-   
-   
-   End If
-   rsAssociados.Open str, Conn, adOpenForwardOnly, adLockReadOnly
-   NRO_LIGACOES = "''"
-   
-   If rsAssociados.EOF = False Then
-      
-      While Not rsAssociados.EOF
-         If NRO_LIGACOES = "''" Then
-            NRO_LIGACOES = "'" & rsAssociados.Fields("NRO_LIGACAO").value & "'"
-         Else
-            NRO_LIGACOES = NRO_LIGACOES & ",'" & rsAssociados.Fields("NRO_LIGACAO").value & "'"
-         End If
-         rsAssociados.MoveNext
-      Wend
-   
-      intlocalerro = 3
-      str = GetQueryProcess(2)
-      str = Replace(str, "@NRO_LIGACAO", NRO_LIGACOES)
-      str = Replace(str, "@CLASSIFICACAO_FISCAL", INSCRICOES_LOTES)
+    Dim intlocalerro As Integer
+    On Error GoTo Trata_Erro
+    Dim NRO_LIGACOES As String, INSCRICOES_LOTES As String, msg As String
+    Dim rsAssociados As ADODB.Recordset, str As String, itmx As ListItem, a As Integer, Qtde As Integer
+    'RECUPERA TODAS AS INSCRICOES DE TODOS LOTE
+    'Inicia o processo de recuperar as inscrições/ligações associadas aos lotes. Não temos mais lotes. Hoje as inscrições são armazenadas nos nós nas extremidades dos ramais
+    str = GetQueryProcess(3)
+    INSCRICOES_LOTES = "''"
     
-      If TB_Ramais = "RAMAIS_ESGOTO" Then
-         str = Replace(str, "NXGS_V_LIG_COMERCIAL", "NXGS_V_LIG_COMERCIAL_E")
-      End If
-      
-
-
-'MsgBox "ARQUIVO DEBUG SALVO"
-' WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-      'MsgBox str
+    If Trim(object_id_lote) = "" Then
+        str = Replace(str, "@OBJECT_ID_", "''")
+    Else
+        str = Replace(str, "@OBJECT_ID_", object_id_lote)
+    End If
+    
+    intlocalerro = 1
+    Set rs = Conn.execute(str)
+    
+    'Vefifica se existe alguma ligação associada ao polígono do lote. Não utilizamos mais polígonos de lotes. Claro que não terá nenhuma
+    While Not rs.EOF
         
-        'Set rs = ConnSec.execute(str)
-      Set rs = New ADODB.Recordset
-        rs.Open str, Conn, adOpenDynamic, adLockOptimistic
-        While Not rs.EOF
-         
-            'CARREGA NO FORM TODAS AS LIGAÇÕES CADASTRADAS
+        If INSCRICOES_LOTES = "''" Then
+            INSCRICOES_LOTES = "'" & rs(0).value & "'"
+        Else
+            INSCRICOES_LOTES = INSCRICOES_LOTES & ",'" & rs(0).value & "'"
+        End If
+    
+        rs.MoveNext
+    Wend
+    
+    rs.Close
+    'Finaliza o processo de recuperar as inscrições/ligações associadas aos lotes.
+    
+    'Inicia a recuperação de todas as ligações associadas ao nó na extremidade do ramal
+    'Configura o código de erro para que se ocorra um erro, seja indicado o local onde ele ocorreu (2)
+    intlocalerro = 2
+    vi = "OBJECT_ID_"
+    Set rsAssociados = New ADODB.Recordset
+    
+    'Seleciona todas as colunas da tabela onde estão os números das ligações de água ou esgoto, associadas aos ramais. Pode existir mais de uma ligação associada a um mesmo ramal
+    If frmCanvas.TipoConexao <> 4 Then
+        'No caso de ser banco de dados SQLServer ou Oracle
+        str = "SELECT * FROM " & TB_Ligacoes & " WHERE OBJECT_ID_ = '" & object_id_ramal & "'"
+    Else
+        'No caso de se banco de dados Postgres
+        str = "SELECT * FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vi + """" + " = '" & object_id_ramal & "'"
+    End If
 
-           With lvLigacoes
-              
-              'Set itmx = .ListItems.Add(, , rs.Fields("NRO_LIGACAO").value)
-              'itmx.SubItems(1) = IIf(IsNull(rs.Fields("CLASSIFICACAO_FISCAL").value), "", rs.Fields("CLASSIFICACAO_FISCAL").value)
-              Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("CLASSIFICACAO_FISCAL").value)
-              itmx.SubItems(1) = IIf(IsNull(rs.Fields("NRO_LIGACAO").value), "", rs.Fields("NRO_LIGACAO").value)
-              
-              itmx.SubItems(2) = IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
-              itmx.SubItems(3) = IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value)
-              
-              itmx.SubItems(4) = IIf(IsNull(rs.Fields("TIPO").value), "", rs.Fields("TIPO").value)
-              
-              rsAssociados.Filter = "NRO_LIGACAO='" & rs.Fields("NRO_LIGACAO").value & "'"
-              If Not rsAssociados.EOF Then itmx.Checked = True
-              itmx.Tag = IIf(IsNull(rs.Fields("codlograd").value), "", rs.Fields("codlograd").value)
-           End With
-           rs.MoveNext
+    'Abre a conexão com o banco de dados para ver os números das ligações
+    rsAssociados.Open str, Conn, adOpenForwardOnly, adLockReadOnly
+    NRO_LIGACOES = "''"
+   
+    'Enquanto houverem ligações associadas ao ramal/nó selecionado
+    If rsAssociados.EOF = False Then
+        While Not rsAssociados.EOF
+            'Se o número da ligação for nulo, ou seja se for a primera vez que estiver lendo a primeira ligação
+            If NRO_LIGACOES = "''" Then
+                'Armazena ela no vetor de ligações
+                NRO_LIGACOES = "'" & rsAssociados.Fields("NRO_LIGACAO").value & "'"
+            'Se for a segunda ou próxima ligação, acrescenta a mesma ao vetor de ligações
+            Else
+                NRO_LIGACOES = NRO_LIGACOES & ",'" & rsAssociados.Fields("NRO_LIGACAO").value & "'"
+            End If
+            rsAssociados.MoveNext
+        Wend
+        'Pronto! Agora tenho um vetor com o(s) numero(s) de todas as ligações que eu selecionei (nó) e estão ligadas ao determinado ramal
+        'Configura o código de erro para que se ocorra um erro, seja indicado o local onde ele ocorreu (3), indicando que agora iremos para outra fase
+        intlocalerro = 3
+        'Recupera a querie junto a vista ou tabela que contem a lista de todas as ligações do município, com os dados das mesmas. Geralmente vinda do banco de dados comercial
+        str = GetQueryProcess(2)
+        'Faz a substituição no local dos números das ligações pelo vetor contendo todos os números de ligações selecionados
+        str = Replace(str, "@NRO_LIGACAO", NRO_LIGACOES)
+        'Faz a substituição no local com a classificação fiscal da prefeitura com as inscrições dos lotes. Não tem nada para substituir
+        str = Replace(str, "@CLASSIFICACAO_FISCAL", INSCRICOES_LOTES)
+        'No caso de cadastro de ramais de esgoto, ele necessita informar que a tabela de esgotos é outra
+        If TB_Ramais = "RAMAIS_ESGOTO" Then
+            str = Replace(str, "NXGS_V_LIG_COMERCIAL", "NXGS_V_LIG_COMERCIAL_E")
+        End If
+        'MsgBox "ARQUIVO DEBUG SALVO"
+        ' WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
+        'MsgBox str
+        'Set rs = ConnSec.execute(str)
+        'Abre a conexão com o banco de dados para ler as ligações do vetor de ligações
+        Set rs = New ADODB.Recordset
+        rs.Open str, Conn, adOpenDynamic, adLockOptimistic
+        'Enquanto existirem ligações
+        While Not rs.EOF
+            'CARREGA NO FORM TODAS AS LIGAÇÕES CADASTRADAS
+            With lvLigacoes
+                'Set itmx = .ListItems.Add(, , rs.Fields("NRO_LIGACAO").value)
+                'itmx.SubItems(1) = IIf(IsNull(rs.Fields("CLASSIFICACAO_FISCAL").value), "", rs.Fields("CLASSIFICACAO_FISCAL").value)
+                Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("CLASSIFICACAO_FISCAL").value)
+                itmx.SubItems(1) = IIf(IsNull(rs.Fields("NRO_LIGACAO").value), "", rs.Fields("NRO_LIGACAO").value)
+                itmx.SubItems(2) = IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
+                itmx.SubItems(3) = IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value)
+                itmx.SubItems(4) = IIf(IsNull(rs.Fields("TIPO").value), "", rs.Fields("TIPO").value)
+                rsAssociados.Filter = "NRO_LIGACAO='" & rs.Fields("NRO_LIGACAO").value & "'"
+                If Not rsAssociados.EOF Then itmx.Checked = True
+                    itmx.Tag = IIf(IsNull(rs.Fields("codlograd").value), "", rs.Fields("codlograd").value)
+            End With
+            rs.MoveNext
         Wend
         rs.Close
-    
-   End If
+    End If
     
     'CARREGA AS LIGAÇÕES FICTÍCIAS CASO SEJA RAMAIS DE AGUA
-   If TB_Ligacoes = "RAMAIS_AGUA_LIGACAO" Then
+    If TB_Ligacoes = "RAMAIS_AGUA_LIGACAO" Then
         If frmCanvas.TipoConexao <> 4 Then
-       
-      str = "SELECT * FROM " & TB_Ligacoes & " WHERE NRO_LIGACAO IN (" & NRO_LIGACOES & ") AND TIPO = 'FICTÍCIA'"
-      
-      Else
-      
-      vi = "NRO_LIGACAO"
-      vo = "TIPO"
-      If frmCanvas.TipoConexao = 4 Then
-      
-       If NRO_LIGACOES = "''" Then
-      NRO_LIGACOES = "'0'"
-      End If
-      End If
-    str = "SELECT * FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vi + """" + " IN (" & NRO_LIGACOES & ") AND " + """" + vo + """" + " = 'FICTÍCIA'"
-      End If
-      Set rs = Conn.execute(str)
-      If rs.EOF = False Then
-      
-        While Not rs.EOF
-                      
-           Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("INSCRICAO_LOTE").value)
-           itmx.SubItems(1) = IIf(IsNull(rs.Fields("NRO_LIGACAO").value), "", rs.Fields("NRO_LIGACAO").value)
-           
-           itmx.SubItems(2) = "" 'IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
-           
-           itmx.SubItems(3) = "" 'IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value)
-           
-           'rsAssociados.Filter = "NRO_LIGACAO='" & rs.Fields("NRO_LIGACAO").value & "'"
-           
-           'If Not rsAssociados.EOF Then itmx.Checked = True
-           
-           itmx.Checked = True
-           itmx.SubItems("4") = "FICTÍCIA"
-           Me.txtQtd.Text = CInt(Me.txtQtd.Text) + 1
-           Me.optLitrosSegundo.value = True
-           Me.txtConsumoFicticia.Text = IIf(IsNull(rs.Fields("CONSUMO_LPS").value), "0.00", rs.Fields("CONSUMO_LPS").value)
-           rs.MoveNext
-        Wend
-        rs.Close
-      End If
-   End If
-   intlocalerro = 4
-   
-   rsAssociados.Close
-
-
-'CarregaLigacoes_err:
-'   msg = "object_id_lote: '" & object_id_lote & "'"
-'   msg = msg & vbCrLf & "INSCRICOES_LOTES: " & INSCRICOES_LOTES
-'   MsgBox Err.Description & vbCrLf & msg & vbCrLf & str
+            str = "SELECT * FROM " & TB_Ligacoes & " WHERE NRO_LIGACAO IN (" & NRO_LIGACOES & ") AND TIPO = 'FICTÍCIA'"
+        Else
+            vi = "NRO_LIGACAO"
+            vo = "TIPO"
+            If frmCanvas.TipoConexao = 4 Then
+                If NRO_LIGACOES = "''" Then
+                    NRO_LIGACOES = "'0'"
+                End If
+            End If
+            str = "SELECT * FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vi + """" + " IN (" & NRO_LIGACOES & ") AND " + """" + vo + """" + " = 'FICTÍCIA'"
+        End If
+        Set rs = Conn.execute(str)
+        If rs.EOF = False Then
+            While Not rs.EOF
+               Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("INSCRICAO_LOTE").value)
+               itmx.SubItems(1) = IIf(IsNull(rs.Fields("NRO_LIGACAO").value), "", rs.Fields("NRO_LIGACAO").value)
+               itmx.SubItems(2) = ""                                                                                'IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
+               itmx.SubItems(3) = ""                                                                                'IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value)
+               'rsAssociados.Filter = "NRO_LIGACAO='" & rs.Fields("NRO_LIGACAO").value & "'"
+               'If Not rsAssociados.EOF Then itmx.Checked = True
+               itmx.Checked = True
+               itmx.SubItems("4") = "FICTÍCIA"
+               Me.txtQtd.Text = CInt(Me.txtQtd.Text) + 1
+               Me.optLitrosSegundo.value = True
+               Me.txtConsumoFicticia.Text = IIf(IsNull(rs.Fields("CONSUMO_LPS").value), "0.00", rs.Fields("CONSUMO_LPS").value)
+               rs.MoveNext
+            Wend
+            rs.Close
+        End If
+    End If
+    intlocalerro = 4
+    rsAssociados.Close
+    'CarregaLigacoes_err:
+    '   msg = "object_id_lote: '" & object_id_lote & "'"
+    '   msg = msg & vbCrLf & "INSCRICOES_LOTES: " & INSCRICOES_LOTES
+    '   MsgBox Err.Description & vbCrLf & msg & vbCrLf & str
 
 Trata_Erro:
 If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
+    Resume Next
 Else
-   
-   PrintErro CStr(Me.Name), "Private Sub carregaLigacoes()", CStr(Err.Number), CStr(Err.Description), True
-
+    PrintErro CStr(Me.Name), "Private Sub carregaLigacoes()", CStr(Err.Number), CStr(Err.Description), True
 End If
-
 
 End Sub
 
@@ -2328,16 +2304,16 @@ Private Sub lvLigacoes_ItemCheck(ByVal Item As MSComctlLib.ListItem)
 End Sub
 
 
-Private Sub optCentro_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub optCentro_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 
 
-Private Sub optDireito_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub optDireito_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 
-Private Sub optEsquerdo_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub optEsquerdo_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 

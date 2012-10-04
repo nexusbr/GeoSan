@@ -1,6 +1,12 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+04-10-2012 - GeoSan 06.00.07.05
+
+Foi realizada a revisão no código no formulário FrmCadastroRamal, colocados diversos comentários.
+Foi alterada uma linha no banco de dados. Consultar o arquivo db\historico de alteracoes banco de dados.txt
+Corrigida a questão de acesso dos consumidores em banco local, que não estava acessando. 
+
 04-09-2012 - GeoSan 06.00.07.04
 Atualizada a querie que distribui as demandas de consumo médio do software comercial para os ramais das ligações de água.
 Gerado novo executável para instalação do GeoSan.
