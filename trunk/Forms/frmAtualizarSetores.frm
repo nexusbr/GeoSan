@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TECOMD~1.DLL"
-Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TECOMC~1.DLL"
+Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Begin VB.Form frmAtualizarSetores 
    Caption         =   "Carregar Polígono de Setor"
    ClientHeight    =   4905
@@ -303,311 +303,222 @@ Private Sub cmdOperacoes_Click()
    
 End Sub
 
+'Rotina responsável por carregar os dados do polígono de seleção para a tabela POLIGONO_SELECAO para depois gerar relatórios
+'ou exportar para o Epanet
 Private Sub cmdCarregar_Click()
-   On Error GoTo Trata_Erro
-   
-   Dim i As Long
-   Dim contador As Integer
- contador = 1
-   Me.MousePointer = vbHourglass
-   
-   Open App.path & "\Controles\UserLog.txt" For Output As #3
-   Print #3, strUser
-   Close #3
-a = "POLIGONO_SELECAO"
-b = "USUARIO"
-c = "TIPO"
+    On Error GoTo Trata_Erro
+    Dim i As Long
+    Dim contador As Integer
+    
+    contador = 1
+    Me.MousePointer = vbHourglass
+    'Armazena no arquivo o nome do usuário que gerou este polígono de seleção
+    Open App.path & "\Controles\UserLog.txt" For Output As #3
+    Print #3, strUser
+    Close #3
+    
+    a = "POLIGONO_SELECAO"
+    b = "USUARIO"
+    c = "TIPO"
 
-   'LIMPA DA BASE AS REDES SELECIONADAS ANTERIORMENTE PELO USUÁRIO
-   
-     If frmCanvas.TipoConexao <> 4 Then
-   Conn.execute ("DELETE FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1")
-      Else
+    '********************************************************************************************************************
+    'LIMPA DA BASE AS REDES (TIPO = 1) SELECIONADAS ANTERIORMENTE PELO USUÁRIO na rotina de carregar polígono de seleção
+    If frmCanvas.TipoConexao <> 4 Then
+        'Caso não seja Postgres
+        Conn.execute ("DELETE FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1")
+    Else
+        'Caso seja Postgres
         Conn.execute ("DELETE FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & strUser & "' AND " + """" + c + """" + " = '1'")
-      End If
+    End If
         
-   If Me.Check1.value = 1 Then
-      If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
-         
-         If lngTotalRedesDentro > 0 Then
-            FrmMain.ProgressBar1.Max = lngTotalRedesDentro + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To lngTotalRedesDentro - 1
-               DoEvents
-               
-               If ArrRedesDentro(i) <> 0 Then
-               a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
+    If Me.Check1.value = 1 Then
+        If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
+            If lngTotalRedesDentro > 0 Then
+                FrmMain.ProgressBar1.Max = lngTotalRedesDentro + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To lngTotalRedesDentro - 1
+                    DoEvents
+                    If ArrRedesDentro(i) <> 0 Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRedesDentro(i) & "','" & strUser & "',1)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ") VALUES ( '" & ArrRedesDentro(i) & "','" & strUser & "',1)")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        Else
+            Qtde = TeDatabasePoligono.locateInsideofPolygon(idPoligonSel, , tpLINES, "WATERLINES")
+            If Qtde > 0 Then
+                FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To Qtde - 1
+                    DoEvents
+                    If TeDatabasePoligono.objectIds(i) <> "" Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',1)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','1')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        End If
+    End If
+    If Me.Check2.value = 1 Then 'PEGA AS REDES QUE FORAM TOCADAS PELO POLÍGONO
+        If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
+            If lngTotalRedesDivisa > 0 Then
+                FrmMain.ProgressBar1.Max = lngTotalRedesDivisa + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To lngTotalRedesDivisa - 1
+                    DoEvents
+                    If ArrRedesDivisa(i) <> 0 Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRedesDivisa(i) & "','" & strUser & "',1)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & ArrRedesDivisa(i) & "','" & strUser & "','1')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        Else
+            Qtde = TeDatabasePoligono.locatePolygonthatCrosses(idPoligonSel, , tpLINES, "WATERLINES")
+            If Qtde > 0 Then
+                FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To Qtde - 1
+                    DoEvents
+                    If TeDatabasePoligono.objectIds(i) <> "" Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',1)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','1')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        End If
+    End If
+    b = "POLIGONO_SELECAO"
+    c = "USUARIO"
+    d = "TIPO"
+    
+    '********************************************************************************************************************
+    'LIMPA DA BASE OS RAMAIS (TIPO = 2) SELECIONADAS ANTERIORMENTE PELO USUÁRIO na rotina de carregar polígono de seleção
+    If frmCanvas.TipoConexao <> 4 Then
+        Conn.execute ("DELETE FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 2")
+    Else
+        Conn.execute ("DELETE FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '" & strUser & "' AND " + """" + d + """" + " = '2'")
+    End If
+    If Me.Check3.value = 1 Then 'PEGA OS RAMAIS QUE ESTÃO DENTRO DO POLÍGONO
+        If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
+            If lngTotalRamaisDentro > 0 Then
+                FrmMain.ProgressBar1.Max = lngTotalRamaisDentro + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To lngTotalRamaisDentro - 1
+                    DoEvents
+                    If ArrRamaisDentro(i) <> 0 Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRamaisDentro(i) & "','" & strUser & "',2)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & ArrRamaisDentro(i) & "','" & strUser & "','2')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        Else
+            'qtde = tedatabasepoligono.locatePolygonthatCrosses(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
+            Qtde = TeDatabasePoligono.locateInsideofPolygon(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
+            If Qtde > 0 Then
+                FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To Qtde - 1
+                    DoEvents
+                    If TeDatabasePoligono.objectIds(icont) <> "" Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',2)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','2')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        End If
+    End If
+    If Me.Check4.value = 1 Then 'PEGA OS RAMAIS QUE ESTÃO NA BORDA DO POLÍGONO
+        If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
+            If lngTotalRamaisDivisa > 0 Then
+                FrmMain.ProgressBar1.Max = lngTotalRamaisDivisa + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To lngTotalRamaisDivisa - 1
+                    DoEvents
+                    If ArrRamaisDivisa(i) <> 0 Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRamaisDivisa(i) & "','" & strUser & "',2)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & ArrRamaisDivisa(i) & "','" & strUser & "','2')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        Else
+            'qtde = tedatabasepoligono.locateInsideofPolygon(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
+            Qtde = TeDatabasePoligono.locatePolygonthatCrosses(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
+            If Qtde > 0 Then
+                FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
+                For i = 0 To Qtde - 1
+                    DoEvents
+                    If TeDatabasePoligono.objectIds(i) <> "" Then
+                        a = "POLIGONO_SELECAO"
+                        b = "OBJECT_ID_"
+                        c = "USUARIO"
+                        d = "TIPO"
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',2)")
+                        Else
+                            Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','2')")
+                        End If
+                    End If
+                    FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
+                Next
+            End If
+        End If
+    End If
 
 
-     If frmCanvas.TipoConexao <> 4 Then
-         
-    Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRedesDentro(i) & "','" & strUser & "',1)")
-     Else
-     
-       Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ") VALUES ( '" & ArrRedesDentro(i) & "','" & strUser & "',1)")
-     End If
-               
-               
-               
-                  
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-      Else
-         
-         Qtde = TeDatabasePoligono.locateInsideofPolygon(idPoligonSel, , tpLINES, "WATERLINES")
-         If Qtde > 0 Then
-            FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To Qtde - 1
-               DoEvents
-               If TeDatabasePoligono.objectIds(i) <> "" Then
-               a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-   Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',1)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','1')")
-     End If
-                  
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-      End If
-   End If
+    '********************************************************************************************************************
+    'LIMPA DA BASE OS NÓS (TIPO = 0) SELECIONADAS ANTERIORMENTE PELO USUÁRIO na rotina de carregar polígono de seleção
+    'implementando a funcionalidade para nós de redes de agua
    
-   
-   If Me.Check2.value = 1 Then 'PEGA AS REDES QUE FORAM TOCADAS PELO POLÍGONO
-      
-      If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
-         
-         If lngTotalRedesDivisa > 0 Then
-            FrmMain.ProgressBar1.Max = lngTotalRedesDivisa + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To lngTotalRedesDivisa - 1
-               DoEvents
-               
-               If ArrRedesDivisa(i) <> 0 Then
-               
-                 a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
 
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-      Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRedesDivisa(i) & "','" & strUser & "',1)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & ArrRedesDivisa(i) & "','" & strUser & "','1')")
-     End If
-               
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-      Else
-      
-         Qtde = TeDatabasePoligono.locatePolygonthatCrosses(idPoligonSel, , tpLINES, "WATERLINES")
-         
-         If Qtde > 0 Then
-            FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To Qtde - 1
-               DoEvents
-               If TeDatabasePoligono.objectIds(i) <> "" Then
-               
-      a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-    Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',1)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','1')")
-     End If
-                  
-                 
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-      End If
-   End If
-   
-     b = "POLIGONO_SELECAO"
-      c = "USUARIO"
-      d = "TIPO"
-
-     If frmCanvas.TipoConexao <> 4 Then
-
-   'LIMPA DA BASE OS RAMAIS SELECIONADOS ANTERIORMENTE PELO USUÁRIO
-   Conn.execute ("DELETE FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 2")
-Else
-
- Conn.execute ("DELETE FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '" & strUser & "' AND " + """" + d + """" + " = '2'")
-End If
-      
-   If Me.Check3.value = 1 Then 'PEGA OS RAMAIS QUE ESTÃO DENTRO DO POLÍGONO
-      
-      If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
-         
-         If lngTotalRamaisDentro > 0 Then
-            FrmMain.ProgressBar1.Max = lngTotalRamaisDentro + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To lngTotalRamaisDentro - 1
-               DoEvents
-               
-               If ArrRamaisDentro(i) <> 0 Then
-               
-               
-                a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-        Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRamaisDentro(i) & "','" & strUser & "',2)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & ArrRamaisDentro(i) & "','" & strUser & "','2')")
-     End If
-               
-               
-               
-               
-               
-               
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-
-      Else
-      'qtde = tedatabasepoligono.locatePolygonthatCrosses(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
-         Qtde = TeDatabasePoligono.locateInsideofPolygon(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
-         
-         If Qtde > 0 Then
-            FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To Qtde - 1
-               DoEvents
-               If TeDatabasePoligono.objectIds(icont) <> "" Then
-                a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-      Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',2)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','2')")
-     End If
-               
-               
-               
-               
-                
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-      End If
-   End If
-   
-   
-   If Me.Check4.value = 1 Then 'PEGA OS RAMAIS QUE ESTÃO NA BORDA DO POLÍGONO
-      
-      If blnPoligonoVirtual = True Then 'VERIFICA SE A OPERAÇÃO É POR POLÍGONO VIRTUAL OU REAL
-         
-         If lngTotalRamaisDivisa > 0 Then
-            FrmMain.ProgressBar1.Max = lngTotalRamaisDivisa + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To lngTotalRamaisDivisa - 1
-               DoEvents
-               
-               If ArrRamaisDivisa(i) <> 0 Then
-               
-                 a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-      Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & ArrRamaisDivisa(i) & "','" & strUser & "',2)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & ArrRamaisDivisa(i) & "','" & strUser & "','2')")
-     End If
-               
-                 
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-
-      Else
-         'qtde = tedatabasepoligono.locateInsideofPolygon(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
-         Qtde = TeDatabasePoligono.locatePolygonthatCrosses(idPoligonSel, , tpLINES, "RAMAIS_AGUA")
-      
-         If Qtde > 0 Then
-            FrmMain.ProgressBar1.Max = Qtde + 1: FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1
-            For i = 0 To Qtde - 1
-               DoEvents
-               If TeDatabasePoligono.objectIds(i) <> "" Then
-                a = "POLIGONO_SELECAO"
-      b = "OBJECT_ID_"
-      c = "USUARIO"
-      d = "TIPO"
-      
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-       Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "',2)")
-     Else
-     
-     Conn.execute ("INSERT INTO " + """" + a + """" + " (" + """" + b + """" + "," + """" + c + """" + "," + """" + d + """" + ")VALUES  ( '" & TeDatabasePoligono.objectIds(i) & "','" & strUser & "','2')")
-     End If
-     
-               
-                
-               End If
-               FrmMain.ProgressBar1.value = FrmMain.ProgressBar1.value + 1
-            Next
-         End If
-      End If
-   End If
-
-
-'##################################################################################
-   
-   'implementando a funcionalidade para nós de redes de agua
-   
-   'LIMPA DA BASE OS NÓS DAS REDES SELECIONADAS ANTERIORMENTE PELO USUÁRIO
 a = "POLIGONO_SELECAO"
 b = "USUARIO"
 c = "TIPO"
@@ -745,8 +656,8 @@ c = "TIPO"
          End If
       End If
    End If
-'##################################################################################
-
+    
+    '********************************************************************************************************************
 
 
 fim:

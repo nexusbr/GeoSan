@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{18576B0E-A129-4A50-9930-59E18A6FE5E1}#1.0#0"; "TECOMC~2.DLL"
-Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TECOMV~2.DLL"
+Object = "{18576B0E-A129-4A50-9930-59E18A6FE5E1}#1.0#0"; "TeComCanvas.dll"
 Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TECOMD~1.DLL"
-Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TECOMC~1.DLL"
+Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
+Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Begin VB.Form frmCanvas 
    Caption         =   "Mapa"
    ClientHeight    =   5955
@@ -314,7 +314,7 @@ Dim rs As ADODB.Recordset
 tipoDeConexao = typeconnection
 
 
-If typeconnection <> PostgreSQL Then
+If typeconnection <> postgreSQL Then
 
 3 TeViewDatabase1.username = username
 

@@ -46,509 +46,415 @@ Dim blnRsWaterCompTypes As Boolean 'Indicador para informar se a tabela RsWaterC
 Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nsize As Long, ByVal lpFileName As String) As Long
 Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+'Lê as informações do arquivo de inicialização do GeoSan
+'Arquivo=nome do arquivo ini
+'Secao=O que esta entre []
+'Entrada=nome do que se encontra antes do sinal de igual
 Public Function ReadINI(Secao As String, Entrada As String, Arquivo As String)
-  
-  'Arquivo=nome do arquivo ini
-  'Secao=O que esta entre []
-  'Entrada=nome do que se encontra antes do sinal de igual
- 
- Dim retlen As String
- Dim Ret As String
- 
- Ret = String$(255, 0)
- retlen = GetPrivateProfileString(Secao, Entrada, "", Ret, Len(Ret), Arquivo)
- Ret = Left$(Ret, retlen)
- ReadINI = Ret
-
+    Dim retlen As String
+    Dim Ret As String
+    Ret = String$(255, 0)
+    retlen = GetPrivateProfileString(Secao, Entrada, "", Ret, Len(Ret), Arquivo)
+    Ret = Left$(Ret, retlen)
+    ReadINI = Ret
 End Function
-
-
-
-
-
-
 'Procedimento Exporte EPANET recebe como parametros o cursor trazendo todas os trechos
-' a serem exportados e o objecto de conexão
-Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
-
+'a serem exportados e o objecto de conexão
 '(rsTrechos):É a tabela Waterlines com os filtros de tipo de rede e
 'setor selecionados pelo usuário
-
-
-On Error GoTo Trata_Erro
-   Dim mPROVEDOR As String
-Dim mSERVIDOR As String
-Dim mPORTA As String
-Dim mBANCO As String
-Dim mUSUARIO As String
-Dim Senha As String
-Dim decriptada As String
-Dim nStr As String
-Dim prov As String
-   
-If (az <> 10) Then
-mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\CONTROLES\GEOSAN.ini")
-mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\CONTROLES\GEOSAN.ini")
-mBANCO = ReadINI("CONEXAO", "BANCO", App.Path & "\CONTROLES\GEOSAN.ini")
-mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.Path & "\CONTROLES\GEOSAN.ini")
-Senha = ReadINI("CONEXAO", "SENHA", App.Path & "\CONTROLES\GEOSAN.ini")
-prov = ReadINI("CONEXAO", "PROVEDOR", App.Path & "\CONTROLES\GEOSAN.ini")
-decriptada = FunDecripta(Senha)
-az = 10
- End If
- If prov = "4-PostgreSQL" Then
-    FrmEPANET.TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
-
-End If
-
-   Set conn = mconn
-   
-   'Vaviavel que guadará o nó a ser processado
-   Dim NO As String
-   
-   'Variável contador para repetição do processo para o no inicial e final de cada trecho
-   Dim conta_no As Integer
-   
-   'Variáveis que retornarão a posição do ponto virtual
-   Dim Lin_len As Double, x As Double, y As Double
-   
-   'Variáveis que guardarão os nós para inserção do trecho
-   Dim NoI As String, NoF As String
-   
-   'Configura o objeto tb(Tecomdatabase) que será usado para retornar para as variáveis lin_len, x e y
-   'seus valores para cada trecho
-   If conn.Provider <> "PostgreSQL.1" Then
-   tb.Provider = Provider
-   tb.Connection = conn
-   Else
-    tb.Provider = Provider
-   tb.Connection = FrmEPANET.TeAcXConnection1.objectConnection_
-   End If
-   'tb.setCurrentLayer "waterlines"
-   
-   'PADRONIZADO O NOME DAS TABELAS PARA LETRA MAIÚSCULA - Jonathas 19/03/09
-   tb.setCurrentLayer "WATERLINES"
-   
+Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
+    On Error GoTo Trata_Erro
+    Dim numeroErro As String                'para auxiliar a identificar onde ocorreu o erro
+    Dim contadorTrechos As Integer          'para contar quantos trechos está exportando
+    Dim mPROVEDOR As String
+    Dim mSERVIDOR As String
+    Dim mPORTA As String
+    Dim mBANCO As String
+    Dim mUSUARIO As String
+    Dim Senha As String
+    Dim decriptada As String
+    Dim nStr As String
+    Dim prov As String
     
+    'Informa que o contador de trechos exportados é zero
+    contadorTrechos = 0
+    'Abre um arquivo, sobrepondo o anterior para registrar cada trecho que está sendo exportado para o Epanet
+    Open App.Path & "\LogErroExportEPANET-histórico.txt" For Output As #3
+         
+    If (az <> 10) Then
+        mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\CONTROLES\GEOSAN.ini")
+        mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\CONTROLES\GEOSAN.ini")
+        mBANCO = ReadINI("CONEXAO", "BANCO", App.Path & "\CONTROLES\GEOSAN.ini")
+        mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.Path & "\CONTROLES\GEOSAN.ini")
+        Senha = ReadINI("CONEXAO", "SENHA", App.Path & "\CONTROLES\GEOSAN.ini")
+        prov = ReadINI("CONEXAO", "PROVEDOR", App.Path & "\CONTROLES\GEOSAN.ini")
+        decriptada = FunDecripta(Senha)
+        az = 10
+    End If
+    If prov = "4-PostgreSQL" Then
+        FrmEPANET.TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
+    End If
+    Set conn = mconn
+    
+    Dim NO As String                                'Vaviavel que guadará o nó a ser processado
+    Dim conta_no As Integer                         'Variável contador para repetição do processo para o no inicial e final de cada trecho
+    Dim Lin_len As Double, x As Double, y As Double 'Variáveis que retornarão a posição do ponto virtual
+    Dim NoI As String, NoF As String                'Variáveis que guardarão os nós para inserção do trecho
+   
+    'Configura o objeto tb(Tecomdatabase) que será usado para retornar para as variáveis lin_len, x e y
+    'seus valores para cada trecho
+    If conn.Provider <> "PostgreSQL.1" Then
+        tb.Provider = Provider
+        tb.Connection = conn
+    Else
+        tb.Provider = Provider
+        tb.Connection = FrmEPANET.TeAcXConnection1.objectConnection_
+    End If
+    'tb.setCurrentLayer "waterlines"
+    'PADRONIZADO O NOME DAS TABELAS PARA LETRA MAIÚSCULA - Jonathas 19/03/09
+    tb.setCurrentLayer "WATERLINES"
     'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     Dim retorno As Double, distancia As Double, novoLinLen As Double
     Dim numTotalVerticesNaLinha, i As Integer
-    
     Dim teNet As New TECOMNETWORKLib.TeNetwork
-    
-    
     'Variáveis da biblioteca
     Dim geom_id As Long, rightside As Long, adjust As Long
     Dim object_id As String
     Dim xpinter As Double, ypinter As Double, metricValue As Double
     Dim verticeInicial_x As Double, verticeInicial_y As Double, vertice_Y As Double, vertice_X As Double
-    
-    
     teNet.Provider = 1
     'configura o componente para conexao com o banco de dados
     teNet.Connection = conn
     'seta o plano "WATERLINES" como corrente
     teNet.setCurrentLayer "WATERLINES"
     'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    
-    
     intLinhaCod = 1
-   
-   'Abre os cursores que guardarão os objectos do rede(nos,trechos,etc) em memoria
-   'para serem gerados em arquivo txt
-   AbrirEstruturaExporteRede
-   
-   'RECORDSET COM OS TIPOS DE REDES EXISTENTES
-      If conn.Provider <> "PostgreSQL.1" Then
-   Set rsWaterCompTypes = conn.Execute("SELECT * FROM WATERCOMPONENTSTYPES ORDER BY ID_TYPE")
-   Else
-    Set rsWaterCompTypes = conn.Execute("SELECT * FROM " + """" + "WATERCOMPONENTSTYPES" + """" + " ORDER BY " + """" + "ID_TYPE" + """" + "")
-   End If
-   If rsWaterCompTypes.EOF = False Then
-      blnRsWaterCompTypes = True
-   Else
-      MsgBox "Não será possivel identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia.", vbExclamation, ""
-      blnRsWaterCompTypes = False
-   End If
-   
-   
-   intLinhaCod = 2
-   'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
-   CarregaRsNosTMP
-   
-   intLinhaCod = 3
-   'With rsTrechos
-   'Percorre todos os trechos da tabela waterlines com a clausura where (setor e tipo de rede)
-   'ativada e cursor iniciando no primeiro registro
-   
- 
-   Do While Not rsTrechos.EOF = True
-      DoEvents
-      If Cancelar = True Then
-         Exit Sub
-      End If
-      'Percorre os dois nós do Trecho
+    'Abre os cursores que guardarão os objectos do rede(nos,trechos,etc) em memoria
+    'para serem gerados em arquivo txt
+    AbrirEstruturaExporteRede
+    'RECORDSET COM OS TIPOS DE REDES EXISTENTES
+    If conn.Provider <> "PostgreSQL.1" Then
+        Set rsWaterCompTypes = conn.Execute("SELECT * FROM WATERCOMPONENTSTYPES ORDER BY ID_TYPE")
+    Else
+        Set rsWaterCompTypes = conn.Execute("SELECT * FROM " + """" + "WATERCOMPONENTSTYPES" + """" + " ORDER BY " + """" + "ID_TYPE" + """" + "")
+    End If
+    If rsWaterCompTypes.EOF = False Then
+        blnRsWaterCompTypes = True
+    Else
+        MsgBox "Não será possivel identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia.", vbExclamation, ""
+        blnRsWaterCompTypes = False
+    End If
+    intLinhaCod = 2
+    'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
+    CarregaRsNosTMP
+    
+    intLinhaCod = 3
+    'With rsTrechos
+    'Percorre todos os trechos da tabela waterlines com a clausura where (setor e tipo de rede)
+    'ativada e cursor iniciando no primeiro registro
+    
+    Do While Not rsTrechos.EOF = True
+        intLinhaCod = 161
+        DoEvents
+        If Cancelar = True Then
+           Exit Sub
+        End If
+        
+        'Percorre os dois nós do Trecho
+        intLinhaCod = 4
+        contadorTrechos = contadorTrechos + 1                                   'Incrementa o contador de trechos lidos
+        'Imprime o trecho de rede que ele está lendo para exportar para o Epanet
+        Print #3, Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_
 
-      intLinhaCod = 4
-      For conta_no = 1 To 2
-         'Verifica a variável conta_no e atribui a variavel NO o valor do nó inicial ou final
-         If conta_no = 1 Then 'refere-se ao nó inicial
-            NO = rsTrechos.Fields("InitialComponent").Value
-         Else 'refere-se ao no final
-            NO = rsTrechos.Fields("FinalComponent").Value
-         End If
-
-         intLinhaCod = 5
-         'Verifica se o trecho não foi cadastrado
-         If Not TrechoCadastrado(rsTrechos.Fields("object_id_").Value) Then 'se não foi exportado, vamos processar
-
-            Dim idLinha As String
-            Dim idNo As String
-
-            idLinha = rsTrechos.Fields("object_id_").Value
-            idNo = NO
-
-
-            '###########################################################
-            'Atribui a variável NoI ou NoF com o valor NO para ser usado na inserção do trecho
-            'no procedimento inserção de Trecho
-            If conta_no = 1 Then
-               NoI = NO
-            Else
-               NoF = NO
+        For conta_no = 1 To 2
+            'Verifica a variável conta_no e atribui a variavel NO o valor do nó inicial ou final
+            If conta_no = 1 Then 'refere-se ao nó inicial
+                Print #3, Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_ & " - Nó inicial: " & rsTrechos!InitialComponent
+                NO = rsTrechos.Fields("InitialComponent").Value
+            Else 'refere-se ao no final
+                Print #3, Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_ & " - Nó final: " & rsTrechos!FinalComponent
+                NO = rsTrechos.Fields("FinalComponent").Value
             End If
-
-            '######################
-            'Verifica se o nó não foi cadastrado
-            intLinhaCod = 6
-            If Not NoCadastrada(NO) Then 'se o nó não foi cadastrado
-
-               'Seleciona no Cursor rsNosTmp o nó igual o valor de NO
-               rsNosTmp.Filter = "id='" & NO & "'"
-               'Seleciona do processo a ser usado para o tipo do nó
-
-               intLinhaCod = 7
-
-               If rsNosTmp.EOF = False Then
-
-                  strTipoComp = ""
-
-                  If blnRsWaterCompTypes = True Then
-                     rsWaterCompTypes.MoveFirst
-                     Do While Not rsWaterCompTypes.EOF = True
-                        If rsNosTmp.Fields("Tipo").Value = rsWaterCompTypes!id_type Then
-                            strTipoComp = rsWaterCompTypes!SPECIFICATION_
-                            Exit Do
+            intLinhaCod = 5
+            'Verifica se o trecho não foi cadastrado
+            If Not TrechoCadastrado(rsTrechos.Fields("object_id_").Value) Then 'se não foi exportado, vamos processar
+                Dim idLinha As String
+                Dim idNo As String
+                idLinha = rsTrechos.Fields("object_id_").Value
+                idNo = NO
+                '###########################################################
+                'Atribui a variável NoI ou NoF com o valor NO para ser usado na inserção do trecho
+                'no procedimento inserção de Trecho
+                If conta_no = 1 Then
+                   NoI = NO
+                Else
+                   NoF = NO
+                End If
+                '######################
+                'Verifica se o nó não foi cadastrado
+                intLinhaCod = 6
+                If Not NoCadastrada(NO) Then 'se o nó não foi cadastrado
+                    'Seleciona no Cursor rsNosTmp o nó igual o valor de NO
+                    rsNosTmp.Filter = "id='" & NO & "'"
+                    'Seleciona do processo a ser usado para o tipo do nó
+                    intLinhaCod = 7
+                    If rsNosTmp.EOF = False Then
+                        strTipoComp = ""
+                        If blnRsWaterCompTypes = True Then
+                            rsWaterCompTypes.MoveFirst
+                            Do While Not rsWaterCompTypes.EOF = True
+                                If rsNosTmp.Fields("Tipo").Value = rsWaterCompTypes!id_type Then
+                                    strTipoComp = rsWaterCompTypes!SPECIFICATION_
+                                    Exit Do
+                                End If
+                                rsWaterCompTypes.MoveNext
+                            Loop
                         End If
-                        rsWaterCompTypes.MoveNext
-                     Loop
-                  End If
-
-                  Select Case strTipoComp
-'                     Case No_Bombas, No_Valvulas, No_Valvulas_99 'Especial nó
-                      Case "PUMP", "VALVE", "VALVE2", "REGISTER"
-
-                        'Verifica a Direção da Tubulação e recupera um ponto X_NO_VIRT, Y_NO_VIRT a 1/3 da distancia
-                        ' e insere o no virtual em RsJuntions e RsCoordinates
-
-                        tb.getLengthOfLine 0, idLinha, Lin_len
-                        'carrega em Lin_len o comprimento total da linha
-
-                        intLinhaCod = 8
-
-                        Dim X_Componente As Double 'COORDENADA X DO VERTICE
-                        Dim Y_Componente As Double 'COORDENADA Y DO VERTICE
-                        Dim X_Vertice As Double    'COORDENADA X DO VERTICE
-                        Dim Y_Vertice As Double    'COORDENADA Y DO VERTICE
-                        Dim VERTICE_LEN As Double  'ARMAZENA O COMPRIMENTO DO VERTICE ANALIZADO
-                        Dim X_NO_VIRT As Double    'ARMAZENA A COORDENADA X DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
-                        Dim Y_NO_VIRT As Double    'ARMAZENA A COORDENADA Y DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
-
-                        If conta_no = 2 Then ' se for o ponto final pega a distância de 2/3 do comprimento da linha
-
-                           numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha) 'retorna número de pontos que compõem a linha. se maior que 2 significa que tem vertices
-
-                           If numTotalVerticesNaLinha > 2 Then 'existem vértices na linha
-                              'Pegar o penultimo ponto(vertice)
-
-                              'RETORNA A COORDENADA DO ÚLTIMO VERTICE
-                              retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha - 2), X_Vertice, Y_Vertice)
-
-                              'RETORNA A COORDENADA DO ÚLTIMO NÓ
-                              retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha - 1), X_Componente, Y_Componente)
-
-                              'RETORNA A DISTANCIA ENTRE O ULTIMO NÓ E O ULTIMO VERTICE
-                              VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
-
-                              'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
-                              '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
-                              distancia = (Lin_len - VERTICE_LEN) + (VERTICE_LEN * 0.666666)
-
-                              'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                              'VIRTUAL QUE DEVERÁ SER CRIADO
-                              tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-
-                           Else
-
-                              'DISTANCIA = 2 TERÇOS DO COMPRIMENTO TOTAL DA LINHA
-                              distancia = Lin_len * 0.666666
-
-                              'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                              'VIRTUAL QUE DEVERÁ SER CRIADO
-                              tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-
-                           End If
-
-                        Else ' se o ponto for o inicial, pega a distãncia de 1/3 do comprimento da linha
-
-                           numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)
-                           If numTotalVerticesNaLinha > 2 Then 'existem vértices na linha
-
-                              'RETORNA A COORDENADA DO PRIMEIRO VERTICE
-                              retorno = tb.getPointOfLine(0, idLinha, 1, X_Vertice, Y_Vertice)
-
-                              'RETORNA A COORDENADA DO PRIMEIRO NÓ
-                              retorno = tb.getPointOfLine(0, idLinha, 0, X_Componente, Y_Componente)
-
-                              'RETORNA EM VERTICE_LEN A DISTANCIA ENTRE O PRIMEIRO VERTICE E O PRIMEIRO NÓ
-                              VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
-
-                              'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
-                              '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
-                              distancia = VERTICE_LEN * 0.33333
-
-                              'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                              'VIRTUAL QUE DEVERÁ SER CRIADO
-                              tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-
-                           Else
-
-                              'DISTANCIA = 1 TERÇO DO COMPRIMENTO TOTAL DA LINHA
-                              distancia = Lin_len * 0.333333
-
-                              'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                              'VIRTUAL QUE DEVERÁ SER CRIADO
-                              tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-
-                           End If
-
-                           ' retorna em x, y a coordenada do ponto inicial que fica a 1/3 do início da linha
-                           'tb.getPerpendicularPoint 0, .Fields("object_id_").Value, (Lin_len / 3) * 2, 0, X_Componente, Y_Componente ' colocou zero antes de x, y para retornar o ponto na própria linha
-
-                        End If
-
-                        intLinhaCod = 9
-
-                        rsJunctions.AddNew
-                        rsJunctions.Fields("id").Value = NO & "A"
-                        rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
-                        rsJunctions.Fields("demand").Value = 0
-                        rsJunctions.Fields("pattern").Value = ""
-
-                        rsCoordinates.AddNew
-                        rsCoordinates.Fields("id").Value = NO & "A"
-                        rsCoordinates.Fields("x").Value = X_NO_VIRT
-                        rsCoordinates.Fields("y").Value = Y_NO_VIRT
-
-
-                     '###########################################################
-                     'Alterar a variável NoI ou NoF com o valor NO & "A" para ser usado na inserção do trecho
-                     'indicando que o trecho a ser inserido usará um nó virtual
-                     If conta_no = 1 Then
-                        NoI = NO & "A"
-                     Else
-                        NoF = NO & "A"
-                     End If
-                     '######################
-                     'Cria o Componente do tipo entre o nó virtual e o nó processado
-
-                      intLinhaCod = 10
-                      'Select Case rsNosTmp.Fields("Tipo").Value
-
-                     Select Case strTipoComp
-                        Case "PUMP"
-                           rsPumps.AddNew
-                           rsPumps.Fields("id").Value = NO
-
-                           If conta_no = 1 Then
-                              rsPumps.Fields("Node1").Value = NO          'NESTE TRECHO É DEFINIDO O SENTIDO DA BOMBA
-                              rsPumps.Fields("Node2").Value = NO & "A"    'A ORDEM DE NO E NOA INFLUENCIA NO SENTIDO
-                           Else
-                              rsPumps.Fields("Node1").Value = NO & "A"
-                              rsPumps.Fields("Node2").Value = NO
-                           End If
-
-                           AddSubItemPumps NO  'Adiciona os sub itens para a bomba (curva)
-                        Case "VALVE"
-                           rsValves.AddNew
-                           rsValves.Fields("ID").Value = NO
-                           rsValves.Fields("Node1").Value = NO & "A"
-                           rsValves.Fields("Node2").Value = NO
-                           AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
-
-                        Case "VALVE2"
-                           rsPipes.AddNew
-                           rsPipes.Fields("id").Value = NO & "A"
-                           rsPipes.Fields("node1").Value = NO & "A"
-                           rsPipes.Fields("node2").Value = NO
-                           rsPipes.Fields("length").Value = 0.1
-                           rsPipes.Fields("diameter").Value = Replace(rsTrechos.Fields("internaldiameter").Value, ",", ".")
-                           rsPipes.Fields("roughness").Value = Replace(rsTrechos.Fields("roughness").Value, ",", ".")
-                           rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
-                           If rsTrechos.Fields("MATERIALNAME").Value <> "" Then
-                              rsPipes.Fields("Description").Value = rsTrechos.Fields("MATERIALNAME").Value
-                           Else
-                              rsPipes.Fields("Description").Value = ""
-                           End If
-
-                        Case "REGISTER"
-                           rsPipes.AddNew
-                           rsPipes.Fields("ID").Value = NO & "A"
-                           rsPipes.Fields("NODE1").Value = NO & "A"
-                           rsPipes.Fields("NODE2").Value = NO
-                           rsPipes.Fields("LENGTH").Value = 1
-                           rsPipes.Fields("DIAMETER").Value = Replace(rsTrechos.Fields("internaldiameter").Value, ",", ".")
-                           rsPipes.Fields("ROUGHNESS").Value = Replace(rsTrechos.Fields("roughness").Value, ",", ".")
-                           rsPipes.Fields("STATUS").Value = IIf(rsNosTmp("ESTADO").Value = 0, " ", rsNosTmp("ESTADO").Value)
-                           rsPipes.Fields("DESCRIPTION").Value = "REGISTRO"
-                           
-                           
-                          
-                           
-                           
-                     
-
-                     End Select
-                  End Select
-               End If 'rsNosTmp.EOF = true
-
-               'Insere o nó processado
-               intLinhaCod = 11
-               'Select Case rsNosTmp.Fields("Tipo").Value
-                Select Case strTipoComp
-                  Case "RNV" 'No_Tanques
-                     rsTanks.AddNew
-                     rsTanks.Fields("ID").Value = NO
-                     rsTanks.Fields("Elevation").Value = Format(rsNosTmp("cota").Value, ".0")
-                     AddSubItemTank NO
-                  Case "RNF" 'No_Reservatorios
-                     rsReservoirs.AddNew
-                     rsReservoirs.Fields("ID").Value = NO
-                     rsReservoirs.Fields("Head").Value = ""
-                     rsReservoirs.Fields("Pattern").Value = ""
-                  Case Else
-                     rsJunctions.AddNew
-                     rsJunctions.Fields("id").Value = NO
-                     rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
-                     rsJunctions.Fields("demand").Value = rsNosTmp("demanda").Value
-                     rsJunctions.Fields("pattern").Value = IIf(rsNosTmp("padrao").Value = 0, "", rsNosTmp("padrao").Value)
-               End Select
-
-               intLinhaCod = 12
-               rsCoordinates.AddNew
-               rsCoordinates.Fields("id").Value = NO
-               rsCoordinates.Fields("x").Value = rsNosTmp("x").Value
-               rsCoordinates.Fields("y").Value = rsNosTmp("y").Value
+                        Select Case strTipoComp
+                            'Case No_Bombas, No_Valvulas, No_Valvulas_99 'Especial nó
+                            Case "PUMP", "VALVE", "VALVE2", "REGISTER"
+                                'Verifica a Direção da Tubulação e recupera um ponto X_NO_VIRT, Y_NO_VIRT a 1/3 da distancia
+                                ' e insere o no virtual em RsJuntions e RsCoordinates
+                                tb.getLengthOfLine 0, idLinha, Lin_len
+                                'carrega em Lin_len o comprimento total da linha
+                                intLinhaCod = 8
+                                Dim X_Componente As Double 'COORDENADA X DO VERTICE
+                                Dim Y_Componente As Double 'COORDENADA Y DO VERTICE
+                                Dim X_Vertice As Double    'COORDENADA X DO VERTICE
+                                Dim Y_Vertice As Double    'COORDENADA Y DO VERTICE
+                                Dim VERTICE_LEN As Double  'ARMAZENA O COMPRIMENTO DO VERTICE ANALIZADO
+                                Dim X_NO_VIRT As Double    'ARMAZENA A COORDENADA X DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
+                                Dim Y_NO_VIRT As Double    'ARMAZENA A COORDENADA Y DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
+                                If conta_no = 2 Then ' se for o ponto final pega a distância de 2/3 do comprimento da linha
+                                    numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha) 'retorna número de pontos que compõem a linha. se maior que 2 significa que tem vertices
+                                    If numTotalVerticesNaLinha > 2 Then 'existem vértices na linha
+                                        'Pegar o penultimo ponto(vertice)
+                                        'RETORNA A COORDENADA DO ÚLTIMO VERTICE
+                                        retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha - 2), X_Vertice, Y_Vertice)
+                                        'RETORNA A COORDENADA DO ÚLTIMO NÓ
+                                        retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha - 1), X_Componente, Y_Componente)
+                                        'RETORNA A DISTANCIA ENTRE O ULTIMO NÓ E O ULTIMO VERTICE
+                                        VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
+                                        'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
+                                        '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
+                                        distancia = (Lin_len - VERTICE_LEN) + (VERTICE_LEN * 0.666666)
+                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+                                        'VIRTUAL QUE DEVERÁ SER CRIADO
+                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+                                    Else
+                                        'DISTANCIA = 2 TERÇOS DO COMPRIMENTO TOTAL DA LINHA
+                                        distancia = Lin_len * 0.666666
+                                        
+                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+                                        'VIRTUAL QUE DEVERÁ SER CRIADO
+                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+                                    End If
+                                Else ' se o ponto for o inicial, pega a distãncia de 1/3 do comprimento da linha
+                                    numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)
+                                    If numTotalVerticesNaLinha > 2 Then 'existem vértices na linha
+                                        'RETORNA A COORDENADA DO PRIMEIRO VERTICE
+                                        retorno = tb.getPointOfLine(0, idLinha, 1, X_Vertice, Y_Vertice)
+                                        'RETORNA A COORDENADA DO PRIMEIRO NÓ
+                                        retorno = tb.getPointOfLine(0, idLinha, 0, X_Componente, Y_Componente)
+                                        'RETORNA EM VERTICE_LEN A DISTANCIA ENTRE O PRIMEIRO VERTICE E O PRIMEIRO NÓ
+                                        VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
+                                        'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
+                                        '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
+                                        distancia = VERTICE_LEN * 0.33333
+                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+                                        'VIRTUAL QUE DEVERÁ SER CRIADO
+                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+                                    Else
+                                        'DISTANCIA = 1 TERÇO DO COMPRIMENTO TOTAL DA LINHA
+                                        distancia = Lin_len * 0.333333
+                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+                                        'VIRTUAL QUE DEVERÁ SER CRIADO
+                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+                                    End If
+                                    ' retorna em x, y a coordenada do ponto inicial que fica a 1/3 do início da linha
+                                    'tb.getPerpendicularPoint 0, .Fields("object_id_").Value, (Lin_len / 3) * 2, 0, X_Componente, Y_Componente ' colocou zero antes de x, y para retornar o ponto na própria linha
+                                End If
+                                intLinhaCod = 9
+                                rsJunctions.AddNew
+                                rsJunctions.Fields("id").Value = NO & "A"
+                                rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
+                                rsJunctions.Fields("demand").Value = 0
+                                rsJunctions.Fields("pattern").Value = ""
+                                rsCoordinates.AddNew
+                                rsCoordinates.Fields("id").Value = NO & "A"
+                                rsCoordinates.Fields("x").Value = X_NO_VIRT
+                                rsCoordinates.Fields("y").Value = Y_NO_VIRT
+                                '###########################################################
+                                'Alterar a variável NoI ou NoF com o valor NO & "A" para ser usado na inserção do trecho
+                                'indicando que o trecho a ser inserido usará um nó virtual
+                                If conta_no = 1 Then
+                                   NoI = NO & "A"
+                                Else
+                                   NoF = NO & "A"
+                                End If
+                                '######################
+                                'Cria o Componente do tipo entre o nó virtual e o nó processado
+                                 intLinhaCod = 10
+                            'Select Case rsNosTmp.Fields("Tipo").Value
+                            Select Case strTipoComp
+                                Case "PUMP"
+                                    rsPumps.AddNew
+                                    rsPumps.Fields("id").Value = NO
+                                    If conta_no = 1 Then
+                                       rsPumps.Fields("Node1").Value = NO          'NESTE TRECHO É DEFINIDO O SENTIDO DA BOMBA
+                                       rsPumps.Fields("Node2").Value = NO & "A"    'A ORDEM DE NO E NOA INFLUENCIA NO SENTIDO
+                                    Else
+                                       rsPumps.Fields("Node1").Value = NO & "A"
+                                       rsPumps.Fields("Node2").Value = NO
+                                    End If
+                                    AddSubItemPumps NO  'Adiciona os sub itens para a bomba (curva)
+                                Case "VALVE"
+                                    rsValves.AddNew
+                                    rsValves.Fields("ID").Value = NO
+                                    rsValves.Fields("Node1").Value = NO & "A"
+                                    rsValves.Fields("Node2").Value = NO
+                                    AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
+                                Case "VALVE2"
+                                    rsPipes.AddNew
+                                    rsPipes.Fields("id").Value = NO & "A"
+                                    rsPipes.Fields("node1").Value = NO & "A"
+                                    rsPipes.Fields("node2").Value = NO
+                                    rsPipes.Fields("length").Value = 0.1
+                                    rsPipes.Fields("diameter").Value = Replace(rsTrechos.Fields("internaldiameter").Value, ",", ".")
+                                    rsPipes.Fields("roughness").Value = Replace(rsTrechos.Fields("roughness").Value, ",", ".")
+                                    rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
+                                    If rsTrechos.Fields("MATERIALNAME").Value <> "" Then
+                                       rsPipes.Fields("Description").Value = rsTrechos.Fields("MATERIALNAME").Value
+                                    Else
+                                       rsPipes.Fields("Description").Value = ""
+                                    End If
+                                Case "REGISTER"
+                                    rsPipes.AddNew
+                                    rsPipes.Fields("ID").Value = NO & "A"
+                                    rsPipes.Fields("NODE1").Value = NO & "A"
+                                    rsPipes.Fields("NODE2").Value = NO
+                                    rsPipes.Fields("LENGTH").Value = 1
+                                    rsPipes.Fields("DIAMETER").Value = Replace(rsTrechos.Fields("internaldiameter").Value, ",", ".")
+                                    rsPipes.Fields("ROUGHNESS").Value = Replace(rsTrechos.Fields("roughness").Value, ",", ".")
+                                    rsPipes.Fields("STATUS").Value = IIf(rsNosTmp("ESTADO").Value = 0, " ", rsNosTmp("ESTADO").Value)
+                                    rsPipes.Fields("DESCRIPTION").Value = "REGISTRO"
+                            End Select
+                        End Select
+                    End If 'rsNosTmp.EOF = true
+                    'Insere o nó processado
+                    intLinhaCod = 11
+                    'Select Case rsNosTmp.Fields("Tipo").Value
+                    Select Case strTipoComp
+                        Case "RNV" 'No_Tanques
+                            rsTanks.AddNew
+                            rsTanks.Fields("ID").Value = NO
+                            rsTanks.Fields("Elevation").Value = Format(rsNosTmp("cota").Value, ".0")
+                            AddSubItemTank NO
+                        Case "RNF" 'No_Reservatorios
+                            rsReservoirs.AddNew
+                            rsReservoirs.Fields("ID").Value = NO
+                            rsReservoirs.Fields("Head").Value = ""
+                            rsReservoirs.Fields("Pattern").Value = ""
+                        Case Else
+                            rsJunctions.AddNew
+                            rsJunctions.Fields("id").Value = NO
+                            rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
+                            rsJunctions.Fields("demand").Value = rsNosTmp("demanda").Value
+                            rsJunctions.Fields("pattern").Value = IIf(rsNosTmp("padrao").Value = 0, "", rsNosTmp("padrao").Value)
+                    End Select
+                    intLinhaCod = 12
+                    rsCoordinates.AddNew
+                    rsCoordinates.Fields("id").Value = NO
+                    rsCoordinates.Fields("x").Value = rsNosTmp("x").Value
+                    rsCoordinates.Fields("y").Value = rsNosTmp("y").Value
+                End If
+                intLinhaCod = 13
+                'Insere o NO no cursor temporário rsNosExportados
+                rsNosExportados.AddNew
+                rsNosExportados.Fields("id").Value = NO
             End If
-            intLinhaCod = 13
-            'Insere o NO no cursor temporário rsNosExportados
-            rsNosExportados.AddNew
-            rsNosExportados.Fields("id").Value = NO
-         End If
-      Next
-      'Insere o trecho no cursor temporário rsPipes
-      intLinhaCod = 14
-      rsPipes.AddNew
-      rsPipes.Fields("id").Value = idLinha
-      rsPipes.Fields("node1").Value = NoI
-      rsPipes.Fields("node2").Value = NoF
-
-      If rsTrechos.Fields("Length").Value > 0 Then
-         rsPipes.Fields("length").Value = Replace(rsTrechos.Fields("Length").Value, ",", ".")
-      Else
-         rsPipes.Fields("Length").Value = Replace(rsTrechos.Fields("LengthCalculated").Value, ",", ".")
-      End If
-
-      rsPipes.Fields("diameter").Value = Replace(rsTrechos.Fields("internaldiameter").Value, ",", ".")
-      rsPipes.Fields("roughness").Value = Replace(rsTrechos.Fields("roughness").Value, ",", ".")
-      'rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
-      rsPipes.Fields("status").Value = "Open"
-
-      If rsTrechos.Fields("MATERIALNAME").Value <> "" Then
-         rsPipes.Fields("Description").Value = rsTrechos.Fields("MATERIALNAME").Value
-      Else
-         rsPipes.Fields("Description").Value = ""
-      End If
-
-      'rsPipes.Fields("Description").Value = IIf(rsTrechos.Fields("MATERIAL").Value <> Null, "", rsTrechos.Fields("MATERIAL").Value)
-
-      ' INICIO DA ROTINA DE INSERIR OS VÉRTICES CASO NECESSÁRIO
-
-      numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)
-      If numTotalVerticesNaLinha > 2 Then ' existem vértice intermediários na linha que necessitam ser considerados no Epanet
-         For i = 1 To numTotalVerticesNaLinha - 2 'DO PRIMEIRO AO ULTIMO VÉRTICE, FAÇA
-            If tb.getPointOfLine(0, idLinha, i, vertice_X, vertice_Y) Then
-               rsVertices.AddNew
-               rsVertices.Fields("ID").Value = idLinha
-               rsVertices.Fields("X-Coord").Value = vertice_X
-               rsVertices.Fields("Y-Coord").Value = vertice_Y
-            End If
-         Next
-      End If
-
-      ' FIM DA ROTINA DE INSERIR VERTICES
-
-
-      intLinhaCod = 15
-      'AddVertices id
-      'Insere no cursor de trechos exportados o trecho processado
-      rsTrechosExportados.AddNew
-      intLinhaCod = 151
-      rsTrechosExportados.Fields("id").Value = idLinha 'rsTrechos.Fields("object_id_").Value
-      'Atualiza o formulario frmOdometro
-      intLinhaCod = 152
-      
-      If FrmEPANET.ProgressBar1.Value < FrmEPANET.ProgressBar1.Max Then FrmEPANET.ProgressBar1.Value = FrmEPANET.ProgressBar1.Value + 1
-      
-      'frmOdometro.Caption = FrmEPANET.ProgressBar1.Value & " até " & frmOdometro.ProgressBar1.Max
-      
-      intLinhaCod = 153
-
-      'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
-      intLinhaCod = 16
-      rsTrechos.MoveNext
-   Loop
-   'End With
-   intLinhaCod = 17
-   
-   Set rsNosTmp = Nothing
-   rsTrechos.Close
-   Set rsTrechos = Nothing
-   rsTrechosExportados.Close
-   Set rsTrechosExportados = Nothing
-   Set rsNos = Nothing
-   
-   intLinhaCod = 18
-   GeraArquivo_de_Saida
-   intLinhaCod = 19
-   
-   Screen.MousePointer = vbNormal
-   MsgBox "Exportação concluída com sucesso!", vbInformation, "Exporte Epanet"
+        Next
+        'Insere o trecho no cursor temporário rsPipes
+        intLinhaCod = 14
+        rsPipes.AddNew
+        rsPipes.Fields("id").Value = idLinha
+        rsPipes.Fields("node1").Value = NoI
+        rsPipes.Fields("node2").Value = NoF
+        If rsTrechos.Fields("Length").Value > 0 Then
+            rsPipes.Fields("length").Value = Replace(rsTrechos.Fields("Length").Value, ",", ".")
+        Else
+            rsPipes.Fields("Length").Value = Replace(rsTrechos.Fields("LengthCalculated").Value, ",", ".")
+        End If
+        rsPipes.Fields("diameter").Value = Replace(rsTrechos.Fields("internaldiameter").Value, ",", ".")
+        rsPipes.Fields("roughness").Value = Replace(rsTrechos.Fields("roughness").Value, ",", ".")
+        'rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
+        rsPipes.Fields("status").Value = "Open"
+        If rsTrechos.Fields("MATERIALNAME").Value <> "" Then
+            rsPipes.Fields("Description").Value = rsTrechos.Fields("MATERIALNAME").Value
+        Else
+            rsPipes.Fields("Description").Value = ""
+        End If
+        'rsPipes.Fields("Description").Value = IIf(rsTrechos.Fields("MATERIAL").Value <> Null, "", rsTrechos.Fields("MATERIAL").Value)
+        ' INICIO DA ROTINA DE INSERIR OS VÉRTICES CASO NECESSÁRIO
+        numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)
+        If numTotalVerticesNaLinha > 2 Then ' existem vértice intermediários na linha que necessitam ser considerados no Epanet
+            For i = 1 To numTotalVerticesNaLinha - 2 'DO PRIMEIRO AO ULTIMO VÉRTICE, FAÇA
+                If tb.getPointOfLine(0, idLinha, i, vertice_X, vertice_Y) Then
+                    rsVertices.AddNew
+                    rsVertices.Fields("ID").Value = idLinha
+                    rsVertices.Fields("X-Coord").Value = vertice_X
+                    rsVertices.Fields("Y-Coord").Value = vertice_Y
+                End If
+            Next
+        End If
+        ' FIM DA ROTINA DE INSERIR VERTICES
+        intLinhaCod = 15
+        'AddVertices id
+        'Insere no cursor de trechos exportados o trecho processado
+        rsTrechosExportados.AddNew
+        intLinhaCod = 151
+        rsTrechosExportados.Fields("id").Value = idLinha 'rsTrechos.Fields("object_id_").Value
+        'Atualiza o formulario frmOdometro
+        intLinhaCod = 152
+        If FrmEPANET.ProgressBar1.Value < FrmEPANET.ProgressBar1.Max Then
+            FrmEPANET.ProgressBar1.Value = FrmEPANET.ProgressBar1.Value + 1
+        End If
+        'frmOdometro.Caption = FrmEPANET.ProgressBar1.Value & " até " & frmOdometro.ProgressBar1.Max
+        intLinhaCod = 153
+        'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
+        intLinhaCod = 16
+        numeroErro = "Penuntimo trecho lido: " & rsTrechos!Object_id_
+        rsTrechos.MoveNext
+        numeroErro = numeroErro + " Ultimo trecho lido: " & rsTrechos!Object_id_
+    Loop
+    'End With
+    intLinhaCod = 17
+    Set rsNosTmp = Nothing
+    rsTrechos.Close
+    Set rsTrechos = Nothing
+    rsTrechosExportados.Close
+    Set rsTrechosExportados = Nothing
+    Set rsNos = Nothing
+    intLinhaCod = 18
+    GeraArquivo_de_Saida
+    intLinhaCod = 19
+    Screen.MousePointer = vbNormal
+    MsgBox "Exportação concluída com sucesso!", vbInformation, "Exporte Epanet"
 
 Trata_Erro:
-    If Err.Number = 0 Or Err.Number = 20 Then
+    If Err.Number = 0 Or Err.Number = 20 Or Err.Number = -2147467259 Or Err.Number = 3021 Then
+        'Quer dizer que é o final do arquivo. O código -2147467259 é um erro desconhecido que aconteceu uma vez e não identificamos. Verificamos que era tb final de arquivo, mas cabe outra verificação
+        'O código 3021 é final de arquivo
         Resume Next
     Else
+        Close #3
         Close #2
         Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
         Print #2, Now & "  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
         Close #2
-        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
-    'Resume
+        MsgBox "Um posssível erro foi identificado na rotina 'ExportaEPANet':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & numeroErro & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+        'Resume
     End If
-    
 End Sub
 
 
@@ -708,11 +614,11 @@ End Function
 
 Sub CarregaRsNosTMP()
 On Error GoTo Trata_Erro
-   Dim layer_id As Long
-   'Cria uma cópia da query da tabela watercomponents + points para RsNosTMP com todos os nos das tabelas relacionadas
-   Dim strSQL As String
-   Set rsNos = New ADODB.Recordset
-   layer_id = GetLayerID("WATERCOMPONENTS")
+    Dim layer_id As Long
+    'Cria uma cópia da query da tabela watercomponents + points para RsNosTMP com todos os nos das tabelas relacionadas
+    Dim strSQL As String
+    Set rsNos = New ADODB.Recordset
+    layer_id = GetLayerID("WATERCOMPONENTS")
    
     'Gera a query desnormatizada junto aos nos(Watercomponents) para facilitar a leitura dos dados dos mesmos
     'Select a.OBJECT_ID_, X, Y, ID_TYPE, GROUNDHEIGHT, DEMAND, Pattern, SubTypeValve,
@@ -730,109 +636,92 @@ On Error GoTo Trata_Erro
     '10001   291975,6117865313   9110853,035953095   0   0,  0,  NULL    NULL    Open
     '10002   291986,8719209225   9110851,24230337    0   0,  0,  NULL    NULL    Open
     '10003   291991,2563980305   9110857,021841375   0   0,  0,  NULL    NULL    Open
-  If conn.Provider <> "PostgreSQL.1" Then
-   strSQL = " Select a.OBJECT_ID_"
-   strSQL = strSQL & ", x, y, ID_TYPE, GROUNDHEIGHT, DEMAND, Pattern, SubTypeValve, case when State = 2 then 'Closed' else 'Open' end state"
-   strSQL = strSQL & " FROM "
-   strSQL = strSQL & "(Select OBJECT_ID_"
-   strSQL = strSQL & ", X, Y, ID_TYPE, GROUNDHEIGHT, DEMAND, Pattern"
-   strSQL = strSQL & " FROM watercomponents inner join points" & layer_id & " on object_id_=object_id) a"
-   strSQL = strSQL & " Left Join"
-   strSQL = strSQL & " (select object_id_,value_ as SubTypeValve from watercomponentsdata  where id_type = 1 and id_subtype = 1) b"
-   strSQL = strSQL & " on a.object_id_=b.object_id_"
-   strSQL = strSQL & "  left Join (select object_id_,value_ as State from watercomponentsdata  where id_type = 1 and id_subtype = 2) c"
-   strSQL = strSQL & " on a.object_id_=c.object_id_"
-   Else
-  ' layer_id = Trim(str(GetLayerID("WATERCOMPONENTS")))
-   Dim aaz As String
-   aaz = Trim(str(GetLayerID("WATERCOMPONENTS")))
-   strSQL = " Select A" + "." + """" + "OBJECT_ID_" + """" + ","
-   strSQL = strSQL + """" + "x" + """" + " ," + """" + "y" + """" + "," + """" + "ID_TYPE" + """" + "," + """" + "INITIALGROUNDHEIGHT" + """" + "," + """" + "DEMAND" + """" + "," + """" + "PATTERN" + """" + "," + """" + "SUBTYPEVALVE" + """" + "," + "case when " + """" + "STATE" + """" + " = '2' then 'Closed' else 'Open' end " + """" + "STATE" + """" + ""
-   strSQL = strSQL + "        From"
-   strSQL = strSQL + " (Select " + """" + "OBJECT_ID_" + """" + ","
-   strSQL = strSQL + """" + "x" + """" + " ," + """" + "y" + """" + "," + """" + "ID_TYPE" + """" + "," + """" + "INITIALGROUNDHEIGHT" + """" + "," + """" + "DEMAND" + """" + "," + """" + "PATTERN" + """" + ""
-   strSQL = strSQL + "      from " + """" + "WATERCOMPONENTS" + """" + " inner join " + """" + "points" & aaz + """" + " on " + """" + "WATERCOMPONENTS" + """" + "." + """" + "OBJECT_ID_" + """" + "=" + """" + "points" + aaz + """" + "." + """" + "object_id" + """" + ")A"
-   strSQL = strSQL + " Left Join"
-   strSQL = strSQL + " (select " + """" + "OBJECT_ID_" + """" + "," + """" + "VALUE_" + """" + " as " + """" + "SUBTYPEVALVE" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" + "  where " + """" + "ID_TYPE" + """" + " = '1' and " + """" + "ID_SUBTYPE" + """" + " = '1')B"
-   strSQL = strSQL + " on  A" + "." + """" + "OBJECT_ID_" + """" + "=B" + "." + """" + "OBJECT_ID_" + """" + ""
-   strSQL = strSQL + "  left Join (select " + """" + "OBJECT_ID_" + """" + "," + """" + "VALUE_" + """" + " as " + """" + "STATE" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" + "  where " + """" + "ID_TYPE" + """" + " = '1' and " + """" + "ID_SUBTYPE" + """" + " = '2')C"
-   strSQL = strSQL + "  ON A" + "." + """" + "OBJECT_ID_" + """" + "=C" + "." + """" + "OBJECT_ID_" + """" + ""
-   
-   
-'MsgBox "ARQUIVO DEBUG SALVO"
- 'WritePrivateProfileString "A", "A", strSQL, App.Path & "\DEBUG.INI"
-   
-   
-   End If
-
-    'IMPRIME EM ARQUIVO TEXTO SO PARA CONSULTA
-    
-'    MsgBox strSQL
-'    Open App.Path & "\ExportEPANET.LOG" For Append As #5
-'    Print #5, strSQL
-'    Close #5
-
-    rsNos.Open strSQL, conn
-   
     If conn.Provider <> "PostgreSQL.1" Then
-   While Not rsNos.EOF
-      With rsNosTmp
-         .AddNew
-         .Fields("ID").Value = rsNos.Fields("OBJECT_ID_").Value
-         .Fields("X").Value = rsNos.Fields("x").Value
-         .Fields("Y").Value = rsNos.Fields("y").Value
-         .Fields("Tipo").Value = IIf(IsNull(rsNos.Fields("id_type").Value), 0, rsNos.Fields("id_type").Value)
-         If rsNos.Fields("ID_TYPE").Value = No_Valvulas Then
-            Select Case rsNos.Fields("SubTypeValve").Value
-               Case 4, 0
-                  .Fields("Tipo").Value = 1
-               Case Else
-                  .Fields("Tipo").Value = 99
-                  
-            End Select
-         End If
-         .Fields("Cota").Value = IIf(IsNull(rsNos.Fields("GROUNDHEIGHT").Value), 0, rsNos.Fields("GROUNDHEIGHT").Value)
-         .Fields("Demanda").Value = IIf(IsNull(rsNos.Fields("demand").Value), 0, rsNos.Fields("demand").Value)
-         .Fields("Padrao").Value = IIf(IsNull(rsNos.Fields("PATTERN").Value), 0, rsNos.Fields("PATTERN").Value)
-         .Fields("estado").Value = rsNos.Fields("state").Value
-      End With
-      rsNos.MoveNext
-   Wend
-   
-   Else
-   
-      While Not rsNos.EOF
-      With rsNosTmp
-         .AddNew
-         .Fields("ID").Value = rsNos.Fields("OBJECT_ID_").Value
-         .Fields("X").Value = rsNos.Fields("x").Value
-         .Fields("Y").Value = rsNos.Fields("y").Value
-         .Fields("Tipo").Value = IIf(IsNull(rsNos.Fields("ID_TYPE").Value), 0, rsNos.Fields("ID_TYPE").Value)
-         If rsNos.Fields("ID_TYPE").Value = No_Valvulas Then
-            Select Case rsNos.Fields("SUBTYPEVALVE").Value
-               Case 4, 0
-                  .Fields("Tipo").Value = 1
-               Case Else
-                  .Fields("Tipo").Value = 99
-                  
-            End Select
-         End If
-         .Fields("Cota").Value = IIf(IsNull(rsNos.Fields("INITIALGROUNDHEIGHT").Value), 0, rsNos.Fields("INITIALGROUNDHEIGHT").Value)
-         .Fields("Demanda").Value = IIf(IsNull(rsNos.Fields("DEMAND").Value), 0, rsNos.Fields("DEMAND").Value)
-         .Fields("Padrao").Value = IIf(IsNull(rsNos.Fields("PATTERN").Value), 0, rsNos.Fields("PATTERN").Value)
-         .Fields("estado").Value = rsNos.Fields("state").Value
-      End With
-      rsNos.MoveNext
-   Wend
-   
-   
-   End If
-   
-   
-   rsNos.Close
-   Set rsNos = Nothing
-   
-   'AO FINAL DESTA ROTINA FICARÁ EXISTENTE A TABELA DE NÓS COMPLETA DESNORMATIZADA (rsNosTmp)
+        strSQL = " Select a.OBJECT_ID_"
+        strSQL = strSQL & ", x, y, ID_TYPE, GROUNDHEIGHT, DEMAND, Pattern, SubTypeValve, case when State = 2 then 'Closed' else 'Open' end state"
+        strSQL = strSQL & " FROM "
+        strSQL = strSQL & "(Select OBJECT_ID_"
+        strSQL = strSQL & ", X, Y, ID_TYPE, GROUNDHEIGHT, DEMAND, Pattern"
+        strSQL = strSQL & " FROM watercomponents inner join points" & layer_id & " on object_id_=object_id) a"
+        strSQL = strSQL & " Left Join"
+        strSQL = strSQL & " (select object_id_,value_ as SubTypeValve from watercomponentsdata  where id_type = 1 and id_subtype = 1) b"
+        strSQL = strSQL & " on a.object_id_=b.object_id_"
+        strSQL = strSQL & "  left Join (select object_id_,value_ as State from watercomponentsdata  where id_type = 1 and id_subtype = 2) c"
+        strSQL = strSQL & " on a.object_id_=c.object_id_"
+    Else
+        ' layer_id = Trim(str(GetLayerID("WATERCOMPONENTS")))
+        Dim aaz As String
+        aaz = Trim(str(GetLayerID("WATERCOMPONENTS")))
+        strSQL = " Select A" + "." + """" + "OBJECT_ID_" + """" + ","
+        strSQL = strSQL + """" + "x" + """" + " ," + """" + "y" + """" + "," + """" + "ID_TYPE" + """" + "," + """" + "INITIALGROUNDHEIGHT" + """" + "," + """" + "DEMAND" + """" + "," + """" + "PATTERN" + """" + "," + """" + "SUBTYPEVALVE" + """" + "," + "case when " + """" + "STATE" + """" + " = '2' then 'Closed' else 'Open' end " + """" + "STATE" + """" + ""
+        strSQL = strSQL + "        From"
+        strSQL = strSQL + " (Select " + """" + "OBJECT_ID_" + """" + ","
+        strSQL = strSQL + """" + "x" + """" + " ," + """" + "y" + """" + "," + """" + "ID_TYPE" + """" + "," + """" + "INITIALGROUNDHEIGHT" + """" + "," + """" + "DEMAND" + """" + "," + """" + "PATTERN" + """" + ""
+        strSQL = strSQL + "      from " + """" + "WATERCOMPONENTS" + """" + " inner join " + """" + "points" & aaz + """" + " on " + """" + "WATERCOMPONENTS" + """" + "." + """" + "OBJECT_ID_" + """" + "=" + """" + "points" + aaz + """" + "." + """" + "object_id" + """" + ")A"
+        strSQL = strSQL + " Left Join"
+        strSQL = strSQL + " (select " + """" + "OBJECT_ID_" + """" + "," + """" + "VALUE_" + """" + " as " + """" + "SUBTYPEVALVE" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" + "  where " + """" + "ID_TYPE" + """" + " = '1' and " + """" + "ID_SUBTYPE" + """" + " = '1')B"
+        strSQL = strSQL + " on  A" + "." + """" + "OBJECT_ID_" + """" + "=B" + "." + """" + "OBJECT_ID_" + """" + ""
+        strSQL = strSQL + "  left Join (select " + """" + "OBJECT_ID_" + """" + "," + """" + "VALUE_" + """" + " as " + """" + "STATE" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" + "  where " + """" + "ID_TYPE" + """" + " = '1' and " + """" + "ID_SUBTYPE" + """" + " = '2')C"
+        strSQL = strSQL + "  ON A" + "." + """" + "OBJECT_ID_" + """" + "=C" + "." + """" + "OBJECT_ID_" + """" + ""
+        'MsgBox "ARQUIVO DEBUG SALVO"
+        'WritePrivateProfileString "A", "A", strSQL, App.Path & "\DEBUG.INI"
+    End If
+    'IMPRIME EM ARQUIVO TEXTO SO PARA CONSULTA
+    '    MsgBox strSQL
+    '    Open App.Path & "\ExportEPANET.LOG" For Append As #5
+    '    Print #5, strSQL
+    '    Close #5
+    rsNos.Open strSQL, conn
+    If conn.Provider <> "PostgreSQL.1" Then
+        While Not rsNos.EOF
+            With rsNosTmp
+              .AddNew
+              .Fields("ID").Value = rsNos.Fields("OBJECT_ID_").Value
+              .Fields("X").Value = rsNos.Fields("x").Value
+              .Fields("Y").Value = rsNos.Fields("y").Value
+              .Fields("Tipo").Value = IIf(IsNull(rsNos.Fields("id_type").Value), 0, rsNos.Fields("id_type").Value)
+              If rsNos.Fields("ID_TYPE").Value = No_Valvulas Then
+                 Select Case rsNos.Fields("SubTypeValve").Value
+                    Case 4, 0
+                       .Fields("Tipo").Value = 1
+                    Case Else
+                       .Fields("Tipo").Value = 99
+                 End Select
+              End If
+                .Fields("Cota").Value = IIf(IsNull(rsNos.Fields("GROUNDHEIGHT").Value), 0, rsNos.Fields("GROUNDHEIGHT").Value)
+                .Fields("Demanda").Value = IIf(IsNull(rsNos.Fields("demand").Value), 0, rsNos.Fields("demand").Value)
+                .Fields("Padrao").Value = IIf(IsNull(rsNos.Fields("PATTERN").Value), 0, rsNos.Fields("PATTERN").Value)
+                .Fields("estado").Value = rsNos.Fields("state").Value
+           End With
+           rsNos.MoveNext
+        Wend
+    Else
+        While Not rsNos.EOF
+            With rsNosTmp
+                .AddNew
+                .Fields("ID").Value = rsNos.Fields("OBJECT_ID_").Value
+                .Fields("X").Value = rsNos.Fields("x").Value
+                .Fields("Y").Value = rsNos.Fields("y").Value
+                .Fields("Tipo").Value = IIf(IsNull(rsNos.Fields("ID_TYPE").Value), 0, rsNos.Fields("ID_TYPE").Value)
+                If rsNos.Fields("ID_TYPE").Value = No_Valvulas Then
+                    Select Case rsNos.Fields("SUBTYPEVALVE").Value
+                        Case 4, 0
+                            .Fields("Tipo").Value = 1
+                        Case Else
+                            .Fields("Tipo").Value = 99
+                    End Select
+                End If
+                .Fields("Cota").Value = IIf(IsNull(rsNos.Fields("INITIALGROUNDHEIGHT").Value), 0, rsNos.Fields("INITIALGROUNDHEIGHT").Value)
+                .Fields("Demanda").Value = IIf(IsNull(rsNos.Fields("DEMAND").Value), 0, rsNos.Fields("DEMAND").Value)
+                .Fields("Padrao").Value = IIf(IsNull(rsNos.Fields("PATTERN").Value), 0, rsNos.Fields("PATTERN").Value)
+                .Fields("estado").Value = rsNos.Fields("state").Value
+            End With
+            rsNos.MoveNext
+        Wend
+    End If
+    rsNos.Close
+    Set rsNos = Nothing
+    'AO FINAL DESTA ROTINA FICARÁ EXISTENTE A TABELA DE NÓS COMPLETA DESNORMATIZADA (rsNosTmp)
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -842,15 +731,12 @@ Trata_Erro:
         Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
         Print #2, Now & "  - ModExporte - Sub CarregaRsNosTMP() - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
         Close #2
-        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
-        
+        MsgBox "Um posssível erro foi identificado na rotina 'CarregaRsNosTMP()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
         If rsNos.EOF = False Then
             MsgBox "Problema com o nó de rede número: " & rsNos.Fields("OBJECT_ID_").Value
         End If
-        
         'Resume
     End If
-
 End Sub
 
 Sub AbrirEstruturaExporteRede()
@@ -1486,7 +1372,7 @@ Trata_Erro:
         Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
         Print #2, Now & "  - Sub GeraArquivo_de_Saida() - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
         Close #2
-        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+        MsgBox "Um posssível erro foi identificado na rotina 'GeraArquivo_de_Saida()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
     End If
 
 End Sub

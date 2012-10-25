@@ -1,0 +1,13 @@
+09/10/2012 11:01:47  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - -2147467259 - Query timeout expired
+09/10/2012 11:26:14  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - -2147467259 - Query timeout expired
+09/10/2012 11:31:27  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - -2147467259 - Query timeout expired
+09/10/2012 17:41:35  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - -2147467259 - Query timeout expired
+09/10/2012 21:17:37  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - -2147467259 - Query timeout expired
+25/10/2012 11:15:38  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 11 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
+25/10/2012 13:48:09  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 11 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
+25/10/2012 13:55:47  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 11 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
+25/10/2012 14:58:01  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 11 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
+25/10/2012 15:02:51  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 11 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
+25/10/2012 15:45:59  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
+25/10/2012 16:08:00  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 4 - 52 - Bad file name or number
+25/10/2012 17:12:02  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: 16 - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.
