@@ -210,6 +210,7 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
                                 rsWaterCompTypes.MoveNext
                             Loop
                         End If
+                        'Neste primeiro select case ele vai dividir uma válvula, registro, etc, que é representado por um nó, em dois nós.
                         Select Case strTipoComp
                             'Case No_Bombas, No_Valvulas, No_Valvulas_99 'Especial nó
                             Case "PUMP", "VALVE", "VALVE2", "REGISTER"
@@ -296,6 +297,7 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
                                 'Cria o Componente do tipo entre o nó virtual e o nó processado
                                  intLinhaCod = 10
                             'Select Case rsNosTmp.Fields("Tipo").Value
+                            'Agora adiciona aos recosets
                             Select Case strTipoComp
                                 Case "PUMP"
                                     rsPumps.AddNew
@@ -310,7 +312,7 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
                                     AddSubItemPumps NO  'Adiciona os sub itens para a bomba (curva)
                                 Case "VALVE"
                                     rsValves.AddNew
-                                    rsValves.Fields("ID").Value = NO
+                                    rsValves.Fields("ID").Value = "V" & NO
                                     rsValves.Fields("Node1").Value = NO & "A"
                                     rsValves.Fields("Node2").Value = NO
                                     AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
@@ -436,6 +438,8 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
     Set rsTrechosExportados = Nothing
     Set rsNos = Nothing
     intLinhaCod = 18
+    'Gera o arquivo .INP de saída para o Epanet
+    Close #3
     GeraArquivo_de_Saida
     intLinhaCod = 19
     Screen.MousePointer = vbNormal
@@ -447,7 +451,7 @@ Trata_Erro:
         'O código 3021 é final de arquivo
         Resume Next
     Else
-        Close #3
+        ' Close #3
         Close #2
         Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
         Print #2, Now & "  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
@@ -1303,6 +1307,7 @@ Dim pos As Integer
        Set rsCurves = Nothing
        
        'grava no arquivo as Coordinates
+        Open App.Path & "\LogErroExportEPANET-histórico.txt" For Append As #4
        intLinhaCod = 35
        With rsCoordinates
           .Filter = ""
@@ -1324,13 +1329,14 @@ Dim pos As Integer
                             .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
                 Next
                 Print #1, str & ";"
+                Print #4, str & ";"
                 str = ""
                 .MoveNext
              Wend
              intLinhaCod = 38
           End If
        End With
-       
+       Close #4
        'grava no arquivo as Vertices
        intLinhaCod = 39
        With rsVertices
