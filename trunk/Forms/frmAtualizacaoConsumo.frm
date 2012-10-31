@@ -156,6 +156,7 @@ End Sub
 
 Private Function AtualizaConsumo() As Boolean
 On Error GoTo Trata_Erro
+    Dim strSql As String                    'string sql
    'ATUALIZA O CONSUMO DAS LIGACOES DE UM RAMAL PUXANDO O VALOR EXISTENTE EM NXGS_V_LIG_COM_CONSUMO_MEDIO
    
    Screen.MousePointer = vbHourglass
@@ -173,7 +174,8 @@ On Error GoTo Trata_Erro
          
          'updated with consumo_medio in 2012-08-21
          'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
-         Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE NRO_LIGACAO = NXGS.NRO_LIGACAO")
+         strSql = "UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS.NRO_LIGACAO"
+         Conn.execute (strSql)
 
    ' if the database is oracle
    ElseIf frmCanvas.TipoConexao = 2 Then
@@ -228,7 +230,7 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
     Dim rsWATER As New ADODB.Recordset
     Dim redeOld As String, Inicial As String, Final As String
     Dim soma_consumo As Double, metade As Double
-    Dim strsql As String
+    Dim strSql As String
     Dim strMetade As String, strConsumo As String
     Dim rsWTC As New ADODB.Recordset
     
@@ -263,12 +265,12 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
     ' open connection to distribute demands
     ' if it is not Postgres
     If frmCanvas.TipoConexao <> 4 Then
-        strsql = "SELECT SUM(RAL.CONSUMO_LPS)/2 AS " + """" + "MEDIA_TRECHO" + """" + ",RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT,WTR.FINALCOMPONENT "
-        strsql = strsql & "FROM RAMAIS_AGUA_LIGACAO RAL "
-        strsql = strsql & "INNER JOIN RAMAIS_AGUA RA ON RAL.OBJECT_ID_ = RA.OBJECT_ID_ INNER JOIN WATERLINES WTR ON WTR.OBJECT_ID_ = RA.OBJECT_ID_TRECHO "
-        strsql = strsql & "Where RAL.CONSUMO_LPS > 0 "
-        strsql = strsql & "GROUP BY RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT,WTR.FINALCOMPONENT "
-        strsql = strsql & "ORDER BY RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT "
+        strSql = "SELECT SUM(RAL.CONSUMO_LPS)/2 AS " + """" + "MEDIA_TRECHO" + """" + ",RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT,WTR.FINALCOMPONENT "
+        strSql = strSql & "FROM RAMAIS_AGUA_LIGACAO RAL "
+        strSql = strSql & "INNER JOIN RAMAIS_AGUA RA ON RAL.OBJECT_ID_ = RA.OBJECT_ID_ INNER JOIN WATERLINES WTR ON WTR.OBJECT_ID_ = RA.OBJECT_ID_TRECHO "
+        strSql = strSql & "Where RAL.CONSUMO_LPS > 0 "
+        strSql = strSql & "GROUP BY RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT,WTR.FINALCOMPONENT "
+        strSql = strSql & "ORDER BY RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT "
     ' if it is Postgres
     Else
         ma = "RAMAIS_AGUA_LIGACAO"
@@ -280,18 +282,18 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
         mh = "RAMAIS_AGUA"
         mi = "OBJECT_ID_TRECHO"
         mj = "RAMAIS_AGUA_LIGACAO"
-        strsql = "SELECT SUM(" + """" + ma + """" + "." + """" + mb + """" + ")/'2' AS " + """" + "MEDIA_TRECHO" + """" + "," + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + "," + """" + md + """" + "." + """" + mg + """" + " "
-        strsql = strsql & "FROM " + """" + ma + """" + ""
-        strsql = strsql & "INNER JOIN " + """" + mh + """" + " ON " + """" + ma + """" + "." + """" + mc + """" + " = " + """" + mh + """" + "." + """" + mc + """" + " INNER JOIN " + """" + md + """" + "  ON " + """" + md + """" + "." + """" + mc + """" + " = " + """" + mh + """" + "." + """" + mi + """" + " "
-        strsql = strsql & "Where " + """" + ma + """" + "." + """" + mb + """" + " > '0' "
-        strsql = strsql & "GROUP BY " + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + "," + """" + md + """" + "." + """" + mg + """" + " "
-        strsql = strsql & "ORDER BY " + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + " "
+        strSql = "SELECT SUM(" + """" + ma + """" + "." + """" + mb + """" + ")/'2' AS " + """" + "MEDIA_TRECHO" + """" + "," + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + "," + """" + md + """" + "." + """" + mg + """" + " "
+        strSql = strSql & "FROM " + """" + ma + """" + ""
+        strSql = strSql & "INNER JOIN " + """" + mh + """" + " ON " + """" + ma + """" + "." + """" + mc + """" + " = " + """" + mh + """" + "." + """" + mc + """" + " INNER JOIN " + """" + md + """" + "  ON " + """" + md + """" + "." + """" + mc + """" + " = " + """" + mh + """" + "." + """" + mi + """" + " "
+        strSql = strSql & "Where " + """" + ma + """" + "." + """" + mb + """" + " > '0' "
+        strSql = strSql & "GROUP BY " + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + "," + """" + md + """" + "." + """" + mg + """" + " "
+        strSql = strSql & "ORDER BY " + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + " "
    End If
    
    Set rsCon = New ADODB.Recordset
-   rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
+   rsCon.Open strSql, Conn, adOpenDynamic, adLockReadOnly
    Set rsCon = New ADODB.Recordset
-   rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
+   rsCon.Open strSql, Conn, adOpenDynamic, adLockReadOnly
   
    Do While Not rsCon.EOF = True
       contador = contador + 1
@@ -306,7 +308,7 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
    Me.ProgressBar1.Visible = True
    
    Set rsCon = New ADODB.Recordset
-   rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
+   rsCon.Open strSql, Conn, adOpenDynamic, adLockReadOnly
    
    'MEDIA_TRECHO,OBJECT_ID_TRECHO,INITIALCOMPONENT,FINALCOMPONENT
    If rsCon.EOF = False Then
