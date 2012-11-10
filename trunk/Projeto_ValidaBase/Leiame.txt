@@ -1,5 +1,7 @@
 Código
 ------
+Versão 01.00.01 - 10/11/2012 - Melhorias com relação ao arquivo de log realizadas
+
 
 No dia 01/04/2009 foi encaminhado o código do valida base em arquivo texto;
 

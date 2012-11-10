@@ -5,7 +5,6 @@ Object={87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0; TeComDatabase.dll
 Form=Forms\Main.frm
 Class=CDecriptaSenha; Classes\CDecriptaSenha.cls
 Class=CGeoSanIniFile; Classes\ReadGeoSanIniFile.cls
-Class=CVerificaGeoSan; Classes\VerificaGeoSan.cls
 Startup="FormuarioPrincipal"
 HelpFile=""
 ExeName32="ValidaBase.exe"

@@ -45,6 +45,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'Versão 01.00.01 VALIDABASE
+'Checa a base de dados para verificação da integridade da mesma para exportação para simulação hidráulica
+
 Option Explicit                         'Impede que uma variável seja utilizada sem que a mesma seja antes criada
 
 Public Conn As New ADODB.Connection     'Define de forma global uma conexão com o banco de dados
@@ -76,6 +79,7 @@ Function ValidaComponentesIniciaisDeWaterlines()
     Dim rsVBP As New ADODB.Recordset
     Dim blnPontoCriado As Boolean           'Indica se a geometria do ponto foi criada ou não
     
+    Print #1, vbCrLf & "Início;ValidaComponentesIniciaisDeWaterlines"
     'Seleciona todos os object_id_s e componentes iniciais da tabela Waterlines
     Set rsVBL = Conn.Execute("SELECT OBJECT_ID_ AS COD,INITIALCOMPONENT AS INI FROM WATERLINES ORDER BY INITIALCOMPONENT")
     'Se existirem redes de água
@@ -99,28 +103,26 @@ Function ValidaComponentesIniciaisDeWaterlines()
                     VALID = False       'Informa que ainda não encontrou o nó inicial de Waterlines em Watercomponents
                 Else
                     'O nó é maior do que o componente inicial do trecho de rede, isto quer dizer que ele não foi encontrado.
-                    Print #1, "Componente Inicial:"; Tab(21); rsVBL!ini; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "NÃO ENCONTRADO."
+                    Print #1, "ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:"; Tab(21); rsVBL!ini; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "NÃO ENCONTRADO."
                     
                     CriaComponenteDefault (rsVBL!ini)
                     If blnPontoCriado = True Then
-                        Print #1, "Componente " & rsVBL!ini & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
+                        Print #1, "ValidaComponentesIniciaisDeWaterlines-21;Componente " & rsVBL!ini & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
                     Else
-                        Print #1, "Componente " & rsVBL!ini & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
+                        Print #1, "ValidaComponentesIniciaisDeWaterlines-22;Componente " & rsVBL!ini & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
                     End If
-                    
                     rsVBL.MoveNext
                 End If
                 'Verifica se chegarmos ao final da leitura de todos os nós e não exsitem mais nós para lermos
                 If rsVBP.EOF = True Then
                     If VALID = False Then
                         Do While Not rsVBL.EOF = True
-                            Print #1, "Componente Inicial:"; Tab(21); rsVBL!ini; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "não encontrado!"
-                            
+                            Print #1, "ValidaComponentesIniciaisDeWaterlines-23;Componente Inicial:"; Tab(21); rsVBL!ini; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "não encontrado!"
                             blnPontoCriado = CriaComponenteDefault(rsVBL!ini)
                             If blnPontoCriado = True Then
-                                Print #1, "Componente " & rsVBL!ini & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
+                                Print #1, "ValidaComponentesIniciaisDeWaterlines-24;Componente " & rsVBL!ini & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
                             Else
-                                Print #1, "Componente " & rsVBL!ini & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
+                                Print #1, "ValidaComponentesIniciaisDeWaterlines-25;Componente " & rsVBL!ini & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
                             End If
                             rsVBL.MoveNext
                         Loop
@@ -130,16 +132,16 @@ Function ValidaComponentesIniciaisDeWaterlines()
            Loop
        End If
    End If
+   Print #1, "Fim;ValidaComponentesIniciaisDeWaterlines"
 End Function
 'Irá verificar se todos os compontentes (nós) finais que estão definidos na tabela de atributo Waterlines, estão presentes
 'Esta função varre toda tabela Waterlines na coluna de nó final e procura se o nó informado existe na tabela Watercomponents
-'
-'
-'
 Function ValidaComponentesFinaisDeWaterlines()
     Dim rsVBL As New ADODB.Recordset
     Dim rsVBP As New ADODB.Recordset
     Dim blnPontoCriado As Boolean           'Indica se a geometria do ponto foi criada ou não
+    
+    Print #1, vbCrLf & "Início;ValidaComponentesFinaisDeWaterlines"
     'Seleciona todos os object_id_s e componentes finais da tabela Waterlines
     Set rsVBL = Conn.Execute("SELECT OBJECT_ID_ AS COD,FINALCOMPONENT AS FIM FROM WATERLINES ORDER BY FINALCOMPONENT")
     'Se existirem redes de água
@@ -162,29 +164,27 @@ Function ValidaComponentesFinaisDeWaterlines()
                     VALID = False       'Informa que ainda não encontrou o nó final de Waterlines em Watercomponents
                 Else
                     'O nó é maior do que o componente final do trecho de rede, isto quer dizer que ele não foi encontrado.
-                    Print #1, "Componente Final:"; Tab(21); rsVBL!fim; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "NÃO ENCONTRADO."
+                    Print #1, "ValidaComponentesFinaisDeWaterlines-30;Componente Final:"; Tab(21); rsVBL!fim; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "NÃO ENCONTRADO."
                     
                     CriaComponenteDefault (rsVBL!fim)
                     If blnPontoCriado = True Then
-                        Print #1, "Componente " & rsVBL!fim & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
+                        Print #1, "ValidaComponentesFinaisDeWaterlines-31;Componente " & rsVBL!fim & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
                     Else
-                        Print #1, "Componente " & rsVBL!fim & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
+                        Print #1, "ValidaComponentesFinaisDeWaterlines-32;Componente " & rsVBL!fim & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
                     End If
-            
                     rsVBL.MoveNext
                 End If
                 If rsVBP.EOF = True Then
                     If VALID = False Then
                         Do While Not rsVBL.EOF = True
-                            Print #1, "Componente Final:"; Tab(21); rsVBL!fim; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "não encontrado!"
+                            Print #1, "ValidaComponentesFinaisDeWaterlines-33;Componente Final:"; Tab(21); rsVBL!fim; Tab(31); "da linha"; Tab(40); rsVBL!COD; Tab(50); "não encontrado!"
                             
                             CriaComponenteDefault (rsVBL!fim)
                             If blnPontoCriado = True Then
-                               Print #1, "Componente " & rsVBL!fim & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
+                               Print #1, "ValidaComponentesFinaisDeWaterlines-34;Componente " & rsVBL!fim & " POSSUI GEOMETRIA E FOI CRIADO AUTOMATICAMENTE."
                             Else
-                               Print #1, "Componente " & rsVBL!fim & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
+                               Print #1, "ValidaComponentesFinaisDeWaterlines-35;Componente " & rsVBL!fim & " NÃO PODE SER CRIADO AUTOMATICAMENTE."
                             End If
-                            
                             rsVBL.MoveNext
                         Loop
                     End If
@@ -194,6 +194,7 @@ Function ValidaComponentesFinaisDeWaterlines()
             Loop
         End If
     End If
+    Print #1, "Fim;ValidaComponentesFinaisDeWaterlines"
 End Function
 
 'Esta função irá criar uma nova geometria de nó que não existe
@@ -264,7 +265,7 @@ Private Function ObtemGeomWaterlines() As String
     strSql = "SELECT LAYER_ID,NAME FROM TE_LAYER WHERE NAME = '" & "WATERLINES" & "'"
     Set rsLayer = Conn.Execute(strSql)
     If rsLayer.EOF = True Then
-       MsgBox "Não localizada a tabela de geometrias 'LINES##' da tabela WATERLINES", vbExclamation, ""
+       MsgBox "Não localizada a tabela de geometrias 'LINES##' da tabela WATERLINES", vbExclamation, " Contate o suporte pois o banco está inconsistente."
        Exit Function
     Else
        ObtemGeomWaterlines = rsLayer!layer_id
@@ -283,7 +284,7 @@ Private Function ObtemGeomWatercomponents() As String
     strSql = "SELECT LAYER_ID,NAME FROM TE_LAYER WHERE NAME = '" & "WATERCOMPONENTS" & "'"
     Set rsLayer = Conn.Execute(strSql)
     If rsLayer.EOF = True Then
-        MsgBox "Não localizada a tabela de geometrias 'Points##' da tabela WATERCOMPONENTS", vbExclamation, ""
+        MsgBox "Não localizada a tabela de geometrias 'Points##' da tabela WATERCOMPONENTS", vbExclamation, " Contate o suporte pois o banco está inconsistente."
         Exit Function
     Else
         ObtemGeomWatercomponents = rsLayer!layer_id
@@ -293,52 +294,56 @@ End Function
 'apaga os atributos (dados alfanuméricos) soltos no banco, pois sem uma geometria associada, os mesmos não podem existir.
 '
 ' ApagaLinhasAtributosSemGeometriasWaterlines - retorna o número de linhas da tabela WATERLINES que foram eliminadas por não possuirem geometria de linha de rede associada
-' nomeTabela - recebe o número da tabela de geompetrias de linhas (trechos) de redes de águas
+' numeroTabela - recebe o número da tabela de geompetrias de linhas (trechos) de redes de águas
 '
-Private Function ApagaLinhasAtributosSemGeometriasWaterlines(nomeTabela As String) As Integer
+Private Function ApagaLinhasAtributosSemGeometriasWaterlines(numeroTabela As String) As Integer
     Dim contador As Integer
     Dim strSql As String
     Dim rsLinha As New ADODB.Recordset
-    contador = 0
+    
+    contador = 0                        'zera o número de atributos apagados
     'EXCLUI AS LINHAS QUE NÃO POSSUEM GEOMETRIA NA TABELA LINES1
-    strSql = "SELECT OBJECT_ID_ FROM WATERLINES WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM LINES" & nomeTabela & ")"
+    strSql = "SELECT OBJECT_ID_ FROM WATERLINES WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM LINES" & numeroTabela & ")"
+    Print #1, vbCrLf & "ApagaLinhasAtributosSemGeometriasWaterlines;" & strSql
     Set rsLinha = Conn.Execute(strSql)
     If rsLinha.EOF = False Then
         Do While Not rsLinha.EOF
             'VERIFICADO QUE QUANDO A LINHA NÃO POSSUI GEOMETRIA, ELA NÃO APARECE NO MAPA
             'E POR ISSO O USUÁRIO NÃO PODE MANIPULA-LA
+            Print #1, "ApagaLinhasAtributosSemGeometriasWaterlines;" & "     DELETE FROM WATERLINES WHERE OBJECT_ID_ ='" & rsLinha!Object_id_ & "'"
             Conn.Execute ("DELETE FROM WATERLINES WHERE OBJECT_ID_ ='" & rsLinha!Object_id_ & "'")
-            Print #1, "Linha de atributos na tabela WATERLINES excluída por não ter geometria na tabela LINES" & nomeTabela & " cujo Object_id_ = " & rsLinha!Object_id_
             rsLinha.MoveNext
             contador = contador + 1
         Loop
     End If
+    Print #1, "ApagaLinhasAtributosSemGeometriasWaterlines;" & "Fim do SELECT. " & contador & " linhas de atributos em WATERLINES encontradas sem geometrias associadas"
     ApagaLinhasAtributosSemGeometriasWaterlines = contador
 End Function
 'Esta função apaga todos as geometrias de redes de água que não possuem um atributo associado aos mesmos, ou seja,
 'apaga as geometrias (coordenadas das linhas) soltas no banco, pois sem um atributo associado, as mesmoa não podem existir.
 '
 ' ApagaGeometriasSemAtributosWaterlines - retorna o número de linhas (trechos de redes/geometrias) da tabela LINESXX que foram eliminadas por não possuirem atributos de rede associada em WATERLINES
-' nomeTabela - recebe o número da tabela de geompetrias de linhas (trechos) de redes de águas
+' numeroTabela - recebe o número da tabela de geompetrias de linhas (trechos) de redes de águas
 '
-Private Function ApagaGeometriasSemAtributosWaterlines(nomeTabela As String) As Integer
+Private Function ApagaGeometriasSemAtributosWaterlines(numeroTabela As String) As Integer
     'EXCLUI AS GEOMETRIAS DE LINHAS QUE NÃO TEM LINHAS NA TABELA WATERLINES
     Dim contador As Integer
     Dim strSql As String
     Dim rsLinha As New ADODB.Recordset
     
-    contador = 0
-
-    strSql = "SELECT OBJECT_ID FROM LINES" & nomeTabela & " WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERLINES)"
+    contador = 0                            'zera o número de geometrias apagadas
+    strSql = "SELECT OBJECT_ID FROM LINES" & numeroTabela & " WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERLINES)"
+    Print #1, vbCrLf & "ApagaLinhasAtributosSemGeometriasWaterlines; " & strSql; ""
     Set rsLinha = Conn.Execute(strSql)
     If rsLinha.EOF = False Then
         Do While Not rsLinha.EOF
+            Print #1, "ApagaGeometriasSemAtributosWaterlines;" & "     DELETE FROM LINES1 WHERE OBJECT_ID ='" & rsLinha!object_id & "'"
             Conn.Execute ("DELETE FROM LINES1 WHERE OBJECT_ID ='" & rsLinha!object_id & "'")
-            Print #1, "DESENHO DE Linha COD " & rsLinha!object_id & " SEM INFORMAÇÃO DE CADASTRO, EXCLUÍDA."
             rsLinha.MoveNext
             contador = contador + 1
         Loop
     End If
+    Print #1, "ApagaGeometriasSemAtributosWaterlines;" & "Fim do SELECT. " & contador & " linhas de geometrias de WATERLINES encontradas sem atributos associados"
     ApagaGeometriasSemAtributosWaterlines = contador
 End Function
 'Obter uma lista de componentes de redes (nós) que existem na tabela Watercomponents
@@ -349,27 +354,29 @@ End Function
 'numTabGeomPoints - recebe o número da tabela contento as geometrias dos pontos/nós das redes
 'rsSemPoints - recordSet contendo o resultado da querie na tabela WATERCOMPONENTS com as linhas de atributos sem geometrias
 '
-Private Function WcSemGeometrias(numTabGeomPoints As String, ByRef rsSemPoints As Object)
+Private Function WcSemGeometrias(numTabGeomPoints As String, ByRef rsSemPoints As ADODB.Recordset)
     Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile  'Classe para ler dados de inicialização
     Dim TpConexao As String                         'Tipo de conexão, se SQLServer, Oracle ou Postgres
     Dim strSql As String
     'Dim rsSemPoints As new ADODB.Recordset
     'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
-    leGeoSanIni.arquivo = "D:\Desenv\GEOSAN_VB6_B\trunk\Controles\GeoSan.ini"
+    leGeoSanIni.arquivo = App.Path & "\Controles\GeoSan.ini"
     TpConexao = leGeoSanIni.TipoBDados
     Select Case TpConexao
         Case "1-SQL Server 2005"
             'gera um Recordset contendo todos os OBJECT_ID_s sem geometrias
             strSql = "SELECT OBJECT_ID_ FROM WATERCOMPONENTS WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM POINTS" & numTabGeomPoints & ")"
+            Print #1, vbCrLf & "WcSemGeometrias; " & strSql
             Set rsSemPoints = Conn.Execute(strSql)
+            Print #1, "WcSemGeometrias;Fim do SELECT."
         Case "Oracle"
+            'Não testado com Oracle ainda. Necessita testar novamente
             IMPRIME_COMPONENTE_SEM_GEOMETRIA 'CARREGA UM ARRAY QUE SERÁ USADO NO LUGAR DO RECORDSET
         Case "Postgres"
         
         Case Else
-            MsgBox "Banco de dados incorreto, somente são aceitos SQLServer, Oracle e Postgres"
+            MsgBox "Banco de dados incorreto, somente são aceitos SQLServer, Oracle e Postgres. Entre em contato com o suporte."
     End Select
-    'Set WcSemGeometrias = "FUNCIONOU"
 End Function
 Private Sub ProcuraSeEhNoInicial(id_componente As String, rsNoInicial As ADODB.Recordset)
     'Procura se este nó de Watercomponents é um nó inicial de alguma rede de água em Waterlines
@@ -958,77 +965,69 @@ End Function
 Private Sub Cancela_Click()
     Unload Me
 End Sub
-
+'Esta é a rotina inicial que realiza o processamento do banco de dados do GeoSan quando a não conformidades existentes no mesmo
+'É dada uma ênfase em informar todas as atividades no arquivo de log do sistema
 Private Sub ProcessaBancoDados_Click()
-Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão com o banco de dados
+Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                    'Abre a conexão com o banco de dados
     Dim num_linhas As Integer
-    Dim nomeTabelaGeomWl As String
-    Dim nomeTabelaGeomWc As String
-    Dim teste As String
+    Dim numeroTabelaGeomWl As String
+    Dim numeroTabelaGeomWc As String
     Dim rsSemPoints As New ADODB.Recordset
     Dim id_componente As String                                     'object_id da tabela de atributos de pontos que não possui geometria associada
-    'rsFinal indica os trechos de redes que possuem como nó final o mesmo que de outros trechos, ou seja redes conectadas
-    Dim rsFinal As New ADODB.Recordset                              'lista com linhas (trechos de rede) com nós finais dos trechos de redes de água que pertencem a outros trechos de redes
+    Dim rsFinal As New ADODB.Recordset                              'rsFinal indica os trechos de redes que possuem como nó final o mesmo que de outros trechos, ou seja redes conectadas
+                                                                    'lista com linhas (trechos de rede) com nós finais dos trechos de redes de água que pertencem a outros trechos de redes
     Dim rsInitial As New ADODB.Recordset                            'lista com linhas (trechos de redes) com nós iniciais dos trechos de redes de água que pertencem a outros trechos de redes
     Dim LINHA1 As String                                            'object_id da linha que é componente inicial
     Dim LINHA2 As String                                            'object_id da linha que é componente final
     Dim QTDPT As Integer
     Dim retorno As Double
     Dim XL1 As Double, XL2 As Double, YL1 As Double, YL2 As Double  'X e Y iniciais e finais da linha
-       
     Dim dbConn As New ADODB.Connection
     Dim strCMD As String                                            'comando SQL
+    Dim arquivoLog As String                                        'nome do arquivo de log com todas as operações realizadas no banco de dados
     
     Screen.MousePointer = vbHourglass                               'coloca o mouse como ampulheta
-    
-    'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
-    leGeoSanIni.arquivo = "D:\Desenv\GEOSAN_VB6_B\trunk\Controles\GeoSan.ini"
-    Conn.ConnectionString = leGeoSanIni.StrConexao
-    Conn.Open
-
-    
-    
-    Open "D:\Desenv\GEOSAN_VB6_B\trunk\Controles\ValidaBase.log" For Output As #1 ' ABRE O ARQUIVO TEXTO PARA LOG
-    Print #1, "Início do processamento do banco de dados GeoSan: " & DateValue(Now) & " - " & TimeValue(Now)
-    
-    nomeTabelaGeomWl = ObtemGeomWaterlines
-    num_linhas = ApagaLinhasAtributosSemGeometriasWaterlines(nomeTabelaGeomWl)
-    num_linhas = ApagaGeometriasSemAtributosWaterlines(nomeTabelaGeomWl)
-    
-    nomeTabelaGeomWc = ObtemGeomWatercomponents
-    
-    
-    
-    dbConn.Open leGeoSanIni.StrConexao
-    TeDatabase1.Connection = dbConn
-    TeDatabase1.setCurrentLayer ("waterlines")
-    'TeDatabase1.Connection = leGeoSanIni.StrConexao
+    leGeoSanIni.arquivo = App.Path & "\Controles\GeoSan.ini"        'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
+    Conn.ConnectionString = leGeoSanIni.StrConexao                  'Inicializa a string de conexão com o banco de dados
+    Conn.Open                                                       'Abre a conexão com o banco de dados do GeoSan
+    arquivoLog = "\Controles\ValidaBase" & DateValue(Now) & "  " & TimeValue(Now) & ".log"    'define o nome completo do arquivo de log do sistema, incluíndo a data e hora em que o mesmo será gerado pela primeira vez
+    arquivoLog = Replace(arquivoLog, "/", "-")                      'troca caractere / especial que não é aceito como parte do nome do arquivo
+    arquivoLog = Replace(arquivoLog, ":", "-")                      'troca caractere : especial que não é aceito como parte do nome do arquivo
+    arquivoLog = App.Path & arquivoLog                              'adiciona a localização do caminho onde o aplicativo está instalado
+    Open arquivoLog For Append As #1    'Inicia o log do sistema, abrindo o arquivo sem apagar o log anterior, mantendo sempre o histórico
+    Print #1, vbCrLf & "ValidaBase;*************************************************************************************************"  'Pula uma linha antes de iniciar a escrita
+    Print #1, "ValidaBase;Início do processamento do banco de dados GeoSan: " & DateValue(Now) & " - " & TimeValue(Now)
+    numeroTabelaGeomWl = ObtemGeomWaterlines                        'Precisamos saber qual o número da tabela de geometrias que está relacionada com a tabela de atributos WATERLINES
+    num_linhas = ApagaLinhasAtributosSemGeometriasWaterlines(numeroTabelaGeomWl)    'Varre a tabela de WATERLINES para ver se encontra atributos sem geometrias e se encontrar apaga os atributos
+    num_linhas = ApagaGeometriasSemAtributosWaterlines(numeroTabelaGeomWl)          'Varre a tabela WATERLINES para ver se encontra geometrias sem atributos e se encontrar apaga as geometrias
+    numeroTabelaGeomWc = ObtemGeomWatercomponents                   'Obtem o número da tabela POINTS, de geometrias dos nós das redes
+    dbConn.Open leGeoSanIni.StrConexao                              'Abre a conexão geográfica com o banco de dados do GeoSan para utilizar o TeDatabase
+    TeDatabase1.Connection = dbConn                                 'Atribui a conexão para TeDatabase
+    TeDatabase1.setCurrentLayer ("waterlines")                      'Indica que o layer ativo é o de redes de água, WATERLINES
        
     'Identifica se existem NÓS existentes como atributos mas sem a presença da respectiva geometria
     'Ele vai na tabela WATERCOMPONENTS e verifica se existem atributos de componentes (nós) que não possuem uma geometria associada
     'Em nosso modelo sempre deve existir uma geometria associada a um atributo
-    Call WcSemGeometrias(nomeTabelaGeomWc, rsSemPoints)
+    Call WcSemGeometrias(numeroTabelaGeomWc, rsSemPoints)
     
     'Desta forma, conforme chamada anterior vamos agora investigar os nós que possuem atributos, mas não possuem as respectivas geometrias associadas
     'Enquanto existirem nós sem geometrias
     'Primeiro verifica se existem atributos de pontos (nós de redes) sem geometrias, se não existir pula esta parte (While), pois está tudo ok
+    Print #1, vbCrLf & "ProcessaBancoDados_Click;Início da investigação dos nós que possuem atributos mas não possuem geometrias"
     Do While Not rsSemPoints.EOF = True
-        id_componente = rsSemPoints!Object_id_      'obtem o object_id_ que não tem geometria associada
-        'verifica se o nó em questão é um nó inicial de algum trecho de redes em WATERLINES
-        Call ProcuraSeEhNoInicial(id_componente, rsInitial)
+        id_componente = rsSemPoints!Object_id_                              'obtem o object_id_ que não tem geometria associada
+        Call ProcuraSeEhNoInicial(id_componente, rsInitial)                 'verifica se o nó em questão é um nó inicial de algum trecho de redes em WATERLINES
         If rsInitial.EOF = False Then
             'chegando a este ponto significa que o componente é inicial de 1 ou mais linhas (trechos de rede)
             LINHA1 = rsInitial!Object_id_                                   'carrega em LINHA1 o id da linha que o componente é inicial
             retorno = TeDatabase1.getPointOfLine(0, LINHA1, 0, XL1, YL1)    'retorna em XL1 e YL1 as coordenadas iniciais da linha
             'Procura pelos demais trechos de rede com OBJECT_ID do nó inicial com exceção do trecho já visto anteriormente
             Set rsFinal = Conn.Execute("SELECT LINE_ID,OBJECT_ID_,FINALCOMPONENT FROM WATERLINES WHERE FINALCOMPONENT ='" & id_componente & "'AND OBJECT_ID_ <> '" & LINHA1 & "'")
-
             If rsFinal.EOF = False Then
                 'chegando a este ponto significa que o componente é final de 1 ou mais linhas (trechos de rede)
                 LINHA2 = rsFinal!Object_id_                                 'carrega em LINHA1 o id da linha que o componente é final
                 'chegando a este ponto significa que o componente é inicial e final de duas OU mais linhas
                 'ANALISAR AS 2 LINHAS
-               
                 'FAZER A PESQUISA PARA SABER O X,Y DAS LINHAS
                 'caso a linha que está conectada no ponto final possua mais de dois vertices, vamos obter as coordenadas do último vértice
                 QTDPT = TeDatabase1.getQuantityPointsLine(0, LINHA2) 'retorna número de pontos que compõem a linhA para pegar as coordenadas do ultimo ponto
@@ -1038,16 +1037,13 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão 
                 If XL1 = XL2 And YL1 = YL2 Then
                     strXL1 = Replace(XL1, ",", ".")     'converte o valor double do XL1
                     strYL1 = Replace(YL1, ",", ".")     'converte o valor double do YL1
-                    'insere esta geometria de ponto que está faltando
-                    strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & strXL1 & "," & strYL1 & ")"
-                    
-                    'strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & XL1 & "," & YL1 & "')"
+                    strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & strXL1 & "," & strYL1 & ")"       'insere esta geometria de ponto que está faltando
+                    Print #1, "ProcessaBancoDados_Click-03;" & strSql
                     Conn.Execute (strSql)
-                    Print #1, "10;" & strSql
                 Else
                     'Não pode entrar aqui pois achou mais trechos de rede
                     'MsgBox "Valor inconsistente para o componente de rede nº " & id_componente & " contido nas linhas " & LINHA1 & " e " & LINHA2 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente.", vbExclamation, ""
-                    Print #1, "11-Valor inconsistente para o componente de rede nº " & id_componente & " contido nas linhas " & LINHA1 & " e " & LINHA2 & ". Não foi possivel corrigir automaticamente."
+                    Print #1, "ProcessaBancoDados_Click-04;Valor inconsistente para o componente de rede nº " & id_componente & " contido nas linhas " & LINHA1 & " e " & LINHA2 & ". Não foi possivel corrigir automaticamente."
                End If
             Else
                 'chegando a este ponto significa que o componente é somente inicial de duas ou mais linhas
@@ -1066,8 +1062,8 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão 
                     strYL1 = Replace(YL1, ",", ".")     'converte o valor double do YL1
                     'insere esta geometria de ponto que está faltando
                     strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & strXL1 & "," & strYL1 & ")"
+                    Print #1, "ProcessaBancoDados_Click-01;" & strSql
                     Conn.Execute (strSql)
-                    Print #1, "01;" & strSql
                 Else
                     'Existe mais de um trecho de rede (linha) com o nó inicial sem a respectiva geometria associada
                     'Temos que ver se a coordenada inicial desta linha
@@ -1086,16 +1082,16 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão 
                             strYL1 = Replace(YL1, ",", ".") 'converte o valor double do YL1
                             'Insere o nó na tabela de geometrias associada a WATERCOMPONENTS
                             strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & strXL1 & "," & strYL1 & ")"
+                            Print #1, "ProcessaBancoDados_Click-02;" & strSql
                             Conn.Execute (strSql)
-                            Print #1, "02;" & strSql
                         Else
                             'MsgBox "Valores inconsistentes para a linha " & LINHA1 & " e linha " & LINHA2 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente.", vbExclamation, ""
-                            Print #1, "03-Valores inconsistentes para a linha " & LINHA1 & " e linha " & LINHA2 & ". Não foi possivel corrigir automaticamente."
+                            Print #1, "ProcessaBancoDados_Click-03;Valores inconsistentes para a linha " & LINHA1 & " e linha " & LINHA2 & ". Não foi possivel corrigir automaticamente."
                         End If
                     Else
                         'Não pode entrar aqui pois achou mais trechos de rede
                         MsgBox "Valores inconsistentes para a linha " & LINHA1 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente.", vbExclamation, ""
-                        Print #1, "04-Valores inconsistentes para o trehco de rede (linha): " & LINHA1 & ". Não foi possivel corrigir automaticamente."
+                        Print #1, "ProcessaBancoDados_Click-04;Valores inconsistentes para o trehco de rede (linha): " & LINHA1 & ". Não foi possivel corrigir automaticamente."
                     End If
                 End If
             End If
@@ -1121,8 +1117,9 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão 
                     strYL1 = Replace(YL1, ",", ".")                             'converte o valor double do YL1
                     'insere esta geometria de ponto que está faltando
                     strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & XL1 & "," & YL1 & "')"
+                    Print #1, "ProcessaBancoDados_Click-05;" & strSql
                     Conn.Execute (strSql)
-                    Print #1, "05-Foi inserida uma geometria na tabela POINTS2 referente a WATERCOMPONENTS com object_id: " & id_componente & ", que estava faltando, com sucesso!"
+                    Print #1, "ProcessaBancoDados_Click-05;Foi inserida uma geometria na tabela POINTS2 referente a WATERCOMPONENTS com object_id: " & id_componente & ", que estava faltando, com sucesso!"
                 Else 'O PONTO ESTÁ CONECTADO A MAIS DE 1 LINHA
                     'Existe mais de um trecho de rede (linha) com o nó final sem a respectiva geometria associada
                     'Temos que ver se a coordenada final desta linha
@@ -1136,44 +1133,44 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão 
                         If XL1 = XL2 And YL1 = YL2 Then
                             'Insere o nó na tabela de geometrias associada a WATERCOMPONENTS
                             strSql = "insert into points2 (object_id,x,y) values ('" & id_componente & "'," & XL1 & "," & YL1 & "')"
+                            Print #1, "ProcessaBancoDados_Click-06;" & strSql
                             Conn.Execute (strSql)
-                            Print #1, "06-Foi inserida uma geometria na tabela POINTS2 referente a WATERCOMPONENTS com object_id: " & id_componente & ", que estava faltando, com sucesso!"
+                            Print #1, "ProcessaBancoDados_Click-06;Foi inserida uma geometria na tabela POINTS2 referente a WATERCOMPONENTS com object_id: " & id_componente & ", que estava faltando, com sucesso!"
                         Else
                             'MsgBox "Valores inconsistentes para a linha " & LINHA1 & " e linha " & LINHA2 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente.", vbExclamation, ""
-                            Print #1, "07-Valores inconsistentes para a linha " & LINHA1 & " e linha " & LINHA2 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente."
+                            Print #1, "ProcessaBancoDados_Click-07;Valores inconsistentes para a linha " & LINHA1 & " e linha " & LINHA2 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente."
                         End If
                     Else
                         'Não pode entrar aqui pois achou mais trechos de rede
                         'MsgBox "Valores inconsistentes para a linha " & LINHA1 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente.", vbExclamation, ""
-                        Print #1, "08-Valores inconsistentes para a linha " & LINHA1 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente."
+                        Print #1, "ProcessaBancoDados_Click-08;Valores inconsistentes para a linha " & LINHA1 & "." & Chr(13) & Chr(13) & "Não foi possivel corrigir automaticamente."
                     End If
                 End If
             Else
                'chegando a este ponto significa que o componente não é inicial nem final de linhas
                strCMD = "DELETE FROM WATERCOMPONENTS WHERE OBJECT_ID_ ='" & id_componente & "'"
+               Print #1, "ProcessaBancoDados_Click-09;" & strSql
                Conn.Execute (strCMD)
-               Print #1, "09;" & strCMD
             End If
         End If
         rsSemPoints.MoveNext
     Loop
+    Print #1, "ProcessaBancoDados_Click;Fim da investigação dos nós que possuem atributos mas não possuem geometrias"
+    
     'Agora vamos verificar quais os nós que estão presentes na componente inicial (nó inicial) da tabela Waterlines, mas não existe como nó em Watercomponents
     Call ValidaComponentesIniciaisDeWaterlines
     
+    'Agora vamos verificar quais os nós que estão presentes na componente final (nó final) da tabela Waterlines, mas não existe como nó em Watercomponents
     Call ValidaComponentesFinaisDeWaterlines
     
-    
-    'teste = CorrigeGeometriaNosNaoExistentesEmWatercomponents(rsTeste)
-    
-    'cmdInciar_Click
-
-    'teste = localizaFaltaPointsEmWatercomponents(nomeTabelaGeomWc)
     rsSemPoints.Close
     dbConn.Close
     Set dbConn = Nothing
     Screen.MousePointer = vbDefault                     'Volta mouse ao normal
     Conn.Close                                          'Fecha a conexão com o banco de dados
-    Print #1, "Fim do processamento do banco de dados GeoSan: " & DateValue(Now) & " - " & TimeValue(Now)
-    Close #1                                            'Fecha o arquivo de log do sistema
+    Print #1, vbCrLf & "ValidaBase;Fim do processamento do banco de dados GeoSan: " & DateValue(Now) & " - " & TimeValue(Now)
+    Print #1, "ValidaBase;*************************************************************************************************"
+    Close #1                                           'Fecha o arquivo de log do sistema
+    MsgBox "Validação concluída."
 End Sub
 
