@@ -60,9 +60,9 @@ Public Function ReadINI(Secao As String, Entrada As String, Arquivo As String)
 End Function
 'Procedimento Exporte EPANET recebe como parametros o cursor trazendo todas os trechos
 'a serem exportados e o objecto de conexão
-'(rsTrechos):É a tabela Waterlines com os filtros de tipo de rede e
-'setor selecionados pelo usuário
-Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
+'(rsTrechos):É a tabela Waterlines com os filtros de tipo de rede e setor selecionados pelo usuário
+'arquivoLog: nome do arquivo onde está sendo escrito todo o log do sistema
+Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arquivoLog As String)
     On Error GoTo Trata_Erro
     Dim numeroErro As String                'para auxiliar a identificar onde ocorreu o erro
     Dim contadorTrechos As Integer          'para contar quantos trechos está exportando
@@ -76,11 +76,10 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
     Dim nStr As String
     Dim prov As String
     
+    Open arquivoLog For Append As #5                                'continua a realizar o log do sistema
+    Print #5, vbCrLf & "ExportaEPANet;*************************************************************************************************"  'Indica que começou a nova fase de exportação
     'Informa que o contador de trechos exportados é zero
     contadorTrechos = 0
-    'Abre um arquivo, sobrepondo o anterior para registrar cada trecho que está sendo exportado para o Epanet
-    Open App.Path & "\LogErroExportEPANET-histórico.txt" For Output As #3
-         
     If (az <> 10) Then
         mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\CONTROLES\GEOSAN.ini")
         mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\CONTROLES\GEOSAN.ini")
@@ -134,13 +133,16 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
     AbrirEstruturaExporteRede
     'RECORDSET COM OS TIPOS DE REDES EXISTENTES
     If conn.Provider <> "PostgreSQL.1" Then
+        Print #5, vbCrLf & "ExportaEPANet;SELECT * FROM WATERCOMPONENTSTYPES ORDER BY ID_TYPE"
         Set rsWaterCompTypes = conn.Execute("SELECT * FROM WATERCOMPONENTSTYPES ORDER BY ID_TYPE")
     Else
+        Print #5, vbCrLf & "ExportaEPANet;SELECT * FROM " + """" + "WATERCOMPONENTSTYPES" + """" + " ORDER BY " + """" + "ID_TYPE" + """" + ""
         Set rsWaterCompTypes = conn.Execute("SELECT * FROM " + """" + "WATERCOMPONENTSTYPES" + """" + " ORDER BY " + """" + "ID_TYPE" + """" + "")
     End If
     If rsWaterCompTypes.EOF = False Then
         blnRsWaterCompTypes = True
     Else
+        Print #5, "ExportaEPANet;Não será possivel identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia."
         MsgBox "Não será possivel identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia.", vbExclamation, ""
         blnRsWaterCompTypes = False
     End If
@@ -164,15 +166,15 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
         intLinhaCod = 4
         contadorTrechos = contadorTrechos + 1                                   'Incrementa o contador de trechos lidos
         'Imprime o trecho de rede que ele está lendo para exportar para o Epanet
-        Print #3, Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_
+        Print #5, "ExportaEPANet;" & Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_
 
         For conta_no = 1 To 2
             'Verifica a variável conta_no e atribui a variavel NO o valor do nó inicial ou final
             If conta_no = 1 Then 'refere-se ao nó inicial
-                Print #3, Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_ & " - Nó inicial: " & rsTrechos!InitialComponent
+                Print #5, "ExportaEPANet;" & Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_ & " - Nó inicial: " & rsTrechos!InitialComponent
                 NO = rsTrechos.Fields("InitialComponent").Value
             Else 'refere-se ao no final
-                Print #3, Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_ & " - Nó final: " & rsTrechos!FinalComponent
+                Print #5, "ExportaEPANet;" & Now & " - " & contadorTrechos & " - Trecho lido: " & rsTrechos!Object_id_ & " - Nó final: " & rsTrechos!FinalComponent
                 NO = rsTrechos.Fields("FinalComponent").Value
             End If
             intLinhaCod = 5
@@ -439,10 +441,11 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection)
     Set rsNos = Nothing
     intLinhaCod = 18
     'Gera o arquivo .INP de saída para o Epanet
-    Close #3
     GeraArquivo_de_Saida
     intLinhaCod = 19
     Screen.MousePointer = vbNormal
+    Print #5, vbCrLf & "ExportaEPANet;*************************************************************************************************"
+    Print #5, "ExportaEPANet;Exportação concluída com sucesso!"
     MsgBox "Exportação concluída com sucesso!", vbInformation, "Exporte Epanet"
 
 Trata_Erro:
@@ -451,17 +454,14 @@ Trata_Erro:
         'O código 3021 é final de arquivo
         Resume Next
     Else
-        ' Close #3
-        Close #2
-        Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
-        Print #2, Now & "  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
-        Close #2
+        Close #5
+        Open arquivoLog For Append As #5
+        Print #5, vbCrLf & "ExportaEPANet;" & Now & "  - ModExporte - Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection) - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
+        Print #5, "ExportaEPANet;Um posssível erro foi identificado na rotina 'ExportaEPANet':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & numeroErro & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+        Close #5
         MsgBox "Um posssível erro foi identificado na rotina 'ExportaEPANet':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & numeroErro & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
-        'Resume
     End If
 End Sub
-
-
 Public Function DistanceBetween(ByVal X1 As Double, ByVal Y1 As Double, ByVal X2 As Double, ByVal Y2 As Double) As Double
   ' Calculate the distance between two points, given their X/Y coordinates.
   
