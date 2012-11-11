@@ -1171,6 +1171,6 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                    'Abre a cone
     Print #1, vbCrLf & "ValidaBase;Fim do processamento do banco de dados GeoSan: " & DateValue(Now) & " - " & TimeValue(Now)
     Print #1, "ValidaBase;*************************************************************************************************"
     Close #1                                           'Fecha o arquivo de log do sistema
-    MsgBox "Validação concluída."
+    MsgBox "Validação concluída. Verifique o log no arquivo " & arquivoLog
 End Sub
 
