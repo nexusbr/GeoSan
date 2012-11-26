@@ -1,6 +1,14 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+23-11-2012 - GeoSan 06.00.07.07
+Na consulta de ligações associadas aos ramais de água foi retirada a consulta por lotes. No banco de dados na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2 pmde QUERYSTRING é:
+A palavra endereço estava também com cedilha como ENDEREÇO, o que causava erro.
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+mudado para
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+
+
 04-10-2012 - GeoSan 06.00.07.05
 
 Foi realizada a revisão no código no formulário FrmCadastroRamal, colocados diversos comentários.

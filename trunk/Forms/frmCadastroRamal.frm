@@ -542,12 +542,12 @@ Dim i As Long
 Dim j As Long
 Dim blnBotaoFechar As Boolean
 Dim intKeyAscii As Integer
-Dim iniAtivado As String 'ARMAZENA A INFORMACAO SE A PESQUISA POR LOTE ESTA ATIVADA
+Dim iniAtivado As String            'ARMAZENA A INFORMACAO SE A PESQUISA POR LOTE ESTA ATIVADA
 Dim iniTabela As String
 Dim iniREF_IPTU As String
 Dim iniREF_NROLIGACAO As String
 Dim TB_Ramais As String
-Dim TB_Ligacoes As String
+Dim TB_Ligacoes As String           'Nome da tabela quem contem os ramais das ligações de água ou esgoto. Pode ser RAMAIS_AGUA_LIGACAO ou RAMAIS_ESGOTO_LIGACAO
 Dim TB_comercial As String
 Dim PESQUISA As String
 Dim VALOR As String
@@ -1482,8 +1482,8 @@ Private Sub cmdConfirmar_Click()
    Dim rsCria As ADODB.Recordset
    Dim a As Integer
    Dim cgeo As New clsGeoReference
-   Dim X As Double
-   Dim Y As Double
+   Dim x As Double
+   Dim y As Double
    Dim str As String
    
    Dim strNroL As String 'NÚMERO DA LIGACAO
@@ -1592,13 +1592,13 @@ Set rsCria = New ADODB.Recordset
         
         tdbramais.setCurrentLayer TB_Ramais '"RAMAIS_AGUA"
         'RETORNA EM X E Y A COORDENADA DO FINAL DA LINHA
-        tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y
+        tdbramais.getPointOfLine 0, object_id_ramal, 1, x, y
         
         'INSERE PONTO NO FINAL DA LINHA
-        tdbramais.addPoint object_id_ramal, X, Y
+        tdbramais.addPoint object_id_ramal, x, y
 
         
-        tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y
+        tdbramais.getPointOfLine 0, object_id_ramal, 0, x, y
         'tdb.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
         
         Object_id_trecho = ramal_Object_id_trecho 'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK
@@ -2035,33 +2035,36 @@ Private Sub CarregaLigacoes()
     On Error GoTo Trata_Erro
     Dim NRO_LIGACOES As String, INSCRICOES_LOTES As String, msg As String
     Dim rsAssociados As ADODB.Recordset, str As String, itmx As ListItem, a As Integer, Qtde As Integer
+    
+    Screen.MousePointer = vbHourglass                   'Coloca o ponteiro do mouse como ampulheta
     'RECUPERA TODAS AS INSCRICOES DE TODOS LOTE
     'Inicia o processo de recuperar as inscrições/ligações associadas aos lotes. Não temos mais lotes. Hoje as inscrições são armazenadas nos nós nas extremidades dos ramais
-    str = GetQueryProcess(3)
-    INSCRICOES_LOTES = "''"
-    
-    If Trim(object_id_lote) = "" Then
-        str = Replace(str, "@OBJECT_ID_", "''")
-    Else
-        str = Replace(str, "@OBJECT_ID_", object_id_lote)
-    End If
-    
-    intlocalerro = 1
-    Set rs = Conn.execute(str)
-    
-    'Vefifica se existe alguma ligação associada ao polígono do lote. Não utilizamos mais polígonos de lotes. Claro que não terá nenhuma
-    While Not rs.EOF
+    'Este pedeço de código foi retirado pois atendia apenas Votuporanga e Semasa e hoje o GeoSan não conecta mais as ligações nos lotes.
+        'str = GetQueryProcess(3)
+        'INSCRICOES_LOTES = "''"
         
-        If INSCRICOES_LOTES = "''" Then
-            INSCRICOES_LOTES = "'" & rs(0).value & "'"
-        Else
-            INSCRICOES_LOTES = INSCRICOES_LOTES & ",'" & rs(0).value & "'"
-        End If
-    
-        rs.MoveNext
-    Wend
-    
-    rs.Close
+        'If Trim(object_id_lote) = "" Then
+        '    str = Replace(str, "@OBJECT_ID_", "''")
+        'Else
+        '    str = Replace(str, "@OBJECT_ID_", object_id_lote)
+        'End If
+        
+        'intlocalerro = 1
+        'Set rs = Conn.execute(str)
+        
+        'Vefifica se existe alguma ligação associada ao polígono do lote. Não utilizamos mais polígonos de lotes. Claro que não terá nenhuma
+        'While Not rs.EOF
+            
+        '    If INSCRICOES_LOTES = "''" Then
+        '        INSCRICOES_LOTES = "'" & rs(0).value & "'"
+        '    Else
+        '        INSCRICOES_LOTES = INSCRICOES_LOTES & ",'" & rs(0).value & "'"
+        '    End If
+        
+        '    rs.MoveNext
+        'Wend
+        
+        'rs.Close
     'Finaliza o processo de recuperar as inscrições/ligações associadas aos lotes.
     
     'Inicia a recuperação de todas as ligações associadas ao nó na extremidade do ramal
@@ -2073,13 +2076,13 @@ Private Sub CarregaLigacoes()
     'Seleciona todas as colunas da tabela onde estão os números das ligações de água ou esgoto, associadas aos ramais. Pode existir mais de uma ligação associada a um mesmo ramal
     If frmCanvas.TipoConexao <> 4 Then
         'No caso de ser banco de dados SQLServer ou Oracle
-        str = "SELECT * FROM " & TB_Ligacoes & " WHERE OBJECT_ID_ = '" & object_id_ramal & "'"
+        str = "SELECT * FROM " & TB_Ligacoes & " WHERE OBJECT_ID_ = '" & object_id_ramal & "'"      'Consulta na tabela de ramais de água ou de esgoto as ligações com o object-id do ramal que foi selecionado pelo usuário
     Else
         'No caso de se banco de dados Postgres
-        str = "SELECT * FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vi + """" + " = '" & object_id_ramal & "'"
+        str = "SELECT * FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vi + """" + " = '" & object_id_ramal & "'"      'Consulta na tabela de ramais de água ou de esgoto as ligações com o object-id do ramal que foi selecionado pelo usuário
     End If
 
-    'Abre a conexão com o banco de dados para ver os números das ligações
+    'Abre a conexão com o banco de dados para ver os números das ligações que estão associadas no ramal selecionado pelo usuário
     rsAssociados.Open str, Conn, adOpenForwardOnly, adLockReadOnly
     NRO_LIGACOES = "''"
    
@@ -2090,8 +2093,8 @@ Private Sub CarregaLigacoes()
             If NRO_LIGACOES = "''" Then
                 'Armazena ela no vetor de ligações
                 NRO_LIGACOES = "'" & rsAssociados.Fields("NRO_LIGACAO").value & "'"
-            'Se for a segunda ou próxima ligação, acrescenta a mesma ao vetor de ligações
             Else
+                'Se for a segunda ou próxima ligação, acrescenta a mesma ao vetor de ligações
                 NRO_LIGACOES = NRO_LIGACOES & ",'" & rsAssociados.Fields("NRO_LIGACAO").value & "'"
             End If
             rsAssociados.MoveNext
@@ -2099,12 +2102,12 @@ Private Sub CarregaLigacoes()
         'Pronto! Agora tenho um vetor com o(s) numero(s) de todas as ligações que eu selecionei (nó) e estão ligadas ao determinado ramal
         'Configura o código de erro para que se ocorra um erro, seja indicado o local onde ele ocorreu (3), indicando que agora iremos para outra fase
         intlocalerro = 3
-        'Recupera a querie junto a vista ou tabela que contem a lista de todas as ligações do município, com os dados das mesmas. Geralmente vinda do banco de dados comercial
+        'Recupera a querie junto a vista ou tabela que contem a lista de todas as ligações do município, com cláusula where do vetor de ligações NRO_LIGACAO, com os dados das mesmas. Geralmente vinda do banco de dados comercial
         str = GetQueryProcess(2)
         'Faz a substituição no local dos números das ligações pelo vetor contendo todos os números de ligações selecionados
         str = Replace(str, "@NRO_LIGACAO", NRO_LIGACOES)
-        'Faz a substituição no local com a classificação fiscal da prefeitura com as inscrições dos lotes. Não tem nada para substituir
-        str = Replace(str, "@CLASSIFICACAO_FISCAL", INSCRICOES_LOTES)
+        'Faz a substituição no local com a classificação fiscal da prefeitura com as inscrições dos lotes. Não tem nada para substituir. Retirada esta substituição pois isto era usado apenas em Votuporanga e Semasa que possuiam as ligações associadas aos lotes e a união com a classificação fiscal da Prefeitura
+        'str = Replace(str, "@CLASSIFICACAO_FISCAL", INSCRICOES_LOTES)
         'No caso de cadastro de ramais de esgoto, ele necessita informar que a tabela de esgotos é outra
         If TB_Ramais = "RAMAIS_ESGOTO" Then
             str = Replace(str, "NXGS_V_LIG_COMERCIAL", "NXGS_V_LIG_COMERCIAL_E")
@@ -2115,6 +2118,7 @@ Private Sub CarregaLigacoes()
         'Set rs = ConnSec.execute(str)
         'Abre a conexão com o banco de dados para ler as ligações do vetor de ligações
         Set rs = New ADODB.Recordset
+        intlocalerro = 33
         rs.Open str, Conn, adOpenDynamic, adLockOptimistic
         'Enquanto existirem ligações
         While Not rs.EOF
@@ -2171,6 +2175,7 @@ Private Sub CarregaLigacoes()
     End If
     intlocalerro = 4
     rsAssociados.Close
+    Screen.MousePointer = vbDefault                     'Volta o ponteiro do mouse para o normal
     'CarregaLigacoes_err:
     '   msg = "object_id_lote: '" & object_id_lote & "'"
     '   msg = msg & vbCrLf & "INSCRICOES_LOTES: " & INSCRICOES_LOTES
@@ -2180,9 +2185,9 @@ Trata_Erro:
 If Err.Number = 0 Or Err.Number = 20 Then
     Resume Next
 Else
-    PrintErro CStr(Me.Name), "Private Sub carregaLigacoes()", CStr(Err.Number), CStr(Err.Description), True
+    PrintErro CStr(Me.Name), "Private Sub carregaLigacoes(), localização:" & intlocalerro & ", querie: " & str & ", ", CStr(Err.Number), CStr(Err.Description), True
 End If
-
+Screen.MousePointer = vbDefault
 End Sub
 
 Private Sub cmdConsultarLigacoes_Click()
@@ -2304,16 +2309,16 @@ Private Sub lvLigacoes_ItemCheck(ByVal Item As MSComctlLib.ListItem)
 End Sub
 
 
-Private Sub optCentro_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub optCentro_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 
 
-Private Sub optDireito_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub optDireito_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 
-Private Sub optEsquerdo_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub optEsquerdo_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 

@@ -66,8 +66,8 @@ Public blnGeraRel As Boolean
 Type TListaNo
     indice As Integer
     object_id As String
-    x As Double
-    y As Double
+    X As Double
+    Y As Double
 End Type
 
 Public Enum nxSqlOperations
@@ -712,14 +712,18 @@ Public Function PrintSelect(ByVal strArqDestino As String, ByVal strSelect As St
 
    
 End Function
+'Acrescenta ao arquivo de log o erro ocorrido
 
+'
+'Modulo - string que contém em arquivo VB o erro ocorreu
+'EVENTO - string que contém em que rotina o erro ocorreu
+'ErrDescr - string com a descrição do erro ocorrido
+'ExibeMensagem - se é para exibir ou não uma mensagem para o usuário
+'linha - número da linha em que o erro ocorreu
+'
 Public Function PrintErro(ByVal Modulo As String, ByVal EVENTO As String, ByVal ErrNum As String, ByVal ErrDescr As String, ByVal ExibeMensagem As Boolean, Optional ByVal linha As Integer = 0)
-      
-
       Close #1 'FECHA O ARQUIVO DE LOG
-      
       Open App.path & "\Controles\GeoSanLog.txt" For Append As #1
-      
       Print #1, "DATA"; Tab(16); Now
       Print #1, "USUÁRIO"; Tab(16); strUser
       Print #1, "VERSÃO"; Tab(16); Versao_Geo
@@ -731,16 +735,11 @@ Public Function PrintErro(ByVal Modulo As String, ByVal EVENTO As String, ByVal 
       Print #1, ""
       Print #1, "-----------------------------------------------------------------------------------------------------"
       Print #1, ""
-      
       Close #1 'FECHA O ARQUIVO
-      
       'SE O PARÂMETRO ExibeMensagem = True , EXIBE MENSAGEM PARA O USUÁRIO
       If ExibeMensagem = True Then
-         
          MsgBox "A operação não pode ser completada, consulte o arquivo GeosanLog.txt para maiores detalhes.", vbInformation
-
       End If
-
 End Function
 
 
@@ -1802,8 +1801,8 @@ Public Sub ExporteCrede(MyObject As String, nomeArq As String, LayName As String
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -1964,20 +1963,20 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
          Dim v As String
          Dim sq As String
          Dim sa As String
-          Dim r, x, z, xz, y As String
+          Dim r, X, z, xz, Y As String
          p = "y"
          q = "ID_TYPE"
         r = "OBJECT_ID_"
          t = "GROUNDHEIGHT"
          u = "Demand"
          v = "x"
-         x = "points2"
+         X = "points2"
          z = "WATERCOMPONENTS"
          xz = "object_id"
         sa = cgeo.GetLayerID(LayName)
         sq = "sa"
         
-          sQry = convertQuery("SELECT " + """" + x + """" + "." + """" + y + """" + "," + """" + x + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + x + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + x + """" + "." + """" + u + """" + " From " + """" + x + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
+          sQry = convertQuery("SELECT " + """" + X + """" + "." + """" + Y + """" + "," + """" + X + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + X + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + X + """" + "." + """" + u + """" + " From " + """" + X + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
     'pode está errado ********
         
         
@@ -2087,8 +2086,8 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -2192,8 +2191,8 @@ gtErro:
 End Sub
 'até aqui dia 19/10/2010
 
-Function Log10(x)
-    Log10 = Log(x) / Log(10)
+Function Log10(X)
+    Log10 = Log(X) / Log(10)
 End Function
 
 
@@ -2267,12 +2266,12 @@ Dim i As Long
     MsgBox " NÃO ENCONTROU"
 End Function
 
-Private Function QualCoordernada(object_id, ByRef x As Double, ByRef y As Double) As Long
+Private Function QualCoordernada(object_id, ByRef X As Double, ByRef Y As Double) As Long
 Dim i As Long
     For i = LBound(aListaNo) To UBound(aListaNo)
         If aListaNo(i).object_id = object_id Then
-            x = aListaNo(i).x
-            y = aListaNo(i).y
+            X = aListaNo(i).X
+            Y = aListaNo(i).Y
             Exit Function
         End If
     Next i
@@ -2727,37 +2726,42 @@ Public Function RetornaNomeMes(Mes As Integer, Optional NomeCompleto As Boolean 
          RetornaNomeMes = IIf(NomeCompleto, "dezembro", "dez")
    End Select
 End Function
-
+'Procura no banco de dados a querie correspondente ao ID fornecido
+'
+'query_id           - número da querie que será procurada na tabela GS_QUERYS_CLIENT
+'GetQueryProcess    - retorna a string da querie
+'
 Public Function GetQueryProcess(query_id As Integer) As String
-   Dim rs As Recordset
-   Dim zx As String
-   Dim zy As String
-   Dim zu As String
-   Dim zo As String
-   zx = "QUERYSTRING"
-   zy = "GS_QUERYS_CLIENT"
-   zu = "QUERY_ID"
-   
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute("SELECT querystring from gs_querys_client where query_id=" & query_id) '& " and client_id=" & client_id)
-   If rs.EOF = False Then
-   
-      GetQueryProcess = rs.Fields("querystring").value
-   Else
-      MsgBox "Não há a QUERY_ID n." & query_id & " na tabela GS_QUERYS_CLIENT.", vbInformation, "Falta de registro detectada"
-   End If
-   Else
-   'alterado em 19/10/2010
-   Set rs = Conn.execute("SELECT " + """" + zx + """" + " from " + """" + zy + """" + " where " + """" + zu + """" + "='" & query_id & "'")
-   If rs.EOF = False Then
-   
-      GetQueryProcess = rs.Fields("querystring").value
-   Else
-      MsgBox "Não há a QUERY_ID n." & query_id & " na tabela GS_QUERYS_CLIENT.", vbInformation, "Falta de registro detectada"
-   End If
-   End If
-   rs.Close
-   Set rs = Nothing
+    Dim rs As Recordset
+    Dim zx As String
+    Dim zy As String
+    Dim zu As String
+    Dim zo As String
+    
+    zx = "QUERYSTRING"
+    zy = "GS_QUERYS_CLIENT"
+    zu = "QUERY_ID"
+    If frmCanvas.TipoConexao <> 4 Then
+        'Conexão com bancos SQLServer ou Oracle
+        Set rs = Conn.execute("SELECT querystring from gs_querys_client where query_id=" & query_id) '& " and client_id=" & client_id)
+        If rs.EOF = False Then
+            GetQueryProcess = rs.Fields("querystring").value
+        Else
+            MsgBox "Não há a QUERY_ID n." & query_id & " na tabela GS_QUERYS_CLIENT.", vbInformation, "Falta de registro detectada"
+        End If
+    Else
+        'conexão com Postgres
+        'alterado em 19/10/2010
+        Set rs = Conn.execute("SELECT " + """" + zx + """" + " from " + """" + zy + """" + " where " + """" + zu + """" + "='" & query_id & "'")
+        If rs.EOF = False Then
+           GetQueryProcess = rs.Fields("querystring").value
+        Else
+           MsgBox "Não há a QUERY_ID n." & query_id & " na tabela GS_QUERYS_CLIENT.", vbInformation, "Falta de registro detectada"
+        End If
+    End If
+    rs.Close
+    'MsgBox GetQueryProcess - simplesmente para mostrar a querie lida no banco de dados para debug
+    Set rs = Nothing
 End Function
 
 
