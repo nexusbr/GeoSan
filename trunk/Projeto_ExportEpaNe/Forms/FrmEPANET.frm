@@ -124,24 +124,36 @@ Private rsST As ADODB.Recordset
 
 Dim i As Integer
 
+'Declarações necessárias para a função GetMyDocumentsDirectory()
+Const REG_SZ = 1
+Const REG_BINARY = 3
+Const HKEY_CURRENT_USER = &H80000001
+Const SYNCHRONIZE = &H100000
+Const STANDARD_RIGHTS_READ = &H20000
+Const KEY_ENUMERATE_SUB_KEYS = &H8
+Const KEY_NOTIFY = &H10
+Const KEY_QUERY_VALUE = &H1
+Const KEY_READ = ((STANDARD_RIGHTS_READ Or KEY_QUERY_VALUE Or KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not SYNCHRONIZE))
 
+Private Declare Function RegOpenKeyEx Lib "advapi32.dll" Alias "RegOpenKeyExA" (ByVal hKey As Long, _
+    ByVal lpSubKey As String, ByVal Reserved As Long, ByVal samDesired As Long, phkResult As Long) As Long
+Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, _
+    ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
+Private Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long
+'Fim das declarações necessárias para a função GetMyDocumentsDirectory()
+'
+'
+'Rotina inicial da aplicação
+'
+'
+'
 Public Sub init()
-   
    cmdConfirmar.Default = True
-   
-   'txtArquivo.Text = App.Path & "\GeoSan_Exp_Epanet_" & Format(Now, "YYYY-MM-DD-HHMMSS") & ".INP"
-   txtArquivo.Text = Environ$("USERPROFILE") & "\my documents" & "\GeoSan_Exp_Epanet_" & Format(Now, "YYYY-MM-DD-HHMMSS") & ".INP"
-   
+   txtArquivo.Text = GetMyDocumentsDirectory() & "\GeoSan_Exp_Epanet_" & Format(Now, "YYYY-MM-DD-HHMMSS") & ".INP"
    Me.Show
-
 End Sub
-
-
-
 Private Sub cmdCancelar_Click()
-   
    Cancelar = True
-   
    Unload Me
 End Sub
 'Início da função de exportação para o EPANET. Ao final dela será chamado o ModExport pela rotina ExportaEPANet que gera em memória toda a exportação
@@ -204,6 +216,16 @@ On Error GoTo Trata_Erro
         conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 90 WHERE MATERIAL = 5 AND ROUGHNESS = 0")
         Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 6 AND ROUGHNESS = 0"
         conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 6 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 7 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 7 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 8 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 8 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 9 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 9 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 10 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 10 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 11 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 11 AND ROUGHNESS = 0")
     Else
         'Caso seja Postgres
         Print #5, "ExportEpanet;UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '0'"""
@@ -222,6 +244,16 @@ On Error GoTo Trata_Erro
         conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '90' WHERE " + """" + "MATERIAL" + """" + " = '5' AND " + """" + "ROUGHNESS" + """" + " = '0'")
         Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '6' AND " + """" + "ROUGHNESS" + """" + " = '0'"
         conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '6' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'")
     End If
     'Volta o mouse para o normal
     FrmEPANET.MousePointer = vbDefault
@@ -349,7 +381,7 @@ Trata_Erro:
         Print #5, "ExportEpanet;*************************************************************************************************"
         Close #5                                           'Fecha o arquivo de log do sistema
         MsgBox "Exportação para o Epanet concluída com não conformidades. Verifique o log no arquivo " & arquivoLog
-        MsgBox "Um posssível erro foi identificado na rotina 'INICIAR()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+        MsgBox "Um posssível erro foi identificado na rotina 'INICIAR()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo " & arquivoLog & " com informações desta ocorrencia.", vbInformation
     End If
 End Function
 
@@ -444,4 +476,25 @@ End If
 
 
 End Sub
+'Obtem o nome do diretório dos Meus Documentos do usuário que está logado
+'
+'GetMyDocumentsDirectory() - retorna o caminho do diretório
+'
+Function GetMyDocumentsDirectory() As String
+    Dim lRes As Long
+    Dim lResult As Long, lValueType As Long, strBuf As String, lDataBufSize As Long
+    Dim strData As Integer
+    RegOpenKeyEx HKEY_CURRENT_USER, "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders", 0, KEY_READ, lRes
+    lResult = RegQueryValueEx(lRes, "Personal", 0, lValueType, ByVal 0, lDataBufSize)
+    If lResult = 0 Then
+        If lValueType = REG_SZ Then
+            strBuf = String(lDataBufSize, Chr$(0))
+            lResult = RegQueryValueEx(lRes, "Personal", 0, 0, ByVal strBuf, lDataBufSize)
+            If lResult = 0 Then
+                GetMyDocumentsDirectory = Left$(strBuf, InStr(1, strBuf, Chr$(0)) - 1)
+            End If
+        End If
+    End If
+    RegCloseKey lRes
+End Function
 

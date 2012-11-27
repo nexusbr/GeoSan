@@ -1,6 +1,10 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-11-2012 - GeoSan 06.00.07.10
+Atualizadas as rugosidades para os materiais de 7 a 11 de forma a exportar as mesmas que não estavam sendo exportadas
+Atualizado o diretório para onde é exportado o arquivo do Epanet que apresentava erro no nome, utilizava My Documents e foi modificado para o diretório Documents do usuário ativo.
+
 27-11-2012 - GeoSan 06.00.07.09
 Verificado na consulta de endereços que quando uma coluna vem com valor nulo e soma a outras colunas contendo valores no SQLServer, o valor final fica nulo.
 Desta forma na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2, esta foi modificada de:
