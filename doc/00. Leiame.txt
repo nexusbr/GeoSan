@@ -1,13 +1,45 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-11-2012 - GeoSan 06.00.07.11
+Atualização de rotinas de exportação dos consumidores afetados por uma manobra 
+na rede de água.
+Foi atualizada rotina de apresentação de erros.
+
+A querie na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 18, esta foi modificada
+de:
+
+SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO
+
+para
+
+SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO /10 = NRO_LIGACAO_SEM_DV
+
+pois quando ele procurava na vista NXGS_V_LIG_COMERCIAL o NRO_LIGACAO, este
+continha o dígito verificador e por isso demorava mais para processar.
+Desta forma foi dividido por 10 e utilizada a coluna do banco comercial sem o
+dígito verificador.
+Os testes foram feitos e o problema deixou de ocorrer, pois ela rodou mais
+rápido sem sobrecarregar o sistema.
+
+Foram acertadas as tubulações em algumas localizações do código.
+
+Foi atualizada a template do banco de dados SQLServer. É necessário verificar
+estas alterações para os outros bancos de dados.
+
+
 27-11-2012 - GeoSan 06.00.07.10
-Atualizadas as rugosidades para os materiais de 7 a 11 de forma a exportar as mesmas que não estavam sendo exportadas
-Atualizado o diretório para onde é exportado o arquivo do Epanet que apresentava erro no nome, utilizava My Documents e foi modificado para o diretório Documents do usuário ativo.
+Atualizadas as rugosidades para os materiais de 7 a 11 de forma a exportar as 
+mesmas que não estavam sendo exportadas
+Atualizado o diretório para onde é exportado o arquivo do Epanet que apresentava
+erro no nome, utilizava My Documents e foi modificado para o diretório Documents
+do usuário ativo.
 
 27-11-2012 - GeoSan 06.00.07.09
-Verificado na consulta de endereços que quando uma coluna vem com valor nulo e soma a outras colunas contendo valores no SQLServer, o valor final fica nulo.
-Desta forma na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2, esta foi modificada de:
+Verificado na consulta de endereços que quando uma coluna vem com valor nulo e
+soma a outras colunas contendo valores no SQLServer, o valor final fica nulo.
+Desta forma na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2, esta foi modificada
+de:
 
 SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
 
@@ -15,39 +47,57 @@ para
 
 SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
 
-a comparação ISNULL, substitui o nulo por '' o que faz a coluna ENDERECO aparecer com os respecitivos dados quando uma das colunas conter valores nulos.
+a comparação ISNULL, substitui o nulo por '' o que faz a coluna ENDERECO
+aparecer com os respecitivos dados quando uma das colunas conter valores nulos.
 
 Foi alterada a template do banco de dados SQLServer
 
 27-11-2012 - GeoSan 06.00.07.08
-Atualizada rotina que gerencia erros no ValidaBase para que indique de forma mais apropriada quando não encontra o banco de dados na rede.
-Atualizada rotina que gerencia erros no GeoSan para que indique de forma apropriada a localização do arquivo de erros.
+Atualizada rotina que gerencia erros no ValidaBase para que indique de forma
+mais apropriada quando não encontra o banco de dados na rede.
+Atualizada rotina que gerencia erros no GeoSan para que indique de forma
+apropriada a localização do arquivo de erros.
 
 
 27-11-2012 - GeoSan 06.00.07.07
-O arquivo 00. Leiame.txt foi unificado. Ele é registrado inicialmente na pasta doc e copiado, quando finalizado, para a de instalação em \install\GeraSetupGeoSan\ArquivosInstGeoSan
+O arquivo 00. Leiame.txt foi unificado. Ele é registrado inicialmente na pasta
+doc e copiado, quando finalizado, para a de instalação em 
+\install\GeraSetupGeoSan\ArquivosInstGeoSan
 
 
 27-11-2012 - GeoSan 06.00.07.07
-Atualizada a subrotina Main() onde foi colocado o número da versão atual no início da mesma, facilitando a alteração da mesma para cada modificação.
+Atualizada a subrotina Main() onde foi colocado o número da versão atual no 
+início da mesma, facilitando a alteração da mesma para cada modificação.
 Foi formatado o código (tabulações) para que ficasse mais legível.
 
 
 27-11-2012 - GeoSan 06.00.07.07
-Verificou-se que ao selecionar Arquivo-Atualizar Consumos e Distribuir Demandas, e selecionar Atualizar com o Consumo Médio das Ligações cadastradas, que a querie demorava muito para processar.
-Ao investigar o motivo verificou-se que no processamento da querie abaixo que acessa a vista do sistema comercial, NXGS_V_LIG_COM_CONSUMO_MEDIO, que a coluna NRO_LIGACAO provavelmente não possui índice o que acarreta uma grande demora no processamento, aparecendo uma mensagem de erro indicando time-out.
+Verificou-se que ao selecionar Arquivo-Atualizar Consumos e Distribuir Demandas,
+e selecionar Atualizar com o Consumo Médio das Ligações cadastradas, que a
+querie demorava muito para processar.
+Ao investigar o motivo verificou-se que no processamento da querie abaixo que
+acessa a vista do sistema comercial, NXGS_V_LIG_COM_CONSUMO_MEDIO, que a coluna
+NRO_LIGACAO provavelmente não possui índice o que acarreta uma grande demora no
+processamento, aparecendo uma mensagem de erro indicando time-out.
 
 UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO
 
-Desta forma a querie foi alterada, retirando-se o digito verificador da coluna RAMAIS_AGUA_LIGACAO da tabela do GeoSan RAMAIS_AGUA_LIGACAO, dividindo-se por 10 e utilizamos a coluna da vista do sistema comercial NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV, a qual não possui o dígito verificador.
+Desta forma a querie foi alterada, retirando-se o digito verificador da coluna 
+RAMAIS_AGUA_LIGACAO da tabela do GeoSan RAMAIS_AGUA_LIGACAO, dividindo-se por 10
+e utilizamos a coluna da vista do sistema comercial NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV, a qual não possui o dígito verificador.
 
 UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO / 10 = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV
 
-Desta forma ela processou em menos de um minuto. Provavelmente o dígito verificador estava sendo calculado para cada número de ligação na vista do sistema comercial e isso causava lentidão.
+Desta forma ela processou em menos de um minuto. Provavelmente o dígito
+verificador estava sendo calculado para cada número de ligação na vista do
+sistema comercial e isso causava lentidão.
 
-Foi alterada a rotina de erro, para que apresente o erro encontrado de forma mais completa, auxiliando assim o progamador a localizar a razão da ocorrência do mesmo.
+Foi alterada a rotina de erro, para que apresente o erro encontrado de forma
+mais completa, auxiliando assim o progamador a localizar a razão da ocorrência
+do mesmo.
 
-É necessário corrigir e testar estas queries para os outros bancos de dados Oracle e Postgres, conforme tabelas comerciais dos demais clientes.
+É necessário corrigir e testar estas queries para os outros bancos de dados
+Oracle e Postgres, conforme tabelas comerciais dos demais clientes.
 
 Para testar esta correção foi zerado o consumo com a querie (SQL Management):
 UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = 0 
@@ -61,14 +111,19 @@ SELECT TOP 1000 [OBJECT_ID_]
       ,[ECONOMIAS]
       ,[HIDROMETRADO]
   FROM [valinhosgeosan].[dbo].[RAMAIS_AGUA_LIGACAO]
-Rodado o GeoSan com a função Arquivo-Atualizar Consumos e Distribuir Demandas, e seleção da opção Atualizar com o Consumo Médio das Ligações cadastradas.
-E consultados os consumos novamente com a mesma querie acima, para verificar as modificações.
+Rodado o GeoSan com a função Arquivo-Atualizar Consumos e Distribuir Demandas,
+e seleção da opção Atualizar com o Consumo Médio das Ligações cadastradas.
+E consultados os consumos novamente com a mesma querie acima, para verificar as
+modificações.
 
-Para testar a o funcionamento da retirada do último dígito verificador do número da ligação, foi rodada a querie:
+Para testar a o funcionamento da retirada do último dígito verificador do número
+da ligação, foi rodada a querie:
 SELECT TOP 10 CONSUMO_LPS, NRO_LIGACAO/10, NRO_LIGACAO FROM RAMAIS_AGUA_LIGACAO
 
 23-11-2012 - GeoSan 06.00.07.07
-Na consulta de ligações associadas aos ramais de água foi retirada a consulta por lotes. No banco de dados na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2 pmde QUERYSTRING é:
+Na consulta de ligações associadas aos ramais de água foi retirada a consulta
+por lotes. No banco de dados na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2
+onde QUERYSTRING é:
 A palavra endereço estava também com cedilha como ENDEREÇO, o que causava erro.
 SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in (@NRO_LIGACAO))
 mudado para
@@ -77,12 +132,16 @@ SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + 
 
 04-10-2012 - GeoSan 06.00.07.05
 
-Foi realizada a revisão no código no formulário FrmCadastroRamal, colocados diversos comentários.
-Foi alterada uma linha no banco de dados. Consultar o arquivo db\historico de alteracoes banco de dados.txt
-Corrigida a questão de acesso dos consumidores em banco local, que não estava acessando. 
+Foi realizada a revisão no código no formulário FrmCadastroRamal, colocados 
+diversos comentários.
+Foi alterada uma linha no banco de dados. Consultar o arquivo db\historico de 
+alteracoes banco de dados.txt
+Corrigida a questão de acesso dos consumidores em banco local, que não estava 
+acessando. 
 
 04-09-2012 - GeoSan 06.00.07.04
-Atualizada a querie que distribui as demandas de consumo médio do software comercial para os ramais das ligações de água.
+Atualizada a querie que distribui as demandas de consumo médio do software
+comercial para os ramais das ligações de água.
 Gerado novo executável para instalação do GeoSan.
 
 03-09-2012 - GeoSan 06.00.07.03
@@ -104,9 +163,12 @@ Você deve atender os seguintes requisitos para realizar a instalação do GeoSan:
 
 1.1. Sistema operacional Windows XP Professional (SP3)
 
-1.2. Fechar todos os programas e desabilitar o software antivirus que estejam em funcionamento, antes de começar a instalação, habilitando-os novamente somente após o término da instalação.
+1.2. Fechar todos os programas e desabilitar o software antivirus que estejam em
+funcionamento, antes de começar a instalação, habilitando-os novamente somente
+após o término da instalação.
 
-1.3. Possuir privilégios administrativos no sistema operacional da máquina cliente onde instalará o GeoSan.
+1.3. Possuir privilégios administrativos no sistema operacional da máquina
+cliente onde instalará o GeoSan.
 
 2. PROCEDIMENTOS PARA INSTALAÇÃO
 

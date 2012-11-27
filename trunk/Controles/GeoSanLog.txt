@@ -264,3 +264,25 @@ DESCRIÇÃO      Item cannot be found in the collection corresponding to the reque
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           27/11/2012 19:14:15 
+USUÁRIO        Administrador
+VERSÃO         06.00.07.09
+MÓDULO         frmConsumidoresDesabastecidos
+EVENTO         Falha em Function init(Object_id_trecho As String), 
+LINHA          0
+MOTIVO         -2147217871
+DESCRIÇÃO      Query timeout expired
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2012 19:19:22 
+USUÁRIO        Administrador
+VERSÃO         06.00.07.09
+MÓDULO         frmConsumidoresDesabastecidos
+EVENTO         Falha em Function init(Object_id_trecho As String), String conexão: SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO
+LINHA          0
+MOTIVO         -2147217871
+DESCRIÇÃO      Query timeout expired
+
+-----------------------------------------------------------------------------------------------------
+

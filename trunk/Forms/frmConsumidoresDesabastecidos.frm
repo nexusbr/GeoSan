@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmConsumidoresDesabastecidos 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Ligações cadastras nos trechos selecionados"
@@ -129,225 +129,165 @@ Dim decriptada As String
 Dim nStr As String
 Dim strConn As String
 Dim connection As Integer
-
-
+'Função para apresentar os usuários afetados em uma manobra de rede
+'
+'init -
+'
 Public Function init(Object_id_trecho As String) As Boolean
-   On Error GoTo Trata_Erro
-   'LoozeXP1.InitIDESubClassing
-   Dim TABELACOMERCIAL As String
-   Dim count2 As Integer
-  Dim lig As String
-   count2 = 0
-   Dim str As String, rs As ADODB.Recordset, itmx As ListItem, QtdeLig As Integer, rs2 As ADODB.Recordset
-   Dim fg As String
-   Dim fh As String
-   Dim fi As String
-   Dim fk As String
-   Dim fl As String
-   Dim fm As String
-   fg = "RAMAIS_AGUA"
-   fh = "RAMAIS_AGUA_LIGACAO"
-   fi = "NRO_LIGACAO"
-   fk = "ramais_agua"
-   fl = "OBJECT_ID_"
-   fm = "OBJECT_ID_TRECHO"
-   
-   
-  ' str = "SELECT l.nro_ligacao from ramais_agua r inner join ramais_agua_ligacao l " & _
-   '     "on r.object_id_=l.object_id_ " & _
-      '  "where object_id_trecho in(" & Object_id_trecho & ")"
-      'alerado em 20/10/2010
-       If frmCanvas.TipoConexao = 4 Then
-      If connection <> 10 Then
-      
-       
-
-mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
-mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
-Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
-nStr = frmCanvas.FunDecripta(Senha)
-       
-strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + nStr + "; ByteaAsLongVarBinary=1;"
-
-conexao.Open strConn
-
-connection = 10
-
-End If
- End If
- If frmCanvas.TipoConexao <> 4 Then
- str = "SELECT ramais_agua_ligacao.nro_ligacao from ramais_agua_ligacao  inner join ramais_agua on ramais_agua.object_id_=ramais_agua_ligacao.object_id_ where object_id_trecho in(" & Object_id_trecho & ")"
- Set rs = Conn.execute(str)
- Else
+    On Error GoTo Trata_Erro
+    'LoozeXP1.InitIDESubClassing
+    Dim TABELACOMERCIAL As String
+    Dim count2 As Integer
+    Dim lig As String
+    Dim str As String, rs As ADODB.Recordset, itmx As ListItem, QtdeLig As Integer, rs2 As ADODB.Recordset
+    Dim fg As String
+    Dim fh As String
+    Dim fi As String
+    Dim fk As String
+    Dim fl As String
+    Dim fm As String
+    Dim numeroErro As String                'indica o número do erro que pode ocorrer
     
-
-     str = "SELECT " + """" + fh + """" + "." + """" + fi + """" + " from " + """" + fh + """" + "  inner join " + """" + fg + """" + "  on " + """" + fg + """" + "." + """" + fl + """" + "=" + """" + fh + """" + "." + """" + fl + """" + " where " + """" + fm + """" + " in(" & Object_id_trecho & ")"
-     Set rs = conexao.execute(str)
-     End If
-     
-   
-   
-   'While Not rs.EOF
-    '  lig = rs.Fields(0).value
-   
-     ' rs.MoveNext
-   'Wend
-   'rs.Close
-   
-   TABELACOMERCIAL = GetQueryProcess(19)
-   If frmCanvas.TipoConexao <> 4 Then
-Dim dw As String
-dw = "GS_TEMP"
-    Set rs2 = Conn.execute("SELECT * FROM GS_TEMP")
-   Else
-   Set rs2 = conexao.execute("SELECT  * FROM " + """" + "GS_TEMP" + """" + "")
-   
-   End If
-   While Not rs2.EOF
-      count2 = 1
-      rs2.MoveNext
-   Wend
-     rs2.Close
-     
-   If count2 = 1 Then
-   
-   If frmCanvas.TipoConexao <> 4 Then
-   
-   
-   
-   ConnSec.execute "Delete  From " & TABELACOMERCIAL
-   Else
-      conexao.execute "Delete  From " + """" + TABELACOMERCIAL + """"
-   
-   End If
-   
-End If
-
-
-'Conn.execute ("INSERT INTO GS_TEMP(NRO_LIGACAO) VALUES (" & Object_id_trecho & ")")
-
-
-   
-   
-   
-   Dim ddd As String
-   Dim rsNro_Ligacao As ADODB.Recordset
-   Set rsNro_Ligacao = New ADODB.Recordset
-   
-
- If frmCanvas.TipoConexao = 1 Then
-
-  rsNro_Ligacao.Open TABELACOMERCIAL, ConnSec, adOpenKeyset, adLockOptimistic, adCmdTable
-  
-  
- ElseIf frmCanvas.TipoConexao = 2 Then
-
-   ddd = "SELECT  * FROM GS_TEMP"
-    rsNro_Ligacao.Open ddd, ConnSec, adOpenDynamic, adLockOptimistic
-  
-  
-  
-  Else
-  
-   ddd = "SELECT  * FROM " + """" + "GS_TEMP" + """" + ""
-    rsNro_Ligacao.Open ddd, conexao, adOpenDynamic, adLockOptimistic
- End If
-   
-   While Not rs.EOF
-      rsNro_Ligacao.AddNew
-      rsNro_Ligacao.Fields(0).value = rs.Fields(0).value
-      rsNro_Ligacao.Update
-      rs.MoveNext
-   Wend
- '  rs.Close
- 
-
+    numeroErro = "Erro não identificado"
+    count2 = 0
+    fg = "RAMAIS_AGUA"
+    fh = "RAMAIS_AGUA_LIGACAO"
+    fi = "NRO_LIGACAO"
+    fk = "ramais_agua"
+    fl = "OBJECT_ID_"
+    fm = "OBJECT_ID_TRECHO"
+    ' str = "SELECT l.nro_ligacao from ramais_agua r inner join ramais_agua_ligacao l " & _
+    '     "on r.object_id_=l.object_id_ " & _
+    '  "where object_id_trecho in(" & Object_id_trecho & ")"
+    'alerado em 20/10/2010
+    If frmCanvas.TipoConexao = 4 Then
+        'se for Postgres
+        If connection <> 10 Then
+            mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
+            mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
+            mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
+            mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
+            Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
+            nStr = frmCanvas.FunDecripta(Senha)
+            strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + nStr + "; ByteaAsLongVarBinary=1;"
+            conexao.Open strConn
+            connection = 10
+        End If
+    End If
+    If frmCanvas.TipoConexao <> 4 Then
+        'se for Oracle ou SQLServer
+        str = "SELECT ramais_agua_ligacao.nro_ligacao from ramais_agua_ligacao inner join ramais_agua on ramais_agua.object_id_=ramais_agua_ligacao.object_id_ where object_id_trecho in(" & Object_id_trecho & ")"
+        Open "d:\temp.txt" For Output As #1
+        Print #1, str
+        Close #1
+        Set rs = Conn.execute(str)
+    Else
+        str = "SELECT " + """" + fh + """" + "." + """" + fi + """" + " from " + """" + fh + """" + "  inner join " + """" + fg + """" + "  on " + """" + fg + """" + "." + """" + fl + """" + "=" + """" + fh + """" + "." + """" + fl + """" + " where " + """" + fm + """" + " in(" & Object_id_trecho & ")"
+        Set rs = conexao.execute(str)
+    End If
+    'While Not rs.EOF
+     '  lig = rs.Fields(0).value
+    
+      ' rs.MoveNext
+    'Wend
+    'rs.Close
+    TABELACOMERCIAL = GetQueryProcess(19)
+    If frmCanvas.TipoConexao <> 4 Then
+        'é Oracle ou SQLServer
+        Dim dw As String
+        dw = "GS_TEMP"
+        Set rs2 = Conn.execute("SELECT * FROM GS_TEMP")
+    Else
+        'é Postgres
+        Set rs2 = conexao.execute("SELECT  * FROM " + """" + "GS_TEMP" + """" + "")
+    End If
+    While Not rs2.EOF
+        count2 = count2 + 1
+        rs2.MoveNext
+    Wend
+    rs2.Close
+    If count2 = 1 Then
+        If frmCanvas.TipoConexao <> 4 Then
+            ConnSec.execute "Delete  From " & TABELACOMERCIAL
+        Else
+            conexao.execute "Delete  From " + """" + TABELACOMERCIAL + """"
+        End If
+    End If
+    'Conn.execute ("INSERT INTO GS_TEMP(NRO_LIGACAO) VALUES (" & Object_id_trecho & ")")
+    Dim ddd As String
+    Dim rsNro_Ligacao As ADODB.Recordset
+    Set rsNro_Ligacao = New ADODB.Recordset
+    If frmCanvas.TipoConexao = 1 Then
+        rsNro_Ligacao.Open TABELACOMERCIAL, ConnSec, adOpenKeyset, adLockOptimistic, adCmdTable
+    ElseIf frmCanvas.TipoConexao = 2 Then
+        ddd = "SELECT  * FROM GS_TEMP"
+        rsNro_Ligacao.Open ddd, ConnSec, adOpenDynamic, adLockOptimistic
+    Else
+        ddd = "SELECT  * FROM " + """" + "GS_TEMP" + """" + ""
+        rsNro_Ligacao.Open ddd, conexao, adOpenDynamic, adLockOptimistic
+    End If
+    While Not rs.EOF
+       rsNro_Ligacao.AddNew
+       rsNro_Ligacao.Fields(0).value = rs.Fields(0).value
+       rsNro_Ligacao.Update
+       rs.MoveNext
+    Wend
+    '  rs.Close
     'Lv.ListItems.Clear
-    
      ' Set itmx = Lv.ListItems.Add(, , 0)
     '  itmx.SubItems(1) = 0
     '  itmx.SubItems(2) = 0
     '  itmx.SubItems(3) = 0
     '  itmx.SubItems(4) = 0
-      
-   '   txtQde = QtdeLig
-  ' Me.Show vbModal
-  ' 'LoozeXP1.EndWinXPCSubClassing
-    
-    
-    
-    
-    
-    
-      
-   str = GetQueryProcess(18)
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = ConnSec.execute(str)
-   Else
-   Set rs = conexao.execute(str)
-   
-   End If
-   'Set rs = ConnSec.execute("SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO")
-   
- If frmCanvas.TipoConexao <> 4 Then
-   Lv.ListItems.Clear
-   While Not rs.EOF
-      Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
-      itmx.SubItems(1) = rs.Fields(1).value
-      itmx.SubItems(2) = rs.Fields(2).value
-      itmx.SubItems(3) = rs.Fields(3).value
-      itmx.SubItems(4) = rs.Fields(4).value
+    '   txtQde = QtdeLig
+    ' Me.Show vbModal
+    ' 'LoozeXP1.EndWinXPCSubClassing
+    str = GetQueryProcess(18)
+    If frmCanvas.TipoConexao <> 4 Then
+        numeroErro = "String conexão: " & str
+        Set rs = ConnSec.execute(str)
+    Else
+        Set rs = conexao.execute(str)
+    End If
+    'Set rs = ConnSec.execute("SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO")
+    If frmCanvas.TipoConexao <> 4 Then
+        Lv.ListItems.Clear
+        While Not rs.EOF
+            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
+            itmx.SubItems(1) = rs.Fields(1).value
+            itmx.SubItems(2) = rs.Fields(2).value
+            itmx.SubItems(3) = rs.Fields(3).value
+            itmx.SubItems(4) = rs.Fields(4).value
+            QtdeLig = QtdeLig + 1
+            rs.MoveNext
+        Wend
+        rs.Close
+    Else
+        Lv.ListItems.Clear
+        While Not rs.EOF
+            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
+            itmx.SubItems(1) = rs.Fields(1).value
+            itmx.SubItems(2) = rs.Fields(5).value
+            itmx.SubItems(3) = rs.Fields(6).value
+            itmx.SubItems(4) = rs.Fields(7).value
+            QtdeLig = QtdeLig + 1
+            rs.MoveNext
+        Wend
+         rs.Close
+    End If
+    txtQde = QtdeLig
+    Me.Show vbModal
+    'LoozeXP1.EndWinXPCSubClassing
+    Exit Function
 
-      QtdeLig = QtdeLig + 1
-     rs.MoveNext
-   Wend
-   rs.Close
-   Else
-   
-    Lv.ListItems.Clear
-   While Not rs.EOF
-      Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
-      itmx.SubItems(1) = rs.Fields(1).value
-      itmx.SubItems(2) = rs.Fields(5).value
-      itmx.SubItems(3) = rs.Fields(6).value
-      itmx.SubItems(4) = rs.Fields(7).value
-
-      QtdeLig = QtdeLig + 1
-     rs.MoveNext
-   Wend
-   rs.Close
-   
-   End If
-   
-   
-   
-   
-   
-   
-
-txtQde = QtdeLig
-   Me.Show vbModal
-   'LoozeXP1.EndWinXPCSubClassing
-   
-   
-
-   Exit Function
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 94 Then
-       Resume Next
-   Else
-   
-   
-         'LoozeXP1.EndWinXPCSubClassing
-    
-
-   
-      
-      'PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True
-      
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 94 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Falha em Function init(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True
+        'LoozeXP1.EndWinXPCSubClassing
+        'PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True
+    End If
     
 End Function
 
