@@ -1,5 +1,7 @@
 Código
 ------
+2012-11-27 - Esta versão do Leiame.txt não é mais atualizada. Passou a ser atualizada no 00. Leiame.txt que está localizada na pasta \doc\00. Leiame.txt junto com as alterações do GeoSan
+
 Versão 01.00.01 - 10/11/2012 - Melhorias com relação ao arquivo de log realizadas
 
 

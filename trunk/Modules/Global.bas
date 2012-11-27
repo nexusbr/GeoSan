@@ -171,7 +171,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.00.07.07"
+    Versao_Geo = "06.00.07.09"
     connn = ""
     If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
         If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
@@ -685,7 +685,7 @@ Public Function PrintErro(ByVal Modulo As String, ByVal EVENTO As String, ByVal 
       Close #1 'FECHA O ARQUIVO
       'SE O PARÂMETRO ExibeMensagem = True , EXIBE MENSAGEM PARA O USUÁRIO
       If ExibeMensagem = True Then
-         MsgBox "A operação não pode ser completada, consulte o arquivo GeosanLog.txt para maiores detalhes.", vbInformation
+         MsgBox "A operação não pode ser completada, consulte o arquivo: " & App.path & "\Controles\GeoSanLog.txt" & " para maiores detalhes.", vbInformation
       End If
 End Function
 

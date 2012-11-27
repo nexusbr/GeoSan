@@ -1,0 +1,55 @@
+DATA           27/11/2012 11:39:46 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.11 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionOpen (Connect()).]SQL Server does not exist or access denied.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2012 11:41:58 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.11 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionOpen (Connect()).]SQL Server does not exist or access denied.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2012 11:49:35 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.11 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionOpen (Connect()).]SQL Server does not exist or access denied.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2012 11:52:49 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan;Data Source=192.168.0.5 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147217843
+DESCRIÇÃO      Login failed for user 'sa'.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2012 11:55:15 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=nxsdaev;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan;Data Source=192.168.0.5 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147217843
+DESCRIÇÃO      Login failed for user 'sa'.
+
+-----------------------------------------------------------------------------------------------------
+

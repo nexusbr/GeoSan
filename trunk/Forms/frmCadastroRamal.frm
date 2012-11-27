@@ -2112,11 +2112,6 @@ Private Sub CarregaLigacoes()
         If TB_Ramais = "RAMAIS_ESGOTO" Then
             str = Replace(str, "NXGS_V_LIG_COMERCIAL", "NXGS_V_LIG_COMERCIAL_E")
         End If
-        'MsgBox "ARQUIVO DEBUG SALVO"
-        ' WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-        'MsgBox str
-        'Set rs = ConnSec.execute(str)
-        'Abre a conexão com o banco de dados para ler as ligações do vetor de ligações
         Set rs = New ADODB.Recordset
         intlocalerro = 33
         rs.Open str, Conn, adOpenDynamic, adLockOptimistic

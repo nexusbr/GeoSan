@@ -968,7 +968,8 @@ End Sub
 'Esta é a rotina inicial que realiza o processamento do banco de dados do GeoSan quando a não conformidades existentes no mesmo
 'É dada uma ênfase em informar todas as atividades no arquivo de log do sistema
 Private Sub ProcessaBancoDados_Click()
-Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                    'Abre a conexão com o banco de dados
+    On Error GoTo Trata_Erro                                        'Desvia para a rotina de tratamento de erro, caso um erro ocorra
+    Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                'Abre a conexão com o banco de dados
     Dim num_linhas As Integer
     Dim numeroTabelaGeomWl As String
     Dim numeroTabelaGeomWc As String
@@ -985,11 +986,15 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                    'Abre a cone
     Dim dbConn As New ADODB.Connection
     Dim strCMD As String                                            'comando SQL
     Dim arquivoLog As String                                        'nome do arquivo de log com todas as operações realizadas no banco de dados
+    Dim tipoErro As String                                          'Registra o tipo de erro que pode vir a acontecer
     
+    tipoErro = "Sem registro erro"                                  'indica que não existe um registro de erro
     Screen.MousePointer = vbHourglass                               'coloca o mouse como ampulheta
     leGeoSanIni.arquivo = App.Path & "\Controles\GeoSan.ini"        'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
     Conn.ConnectionString = leGeoSanIni.StrConexao                  'Inicializa a string de conexão com o banco de dados
+    tipoErro = "Erro de conexão com base de dados: " & leGeoSanIni.StrConexao & " no arquivo: " & App.Path & "\Controles\GeoSan.ini"  'Registra a conexão caso o registro de erro ocorra
     Conn.Open                                                       'Abre a conexão com o banco de dados do GeoSan
+    tipoErro = "Sem registro erro"                                  'indica que não existe um registro de erro
     arquivoLog = "\Controles\ValidaBase" & DateValue(Now) & "  " & TimeValue(Now) & ".log"    'define o nome completo do arquivo de log do sistema, incluíndo a data e hora em que o mesmo será gerado pela primeira vez
     arquivoLog = Replace(arquivoLog, "/", "-")                      'troca caractere / especial que não é aceito como parte do nome do arquivo
     arquivoLog = Replace(arquivoLog, ":", "-")                      'troca caractere : especial que não é aceito como parte do nome do arquivo
@@ -1172,5 +1177,14 @@ Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile                    'Abre a cone
     Print #1, "ValidaBase;*************************************************************************************************"
     Close #1                                           'Fecha o arquivo de log do sistema
     MsgBox "Validação concluída. Verifique o log no arquivo " & arquivoLog
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Screen.MousePointer = vbDefault
+        PrintErro CStr(Me.Name), "ProcessaBancoDados_Click(), tipo de erro: " & tipoErro, CStr(Err.Number), CStr(Err.Description), True
+    End If
+
 End Sub
 

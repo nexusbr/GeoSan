@@ -1,6 +1,18 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-11-2012 - GeoSan 06.00.07.08
+Atualizada rotina que gerencia erros no ValidaBase para que indique de forma mais apropriada quando não encontra o banco de dados na rede.
+Atualizada rotina que gerencia erros no GeoSan para que indique de forma apropriada a localização do arquivo de erros.
+
+27-11-2012 - GeoSan 06.00.07.07
+O arquivo 00. Leiame.txt foi unificado. Ele é registrado inicialmente na pasta doc e copiado, quando finalizado, para a de instalação em \install\GeraSetupGeoSan\ArquivosInstGeoSan
+
+27-11-2012 - GeoSan 06.00.07.07
+Atualizada a subrotina Main() onde foi colocado o número da versão atual no início da mesma, facilitando a alteração da mesma para cada modificação.
+Foi formatado o código (tabulações) para que ficasse mais legível.
+
+
 27-11-2012 - GeoSan 06.00.07.07
 Verificou-se que ao selecionar Arquivo-Atualizar Consumos e Distribuir Demandas, e selecionar Atualizar com o Consumo Médio das Ligações cadastradas, que a querie demorava muito para processar.
 Ao investigar o motivo verificou-se que no processamento da querie abaixo que acessa a vista do sistema comercial, NXGS_V_LIG_COM_CONSUMO_MEDIO, que a coluna NRO_LIGACAO provavelmente não possui índice o que acarreta uma grande demora no processamento, aparecendo uma mensagem de erro indicando time-out.

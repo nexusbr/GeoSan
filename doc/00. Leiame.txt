@@ -1,8 +1,28 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-11-2012 - GeoSan 06.00.07.09
+Verificado na consulta de endereços que quando uma coluna vem com valor nulo e soma a outras colunas contendo valores no SQLServer, o valor final fica nulo.
+Desta forma na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2, esta foi modificada de:
+
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+
+para
+
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+
+a comparação ISNULL, substitui o nulo por '' o que faz a coluna ENDERECO aparecer com os respecitivos dados quando uma das colunas conter valores nulos.
+
+Foi alterada a template do banco de dados SQLServer
+
+27-11-2012 - GeoSan 06.00.07.08
+Atualizada rotina que gerencia erros no ValidaBase para que indique de forma mais apropriada quando não encontra o banco de dados na rede.
+Atualizada rotina que gerencia erros no GeoSan para que indique de forma apropriada a localização do arquivo de erros.
+
+
 27-11-2012 - GeoSan 06.00.07.07
 O arquivo 00. Leiame.txt foi unificado. Ele é registrado inicialmente na pasta doc e copiado, quando finalizado, para a de instalação em \install\GeraSetupGeoSan\ArquivosInstGeoSan
+
 
 27-11-2012 - GeoSan 06.00.07.07
 Atualizada a subrotina Main() onde foi colocado o número da versão atual no início da mesma, facilitando a alteração da mesma para cada modificação.
