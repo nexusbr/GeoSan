@@ -3,6 +3,8 @@ Option Explicit
 
 Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 
+Public Versao_Geo As String             'Número da versão do software no formato XX.YY.ZZ.WW
+
 'FUNÇÕES PARA LER E GRAVAR NO ARQUIVO .INI-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nsize As Long, ByVal lpFileName As String) As Long
 Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
@@ -66,8 +68,8 @@ Public blnGeraRel As Boolean
 Type TListaNo
     indice As Integer
     object_id As String
-    X As Double
-    Y As Double
+    x As Double
+    y As Double
 End Type
 
 Public Enum nxSqlOperations
@@ -79,7 +81,7 @@ End Enum
 
 Public blnMonitorar As Boolean
 'Public frmCanvas.TipoConexao As Integer
-Public Versao_Geo As String
+
 Public ConnPostgresPorta As String ' informa ao a conexão TeConnectio a porta de conexão postgres
 
 Public blnAutoLogin As Boolean
@@ -155,167 +157,112 @@ Enum TipoRelatorio
    RegistrosEstadoEstado = 1
    ComponentsRede = 2
 End Enum
-
+'Subrotina principal de entrada do GeoSan'
+'
+'
+'
 Public Sub Main()
-
-On Error GoTo Trata_Erro
-    
-   Dim momento As String
-   'ConectaBanco
-   
-   Dim nC As New NexusConnection.App
-   Dim contador As String * 100
-  Dim tipo As String
-   
-   
-   
+    On Error GoTo Trata_Erro
+    Dim momento As String
+    'ConectaBanco
+    Dim nC As New NexusConnection.App
+    Dim contador As String * 100
+    Dim tipo As String
     Dim connn As String
-   connn = ""
-   
-
-    
-   
-   If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
-      
-   
-     If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
-         End
-     End If
-      
-      typeconnection = nC.typeconnection
-   End If
-   Set nC = Nothing
-   
-  ' Dim strCon As String
-  'strCon = "DRIVER={PostgreSQL Unicode}; DATABASE=geosanovo; SERVER=localhost; PORT=5432; UID=postgres; PWD=gustavo; ByteaAsLongVarBinary=1;"
- 
-  ' Conn2.Open strCon
- 
-  ' Dim aq As String
-'aq = Conn.ConnectionString
- ' MsgBox "ARQUIVO DEBUG SALVO"
- 'WritePrivateProfileString "A", "A", Conn.ConnectionString, App.path & "\DEBUG.INI"
-''MsgBox Conn
- 'contador = Conn.ConnectionString
- 'Conn.Close
-' Conn.Open
- 
-  'tipo = typeconnection
- 'Conn.ConnectionString = contador
- 
-    '  MsgBox Conn
-      
-   FrmMain.Show
-    
-   Dim rs As ADODB.Recordset
-   Set rs = New ADODB.Recordset
-
-   '%%%% AUTO LOGIN %%%%
-   Dim retval As String
-
- 
-    
-   retval = Dir(App.path & "\Controles\AutoLogin.txt")
-   If retval <> "" Then 'verifica se o arquivo existe na pasta
-      blnAutoLogin = True
-      
-      Open App.path & "\Controles\AutoLogin.txt" For Input As #3
-         Input #3, strUser
-      Close #3
-      
-      If Trim(strUser) = "" Then
-         MsgBox "Arquivo de login automático inválido.", vbExclamation, ""
-         Kill App.path & "\Controles\AutoLogin.txt"
-         End
-      End If
-          a = "USRLOG"
-      c = "SYSTEMUSERS"
-      b = "USRFUN"
-      'manoel alterou em 18/10/2010
-      If frmCanvas.TipoConexao <> 4 Then
-
-      rs.Open ("SELECT * FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "'"), Conn, adOpenDynamic, adLockReadOnly
-      If rs.EOF = False Then
-      
-         If Sec.MyUsers.SelectData(Conn, rs!UsrId) Then
-         
-            usuario.UseName = Sec.MyUsers.UsrLog
-         
-         End If
-         
-      
-      End If
-      
-      Else
-      
-      rs.Open ("SELECT * FROM " + """" + c + """" + " WHERE " + """" + a + """" + " = '" & strUser & "'"), Conn, adOpenDynamic, adLockOptimistic
-      If rs.EOF = False Then
-      
-         If Sec.MyUsers.SelectData(Conn, rs!UsrId) Then
-         
-            usuario.UseName = Sec.MyUsers.UsrLog
-         
-         End If
-         
-      
-      End If
-      End If
-      Dim frmauto As New frmAutoLogin
-      frmauto.Show 1
-      
-            
-   Else 'O arquivo não existe na pasta
-      blnAutoLogin = False
-      nxUser.TipoConexao (frmCanvas.TipoConexao)
-      
-     usuario.UsrId = Sec.OpenLogin(Conn) 'Abre a tela de Usuário e Senha para preenchimento
-
-      If Sec.MyUsers.SelectData(Conn, usuario.UsrId) Then
-          usuario.UseName = Sec.MyUsers.UsrLog
-          strUser = Sec.MyUsers.UsrLog
-      Else
-          Set Sec = Nothing
-          End
-      End If
-   
-   End If
-   
-   Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-   Versao_Geo = "06.00.07.06"
-   'Valida o perfil do usuário -
-
-   Set rs = New ADODB.Recordset
-   
-   
-   
-   
-   Dim stringconexao As String
-
- 
-    a = "USRLOG"
-      c = "SYSTEMUSERS"
-      b = "USRFUN"
-      
-      
-If frmCanvas.TipoConexao <> 4 Then
-      stringconexao = "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG"
-   Else
-   stringconexao = "Select " + """" + a + """" + "," + """" + b + """" + " from  " + """" + c + """" + "Where " + """" + a + """" + "=" + " '" & strUser & "' ORDER BY " + """" + a + """" + ""
-  
-   End If
-   
-
-     rs.Open stringconexao, Conn, adOpenDynamic, adLockOptimistic
-   
-   If rs.EOF = False Then
-
-      If blnAutoLogin = True Then
-         If rs!UsrFun < 3 Then 'para logina automático somente pode ser usuário tipo visitante ou visualizador
-            MsgBox "Este usuário não pode iniciar com login automático." & Chr(13) & Chr(13) & "Senha requerida.", vbExclamation, ""
+    'Configura a versão atual do GeoSan
+    Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
+    Versao_Geo = "06.00.07.07"
+    connn = ""
+    If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
+        If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
+            End
+        End If
+        typeconnection = nC.typeconnection
+    End If
+    Set nC = Nothing
+    'Dim strCon As String
+    'strCon = "DRIVER={PostgreSQL Unicode}; DATABASE=geosanovo; SERVER=localhost; PORT=5432; UID=postgres; PWD=gustavo; ByteaAsLongVarBinary=1;"
+    'Conn2.Open strCon
+    'Dim aq As String
+    'aq = Conn.ConnectionString
+    'MsgBox "ARQUIVO DEBUG SALVO"
+    'WritePrivateProfileString "A", "A", Conn.ConnectionString, App.path & "\DEBUG.INI"
+    'MsgBox Conn
+    'contador = Conn.ConnectionString
+    'Conn.Close
+    'Conn.Open
+    'tipo = typeconnection
+    'Conn.ConnectionString = contador
+    'MsgBox Conn
+    FrmMain.Show
+    Dim rs As ADODB.Recordset
+    Set rs = New ADODB.Recordset
+    '%%%% AUTO LOGIN %%%%
+    Dim retval As String
+    retval = Dir(App.path & "\Controles\AutoLogin.txt")
+    If retval <> "" Then 'verifica se o arquivo existe na pasta
+        blnAutoLogin = True
+        Open App.path & "\Controles\AutoLogin.txt" For Input As #3
+        Input #3, strUser
+        Close #3
+        If Trim(strUser) = "" Then
+            MsgBox "Arquivo de login automático inválido.", vbExclamation, ""
             Kill App.path & "\Controles\AutoLogin.txt"
             End
-         End If
-      End If
+        End If
+        a = "USRLOG"
+        c = "SYSTEMUSERS"
+        b = "USRFUN"
+        'manoel alterou em 18/10/2010
+        If frmCanvas.TipoConexao <> 4 Then
+            rs.Open ("SELECT * FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "'"), Conn, adOpenDynamic, adLockReadOnly
+            If rs.EOF = False Then
+                If Sec.MyUsers.SelectData(Conn, rs!UsrId) Then
+                    usuario.UseName = Sec.MyUsers.UsrLog
+                End If
+            End If
+        Else
+            rs.Open ("SELECT * FROM " + """" + c + """" + " WHERE " + """" + a + """" + " = '" & strUser & "'"), Conn, adOpenDynamic, adLockOptimistic
+            If rs.EOF = False Then
+                If Sec.MyUsers.SelectData(Conn, rs!UsrId) Then
+                    usuario.UseName = Sec.MyUsers.UsrLog
+                End If
+            End If
+        End If
+        Dim frmauto As New frmAutoLogin
+        frmauto.Show 1
+    Else 'O arquivo não existe na pasta
+        blnAutoLogin = False
+        nxUser.TipoConexao (frmCanvas.TipoConexao)
+        usuario.UsrId = Sec.OpenLogin(Conn) 'Abre a tela de Usuário e Senha para preenchimento
+        If Sec.MyUsers.SelectData(Conn, usuario.UsrId) Then
+            usuario.UseName = Sec.MyUsers.UsrLog
+            strUser = Sec.MyUsers.UsrLog
+        Else
+            Set Sec = Nothing
+            End
+        End If
+    End If
+    'Valida o perfil do usuário -
+    Set rs = New ADODB.Recordset
+    Dim stringconexao As String
+    a = "USRLOG"
+    c = "SYSTEMUSERS"
+    b = "USRFUN"
+    If frmCanvas.TipoConexao <> 4 Then
+        stringconexao = "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG"
+    Else
+        stringconexao = "Select " + """" + a + """" + "," + """" + b + """" + " from  " + """" + c + """" + "Where " + """" + a + """" + "=" + " '" & strUser & "' ORDER BY " + """" + a + """" + ""
+    End If
+    rs.Open stringconexao, Conn, adOpenDynamic, adLockOptimistic
+    If rs.EOF = False Then
+        If blnAutoLogin = True Then
+            If rs!UsrFun < 3 Then 'para logina automático somente pode ser usuário tipo visitante ou visualizador
+                MsgBox "Este usuário não pode iniciar com login automático." & Chr(13) & Chr(13) & "Senha requerida.", vbExclamation, ""
+                Kill App.path & "\Controles\AutoLogin.txt"
+                End
+            End If
+        End If
        
       If rs!UsrFun = 1 Then 'ADMINISTRADOR
          FrmMain.mnuChangePassword.Visible = False 'desabilita a troca de senha pelo menu arquivo
@@ -1801,8 +1748,8 @@ Public Sub ExporteCrede(MyObject As String, nomeArq As String, LayName As String
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -1963,20 +1910,20 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
          Dim v As String
          Dim sq As String
          Dim sa As String
-          Dim r, X, z, xz, Y As String
+          Dim r, x, z, xz, y As String
          p = "y"
          q = "ID_TYPE"
         r = "OBJECT_ID_"
          t = "GROUNDHEIGHT"
          u = "Demand"
          v = "x"
-         X = "points2"
+         x = "points2"
          z = "WATERCOMPONENTS"
          xz = "object_id"
         sa = cgeo.GetLayerID(LayName)
         sq = "sa"
         
-          sQry = convertQuery("SELECT " + """" + X + """" + "." + """" + Y + """" + "," + """" + X + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + X + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + X + """" + "." + """" + u + """" + " From " + """" + X + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
+          sQry = convertQuery("SELECT " + """" + x + """" + "." + """" + y + """" + "," + """" + x + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + x + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + x + """" + "." + """" + u + """" + " From " + """" + x + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
     'pode está errado ********
         
         
@@ -2086,8 +2033,8 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -2191,8 +2138,8 @@ gtErro:
 End Sub
 'até aqui dia 19/10/2010
 
-Function Log10(X)
-    Log10 = Log(X) / Log(10)
+Function Log10(x)
+    Log10 = Log(x) / Log(10)
 End Function
 
 
@@ -2266,12 +2213,12 @@ Dim i As Long
     MsgBox " NÃO ENCONTROU"
 End Function
 
-Private Function QualCoordernada(object_id, ByRef X As Double, ByRef Y As Double) As Long
+Private Function QualCoordernada(object_id, ByRef x As Double, ByRef y As Double) As Long
 Dim i As Long
     For i = LBound(aListaNo) To UBound(aListaNo)
         If aListaNo(i).object_id = object_id Then
-            X = aListaNo(i).X
-            Y = aListaNo(i).Y
+            x = aListaNo(i).x
+            y = aListaNo(i).y
             Exit Function
         End If
     Next i

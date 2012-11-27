@@ -1,6 +1,40 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-11-2012 - GeoSan 06.00.07.07
+Verificou-se que ao selecionar Arquivo-Atualizar Consumos e Distribuir Demandas, e selecionar Atualizar com o Consumo Médio das Ligações cadastradas, que a querie demorava muito para processar.
+Ao investigar o motivo verificou-se que no processamento da querie abaixo que acessa a vista do sistema comercial, NXGS_V_LIG_COM_CONSUMO_MEDIO, que a coluna NRO_LIGACAO provavelmente não possui índice o que acarreta uma grande demora no processamento, aparecendo uma mensagem de erro indicando time-out.
+
+UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO
+
+Desta forma a querie foi alterada, retirando-se o digito verificador da coluna RAMAIS_AGUA_LIGACAO da tabela do GeoSan RAMAIS_AGUA_LIGACAO, dividindo-se por 10 e utilizamos a coluna da vista do sistema comercial NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV, a qual não possui o dígito verificador.
+
+UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO / 10 = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV
+
+Desta forma ela processou em menos de um minuto. Provavelmente o dígito verificador estava sendo calculado para cada número de ligação na vista do sistema comercial e isso causava lentidão.
+
+Foi alterada a rotina de erro, para que apresente o erro encontrado de forma mais completa, auxiliando assim o progamador a localizar a razão da ocorrência do mesmo.
+
+É necessário corrigir e testar estas queries para os outros bancos de dados Oracle e Postgres, conforme tabelas comerciais dos demais clientes.
+
+Para testar esta correção foi zerado o consumo com a querie (SQL Management):
+UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = 0 
+Consultados os consumos para verificar se estavam zerados mesmo com a querie:
+SELECT TOP 1000 [OBJECT_ID_]
+      ,[NRO_LIGACAO]
+      ,[INSCRICAO_LOTE]
+      ,[AUTO]
+      ,[CONSUMO_LPS]
+      ,[TIPO]
+      ,[ECONOMIAS]
+      ,[HIDROMETRADO]
+  FROM [valinhosgeosan].[dbo].[RAMAIS_AGUA_LIGACAO]
+Rodado o GeoSan com a função Arquivo-Atualizar Consumos e Distribuir Demandas, e seleção da opção Atualizar com o Consumo Médio das Ligações cadastradas.
+E consultados os consumos novamente com a mesma querie acima, para verificar as modificações.
+
+Para testar a o funcionamento da retirada do último dígito verificador do número da ligação, foi rodada a querie:
+SELECT TOP 10 CONSUMO_LPS, NRO_LIGACAO/10, NRO_LIGACAO FROM RAMAIS_AGUA_LIGACAO
+
 23-11-2012 - GeoSan 06.00.07.07
 Na consulta de ligações associadas aos ramais de água foi retirada a consulta por lotes. No banco de dados na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2 pmde QUERYSTRING é:
 A palavra endereço estava também com cedilha como ENDEREÇO, o que causava erro.

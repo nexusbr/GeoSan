@@ -153,74 +153,54 @@ Private Sub Command1_Click()
 
    
 End Sub
-
+'Esta função atualiza os consumos médios da vista do banco de dados comercial (NXGS_V_LIG_COM_CONSUMO_MEDIO) para o banco a tabela do GeoSan RAMAIS_AGUA_LIGACAO
+'
+'AtualizaConsumo - Retorna True se atualizou corretamente, False se não atualizou o consumo na tabela RAMAIS_AGUA_LIGACAO a partir da vista do sistema comercial
+'
 Private Function AtualizaConsumo() As Boolean
     On Error GoTo Trata_Erro
     Dim strsql As String                    'string sql
-   'ATUALIZA O CONSUMO DAS LIGACOES DE UM RAMAL PUXANDO O VALOR EXISTENTE EM NXGS_V_LIG_COM_CONSUMO_MEDIO
-   
-   Screen.MousePointer = vbHourglass
-   
-   ' if the database is SqlServer
-   If frmCanvas.TipoConexao = 1 Then
-   
-        'ORIGINAL DA VERSÃO 5.7.6
-        'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
-        'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (SELECT NXGS.CONSUMO_MEDIO * 0.00038580246 FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO)")
-        'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (SELECT NXGS.CONSUMO_MEDIO * 0.00038580246 FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS.NRO_LIGACAO)")
-         
-        'querie does not update consumo_medio - is wrong
-        'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIDO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
-         
-         'updated with consumo_medio in 2012-08-21
-         'Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM RAMAIS_AGUA_LIGACAO RAL INNER JOIN NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO")
-         strsql = "UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS.NRO_LIGACAO"
-         Conn.execute (strsql)
-
-   ' if the database is oracle
-   ElseIf frmCanvas.TipoConexao = 2 Then
-  
+    'ATUALIZA O CONSUMO DAS LIGACOES DE UM RAMAL PUXANDO O VALOR EXISTENTE EM NXGS_V_LIG_COM_CONSUMO_MEDIO
+    Screen.MousePointer = vbHourglass
+    ' if the database is SqlServer
+    If frmCanvas.TipoConexao = 1 Then
+        strsql = "UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO / 10 = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV"
+        Conn.execute (strsql)
+    ' if the database is oracle
+    ElseIf frmCanvas.TipoConexao = 2 Then
+        'Esta querie necessita ser validada para este banco de dados, a mesma já foi validadada para a conexão do tipo 1, SQLServer
         Conn.execute ("UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (SELECT NXGS.CONSUMO_MEDIO * 0.00038580246 FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS.NRO_LIGACAO)")
-   
-   ' if the database is postgres
-   ElseIf frmCanvas.TipoConexao = 4 Then
+    ' if the database is postgres
+    ElseIf frmCanvas.TipoConexao = 4 Then
         a = "RAMAIS_AGUA_LIGACAO"
         b = "CONSUMO_LPS"
         c = "CONSUMO_MEDIDO"
         d = "NXGS_V_LIG_COMERCIAL_CONSUMO"
         e = "NRO_LIGACAO"
         Dim conexao As String
-
         'UPDATE "RAMAIS_AGUA_LIGACAO" SET "CONSUMO_LPS" = (rc."CONSUMO_MEDIDO" *
         ''0.00038580246') FROM "RAMAIS_AGUA_LIGACAO" ra INNER JOIN"NXGS_V_LIG_COMERCIAL_CONSUMO" rc ON ra."NRO_LIGACAO" = rc."NRO_LIGACAO"
-        
         'MsgBox "UPDATE " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " SET " + """" + "CONSUMO_LPS" + """" + " = (N." + """" + "CONSUMO_MEDIDO" + """" + " * 0.00038580246) FROM " + """" + "RAMAIS_AGUA_LIGACAO" + """" + "  as R INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N  ON R." + """" + "NRO_LIGACAO" + """" + " = N." + """" + "NRO_LIGACAO" + """" + ""
-        
         'MsgBox "ARQUIVO DEBUG SALVO"
-        'WritePrivateProfileString "A", "A", "UPDATE " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " SET " + """" + "CONSUMO_LPS" + """" + " = (N." + """" + "CONSUMO_MEDIDO" + """" + " * 0.00038580246) FROM " + """" + "RAMAIS_AGUA_LIGACAO" + """" + "  as R INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N  ON R." + """" + "NRO_LIGACAO" + """" + " = N." + """" + "NRO_LIGACAO" + """" + "", App.path & "\DEBUG.INI"
-                                                                                                                                                                                                                                                                                                                 ' "CAST(" + """" + d4 + """" + "." + """" + e4 + """" + " AS INTEGER)"
+        'WritePrivateProfileString "A", "A", "UPDATE " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " SET " + """" + "CONSUMO_LPS" + """" + " = (N." + """" + "CONSUMO_MEDIDO" + """" + " * 0.00038580246) FROM " + """" + "RAMAIS_AGUA_LIGACAO" + """" + "  as R INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N  ON R." + """" + "NRO_LIGACAO" + """" + " = N." + """" + "NRO_LIGACAO" + """" + "", App.path & "\DEBUG.INI"                                                                                                                                                                                                                                                                                                      ' "CAST(" + """" + d4 + """" + "." + """" + e4 + """" + " AS INTEGER)"
         'Please verify this querie, is problably is wrong because it updates de consumo_medido instead of consumo_medio - 2012-08-21
         'It is not necessary the inerjoin, please look at the SQLServer querie that was tested
+        'Esta querie necessita ser validada para este banco de dados, a mesma já foi validadada para a conexão do tipo 1, SQLServer
         Conn.execute ("UPDATE " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " SET " + """" + "CONSUMO_LPS" + """" + " = (N." + """" + "CONSUMO_MEDIDO" + """" + " * 0.00038580246) FROM " + """" + "RAMAIS_AGUA_LIGACAO" + """" + "  as R INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N  ON CAST(R" + "." + """" + "NRO_LIGACAO" + """" + "AS INTEGER) = CAST(N." + """" + "NRO_LIGACAO" + """" + "AS INTEGER)" + "")
-      
         'Conn.execute ("UPDATE " + """" + a + """" + " SET " + """" + b + """" + " = (" + """" + d + """" + "." + """" + c + """" + " * '0.00038580246') FROM " + """" + a + """" + " INNER JOIN( " + """" + d + """" + " ON " + """" + a + """" + "." + """" + e + """" + " = " + """" + d + """" + "." + """" + e + """" + ")'")
         'Conn.execute (conexao)
-   End If
-   Screen.MousePointer = vbDefault
-      
-   AtualizaConsumo = True
+    End If
+    Screen.MousePointer = vbDefault
+    AtualizaConsumo = True
 
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-    Screen.MousePointer = vbDefault
-    PrintErro CStr(Me.Name), "Private Sub AtualizaConsumo(), querie: " & strsql, CStr(Err.Number), CStr(Err.Description), True
-    AtualizaConsumo = False
-
-   'Resume
-End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Screen.MousePointer = vbDefault
+        PrintErro CStr(Me.Name), "Private Sub AtualizaConsumo(), querie: " & strsql, CStr(Err.Number), CStr(Err.Description), True
+        AtualizaConsumo = False
+    End If
 End Function
 
 Private Function DISTRIBUI_DEMANDAS() As Boolean
