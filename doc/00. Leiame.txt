@@ -1,6 +1,17 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-11-2012 - GeoSan 06.00.07.12
+Gerado arquivo de instalação com todas componentes atualizadas.
+
+Atualizados a caixa de salvamento de arquivo texto com a lista dos consumidores
+desabastecidos para que pré-apresente o nome do arquivo, filtro e posicione no
+diretório de documentos do usuário ativo.
+
+Inserida no GeoSan a rotina GetMyDocumentsDirectory() que retorna o caminho do
+diretório de documentos do usuário. Foi copiada do EpanetExport.
+
+
 27-11-2012 - GeoSan 06.00.07.11
 Atualização de rotinas de exportação dos consumidores afetados por uma manobra 
 na rede de água.

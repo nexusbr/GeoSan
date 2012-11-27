@@ -10,6 +10,24 @@ Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfile
 Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+'Declarações necessárias para a função GetMyDocumentsDirectory()
+Const REG_SZ = 1
+Const REG_BINARY = 3
+Const HKEY_CURRENT_USER = &H80000001
+Const SYNCHRONIZE = &H100000
+Const STANDARD_RIGHTS_READ = &H20000
+Const KEY_ENUMERATE_SUB_KEYS = &H8
+Const KEY_NOTIFY = &H10
+Const KEY_QUERY_VALUE = &H1
+Const KEY_READ = ((STANDARD_RIGHTS_READ Or KEY_QUERY_VALUE Or KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not SYNCHRONIZE))
+
+Private Declare Function RegOpenKeyEx Lib "advapi32.dll" Alias "RegOpenKeyExA" (ByVal hKey As Long, _
+    ByVal lpSubKey As String, ByVal Reserved As Long, ByVal samDesired As Long, phkResult As Long) As Long
+Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, _
+    ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
+Private Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long
+'Fim das declarações necessárias para a função GetMyDocumentsDirectory()
+
 Dim a As String
 Dim b As String
 Dim c As String
@@ -171,7 +189,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.00.07.09"
+    Versao_Geo = "06.00.07.12"
     connn = ""
     If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
         If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
@@ -2757,4 +2775,25 @@ Public Function VerificaSeNumerico(ByVal ColunaNome As String, ByVal TabelaNome 
     End If
    rs.Close
    
+End Function
+'Obtem o nome do diretório dos Meus Documentos do usuário que está logado
+'
+'GetMyDocumentsDirectory() - retorna o caminho do diretório
+'
+Function GetMyDocumentsDirectory() As String
+    Dim lRes As Long
+    Dim lResult As Long, lValueType As Long, strBuf As String, lDataBufSize As Long
+    Dim strData As Integer
+    RegOpenKeyEx HKEY_CURRENT_USER, "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders", 0, KEY_READ, lRes
+    lResult = RegQueryValueEx(lRes, "Personal", 0, lValueType, ByVal 0, lDataBufSize)
+    If lResult = 0 Then
+        If lValueType = REG_SZ Then
+            strBuf = String(lDataBufSize, Chr$(0))
+            lResult = RegQueryValueEx(lRes, "Personal", 0, 0, ByVal strBuf, lDataBufSize)
+            If lResult = 0 Then
+                GetMyDocumentsDirectory = Left$(strBuf, InStr(1, strBuf, Chr$(0)) - 1)
+            End If
+        End If
+    End If
+    RegCloseKey lRes
 End Function

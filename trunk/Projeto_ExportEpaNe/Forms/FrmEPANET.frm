@@ -112,7 +112,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'EpanetExport Versão 01.02.25
+'EpanetExport Versão 06.00.07.12
 
 Option Explicit
 Public conn As ADODB.Connection

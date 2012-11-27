@@ -278,38 +278,43 @@ Public Function init(Object_id_trecho As String) As Boolean
     txtQde = QtdeLig
     Me.Show vbModal
     'LoozeXP1.EndWinXPCSubClassing
+    init = True
     Exit Function
-
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 94 Then
         Resume Next
     Else
         PrintErro CStr(Me.Name), "Falha em Function init(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True
+        init = False
         'LoozeXP1.EndWinXPCSubClassing
         'PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True
     End If
     
 End Function
-
+'Subrotina para gerar um arquivo texto, com os dados já gerados pela Função init, contendo todos os consumidores que serão afetados por uma manobra na rede
+'
+'
+'
 Private Sub cmdGerartxt_Click()
 On Error GoTo Trata_Erro
-   Dim a As Integer
-   cdl1.FileName = ""
-   cdl1.ShowSave
-   If cdl1.FileName <> "" Then
-      Open cdl1.FileName For Output As #1
-      For a = 1 To Lv.ListItems.count
-         Print #1, Lv.ListItems.Item(a).Text & ";" & _
-                     Lv.ListItems.Item(a).SubItems(1) & ";" & _
-                     Lv.ListItems.Item(a).SubItems(2) & ";" & _
-                     Lv.ListItems.Item(a).SubItems(3) & ";" & _
-                     Lv.ListItems.Item(a).SubItems(4)
-      Next
-      Close #1
-      
-      MsgBox "Gerado com sucesso", vbInformation
-      Shell "notepad.exe " & cdl1.FileName, vbNormalFocus
-   End If
+    Dim a As Integer
+    cdl1.FileName = GetMyDocumentsDirectory() & "\ClientesAfetadosManobra_" & Format(Now, "YYYY-MM-DD-HHMMSS") & ".txt"
+    cdl1.Filter = "Arquivos texto (*.txt)|*.txt"
+    cdl1.ShowSave
+    If cdl1.FileName <> "" Then
+        Open cdl1.FileName For Output As #1
+        For a = 1 To Lv.ListItems.count
+            Print #1, Lv.ListItems.Item(a).Text & ";" & _
+                        Lv.ListItems.Item(a).SubItems(1) & ";" & _
+                        Lv.ListItems.Item(a).SubItems(2) & ";" & _
+                        Lv.ListItems.Item(a).SubItems(3) & ";" & _
+                        Lv.ListItems.Item(a).SubItems(4)
+        Next
+        Close #1
+        MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.FileName, vbInformation
+        Shell "notepad.exe " & cdl1.FileName, vbNormalFocus
+    End If
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
