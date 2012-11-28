@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TECOMD~1.DLL"
+Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
 Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Begin VB.Form frmAtualizarSetores 
    Caption         =   "Carregar Polígono de Setor"
@@ -302,7 +302,6 @@ Private Sub cmdOperacoes_Click()
    Unload Me
    
 End Sub
-
 'Rotina responsável por carregar os dados do polígono de seleção para a tabela POLIGONO_SELECAO para depois gerar relatórios
 'ou exportar para o Epanet
 Private Sub cmdCarregar_Click()

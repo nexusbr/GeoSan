@@ -60,9 +60,9 @@ Public Function ReadINI(Secao As String, Entrada As String, Arquivo As String)
 End Function
 'Procedimento Exporte EPANET recebe como parametros o cursor trazendo todas os trechos
 'a serem exportados e o objecto de conexão
-'(rsTrechos):É a tabela Waterlines com os filtros de tipo de rede e setor selecionados pelo usuário
+'(rsTrechos):É a tabela Waterlines com os filtros de tipo de rede e setor selecionados pelo usuário (TIPO=1 na tabela POLIGONO_SELECAO)
 'arquivoLog: nome do arquivo onde está sendo escrito todo o log do sistema
-Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arquivoLog As String)
+Public Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arquivoLog As String)
     On Error GoTo Trata_Erro
     Dim numeroErro As String                'para auxiliar a identificar onde ocorreu o erro
     Dim contadorTrechos As Integer          'para contar quantos trechos está exportando
@@ -78,6 +78,8 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arqui
     
     Open arquivoLog For Append As #5                                'continua a realizar o log do sistema
     Print #5, vbCrLf & "ExportaEPANet;*************************************************************************************************"  'Indica que começou a nova fase de exportação
+    Print #5, vbCrLf & "ExportaEPANet;Inicia a exportação (2a. fase), onde recebe o cursor pronto com os dados para exportar."
+    Print #5, vbCrLf & "ExportaEPANet;Querie recebida: " & rsTrechos.Source
     'Informa que o contador de trechos exportados é zero
     contadorTrechos = 0
     If (az <> 10) Then
@@ -94,7 +96,6 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arqui
         FrmEPANET.TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
     End If
     Set conn = mconn
-    
     Dim NO As String                                'Vaviavel que guadará o nó a ser processado
     Dim conta_no As Integer                         'Variável contador para repetição do processo para o no inicial e final de cada trecho
     Dim Lin_len As Double, x As Double, y As Double 'Variáveis que retornarão a posição do ponto virtual
@@ -103,9 +104,11 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arqui
     'Configura o objeto tb(Tecomdatabase) que será usado para retornar para as variáveis lin_len, x e y
     'seus valores para cada trecho
     If conn.Provider <> "PostgreSQL.1" Then
+        'caso Oracle ou SQLServer
         tb.Provider = Provider
         tb.Connection = conn
     Else
+        'caso Postgres
         tb.Provider = Provider
         tb.Connection = FrmEPANET.TeAcXConnection1.objectConnection_
     End If
@@ -147,14 +150,15 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arqui
         blnRsWaterCompTypes = False
     End If
     intLinhaCod = 2
+    Close #5            'fecha o arquivo de log pois será reaberto na subrotina CarregaRsNosTMP
     'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
-    CarregaRsNosTMP
-    
+    CarregaRsNosTMP arquivoLog
+    Open arquivoLog For Append As #5                                'continua a realizar o log do sistema para esta rotina
     intLinhaCod = 3
     'With rsTrechos
     'Percorre todos os trechos da tabela waterlines com a clausura where (setor e tipo de rede)
     'ativada e cursor iniciando no primeiro registro
-    
+    Print #5, "ExportaEPANet;Inicia o cursor em cada trecho de rede com a querie: " & rsTrechos.Source
     Do While Not rsTrechos.EOF = True
         intLinhaCod = 161
         DoEvents
@@ -428,6 +432,7 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arqui
         'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
         intLinhaCod = 16
         numeroErro = "Penuntimo trecho lido: " & rsTrechos!Object_id_
+        Print #5, "ExportaEPANet;Querie rsTrechos: " & rsTrechos.Source
         rsTrechos.MoveNext
         numeroErro = numeroErro + " Ultimo trecho lido: " & rsTrechos!Object_id_
     Loop
@@ -447,10 +452,10 @@ Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection, arqui
     Print #5, vbCrLf & "ExportaEPANet;*************************************************************************************************"
     Print #5, "ExportaEPANet;Exportação concluída com sucesso!"
     MsgBox "Exportação concluída com sucesso!", vbInformation, "Exporte Epanet"
-
+    Close #5
 Trata_Erro:
-    If Err.Number = 0 Or Err.Number = 20 Or Err.Number = -2147467259 Or Err.Number = 3021 Then
-        'Quer dizer que é o final do arquivo. O código -2147467259 é um erro desconhecido que aconteceu uma vez e não identificamos. Verificamos que era tb final de arquivo, mas cabe outra verificação
+    If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 3021 Then
+        'O código -2147467259 é um erro de timeout expired que aconteceu e quando foram criados os índices foi corrigido.
         'O código 3021 é final de arquivo
         Resume Next
     Else
@@ -614,13 +619,18 @@ Function NoCadastrada(Object_id_ As String) As Boolean
    rsNosExportados.Filter = "id='" & Object_id_ & "'"
    NoCadastrada = Not rsNosExportados.EOF
 End Function
-
-
-Sub CarregaRsNosTMP()
+'Gera um vetor temporário de nós com seus atributos, como o objetivo de facilitar a leitura dos dados dos nós da rede
+'Cria uma cópia da query da tabela watercomponents + points para RsNosTMP com todos os nos das tabelas relacionadas
+'
+'arquivoLog - nome do arquivo de logo onde está sendo exportado o log do Epanet
+'
+Sub CarregaRsNosTMP(arquivoLog As String)
 On Error GoTo Trata_Erro
     Dim layer_id As Long
-    'Cria uma cópia da query da tabela watercomponents + points para RsNosTMP com todos os nos das tabelas relacionadas
     Dim strSQL As String
+    
+    Open arquivoLog For Append As #5                                'continua a realizar o log do sistema
+    Print #5, vbCrLf & "CarregaRsNosTMP; Inicia o registro do resultado dos nós temporários"
     Set rsNos = New ADODB.Recordset
     layer_id = GetLayerID("WATERCOMPONENTS")
    
@@ -670,11 +680,7 @@ On Error GoTo Trata_Erro
         'MsgBox "ARQUIVO DEBUG SALVO"
         'WritePrivateProfileString "A", "A", strSQL, App.Path & "\DEBUG.INI"
     End If
-    'IMPRIME EM ARQUIVO TEXTO SO PARA CONSULTA
-    '    MsgBox strSQL
-    '    Open App.Path & "\ExportEPANET.LOG" For Append As #5
-    '    Print #5, strSQL
-    '    Close #5
+    Print #5, "CarregaRsNosTMP; string conexão: " & strSQL & " conexão: " & conn
     rsNos.Open strSQL, conn
     If conn.Provider <> "PostgreSQL.1" Then
         While Not rsNos.EOF
@@ -724,9 +730,10 @@ On Error GoTo Trata_Erro
         Wend
     End If
     rsNos.Close
+    
     Set rsNos = Nothing
     'AO FINAL DESTA ROTINA FICARÁ EXISTENTE A TABELA DE NÓS COMPLETA DESNORMATIZADA (rsNosTmp)
-
+    Close #5
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -742,99 +749,107 @@ Trata_Erro:
         'Resume
     End If
 End Sub
-
+'Define a estrutura dos vetores que conterão os dados que serão exportados para o Epanet
+'
+'
 Sub AbrirEstruturaExporteRede()
-   rsCoordinates.Fields.Append "id", adVarChar, 255
-   rsCoordinates.Fields.Append "x", adDouble
-   rsCoordinates.Fields.Append "y", adDouble
-   rsCoordinates.Open
-   
-   rsPipes.Fields.Append "id", adVarChar, 255
-   rsPipes.Fields.Append "node1", adVarChar, 255
-   rsPipes.Fields.Append "node2", adVarChar, 255
-   rsPipes.Fields.Append "length", adVarChar, 255
-   rsPipes.Fields.Append "diameter", adDouble, 255
-   rsPipes.Fields.Append "roughness", adDouble, 255
-   rsPipes.Fields.Append "minorloss", adVarChar, 255
-   rsPipes.Fields.Append "status", adVarChar, 255
-   
-   rsPipes.Fields.Append "Description", adVarChar, 255 'incluido em 13/05/2009 Jonathas
-   
-   rsPipes.Open
-   
-   rsJunctions.Fields.Append "id", adVarChar, 255
-   rsJunctions.Fields.Append "elev", adVarChar, 255
-   rsJunctions.Fields.Append "demand", adDouble, 255
-   rsJunctions.Fields.Append "pattern", adVarChar, 255
-   rsJunctions.Open
-   
-   rsPumps.Fields.Append "id", adVarChar, 255
-   rsPumps.Fields.Append "node1", adVarChar, 255
-   rsPumps.Fields.Append "node2", adVarChar, 255
-   rsPumps.Fields.Append "parameters", adVarChar, 255
-   rsPumps.Open
-   
-   rsValves.Fields.Append "id", adVarChar, 255
-   rsValves.Fields.Append "node1", adVarChar, 255
-   rsValves.Fields.Append "node2", adVarChar, 255
-   rsValves.Fields.Append "diameter", adVarChar, 255
-   rsValves.Fields.Append "type", adVarChar, 255
-   rsValves.Fields.Append "setting", adVarChar, 255
-   rsValves.Fields.Append "minorloss", adVarChar, 255
-   rsValves.Open
-
-   rsReservoirs.Fields.Append "ID", adVarChar, 255
-   rsReservoirs.Fields.Append "Head", adVarChar, 255
-   rsReservoirs.Fields.Append "Pattern", adVarChar, 255
-   rsReservoirs.Open
-   
-   rsTanks.Fields.Append "ID", adVarChar, 255
-   rsTanks.Fields.Append "Elevation", adVarChar, 255
-   rsTanks.Fields.Append "InitLevel", adVarChar, 255
-   rsTanks.Fields.Append "MinLevel", adVarChar, 255
-   rsTanks.Fields.Append "MaxLevel", adVarChar, 255
-   rsTanks.Fields.Append "Diameter", adVarChar, 255
-   rsTanks.Fields.Append "MinVol", adVarChar, 255
-   rsTanks.Fields.Append "VolCurve", adVarChar, 255
-   rsTanks.Open
-   
-   rsVertices.Fields.Append "ID", adVarChar, 255
-   rsVertices.Fields.Append "X-Coord", adDouble
-   rsVertices.Fields.Append "Y-Coord", adDouble
-   rsVertices.Open
-   
-   rsNosTmp.Fields.Append "ID", adVarChar, 255
-   rsNosTmp.Fields.Append "X", adDouble
-   rsNosTmp.Fields.Append "Y", adDouble
-   rsNosTmp.Fields.Append "Tipo", adInteger
-   rsNosTmp.Fields.Append "Padrao", adInteger
-   rsNosTmp.Fields.Append "Curva", adInteger
-   rsNosTmp.Fields.Append "Diametro", adVarChar, 255
-   rsNosTmp.Fields.Append "Cota", adDouble
-   rsNosTmp.Fields.Append "NivelMin", adDouble
-   rsNosTmp.Fields.Append "NivelMax", adDouble
-   rsNosTmp.Fields.Append "VolumeMin", adDouble
-   rsNosTmp.Fields.Append "CurvaVol", adDouble
-   rsNosTmp.Fields.Append "Parametros", adDouble
-   rsNosTmp.Fields.Append "setting", adDouble
-   rsNosTmp.Fields.Append "SubTypeValve", adDouble
-   rsNosTmp.Fields.Append "demanda", adDouble
-   rsNosTmp.Fields.Append "estado", adVarChar, 255
-   
-   rsNosTmp.Fields.Append "Description", adVarChar, 255
-   
-   rsNosTmp.Open
-   
-   rsTrechosExportados.Fields.Append "id", adVarChar, 255
-   rsTrechosExportados.Open
-   
-   rsNosExportados.Fields.Append "id", adVarChar, 255
-   rsNosExportados.Open
-   
+    'coordenadas dos nós
+    rsCoordinates.Fields.Append "id", adVarChar, 255            'número do nó
+    rsCoordinates.Fields.Append "x", adDouble                   'coordenada X
+    rsCoordinates.Fields.Append "y", adDouble                   'coordenada Y
+    rsCoordinates.Open
+    
+    'tubulações
+    rsPipes.Fields.Append "id", adVarChar, 255                  'número da tubulação
+    rsPipes.Fields.Append "node1", adVarChar, 255
+    rsPipes.Fields.Append "node2", adVarChar, 255
+    rsPipes.Fields.Append "length", adVarChar, 255
+    rsPipes.Fields.Append "diameter", adDouble, 255
+    rsPipes.Fields.Append "roughness", adDouble, 255
+    rsPipes.Fields.Append "minorloss", adVarChar, 255
+    rsPipes.Fields.Append "status", adVarChar, 255
+    rsPipes.Fields.Append "Description", adVarChar, 255         'incluido em 13/05/2009 Jonathas
+    rsPipes.Open
+    
+    'junções
+    rsJunctions.Fields.Append "id", adVarChar, 255
+    rsJunctions.Fields.Append "elev", adVarChar, 255
+    rsJunctions.Fields.Append "demand", adDouble, 255
+    rsJunctions.Fields.Append "pattern", adVarChar, 255
+    rsJunctions.Open
+    
+    'bombas
+    rsPumps.Fields.Append "id", adVarChar, 255
+    rsPumps.Fields.Append "node1", adVarChar, 255
+    rsPumps.Fields.Append "node2", adVarChar, 255
+    rsPumps.Fields.Append "parameters", adVarChar, 255
+    rsPumps.Open
+    
+    'válvulas
+    rsValves.Fields.Append "id", adVarChar, 255
+    rsValves.Fields.Append "node1", adVarChar, 255
+    rsValves.Fields.Append "node2", adVarChar, 255
+    rsValves.Fields.Append "diameter", adVarChar, 255
+    rsValves.Fields.Append "type", adVarChar, 255
+    rsValves.Fields.Append "setting", adVarChar, 255
+    rsValves.Fields.Append "minorloss", adVarChar, 255
+    rsValves.Open
+    
+    'reservatórios
+    rsReservoirs.Fields.Append "ID", adVarChar, 255
+    rsReservoirs.Fields.Append "Head", adVarChar, 255
+    rsReservoirs.Fields.Append "Pattern", adVarChar, 255
+    rsReservoirs.Open
+    
+    'tanques
+    rsTanks.Fields.Append "ID", adVarChar, 255
+    rsTanks.Fields.Append "Elevation", adVarChar, 255
+    rsTanks.Fields.Append "InitLevel", adVarChar, 255
+    rsTanks.Fields.Append "MinLevel", adVarChar, 255
+    rsTanks.Fields.Append "MaxLevel", adVarChar, 255
+    rsTanks.Fields.Append "Diameter", adVarChar, 255
+    rsTanks.Fields.Append "MinVol", adVarChar, 255
+    rsTanks.Fields.Append "VolCurve", adVarChar, 255
+    rsTanks.Open
+    
+    'vértices de linhas de tubulações
+    rsVertices.Fields.Append "ID", adVarChar, 255               'número da tubulação
+    rsVertices.Fields.Append "X-Coord", adDouble
+    rsVertices.Fields.Append "Y-Coord", adDouble
+    rsVertices.Open
+    
+    'nós
+    rsNosTmp.Fields.Append "ID", adVarChar, 255
+    rsNosTmp.Fields.Append "X", adDouble
+    rsNosTmp.Fields.Append "Y", adDouble
+    rsNosTmp.Fields.Append "Tipo", adInteger
+    rsNosTmp.Fields.Append "Padrao", adInteger
+    rsNosTmp.Fields.Append "Curva", adInteger
+    rsNosTmp.Fields.Append "Diametro", adVarChar, 255
+    rsNosTmp.Fields.Append "Cota", adDouble
+    rsNosTmp.Fields.Append "NivelMin", adDouble
+    rsNosTmp.Fields.Append "NivelMax", adDouble
+    rsNosTmp.Fields.Append "VolumeMin", adDouble
+    rsNosTmp.Fields.Append "CurvaVol", adDouble
+    rsNosTmp.Fields.Append "Parametros", adDouble
+    rsNosTmp.Fields.Append "setting", adDouble
+    rsNosTmp.Fields.Append "SubTypeValve", adDouble
+    rsNosTmp.Fields.Append "demanda", adDouble
+    rsNosTmp.Fields.Append "estado", adVarChar, 255
+    rsNosTmp.Fields.Append "Description", adVarChar, 255
+    rsNosTmp.Open
+    
+    'lista de trechos exportados
+    rsTrechosExportados.Fields.Append "id", adVarChar, 255
+    rsTrechosExportados.Open
+    
+    'lista de nós exportados
+    rsNosExportados.Fields.Append "id", adVarChar, 255
+    rsNosExportados.Open
 End Sub
-
-
-
+'
+'
+'
 Sub GeraArquivo_de_Saida()
 On Error GoTo Trata_Erro
 'Recupera os dados do cursor em memoria e cria o arquivo .INP

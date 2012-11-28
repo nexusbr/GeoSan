@@ -112,7 +112,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'EpanetExport Versão 06.00.07.12
+'EpanetExport Versão 06.00.07.13
 
 Option Explicit
 Public conn As ADODB.Connection
@@ -157,14 +157,15 @@ Private Sub cmdCancelar_Click()
    Unload Me
 End Sub
 'Início da função de exportação para o EPANET. Ao final dela será chamado o ModExport pela rotina ExportaEPANet que gera em memória toda a exportação
-'para depois gerar em arquivo através de outra rotina
+'para depois gerar em arquivo através de outra rotina. Esta rotina incicia quando o timer é iniciado
 Private Function INICIAR()
-On Error GoTo Trata_Erro
-
+    On Error GoTo Trata_Erro
     Dim retval As String
     Dim usuario As String
     Dim arquivoLog As String                        'nome do arquivo de log com todas as operações ao exportar para o Epanet
+    Dim tipoErro As String                          'indica para o arquivo de log o tipo de erro que pode estar acontecendo
    
+    tipoErro = "Erro não localizado"
     arquivoLog = "\Controles\ExportaEpanet" & DateValue(Now) & "  " & TimeValue(Now) & ".log"    'define o nome completo do arquivo de log do sistema, incluíndo a data e hora em que o mesmo será gerado pela primeira vez
     arquivoLog = Replace(arquivoLog, "/", "-")                      'troca caractere / especial que não é aceito como parte do nome do arquivo
     arquivoLog = Replace(arquivoLog, ":", "-")                      'troca caractere : especial que não é aceito como parte do nome do arquivo
@@ -172,8 +173,6 @@ On Error GoTo Trata_Erro
     Open arquivoLog For Append As #5                                'Inicia o log do sistema, abrindo o arquivo sem apagar o log anterior, mantendo sempre o histórico
     Print #5, vbCrLf & "ExportEpanet;*************************************************************************************************"  'Pula uma linha antes de iniciar a escrita
     Print #5, "ExportEpanet;Início do processamento da exportação para o Epanet: " & DateValue(Now) & " - " & TimeValue(Now)
-
-    
     'Neste arquivo existe gravado o nome do usuário ativo, que indica que usuário exportou para o Epanet o polígono de seleção
     'Através dele será feita uma pesquisa no banco de dados POLIGONO_SELECAO para ver que redes OBJECT_ID_s serão exportados para o EPANET
     'Lembrando que
@@ -200,6 +199,7 @@ On Error GoTo Trata_Erro
     'Atualiza todas as rugosidades de todas as tubulações, conforme o tipo de material. Foi considerada uma tubulação de 20 anos de idade
     If conn.Provider <> "PostgreSQL.1" Then
         'Caso o banco de dados seja Oracle ou SQLServer
+        'Sempre que alguma linha for alterada na tabela X_Material, estas rugosidades deverão ser revistas
         Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 0"
         conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 0")
         Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 111 WHERE MATERIAL = 0"
@@ -216,18 +216,19 @@ On Error GoTo Trata_Erro
         conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 90 WHERE MATERIAL = 5 AND ROUGHNESS = 0")
         Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 6 AND ROUGHNESS = 0"
         conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 6 AND ROUGHNESS = 0")
-        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 7 AND ROUGHNESS = 0"
-        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 7 AND ROUGHNESS = 0")
-        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 8 AND ROUGHNESS = 0"
-        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 8 AND ROUGHNESS = 0")
-        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 9 AND ROUGHNESS = 0"
-        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 9 AND ROUGHNESS = 0")
-        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 10 AND ROUGHNESS = 0"
-        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 10 AND ROUGHNESS = 0")
-        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 11 AND ROUGHNESS = 0"
-        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 11 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 7 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 7 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 8 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 8 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 9 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 9 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 10 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 10 AND ROUGHNESS = 0")
+        Print #5, "ExportEpanet;UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 11 AND ROUGHNESS = 0"
+        conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 11 AND ROUGHNESS = 0")
     Else
         'Caso seja Postgres
+        'Sempre que alguma linha for alterada na tabela X_Material, estas rugosidades deverão ser revistas
         Print #5, "ExportEpanet;UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '0'"""
         conn.Execute ("UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '0'")
         Print #5, "ExportEpanet;UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '111' WHERE " + """" + "MATERIAL" + """" + " = '0'"
@@ -244,16 +245,16 @@ On Error GoTo Trata_Erro
         conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '90' WHERE " + """" + "MATERIAL" + """" + " = '5' AND " + """" + "ROUGHNESS" + """" + " = '0'")
         Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '6' AND " + """" + "ROUGHNESS" + """" + " = '0'"
         conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '6' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'"
-        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'"
-        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'"
-        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'"
-        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'"
-        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'"
+        conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'")
     End If
     'Volta o mouse para o normal
     FrmEPANET.MousePointer = vbDefault
@@ -262,28 +263,8 @@ On Error GoTo Trata_Erro
     Dim str As String
     Dim Tipo As String
     Dim setor As String
-    Dim strtot As String        'armazena a querie para obter o número total de segmentos de rede que serão exportados para o Epanet
-   
-
-    '   For i = 1 To lvTipoRede.ListItems.Count
-    '      If lvTipoRede.ListItems.Item(i).Checked Then
-    '         If Tipo = "" Then
-    '            Tipo = lvTipoRede.ListItems.Item(i).Tag
-    '         Else
-    '            Tipo = Tipo & "," & lvTipoRede.ListItems.Item(i).Tag
-    '         End If
-    '      End If
-    '   Next
-    '
-    '   For i = 1 To lvSetor.ListItems.Count
-    '      If lvSetor.ListItems.Item(i).Checked Then
-    '         If setor = "" Then
-    '            setor = lvSetor.ListItems.Item(i).Tag
-    '         Else
-    '            setor = setor & "," & lvSetor.ListItems.Item(i).Tag
-    '         End If
-    '      End If
-    '   Next
+    Dim strtot As String                        'armazena a querie para obter o número total de segmentos de rede que serão exportados para o Epanet (TIPO=1 na tabela POLIGONO_SELECAO)
+    Dim totalTrechosExportar As Integer         'número total de trechos de rede de água que serão exportados para o Epanet, disponíveis em (TIPO=1 na tabela POLIGONO_SELECAO)
     
     'Zera todos os materiais de tubulações quando o mesmo não estiver cadastrado
     If conn.Provider <> "PostgreSQL.1" Then
@@ -295,78 +276,81 @@ On Error GoTo Trata_Erro
         Print #5, "ExportEpanet;UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "MATERIAL" + """" + " = '0' WHERE " + """" + "MATERIAL" + """" + " IS NULL"
         conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "MATERIAL" + """" + " = '0' WHERE " + """" + "MATERIAL" + """" + " IS NULL")
     End If
-   
-    'WHERE WATERLINES.id_type in(1,3,0,2,12) and WATERLINES.SECTOR IN (21)
-    'str = "SELECT * FROM WATERLINES "
-       
-    '   If Tipo <> "" Or setor <> "" Then
-    '      str = str & "WHERE "
-    '      If Tipo <> "" Then
-    '         str = str & "id_type in(" & Tipo & ") "
-    '      End If
-    '      If setor <> "" And Tipo <> "" Then
-    '         str = str & "and "
-    '      End If
-    '      If setor <> "" Then
-    '         str = str & "SECTOR IN (" & setor & ")"
-    '      End If
-    '   End If
-       'MsgBox str
     
-    'Agora temos que descobrir todos os trechos de rede (TIPO=1) que serão exportados para o Epanet, do usuário ativo
+    'Agora temos que descobrir todos os trechos de rede (TIPO=1 na tabela POLIGONO_SELECAO) que serão exportados para o Epanet, do usuário ativo
     If Provider = 1 Then
         'Se for SQLServer
-        str = "SELECT * FROM WATERLINES INNER JOIN X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID "
-        str = str & "WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & usuario & "' AND TIPO = 1)"
+        str = "SELECT * FROM WATERLINES INNER JOIN X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID"
+        str = str & " WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & usuario & "' AND TIPO = 1)"
+        Print #5, "ExportEpanet;" & str
     ElseIf Provider = 2 Then
         'Se for Oracle
         str = "SELECT * FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID "
-        str = str & "WHERE EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & usuario & "' AND P.TIPO = 1)"
+        str = str & " WHERE EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & usuario & "' AND P.TIPO = 1)"
+        Print #5, "ExportEpanet;" & str
     End If
     If conn.Provider = "PostgreSQL.1" Then
         'Se for Postgres
         str = "SELECT * FROM " + """" + "WATERLINES" + """" + " INNER JOIN " + """" + "X_MATERIAL" + """" + " ON " + """" + "WATERLINES" + """" + "." + """" + "MATERIAL" + """" + " = " + """" + "X_MATERIAL" + """" + "." + """" + "MATERIALID" + """" + " "
-        str = str & "WHERE " + """" + "WATERLINES" + """" + "." + """" + "OBJECT_ID_" + """" + " IN (SELECT " + """" + "OBJECT_ID_" + """" + " FROM " + """" + "POLIGONO_SELECAO" + """" + " WHERE " + """" + "USUARIO" + """" + " = '" & usuario & "' AND " + """" + "TIPO" + """" + " = '1')"
+        str = str & " WHERE " + """" + "WATERLINES" + """" + "." + """" + "OBJECT_ID_" + """" + " IN (SELECT " + """" + "OBJECT_ID_" + """" + " FROM " + """" + "POLIGONO_SELECAO" + """" + " WHERE " + """" + "USUARIO" + """" + " = '" & usuario & "' AND " + """" + "TIPO" + """" + " = '1')"
+        Print #5, "ExportEpanet;" & str
     End If
     
-    'Prepara querie para verificar quantos trechos de rede iremos ler
+    'Prepara querie para verificar quantos trechos de rede iremos ler, substinuindo o início da querie acima para contar (SELECT COUNT(*))
     If conn.Provider <> "PostgreSQL.1" Then
         'Se for Oracle ou SQLServer
         strtot = Replace(str, "SELECT *", "SELECT COUNT(*)")
+        Print #5, "ExportEpanet;" & strtot
     Else
         'Se for Postgres
         strtot = Replace(str, "SELECT *", "SELECT COUNT(*)")
+        Print #5, "ExportEpanet;" & strtot
     End If
     Set Rs = New ADODB.Recordset
-    'Obtem o número total de trechos de rede a serem exportados para o Epanet
+    'Obtem o número total de trechos de rede a serem exportados para o Epanet os quais são do TIPO=1 na tabela POLIGONO_SELECAO
     If conn.Provider <> "PostgreSQL.1" Then
         'Se SQLServer ou Oracle
+        tipoErro = "sql abertura cursor: " & strtot & " - string de conexão: " & conn
         Rs.Open strtot, conn, adOpenDynamic, adLockReadOnly
+        Print #5, "ExportEpanet;Executou a abertura do cursor com a querie: " & strtot
+        tipoErro = "Erro não localizado"
     Else
         'Se Postgres
         Rs.Open strtot, conn, adOpenDynamic, adLockOptimistic
+        Print #5, "ExportEpanet;Executou a abertura do cursor com a querie: " & strtot
     End If
     Me.ProgressBar1.Value = 1
-    If Rs(0).Value > 0 Then
-        Me.ProgressBar1.Max = Rs(0).Value
+    totalTrechosExportar = Rs(0).Value      'obtem o número total de trechos de rede que serão exportados
+    If totalTrechosExportar > 0 Then
+        'existe pelo menos um trecho a ser exportado para o Epanet
+        Me.ProgressBar1.Max = totalTrechosExportar
     Else
+        'não existem trechos a serem exportados para o Epanet
         MsgBox "Não há dados selecionados para exportar.", vbInformation, ""
+        Print #5, "ExportEpanet;Total de trechos que serão exportados: " & totalTrechosExportar & " Devido a isso a exportação está sendo abortada."
         Exit Function
     End If
+    Print #5, "ExportEpanet;Total de trechos que serão exportados: " & totalTrechosExportar
     Rs.Close
     Set Rs = Nothing
    
     'Agora que temos trechos a serem exportados, vamos exportar para o Epanet
     Set Rs = New ADODB.Recordset
+    tipoErro = "sql abertura cursor: " & str & " - string de conexão: " & conn
     Rs.Open str, conn, adOpenDynamic, adLockReadOnly
+    conn.CommandTimeout = 300
+    tipoErro = "Erro não localizado"
     If Rs.EOF = False Then
         'Fecha temporariamente a conexão com o arquivo de log
-        Print #5, vbCrLf & "ExportEpanet;Fim do processamento inicial da exportação para o Epanet. Inicia A exportação."
+        Print #5, "ExportEpanet;Querie a ser enviada para o ExportaEPANet: " & Rs.Source
+        Print #5, "ExportEpanet;Fim do processamento inicial da exportação para o Epanet. Iniciará a exportação de " & totalTrechosExportar & " trechos de rede para o Epanet."
         Close #5                                           'Fecha o arquivo de log do sistema
         'Chama rotina de exportação, passando o cursor com a querie com todos os segmentos de rede a serem exportados
         ExportaEPANet Rs, conn, arquivoLog
     Else
         MsgBox "Não há informações selecionadas para exportar.", vbInformation, ""
+        Print #5, "ExportEpanet;Fim do processamento inicial da exportação para o Epanet defido a falta de informações para exportar."
+        Close #5                                           'Fecha o arquivo de log do sistema
     End If
 
 Trata_Erro:
@@ -375,54 +359,33 @@ Trata_Erro:
     Else
         Close #2
         Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
-        Print #2, Now & "  - Private Sub cmdConfirmar_Click() - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
+        Print #2, Now & "  - Private Sub cmdConfirmar_Click() - Tipo de erro: " & tipoErro & " - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
         Close #2
-        Print #5, vbCrLf & "ExportEpanet;Fim do processamento da exportação para o Epanet: " & DateValue(Now) & " - " & TimeValue(Now)
+        Print #5, "ExportEpanet;Fim do processamento da exportação para o Epanet: " & DateValue(Now) & " - " & TimeValue(Now)
         Print #5, "ExportEpanet;*************************************************************************************************"
         Close #5                                           'Fecha o arquivo de log do sistema
         MsgBox "Exportação para o Epanet concluída com não conformidades. Verifique o log no arquivo " & arquivoLog
-        MsgBox "Um posssível erro foi identificado na rotina 'INICIAR()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo " & arquivoLog & " com informações desta ocorrencia.", vbInformation
+        MsgBox "Um posssível erro foi identificado na rotina 'INICIAR()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo " & App.Path & "\LogErroExportEPANET.txt" & " com informações desta ocorrencia.", vbInformation
     End If
 End Function
 
+'Subrotina que inicia o timer e inicia a exportação para o Epanet
+'
+'
 Private Sub Timer1_Timer()
-
-'   If txtTimer.Text = "" Then
-      
-      
-      
-      MousePointer = vbHourglass
-      INICIAR
-      
-      MousePointer = vbDefault
-      
-      Timer1.Enabled = False
-      End
-      
-'   Else
-'      If IsDate(Me.txtTimer.Text) Then
-'
-'         If CDate(txtTimer.Text) < Format(Now, "HH:MM:SS") Then
-'            INICIAR
-'            Timer1.Enabled = False
-'         End If
-'
-'      Else
-'         MsgBox "Horário inválido"
-'         Timer1.Enabled = False
-'      End If
-'   End If
-
+    MousePointer = vbHourglass              'ativa a ampulheta
+    INICIAR                                 'inicia a conversão para o EPANET
+    MousePointer = vbDefault                'desativa a ampulheta
+    Timer1.Enabled = False                  'desativa o timer
+    End
 End Sub
-
-
-
-
+'Subrotina que irá iniciar a exportação para o Epanet
+'
+'
 Private Sub cmdConfirmar_Click()
-   Timer1.Enabled = True
-   Me.ProgressBar1.Visible = True
-   Me.cmdConfirmar.Enabled = False
-   
+    Timer1.Enabled = True               'ativa o timer
+    Me.ProgressBar1.Visible = True      'ativa a visualização da barra de progresso
+    Me.cmdConfirmar.Enabled = False
 End Sub
 
 
@@ -435,46 +398,45 @@ Private Sub cmdPath_Click()
    
    txtArquivo.Text = cdl.FileName
 End Sub
-
-
+'Rotina para atualizar rugozidades nas tubulações. Sempre que alguma linha for alterada na tabela X_Material, esta rotina deverá ser revista
+'
+'
+'
 Private Sub Command1_Click()
-
-If MsgBox("Deseja aplicar fórmula Material x Rugosidade?", vbYesNo + vbQuestion, "Confirmar Ação") = vbYes Then
-   FrmEPANET.MousePointer = vbHourglass
-   
-   
-
-     If conn.Provider <> "PostgreSQL.1" Then
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 0")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 111 WHERE MATERIAL = 0")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 1 AND ROUGHNESS = 0")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 120 WHERE MATERIAL = 2 AND ROUGHNESS = 0 ")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 110 WHERE MATERIAL = 3 AND ROUGHNESS = 0")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 105 WHERE MATERIAL = 4 AND ROUGHNESS = 0")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 90 WHERE MATERIAL = 5 AND ROUGHNESS = 0")
-   conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 6 AND ROUGHNESS = 0")
-   Else
-     conn.Execute ("UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '0'")
-   conn.Execute ("UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '111' WHERE " + """" + "MATERIAL" + """" + " = '0'")
-   conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '1' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-   conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '120' WHERE " + """" + "MATERIAL" + """" + " = '2' AND " + """" + "ROUGHNESS" + """" + " = '0' ")
-   conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '110' WHERE " + """" + "MATERIAL" + """" + " = '3' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-   conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '105' WHERE " + """" + "MATERIAL" + """" + " = '4' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-   conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '90' WHERE " + """" + "MATERIAL" + """" + " = '5' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-   conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '6' AND " + """" + "ROUGHNESS" + """" + " = '0'")
-   
-   
-   End If
-   
-   
-   
-   
-   
-   FrmEPANET.MousePointer = vbDefault
-   MsgBox "Fórmula aplicada com sucesso!", vbInformation, ""
-End If
-
-
+    If MsgBox("Deseja aplicar fórmula Material x Rugosidade?", vbYesNo + vbQuestion, "Confirmar Ação") = vbYes Then
+        FrmEPANET.MousePointer = vbHourglass
+        If conn.Provider <> "PostgreSQL.1" Then
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 111 WHERE MATERIAL = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 1 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 120 WHERE MATERIAL = 2 AND ROUGHNESS = 0 ")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 110 WHERE MATERIAL = 3 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 105 WHERE MATERIAL = 4 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 90 WHERE MATERIAL = 5 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 130 WHERE MATERIAL = 6 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 7 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 8 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 9 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 10 AND ROUGHNESS = 0")
+            conn.Execute ("UPDATE WATERLINES SET ROUGHNESS = 140 WHERE MATERIAL = 11 AND ROUGHNESS = 0")
+        Else
+            conn.Execute ("UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE" + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '111' WHERE " + """" + "MATERIAL" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '1' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '120' WHERE " + """" + "MATERIAL" + """" + " = '2' AND " + """" + "ROUGHNESS" + """" + " = '0' ")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '110' WHERE " + """" + "MATERIAL" + """" + " = '3' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '105' WHERE " + """" + "MATERIAL" + """" + " = '4' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '90' WHERE " + """" + "MATERIAL" + """" + " = '5' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '130' WHERE " + """" + "MATERIAL" + """" + " = '6' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '7' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '8' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '9' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '10' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+            conn.Execute ("UPDATE " + """" + "WATERLINES" + """" + " SET " + """" + "ROUGHNESS" + """" + " = '140' WHERE " + """" + "MATERIAL" + """" + " = '11' AND " + """" + "ROUGHNESS" + """" + " = '0'")
+        End If
+        FrmEPANET.MousePointer = vbDefault
+        MsgBox "Fórmula aplicada com sucesso!", vbInformation, ""
+    End If
 End Sub
 'Obtem o nome do diretório dos Meus Documentos do usuário que está logado
 '

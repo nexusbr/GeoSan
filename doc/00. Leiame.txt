@@ -1,6 +1,55 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+28-11-2012 - GeoSan 06.00.07.13
+Atualizadas as rugozidades no módulo EpanetExport.
+Sempre que alguma linha for alterada na tabela X_Material, as rugosidades
+deverão ser revistas
+
+Foi verificado que ocorriam erros de Timeout Expired, foi alterada a rotina
+de manipulação de erros, melhorados os logs para apresentarem mais informações
+e criados os seguintes índices:
+________________________________________________________________________________
+Tabela WaterLines
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [object_id]    Script Date: 11/28/2012 20:13:29 ******/
+CREATE NONCLUSTERED INDEX [object_id] ON [dbo].[WaterLines] 
+(
+	[object_id_] ASC,
+	[Material] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+Tabela X_Material
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [IDMATERIAL]    Script Date: 11/28/2012 20:16:23 ******/
+CREATE NONCLUSTERED INDEX [IDMATERIAL] ON [dbo].[X_Material] 
+(
+	[MaterialID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+Tabela POLIGONO_SELECAO
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [OBJECT_ID]    Script Date: 11/28/2012 20:17:41 ******/
+CREATE NONCLUSTERED INDEX [OBJECT_ID] ON [dbo].[POLIGONO_SELECAO] 
+(
+	[OBJECT_ID_] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+
+Foi formatada a tabulação da rotina responsável por selecionar um setor.
+
 27-11-2012 - GeoSan 06.00.07.12
 Gerado novo arquivo de instalação com todas componentes atualizadas.
 

@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TECOMD~1.DLL"
-Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TECOMC~1.DLL"
+Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
+Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Begin VB.Form frmAlteraNoPoligono 
    BorderStyle     =   1  'Fixed Single
    Caption         =   " Operações por Polígono"
@@ -121,37 +121,28 @@ Dim strConn As String
 Dim nStr As String
 Dim usuario As String
 Dim count1, count2 As Integer
- 
+'Subrotina acionada caso ele selecione o botão PRÓXIMO, para rodar o próximo passo com relação as tubulações, ramais e nós pré-selecionados
+'
+'
+'
 Private Sub cmdAtivar_Click()
-   
-   If Me.optExportEpanet.value = True Then
-      
-      'Shell "C:\arquivos de programas\geosan\Ferramentas\Exporte EPANet.exe", vbNormalFocus
-      
-      Shell "C:\arquivos de programas\geosan\Exporte EPANet.exe", vbNormalFocus
-      
-   ElseIf Me.optAlteraConsumo.value = True Then
-      
-      Me.Visible = False
-      frmAlteraConsumoPorPoligono.Show 1
-   
-   ElseIf Me.optRelatorios.value = True Then
-      
-      Me.Visible = False
-      frmRelatoriosAvancados.Show 1
-   
-   ElseIf Me.optLocTrechoRede.value = True Then
-   
-     
-      If ATUALIZA_TRECHOS_RAMAIS_AGUA = True Then
-      
-         MsgBox "Comando executado com sucesso!", vbInformation, ""
-      
-      End If
-      
-   End If
-   
- 
+    If Me.optExportEpanet.value = True Then
+        'deseja exportar para o Epanet
+        Shell "C:\arquivos de programas\geosan\Exporte EPANet.exe", vbNormalFocus
+    ElseIf Me.optAlteraConsumo.value = True Then
+        'deseja alterar os consumos das ligações
+        Me.Visible = False
+        frmAlteraConsumoPorPoligono.Show 1
+        ElseIf Me.optRelatorios.value = True Then
+            'deseja emitir relatórios no formato texto
+            Me.Visible = False
+            frmRelatoriosAvancados.Show 1
+            ElseIf Me.optLocTrechoRede.value = True Then
+                'deseja localizar trechos de redes dos ramais selecionados
+                If ATUALIZA_TRECHOS_RAMAIS_AGUA = True Then
+                    MsgBox "Comando executado com sucesso!", vbInformation, ""
+                End If
+    End If
 End Sub
 
 Public Function ATUALIZA_TRECHOS_RAMAIS_AGUA() As Boolean
