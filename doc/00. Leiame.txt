@@ -1,6 +1,10 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+28-11-2012 - GeoSan 06.00.07.14
+Atualizada a template do banco de dados SQLServer onde foram incluídos os
+índices.
+
 28-11-2012 - GeoSan 06.00.07.13
 Atualizadas as rugozidades no módulo EpanetExport.
 Sempre que alguma linha for alterada na tabela X_Material, as rugosidades
