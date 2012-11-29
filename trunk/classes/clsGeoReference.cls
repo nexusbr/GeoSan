@@ -1213,139 +1213,145 @@ Trata_Erro:
     End If
    
 End Function
-
-
 '###############################################################
 ' Autor     : Luis Claudio Rodrigues Domingues    Data: 20/12/05
 ' Nome      : SELECTRede
 ' Descrição : Colore a rede até encontrar válvula
 '###############################################################
-
 Public Function SELECTRede(Object_id_ As String)
-   On Error GoTo Trata_Erro
-   
-   Dim rs As ADODB.Recordset
-   Dim iContA As Integer, iContB As Integer
-   Dim MyLocalLines() As String, iLn As Integer, iPnt
-   Dim MyComponents(1) As String
-   
-   Dim ACHOU As Boolean
-   
-   Dim rsType As ADODB.Recordset
-   Set rsType = New ADODB.Recordset
-   If frmCanvas.TipoConexao <> 4 Then
-   rsType.Open "SELECT ID_TYPE,DESCRIPTION_,SPECIFICATION_ FROM WATERCOMPONENTSTYPES", Conn, adOpenDynamic, adLockReadOnly
-   Else
-Dim fg As String
-Dim fh As String
-Dim fi As String
-Dim fj As String
-Dim fl As String
-Dim fm As String
-Dim fn As String
-Dim fo As String
-fg = "ID_TYPE"
-fh = "DESCRIPTION_"
-fi = "SPECIFICATION_"
-fj = "WATERCOMPONENTSTYPES"
-fl = "INITIALCOMPONENT"
-fm = "FINALCOMPONENT"
-fn = "WATERLINES"
-fo = "OBJECT_ID_"
-Dim ga As String
-ga = "WATERLINES"
-Dim ga2 As String
-ga2 = "WATERCOMPONENTS"
-         'MsgBox "SELECT " + """" + fg + """" + "," + """" + fh + """" + "," + """" + fi + """" + " FROM " + """" + fj + ""
-    rsType.Open "SELECT " + """" + fg + """" + "," + """" + fh + """" + "," + """" + fi + """" + " FROM " + """" + fj + """" + "", Conn, adOpenDynamic, adLockOptimistic
-   End If
-  
-   If rsType.EOF = True Then
-      MsgBox ""
-      Exit Function
-   End If
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute("SELECT InitialComponent,FinalComponent from waterlines where object_id_='" & Object_id_ & "'")
-   Else
-   Set rs = Conn.execute("SELECT " + """" + fl + """" + "," + """" + fm + """" + " from " + """" + ga + """" + " where " + """" + fo + """" + "='" & Object_id_ & "'")
-   End If
-   If Not stopProcess Then
-      DoEvents
-      If Not rs.EOF Then
-         MyComponents(0) = rs(0)
-         MyComponents(1) = rs(1)
-         rs.Close
-         Set rs = Nothing
-         For iContA = 0 To 1
-         If frmCanvas.TipoConexao <> 4 Then
-            Set rs = Conn.execute("SELECT iD_type from watercomponents where object_id_='" & MyComponents(iContA) & "'")
-            Else
-            Set rs = Conn.execute("SELECT " + """" + fg + """" + " from " + """" + ga2 + """" + " where " + """" + fo + """" + "='" & MyComponents(iContA) & "'")
-            End If
-            If Not rs.EOF Then
-               
-               ACHOU = False
-               rsType.Filter = "ID_TYPE='" & rs!id_Type & "'"
-               If rsType.EOF = False Then
-                  If Trim(rsType!Specification_) = "VALVE" Then
-                     ACHOU = True
-                  End If
-               End If
-               
-               If ACHOU = True Then 'valor original = 1 mas não há nada cadastrado como tipo 1
-                  
-                  Exit For
-               
-               Else
-                  rs.Close
-                  Set rs = Nothing
-                  If frmCanvas.TipoConexao <> 4 Then
-                  Set rs = Conn.execute("SELECT object_id_ from waterlines where InitialComponent=" & MyComponents(iContA) & " or FinalComponent= " & MyComponents(iContA))
-                  
-                  Else
-                  ' Set rs = Conn.execute("SELECT " + """" + fo + """" + " from " + """" + fn + """" + " where " + """" + fl + """" + "='" & MyComponents(iContA) & "' or " + """" + fm + """" + "= '" & MyComponents(iContA)) & "'"
-                   Set rs = Conn.execute("SELECT " + """" + "OBJECT_ID_" + """" + " from " + """" + "WATERLINES" + """" + " where " + """" + "INITIALCOMPONENT" + """" + "=" & MyComponents(iContA) & " or " + """" + "FINALCOMPONENT" + """" + "= " & MyComponents(iContA))
-                 
-                  End If
-                  While Not rs.EOF
-                     ReDim Preserve MyLocalLines(iLn)
-                     MyLocalLines(iLn) = rs!Object_id_
-                     iLn = iLn + 1
-                     rs.MoveNext
-                  Wend
-                  iLn = iLn - 1
-                  rs.Close
-                  Set rs = Nothing
-                  For iPnt = 0 To iLn
-                     SubSELECTRede MyLocalLines(iPnt)
-                  Next
-
-               End If
-            Else
-               rs.Close
-               Set rs = Nothing
-            End If
-         Next
-      Else
-         rs.Close
-         Set rs = Nothing
-      End If
-   End If
-   If Not (rs Is Nothing) Then
-      If rs.State = adStateOpen Then rs.Close
-   End If
-   Set rs = Nothing
-   Exit Function
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset
+    Dim iContA As Integer, iContB As Integer
+    Dim MyLocalLines() As String, iLn As Integer, iPnt
+    Dim MyComponents(1) As String
+    Dim ACHOU As Boolean
+    Dim rsType As ADODB.Recordset
+    Dim fg As String
+    Dim fh As String
+    Dim fi As String
+    Dim fj As String
+    Dim fl As String
+    Dim fm As String
+    Dim fn As String
+    Dim fo As String
+    Dim ga As String
+    Dim ga2 As String
+    
+    Set rsType = New ADODB.Recordset
+    'Obtem todos os tipos de componentes de rede (nós da rede) que podem ser cadastrados
+    If frmCanvas.TipoConexao <> 4 Then
+        'Caso seja SQLServer ou Oracle
+        rsType.Open "SELECT ID_TYPE,DESCRIPTION_,SPECIFICATION_ FROM WATERCOMPONENTSTYPES", Conn, adOpenDynamic, adLockReadOnly
+    Else
+        fg = "ID_TYPE"
+        fh = "DESCRIPTION_"
+        fi = "SPECIFICATION_"
+        fj = "WATERCOMPONENTSTYPES"
+        fl = "INITIALCOMPONENT"
+        fm = "FINALCOMPONENT"
+        fn = "WATERLINES"
+        fo = "OBJECT_ID_"
+        ga = "WATERLINES"
+        ga2 = "WATERCOMPONENTS"
+        'MsgBox "SELECT " + """" + fg + """" + "," + """" + fh + """" + "," + """" + fi + """" + " FROM " + """" + fj + ""
+        rsType.Open "SELECT " + """" + fg + """" + "," + """" + fh + """" + "," + """" + fi + """" + " FROM " + """" + fj + """" + "", Conn, adOpenDynamic, adLockOptimistic
+    End If
+    'verifica se a tabela contém registros, caso contrário não é possível realizar esta funcionalidade, existe erro na base de dados
+    If rsType.EOF = True Then
+        MsgBox "Não encontrou os tipos de componentes de rede existentes na tabela WATERCOMPONENTSTYPES. Saindo da funcionalidade."
+        Exit Function
+    End If
+    'obtem o número do nó inicial e o número do nó final do trecho de rede de água selecionado
+    If frmCanvas.TipoConexao <> 4 Then
+        'se SQLServer ou Oracle
+        Set rs = Conn.execute("SELECT InitialComponent,FinalComponent from waterlines where object_id_='" & Object_id_ & "'")
+    Else
+        'se Postgres
+        Set rs = Conn.execute("SELECT " + """" + fl + """" + "," + """" + fm + """" + " from " + """" + ga + """" + " where " + """" + fo + """" + "='" & Object_id_ & "'")
+    End If
+    If Not stopProcess Then
+        DoEvents
+        If Not rs.EOF Then
+            MyComponents(0) = rs(0)         'número do nó inicial do trecho de rede
+            MyComponents(1) = rs(1)         'número do nó final do trecho de rede
+            rs.Close                        'fecha a conexão que obteve os nós do trecho de rede
+            Set rs = Nothing
+            'processa para os dois nós
+            For iContA = 0 To 1
+continuaFor:
+                'obtem o tipo de nó a partir do nó inicial (primeira passada pelo For), e a partir do nó final (segunda passada pelo For), para saber se é um registro e deve parar a procura
+                If frmCanvas.TipoConexao <> 4 Then
+                    'se SQLServer ou Oracle
+                    Set rs = Conn.execute("SELECT iD_type from watercomponents where object_id_='" & MyComponents(iContA) & "'")
+                Else
+                    'se Postgres
+                    Set rs = Conn.execute("SELECT " + """" + fg + """" + " from " + """" + ga2 + """" + " where " + """" + fo + """" + "='" & MyComponents(iContA) & "'")
+                End If
+                'verifica em WATERCOMPONENTS se encontrou o nó inicial ou final (dependendo da passagem do For) que estava especificado na tabela WATERLINES
+                If Not rs.EOF Then
+                    'encontrou o nó em WATERCOMPONENTS que WATERLINES dizia existir (inicial ou final dependendo da passagem do For)
+                    ACHOU = False
+                    rsType.Filter = "ID_TYPE='" & rs!id_Type & "'"
+                    If rsType.EOF = False Then
+                        If Trim(rsType!Specification_) = "VALVE" Then
+                            ACHOU = True
+                        End If
+                    End If
+                    'O PROBLEMA ESTÁ AQUI POIS QUANDO ELE ACHA UM REGISTRO ELE ABANDONA SE PROCURAR O OUTRO LADO
+                    If ACHOU = True Then 'valor original = 1 mas não há nada cadastrado como tipo 1
+                        If iContA = 0 Then
+                            iContA = 1
+                            GoTo continuaFor:
+                        End If
+                        'Exit For
+                    Else
+                        rs.Close
+                        Set rs = Nothing
+                        If frmCanvas.TipoConexao <> 4 Then
+                            Set rs = Conn.execute("SELECT object_id_ from waterlines where InitialComponent=" & MyComponents(iContA) & " or FinalComponent= " & MyComponents(iContA))
+                        Else
+                            ' Set rs = Conn.execute("SELECT " + """" + fo + """" + " from " + """" + fn + """" + " where " + """" + fl + """" + "='" & MyComponents(iContA) & "' or " + """" + fm + """" + "= '" & MyComponents(iContA)) & "'"
+                            Set rs = Conn.execute("SELECT " + """" + "OBJECT_ID_" + """" + " from " + """" + "WATERLINES" + """" + " where " + """" + "INITIALCOMPONENT" + """" + "=" & MyComponents(iContA) & " or " + """" + "FINALCOMPONENT" + """" + "= " & MyComponents(iContA))
+                        End If
+                        While Not rs.EOF
+                            ReDim Preserve MyLocalLines(iLn)
+                            MyLocalLines(iLn) = rs!Object_id_
+                            iLn = iLn + 1
+                            rs.MoveNext
+                        Wend
+                        iLn = iLn - 1
+                        rs.Close
+                        Set rs = Nothing
+                        For iPnt = 0 To iLn
+                            SubSELECTRede MyLocalLines(iPnt)
+                        Next
+                    End If
+                Else
+                    'não encontrou o nó em WATERCOMPONENTS, existe uma inconsistência no banco de dados
+                    MsgBox "Não foi encontrado o nó em WATERCOMPONETS de número " & MyComponents(iContA) & "O trecho de rede número " & Object_id_ & " com nó inicial " & MyComponents(0) & " e nó final " & MyComponents(1) & " foi detectada uma inconsistência na base de dados. Rodar o ValidaBase e analisar o arquivo de log gerado pelo mesmo."
+                    rs.Close
+                    Set rs = Nothing
+                End If
+            Next
+        Else
+            rs.Close
+            Set rs = Nothing
+        End If
+    End If
+    If Not (rs Is Nothing) Then
+        If rs.State = adStateOpen Then
+            rs.Close
+        End If
+    End If
+    Set rs = Nothing
+    Exit Function
 
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-       
       PrintErro "clsGeoReference", "Public Function DeleteTextObjectWithInsertText", CStr(Err.Number), CStr(Err.Description), True
-   
    End If
-   
 End Function
 
 Private Sub SubSELECTRede(Object_id_ As String)

@@ -187,12 +187,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             AutoSize        =   2
-            TextSave        =   "27/11/2012"
+            TextSave        =   "29/11/2012"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             AutoSize        =   2
-            TextSave        =   "11:48"
+            TextSave        =   "18:19"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1828,12 +1828,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.FileName, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
            End If
         End With
     Else
@@ -2346,20 +2346,13 @@ Private Sub TabStrip1_Click()
    End If
    
 End Sub
-
+'Monitoramento dos eventos da barra de ícones. Evento de clique na barra de ferramentas
+'
+'
+'
 Public Sub tbToolBar_ButtonClick(ByVal Button As MSComctlLib.Button)
-
-''******** MONITORAMENTO DE EVENTOS ********
 'If blnMonitorar = True Then
-'    Close #2
-'    Open App.path & "\UserMonitor.txt" For Append As #2
-'    Print #2, Now & " frmMain - Public Sub tbToolBar_ButtonClick"
-'    Close #2
-'End If
-''**************** FIM *********************
-
-On Error GoTo Trata_Erro
-'Evento de clique na barra de ferramentas
+    On Error GoTo Trata_Erro
     Select Case Button.key
         Case "knew", ""
            mnuOpen_Click
@@ -2377,10 +2370,7 @@ Trata_Erro:
         Err.Clear
         Exit Sub
     Else
-         
-         PrintErro CStr(Me.Name), "Public Sub tbToolBar_ButtonClick()", CStr(Err.Number), CStr(Err.Description), True
-         
-        
+        PrintErro CStr(Me.Name), "Public Sub tbToolBar_ButtonClick()", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Sub
 

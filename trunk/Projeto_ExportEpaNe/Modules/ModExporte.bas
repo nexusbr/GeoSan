@@ -847,7 +847,7 @@ Sub AbrirEstruturaExporteRede()
     rsNosExportados.Fields.Append "id", adVarChar, 255
     rsNosExportados.Open
 End Sub
-'
+'Gera o arquivo de saída .INP que o Epanet lê
 '
 '
 Sub GeraArquivo_de_Saida()
@@ -866,6 +866,7 @@ On Error GoTo Trata_Erro
    ' "PIPES"
    ' "TAGS"
    ' "DEMANDS"
+   ' "STATUS"
    ' "PATTERNS"
    ' "CURVES"
    ' "CONTROLS"
@@ -1084,6 +1085,30 @@ Dim pos As Integer
              intLinhaCod = 22
           End If
        End With
+       
+       'grava no arquivo as Status
+       'esta gravação é realizada para facilitar a simulação hidráulica no Epanet, evitando que o usuário tenha que abrir manualmente os registros para iniciar uma simulação completa. Depois ele fecha os registros que achar necessário
+        With rsValves
+          .Filter = ""
+          If .RecordCount > 0 Then
+             .MoveFirst                     'pula o primeiro registro que é o cabeçalho
+             intLinhaCod = 200
+             'imprime o cabeçalho
+             Print #1, ""
+             Print #1, "[STATUS]"
+             Print #1, ";ID                 Status/Setting"
+             str = ""
+             intLinhaCod = 210
+             While Not .EOF
+                str = .Fields(0).Value & Chr(vbKeyTab) & Chr(vbKeyTab) & "Open"     'prepara para impressão somente o número da válvula e o status da mesma que está aberta
+                Print #1, str & ";"
+                str = ""
+                .MoveNext                   'vai para a próxima válvula
+             Wend
+             intLinhaCod = 220
+          End If
+        End With
+       
        
        'grava no arquivo as Pipes
        

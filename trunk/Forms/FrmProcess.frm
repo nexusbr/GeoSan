@@ -70,21 +70,21 @@ Private Sub cmdCancel_Click()
       stopProcess = True
    End If
 End Sub
-
-
+'Função destinada a localizar todos os trechos de rede que estão conectados até que seja encontrato um registro.
+'Um registro é onde posso abrir e fechar, uma válvula não tenho a possibilidade de abrir e fechar. Na verdade ele vai procurar registros e não válvulas
+'
+'Object_id_ - do trecho que foi selecionado
+'tcs - canvas
+'
 Public Function FindValvulas(Object_id_ As String, tcs As TeCanvas) As String
    'LoozeXP1.InitSubClassing
    txtRecord = 0
-   Objectid = Object_id_ 'rede de agua selecionada
+   Objectid = Object_id_                                    'rede de agua selecionada
    Me.Show
    Set cgeo.tcs = tcs
-   
-   tcs.setDetachedLineStyle 3, 1, RGB(255, 255, 0), True
-   tcs.addDetachedIds tpLINES, , Object_id_
-   
-   cgeo.object_ids = "'" & Objectid & "'"
-   
-   
+   tcs.setDetachedLineStyle 3, 1, RGB(255, 255, 0), True    'método para indicar o estilo de visual de plotagem para as próximas linhas que serão destacadas. Somente serão aplicadas a este estilo as próximos linhas adicionadas à lista de destacadas. Vai destacar em amarelo.
+   tcs.addDetachedIds tpLINES, , Object_id_                 'método para destacar as geometrias que possuem a identificação especificada.
+   cgeo.object_ids = "'" & Objectid & "'"                   'obtem os object_id_s
    cgeo.SELECTRede Objectid
    FindValvulas = cgeo.object_ids
    tcs.plotView

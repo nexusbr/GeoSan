@@ -118,8 +118,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
- Dim conexao As New ADODB.connection
-        Dim mPROVEDOR As String
+Dim conexao As New ADODB.connection
+Dim mPROVEDOR As String
 Dim mSERVIDOR As String
 Dim mPORTA As String
 Dim mBANCO As String
@@ -132,6 +132,7 @@ Dim connection As Integer
 'Função para apresentar os usuários afetados em uma manobra de rede
 '
 'init -
+'Object_id_trecho - string com todos os object_id_s dos trechos de rede em que serão consultados os ramais pertencentes aos mesmos
 '
 Public Function init(Object_id_trecho As String) As Boolean
     On Error GoTo Trata_Erro
@@ -139,7 +140,11 @@ Public Function init(Object_id_trecho As String) As Boolean
     Dim TABELACOMERCIAL As String
     Dim count2 As Integer
     Dim lig As String
-    Dim str As String, rs As ADODB.Recordset, itmx As ListItem, QtdeLig As Integer, rs2 As ADODB.Recordset
+    Dim str As String
+    Dim rs As ADODB.Recordset               'todas as ligações que estão localizadas nos trechos que estão conectados até encontrar uma válvula, os quais os object_id_s já foram fornecidos na estrada desta função
+    Dim itmx As ListItem                    'lista com os dados dos consumidores que serão afetados pela manobra
+    Dim QtdeLig As Integer                  'quantidade total de consumidores afetados pela manobra
+    Dim rs2 As ADODB.Recordset              'da tabela que possui os dados temporários das ligações
     Dim fg As String
     Dim fh As String
     Dim fi As String
@@ -174,12 +179,10 @@ Public Function init(Object_id_trecho As String) As Boolean
             connection = 10
         End If
     End If
+    'prepara consulta de todas as ligações que estão localizadas nos trechos que estão conectados até encontrar uma válvula, os quais os object_id_s já foram fornecidos na estrada desta função
     If frmCanvas.TipoConexao <> 4 Then
         'se for Oracle ou SQLServer
         str = "SELECT ramais_agua_ligacao.nro_ligacao from ramais_agua_ligacao inner join ramais_agua on ramais_agua.object_id_=ramais_agua_ligacao.object_id_ where object_id_trecho in(" & Object_id_trecho & ")"
-        Open "d:\temp.txt" For Output As #1
-        Print #1, str
-        Close #1
         Set rs = Conn.execute(str)
     Else
         str = "SELECT " + """" + fh + """" + "." + """" + fi + """" + " from " + """" + fh + """" + "  inner join " + """" + fg + """" + "  on " + """" + fg + """" + "." + """" + fl + """" + "=" + """" + fh + """" + "." + """" + fl + """" + " where " + """" + fm + """" + " in(" & Object_id_trecho & ")"
@@ -191,7 +194,7 @@ Public Function init(Object_id_trecho As String) As Boolean
       ' rs.MoveNext
     'Wend
     'rs.Close
-    TABELACOMERCIAL = GetQueryProcess(19)
+    TABELACOMERCIAL = GetQueryProcess(19)                               'obtem o nome da tabela que possui os dados temporários das ligações
     If frmCanvas.TipoConexao <> 4 Then
         'é Oracle ou SQLServer
         Dim dw As String
@@ -201,12 +204,13 @@ Public Function init(Object_id_trecho As String) As Boolean
         'é Postgres
         Set rs2 = conexao.execute("SELECT  * FROM " + """" + "GS_TEMP" + """" + "")
     End If
+    'conta o número total de linhas na tabela GS_TEMP
     While Not rs2.EOF
         count2 = count2 + 1
         rs2.MoveNext
     Wend
     rs2.Close
-    If count2 = 1 Then
+    If count2 >= 1 Then
         If frmCanvas.TipoConexao <> 4 Then
             ConnSec.execute "Delete  From " & TABELACOMERCIAL
         Else
@@ -217,15 +221,20 @@ Public Function init(Object_id_trecho As String) As Boolean
     Dim ddd As String
     Dim rsNro_Ligacao As ADODB.Recordset
     Set rsNro_Ligacao = New ADODB.Recordset
+    'abre o recordset da tabela temporária de ligações cujo nome está definido no banco de dados em GetQueryProcess(19)
     If frmCanvas.TipoConexao = 1 Then
+        'é SQLServer
         rsNro_Ligacao.Open TABELACOMERCIAL, ConnSec, adOpenKeyset, adLockOptimistic, adCmdTable
     ElseIf frmCanvas.TipoConexao = 2 Then
+        'é Oracle
         ddd = "SELECT  * FROM GS_TEMP"
         rsNro_Ligacao.Open ddd, ConnSec, adOpenDynamic, adLockOptimistic
     Else
+        'é Postgres
         ddd = "SELECT  * FROM " + """" + "GS_TEMP" + """" + ""
         rsNro_Ligacao.Open ddd, conexao, adOpenDynamic, adLockOptimistic
     End If
+    'adiciona os números de todas as ligações conectadas aos trechos de rede afetados pela pesquisa (nro_ligacao)
     While Not rs.EOF
        rsNro_Ligacao.AddNew
        rsNro_Ligacao.Fields(0).value = rs.Fields(0).value
@@ -242,35 +251,41 @@ Public Function init(Object_id_trecho As String) As Boolean
     '   txtQde = QtdeLig
     ' Me.Show vbModal
     ' 'LoozeXP1.EndWinXPCSubClassing
+    'prepara a querie para obter os dados das listas das ligações afetadas pela manobra
     str = GetQueryProcess(18)
     If frmCanvas.TipoConexao <> 4 Then
+        'caso SQLServer ou Oracle
         numeroErro = "String conexão: " & str
         Set rs = ConnSec.execute(str)
     Else
+        'caso Postgres
         Set rs = conexao.execute(str)
     End If
     'Set rs = ConnSec.execute("SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO")
+    'prepara a lista para ser apresentada na caixa de diálogo para o usuário
     If frmCanvas.TipoConexao <> 4 Then
-        Lv.ListItems.Clear
+        'caso SQLServer ou Oracle
+        lv.ListItems.Clear
         While Not rs.EOF
-            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
+            Set itmx = lv.ListItems.Add(, , rs.Fields(0).value)
             itmx.SubItems(1) = rs.Fields(1).value
             itmx.SubItems(2) = rs.Fields(2).value
             itmx.SubItems(3) = rs.Fields(3).value
             itmx.SubItems(4) = rs.Fields(4).value
-            QtdeLig = QtdeLig + 1
+            QtdeLig = QtdeLig + 1                                   'incrementa a quantidade total de ligações
             rs.MoveNext
         Wend
         rs.Close
     Else
-        Lv.ListItems.Clear
+        'caso Postgres
+        lv.ListItems.Clear
         While Not rs.EOF
-            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
+            Set itmx = lv.ListItems.Add(, , rs.Fields(0).value)
             itmx.SubItems(1) = rs.Fields(1).value
             itmx.SubItems(2) = rs.Fields(5).value
             itmx.SubItems(3) = rs.Fields(6).value
             itmx.SubItems(4) = rs.Fields(7).value
-            QtdeLig = QtdeLig + 1
+            QtdeLig = QtdeLig + 1                                   'incrementa a quantidade total de ligações
             rs.MoveNext
         Wend
          rs.Close
@@ -304,12 +319,12 @@ On Error GoTo Trata_Erro
     cdl1.ShowSave
     If cdl1.FileName <> "" Then
         Open cdl1.FileName For Output As #1
-        For a = 1 To Lv.ListItems.count
-            Print #1, Lv.ListItems.Item(a).Text & ";" & _
-                        Lv.ListItems.Item(a).SubItems(1) & ";" & _
-                        Lv.ListItems.Item(a).SubItems(2) & ";" & _
-                        Lv.ListItems.Item(a).SubItems(3) & ";" & _
-                        Lv.ListItems.Item(a).SubItems(4)
+        For a = 1 To lv.ListItems.count
+            Print #1, lv.ListItems.Item(a).Text & ";" & _
+                        lv.ListItems.Item(a).SubItems(1) & ";" & _
+                        lv.ListItems.Item(a).SubItems(2) & ";" & _
+                        lv.ListItems.Item(a).SubItems(3) & ";" & _
+                        lv.ListItems.Item(a).SubItems(4)
         Next
         Close #1
         MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.FileName, vbInformation

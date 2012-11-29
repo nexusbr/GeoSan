@@ -1,0 +1,3 @@
+        Open "d:\temp.txt" For Output As #1
+        Print #1, str
+        Close #1

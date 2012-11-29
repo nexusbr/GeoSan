@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{18576B0E-A129-4A50-9930-59E18A6FE5E1}#1.0#0"; "TeComCanvas.dll"
-Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TECOMD~1.DLL"
+Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
 Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Begin VB.Form frmCanvas 
@@ -773,9 +773,10 @@ Trata_Erro:
     
    End If
 End Sub
-
-
-'Apartir de hoje comentando o codigo
+'Rotina para determinar qual o botão foi selecionado pelo usuário
+'
+'
+'
 Public Sub Tb_SELECT(ByVal Button As String)
 On Error GoTo Trata_Erro 'trata erros
 
@@ -865,14 +866,14 @@ On Error GoTo Trata_Erro 'trata erros
 
 
          Case Else
-            If TCanvas.getCurrentLayer <> "" Then 'configura o plano corrente e se for diferente da falta de seleção
-               TeDatabase1.setCurrentLayer TCanvas.getCurrentLayer 'aciona atabela para modificar o plano e configura um plano corrente
-               Set Tr.tcs = TCanvas ' seta e TCanvas passa ser valor para a variável Tr.tcs
-               Set Tr.tdb = TeDatabase1 'seta e TeDatabase1 passa ser valor para a variável Tr.tdb
-               Set Tr.tdbcon = TeDatabase2 'seta e TeDatabase2 passa ser valor para a variável Tr.tdbcon
-               Set Tr.tdbconref = TeDatabase3 'seta e TeDatabase3 passa ser valor para a variável Tr.tdbconref
-               Set Tr.CtrlMgr = FrmMain.Manager1 'CtrlMgr recebe o form.Manager1
-                      'TCanvas.getRepresentationTheme(
+            If TCanvas.getCurrentLayer <> "" Then                   'configura o plano corrente e se for diferente da falta de seleção
+               TeDatabase1.setCurrentLayer TCanvas.getCurrentLayer  'aciona atabela para modificar o plano e configura um plano corrente
+               Set Tr.tcs = TCanvas                                 'seta e TCanvas passa ser valor para a variável Tr.tcs
+               Set Tr.tdb = TeDatabase1                             'seta e TeDatabase1 passa ser valor para a variável Tr.tdb
+               Set Tr.tdbcon = TeDatabase2                          'seta e TeDatabase2 passa ser valor para a variável Tr.tdbcon
+               Set Tr.tdbconref = TeDatabase3                       'seta e TeDatabase3 passa ser valor para a variável Tr.tdbconref
+               Set Tr.CtrlMgr = FrmMain.Manager1                    'CtrlMgr recebe o form.Manager1
+                                                                    'TCanvas.getRepresentationTheme(
                Select Case Button ' selecione uma das opções
                   
                   Case "kCalcularArea"

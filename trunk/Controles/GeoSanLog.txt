@@ -286,3 +286,25 @@ DESCRIÇÃO      Query timeout expired
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           29/11/2012 11:48:52 
+USUÁRIO        Administrador
+VERSÃO         06.00.07.12
+MÓDULO         frmConsumidoresDesabastecidos
+EVENTO         Falha em Function init(Object_id_trecho As String), Erro não identificado
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionWrite (send()).]General network error. Check your network documentation.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           29/11/2012 13:14:23 
+USUÁRIO        Administrador
+VERSÃO         06.00.07.12
+MÓDULO         clsTerraLib
+EVENTO         Public Function Delete
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+
