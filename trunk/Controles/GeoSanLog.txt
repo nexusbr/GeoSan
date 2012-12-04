@@ -308,3 +308,91 @@ DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           04/12/2012 11:46:50 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('25720','25739','25712')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:00:59 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('37796')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:01:43 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('25720','25739','25712')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:01:50 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('37796')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:01:55 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('41130')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:02:03 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('41130')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:13:53 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('25720','25739','25712')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/12/2012 15:43:16 
+USUÁRIO        Administrador
+VERSÃO         06.08.08
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('39250','219991','299340')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
+
+-----------------------------------------------------------------------------------------------------
+

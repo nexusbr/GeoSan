@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmTheme 
    BorderStyle     =   4  'Fixed ToolWindow
@@ -313,7 +313,6 @@ Begin VB.Form frmTheme
             _ExtentX        =   2408
             _ExtentY        =   2037
             _Version        =   393217
-            Enabled         =   -1  'True
             TextRTF         =   $"frmTheme.frx":0074
          End
       End
@@ -932,7 +931,7 @@ Private rs As ADODB.Recordset, NameIcon As String, InserirIcon As Boolean, Color
 Private blnMudaFiltro As Boolean
 Dim rs2 As New ADODB.Recordset
 Dim intTema As Integer
- Dim ThemeName2 As String
+Dim ThemeName2 As String                        'tema que está ativo na vista
 Public LayerAtivo As String
 Dim conexao As New ADODB.Connection
 Dim man2 As Object
@@ -1861,620 +1860,484 @@ End If
 RetornaID = atributo
 
 End Function
-
-
-
-
-
-
-
+'Função responsável por retornar o nome da coluna a ser pesquisado na tabela, para o filtro da cláusula Where da tabela Theme_Id
+'
+'
 Public Function Retorna(nome As String)
-Dim atributo As String
-
-
-
-
-If (nome = "TIPO") Then
-atributo = "ID_TYPE"
-End If
-
-If (nome = "[COTA DO TERRENO]") Then
-atributo = "INITIALGROUNDHEIGHT"
-End If
-
-
-If (nome = "[DEMANDA]") Then
-atributo = "DEMAND"
-End If
-If (nome = "[NÓ DE CÁLCULO]") Then
-atributo = "CALCULE_NODE"
-End If
-
-
-If (nome = "VALIDADE") Then
-atributo = "INFORMATIONVALIDITY"
-End If
-If (nome = "Observação") Then
-atributo = "NOTES"
-End If
-
-If (nome = "[NÃO_CONFORMIDADE]") Then
-atributo = "TROUBLE"
-End If
-
-If (nome = "[PADRÃO_CONSUMO]") Then
-atributo = "PATTERN"
-End If
-
-If (nome = "[SETOR]") Then
-atributo = "SECTOR"
-End If
-
-
-If (nome = "[TERRENO - COTA INICIAL]") Then
-
- If TypeConn <> 4 Then
- atributo = "INITIALGROUNDHEIGHT"
- Else
-atributo = "INITIALGROUNDHEIGHT"
-End If
-End If
-
-
-If (nome = "[COTA DO TERRENO]") Then
-
- If TypeConn <> 4 Then
- atributo = "INITIALGROUNDHEIGHT"
- Else
-atributo = "INITIALGROUNDHEIGHT"
-End If
-End If
-If (nome = "[COTA DO FUNDO]") Then
-
- If TypeConn <> 4 Then
- atributo = "FINALGROUNDHEIGHT"
- Else
-atributo = "FINALGROUNDHEIGHT"
-End If
-End If
-
-
-If (nome = "[TERRENO - COTA FINAL]") Then
-
- If TypeConn <> 4 Then
- atributo = "GROUNDHEIGHTFINAL"
- Else
-atributo = "FINALGROUNDHEIGHT"
-End If
-End If
-
-
-If (nome = "[TERRENO - COTA FINAL]") Then
-atributo = "FINALGROUNDHEIGHT"
-End If
-
-If (nome = "[PEÇA - COTA INICIAL]") Then
-atributo = "INITIALTUBEDEEPNESS"
-End If
-
-If (nome = "[ANO DE FABRICAÇÃO]") Then
-atributo = "YEAROFCONSTRUCTION"
-End If
-
-
-
-If (nome = "[PEÇA - COTA FINAL]") Then
-atributo = "FINALTUBEDEEPNESS"
-End If
-
-If (nome = "[DIAMETRO INTER.(MM)]") Then
-atributo = "INTERNALDIAMETER"
-End If
-
-If (nome = "[DIAMETRO EXT.(MM)]") Then
-atributo = "EXTERNALDIAMETER"
-End If
-
-If (nome = "[INICIAL COMPONENTE]") Then
-atributo = "INITIALCOMPONENT"
-End If
-
-If (nome = "[FINAL COMPONENTE]") Then
-atributo = "FINALCOMPONENT"
-End If
-
-If (nome = "DENSIDADE") Then
-atributo = "THICKNESS"
-End If
-
-If (nome = "MATERIAL") Then
-atributo = "MATERIAL"
-End If
-
-If (nome = "[COMPRIMENTO(M)]") Then
-atributo = "LENGTH"
-End If
-
-If (nome = "[COMPR. CALCULADO]") Then
-atributo = "LENGTHCALCULATED"
-End If
-
-If (nome = "FORNECEDOR") Then
-atributo = "SUPPLIER"
-End If
-
-If (nome = "FABRICANTE") Then
-atributo = "MANUFACTURER"
-End If
-
-If (nome = "LOCALIZAÇÃO") Then
-atributo = "LOCATION"
-End If
-
-If (nome = "ESTADO") Then
-atributo = "STATE"
-End If
-
-
-If (nome = "RUGOSIDADE") Then
-atributo = "ROUGHNESS"
-End If
-
-If (nome = "SETOR") Then
-atributo = "SECTOR"
-End If
-
-If (nome = "[LADO_DA_RUA]") Then
-atributo = "SIDESTREET"
-End If
-
-
-If (nome = "[DISTÂNCIA_DA_DIVISA]") Then
-atributo = "DIVIDEDDISTANCE"
-End If
-
-If (nome = "USUÁRIO") Then
-atributo = "USUARIO_LOG"
-End If
-
-If (nome = x) Then
-atributo = "MANUFACTURER"
-End If
-
-If (nome = "LINHA") Then
-atributo = "LINE_ID"
-End If
-
-
-
-If (nome = "DATA_DE_INSTALAÇÃO") Then
-atributo = "DATEINSTALLATION"
-End If
-
-
-
-
-
-
-
-Retorna = atributo
-
-End Function
-
-
-
-Private Sub cmdModificar_Click()
-On Error GoTo Trata_Erro
-   
-   
-Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
-Dim mPROVEDOR As String
-Dim mSERVIDOR As String
-Dim mPORTA As String
-Dim mBANCO As String
-Dim mUSUARIO As String
-Dim Senha As String
-Dim decriptada As String
-Dim conexao As New ADODB.Connection
- 
-If TypeConn = 4 Then
-
-mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\GEOSAN.ini")
-mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\GEOSAN.ini")
-mBANCO = ReadINI("CONEXAO", "BANCO", App.Path & "\GEOSAN.ini")
-mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.Path & "\GEOSAN.ini")
-Senha = ReadINI("CONEXAO", "SENHA", App.Path & "\GEOSAN.ini")
-usuario = ReadINI("CONEXAO", "USER", App.Path & "\GEOSAN.ini")
-decriptada = FunDecripta(Senha)
-strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + decriptada + "; ByteaAsLongVarBinary=1;"
-
- conexao.Open strConn
-
-  End If
-  
-  
-  
-  
-  
-  
-  
-   Dim Filtro As String
-   
-    If cmdModificar.Caption = "Modificar" Then
+    Dim atributo As String
     
+    If (nome = "TIPO") Then
+        atributo = "ID_TYPE"
+    End If
+    If (nome = "[COTA DO TERRENO]") Then
+        atributo = "INITIALGROUNDHEIGHT"
+    End If
+    If (nome = "[DEMANDA]") Then
+        atributo = "DEMAND"
+    End If
+    If (nome = "[NÓ DE CÁLCULO]") Then
+        atributo = "CALCULE_NODE"
+    End If
+    If (nome = "VALIDADE") Then
+        atributo = "INFORMATIONVALIDITY"
+    End If
+    If (nome = "Observação") Then
+        atributo = "NOTES"
+    End If
+    If (nome = "[NÃO_CONFORMIDADE]") Then
+        atributo = "TROUBLE"
+    End If
+    If (nome = "[PADRÃO_CONSUMO]") Then
+        atributo = "PATTERN"
+    End If
+    If (nome = "[SETOR]") Then
+        atributo = "SECTOR"
+    End If
+    If (nome = "[TERRENO - COTA INICIAL]") Then
+        If TypeConn <> 4 Then
+            atributo = "INITIALGROUNDHEIGHT"
+        Else
+            atributo = "INITIALGROUNDHEIGHT"
+        End If
+    End If
+    If (nome = "[COTA DO TERRENO]") Then
+        If TypeConn <> 4 Then
+            atributo = "INITIALGROUNDHEIGHT"
+        Else
+            atributo = "INITIALGROUNDHEIGHT"
+        End If
+    End If
+    If (nome = "[COTA DO FUNDO]") Then
+        If TypeConn <> 4 Then
+            atributo = "FINALGROUNDHEIGHT"
+        Else
+            atributo = "FINALGROUNDHEIGHT"
+        End If
+    End If
+    If (nome = "[TERRENO - COTA FINAL]") Then
+        If TypeConn <> 4 Then
+            atributo = "GROUNDHEIGHTFINAL"
+        Else
+            atributo = "FINALGROUNDHEIGHT"
+        End If
+    End If
+    If (nome = "[TERRENO - COTA FINAL]") Then
+        atributo = "FINALGROUNDHEIGHT"
+    End If
+    If (nome = "[PEÇA - COTA INICIAL]") Then
+        atributo = "INITIALTUBEDEEPNESS"
+    End If
+    If (nome = "[ANO DE FABRICAÇÃO]") Then
+        atributo = "YEAROFCONSTRUCTION"
+    End If
+    If (nome = "[PEÇA - COTA FINAL]") Then
+        atributo = "FINALTUBEDEEPNESS"
+    End If
+    If (nome = "[DIAMETRO INTER.(MM)]") Then
+        atributo = "INTERNALDIAMETER"
+    End If
+    If (nome = "[DIAMETRO EXT.(MM)]") Then
+        atributo = "EXTERNALDIAMETER"
+    End If
+    If (nome = "[INICIAL COMPONENTE]") Then
+        atributo = "INITIALCOMPONENT"
+    End If
+    If (nome = "[FINAL COMPONENTE]") Then
+        atributo = "FINALCOMPONENT"
+    End If
+    If (nome = "DENSIDADE") Then
+        atributo = "THICKNESS"
+    End If
+    If (nome = "MATERIAL") Then
+        atributo = "MATERIAL"
+    End If
+    If (nome = "[COMPRIMENTO(M)]") Then
+        atributo = "LENGTH"
+    End If
+    If (nome = "[COMPR. CALCULADO]") Then
+        atributo = "LENGTHCALCULATED"
+    End If
+    If (nome = "FORNECEDOR") Then
+        atributo = "SUPPLIER"
+    End If
+    If (nome = "FABRICANTE") Then
+        atributo = "MANUFACTURER"
+    End If
+    If (nome = "LOCALIZAÇÃO") Then
+        atributo = "LOCATION"
+    End If
+    If (nome = "ESTADO") Then
+        atributo = "STATE"
+    End If
+    If (nome = "RUGOSIDADE") Then
+        atributo = "ROUGHNESS"
+    End If
+    If (nome = "SETOR") Then
+        atributo = "SECTOR"
+    End If
+    If (nome = "[LADO_DA_RUA]") Then
+        atributo = "SIDESTREET"
+    End If
+    If (nome = "[DISTÂNCIA_DA_DIVISA]") Then
+        atributo = "DIVIDEDDISTANCE"
+    End If
+    If (nome = "USUÁRIO") Then
+        atributo = "USUARIO_LOG"
+    End If
+    If (nome = x) Then
+        atributo = "MANUFACTURER"
+    End If
+    If (nome = "LINHA") Then
+        atributo = "LINE_ID"
+    End If
+    If (nome = "DATA_DE_INSTALAÇÃO") Then
+        atributo = "DATEINSTALLATION"
+    End If
+    If (nome = "PROFUNDIDADE_RAMAL") Then
+        atributo = "PROFUNDIDADE_RAMAL"
+    End If
+    If (nome = "HIDROMETRADO") Then
+        atributo = "HIDROMETRADO"
+    End If
+    If (nome = "ECONOMIAS") Then
+        atributo = "ECONOMIAS"
+    End If
+    If (nome = "CONSUMO_LPS") Then
+        atributo = "CONSUMO_LPS"
+    End If
+    If (nome = "DISTANCIA_TESTADA") Then
+        atributo = "DISTANCIA_TESTADA"
+    End If
+    If (nome = "DISTANCIA_LADO") Then
+        atributo = "DISTANCIA_LADO"
+    End If
+    If (nome = "COMPRIMENTO_RAMAL") Then
+        atributo = "COMPRIMENTO_RAMAL"
+    End If
+    If (nome = "USUARIO_LOG") Then
+        atributo = "USUARIO_LOG"
+    End If
+    Retorna = atributo
+End Function
+'Esta rotina modifica o filtro de pesquisa das entidades geográficas, ou seja a coluna [generate_attribute_where] da tabela [te_theme]
+'o filtro (cláusula where) colocado nesta coluna, fará com que sejam apresentados apenas as geometrias que satisfação esta cláusula
+'
+'
+'
+Private Sub cmdModificar_Click()
+    On Error GoTo Trata_Erro
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+    Dim mPROVEDOR As String
+    Dim mSERVIDOR As String
+    Dim mPORTA As String
+    Dim mBANCO As String
+    Dim mUSUARIO As String
+    Dim Senha As String
+    Dim decriptada As String
+    Dim conexao As New ADODB.Connection
+    Dim Filtro As String
+ 
+    If TypeConn = 4 Then
+        'caso seja Postgres
+        mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\GEOSAN.ini")
+        mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\GEOSAN.ini")
+        mBANCO = ReadINI("CONEXAO", "BANCO", App.Path & "\GEOSAN.ini")
+        mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.Path & "\GEOSAN.ini")
+        Senha = ReadINI("CONEXAO", "SENHA", App.Path & "\GEOSAN.ini")
+        usuario = ReadINI("CONEXAO", "USER", App.Path & "\GEOSAN.ini")
+        decriptada = FunDecripta(Senha)
+        strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + decriptada + "; ByteaAsLongVarBinary=1;"
+        conexao.Open strConn
+    End If
+    If cmdModificar.Caption = "Modificar" Then
+        'Caso tenha selecionado o botão indicando que deseja alterar o filtro de pesquisa
         Me.chkFiltro.Value = 0
         Me.chkFiltro.Enabled = True
-        
         Me.cboColunas.Text = ""
         Me.cboColunas2.Text = ""
         Me.cboFiltro.Text = ""
         Me.cboFiltro2.Text = ""
         Me.cboOperador.Text = ""
         Me.cboOperador2.Text = ""
-        
         Me.chkFiltraData.Value = 0
         If ThemeName2 = "SEWERLINES" Or ThemeName2 = "SEWERCOMPONENTS" Then
-        
-               Me.txtDataInicio.Enabled = True
-        Me.txtDataFim.Enabled = True
-        Me.Label5.Enabled = True
-        Me.Label6.Enabled = True
-        Me.Label7.Enabled = True
-        
-        
-        
-         
-          chkFiltraData.Visible = True
-         Label7.Visible = True
-         Label6.Visible = True
-         Label5.Visible = True
-         txtDataInicio.Visible = True
-         txtDataFim.Visible = True
-        
-        
-        
-        
-        Me.chkFiltraData.Enabled = True
+            'se for esgoto ou nó de esgoto
+            Me.txtDataInicio.Enabled = True
+            Me.txtDataFim.Enabled = True
+            Me.Label5.Enabled = True
+            Me.Label6.Enabled = True
+            Me.Label7.Enabled = True
+            chkFiltraData.Visible = True
+            Label7.Visible = True
+            Label6.Visible = True
+            Label5.Visible = True
+            txtDataInicio.Visible = True
+            txtDataFim.Visible = True
+            Me.chkFiltraData.Enabled = True
         End If
         Me.Label5.Enabled = True
         Me.Label6.Enabled = True
         Me.Label7.Enabled = True
         Me.txtDataInicio.Text = ""
         Me.txtDataFim.Text = ""
-        
         Me.cmdModificar.Caption = "Salvar"
-    
     ElseIf cmdModificar.Caption = "Salvar" Then
-        
         'PARTE QUE SALVA FILTROS
-
         'LIMPA O FILTRO E LOG DE FILTROS ANTERIORES
         Dim rs As New ADODB.Recordset
-
-
-a = "NXGS_FILT_TEMA"
-b = "THEME_ID"
-
-If TypeConn <> 4 Then
-        rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
+        a = "NXGS_FILT_TEMA"            'nesta tabela estão armazenados todos os filtros selecionados por todos os usuários, os quais estão associados a um tema da tabela [theme_id]
+        b = "THEME_ID"
+        'localiza o filtro que foi anteriormente entrado pelo usuário na caixa de diálogo, o qual está associado a um tema (theme_id)
+        If TypeConn <> 4 Then
+            'caso SQLServer ou Oracle
+            rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
         Else
-        rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
+            'caso Postgres
+            rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
         End If
         If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
             rs.AddNew
             rs!theme_id = intTema
             rs.Update
             rs.Close
-Dim aa As String
-Dim bb As String
-
-
-If TypeConn <> 4 Then
-            rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
+            Dim aa As String
+            Dim bb As String
+            If TypeConn <> 4 Then
+                rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
             Else
-            rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
+                rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
             End If
         End If
-        
-        
         If TypeConn <> 4 Then
-        
-        If rs.EOF = False Then
-            If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
-                rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
-            Else
-                rs!FILT_1 = ""
+            'se SQLServer ou Oracle
+            If rs.EOF = False Then
+                'Atualiza na tabela [NXGS_FILT_TEMA] os filtros 1 e 2, o filtro 3 não está atualizando, é sempre zerado
+                'Isto registra apenas para cada usuário do GeoSan o filtro que está utilizando, não implica em nenhuma mudança de visualização
+                If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
+                    rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
+                Else
+                    rs!FILT_1 = ""
+                End If
+                If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
+                    rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
+                Else
+                    rs!FILT_2 = ""
+                End If
+                rs!FILT_3 = ""
+                rs.Update
             End If
-            
-            If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
-                rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
-            Else
-                rs!FILT_2 = ""
-            End If
-            
-            rs!FILT_3 = ""
-            rs.Update
-        End If
-        
         Else
-         If rs.EOF = False Then
-            If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
-                rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
-            Else
-                rs!FILT_1 = ""
+            'se Postgres
+            If rs.EOF = False Then
+                'Atualiza na tabela [NXGS_FILT_TEMA] os filtros 1 e 2, o filtro 3 não está atualizando, é sempre zerado
+                'Isto registra apenas para cada usuário do GeoSan o filtro que está utilizando, não implica em nenhuma mudança de visualização
+                If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
+                    rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
+                Else
+                    rs!FILT_1 = ""
+                End If
+                If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
+                    rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
+                Else
+                    rs!FILT_2 = ""
+                End If
+                rs!FILT_3 = ""
+                rs.Update
             End If
-            
-            If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
-                rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
-            Else
-                rs!FILT_2 = ""
-            End If
-            
-            rs!FILT_3 = ""
-            rs.Update
         End If
-        
-        End If
-        
-        
-        
         rs.Close
-        
-        
         'OS FILTROS 1 E 2 SÃO SALVOS PELO COMANDO ABAIXO
-        
         ' If LayerAtivo = "RAMAIS_AGUA" Then
-         If ThemeName2 = "WATERLINES" Or ThemeName2 = "SEWERLINES" Or ThemeName2 = "WATERCOMPONENTS" Or ThemeName2 = "SEWERCOMPONENTS" Then
-           
+        If ThemeName2 = "WATERLINES" Or ThemeName2 = "SEWERLINES" Or ThemeName2 = "WATERCOMPONENTS" Or ThemeName2 = "SEWERCOMPONENTS" Or ThemeName2 = "RAMAIS_AGUA" Or ThemeName2 = "RAMAIS_AGUA_LIGACAO" Then
+            'caso estivermos tratando de redes de água, esgoto, ou mesmo componentes de água ou esgoto
             FILT = Me.cboColunas.Text
-         
-            If FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS" Then 'RAMAIS_AGUA_LIGACAO
-               
-               tabela = "RAMAIS_AGUA_LIGACAO"
-            
+            tabela = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)                                'obtem o nome do tema ativo
+            'modifica o nome da tabela, pois quando o usuário seleciona o layer de ramais, são duas tabelas que estão associadas ao mesmo, a de ramais e a de ligações
+            If FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS" Then    'RAMAIS_AGUA_LIGACAO
+                tabela = "RAMAIS_AGUA_LIGACAO"
             ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
-            
-               tabela = "RAMAIS_AGUA"
-               
+                tabela = "RAMAIS_AGUA"
             End If
-
+            'verifica o sinal da primeira comparação da variável com o valor
             If Me.cboOperador.Text = "Igual" Then
-               sinal = "="
+                sinal = "="
             ElseIf Me.cboOperador.Text = "Maior" Then
-               sinal = ">"
+                sinal = ">"
             ElseIf Me.cboOperador.Text = "Menor" Then
-               sinal = "<"
+                sinal = "<"
             ElseIf Me.cboOperador.Text = "Diferente" Then
-               sinal = "<>"
+                sinal = "<>"
             End If
-            
             Dim sinal2 As String
-             If Me.cboOperador2.Text = "Igual" Then
-               sinal2 = "="
+            'verifica o sinal da segunda comparação da variável com o valor
+            If Me.cboOperador2.Text = "Igual" Then
+                sinal2 = "="
             ElseIf Me.cboOperador2.Text = "Maior" Then
-               sinal2 = ">"
+                sinal2 = ">"
             ElseIf Me.cboOperador2.Text = "Menor" Then
-               sinal2 = "<"
+                sinal2 = "<"
             ElseIf Me.cboOperador2.Text = "Diferente" Then
-               sinal2 = "<>"
+                sinal2 = "<>"
             End If
-            
-            
-            
-
-
-Dim aaa As String
-aaa = "OBJECT_ID_"
-a = "object_id"
-b = tabela
-Dim a12, a13 As String
-a12 = Retorna(Me.cboColunas.Text)
-a13 = RetornaID(Me.cboColunas.Text, Me.cboFiltro.Text)
-If TypeConn <> 4 Then
-            Filtro = "object_id in (select object_id_ from " & tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName) & " WHERE " + a12 + sinal & "'" & a13 & "'"
-Else
-
-
-            Filtro = """" + a + """" + " in (select " + """" + aaa + """" + " from " + """" + tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName) + """" + " WHERE" + """" + a12 + """" + sinal & "'" & a13 & "'"
-End If
-            
-            
-
-
-If Me.cboOperador2.Text <> "" Then
-
-If TypeConn <> 4 Then
-a12 = Retorna(Me.cboColunas2.Text)
-a13 = RetornaID2(Me.cboColunas2.Text, Me.cboFiltro2.Text)
-            Filtro = Filtro + "AND " + a12 + sinal2 & "'" & a13 & "')"
-Else
-
-
-            Filtro = Filtro + "AND " + """" + a12 + """" + sinal2 & "'" & a13 & "')"
-End If
+            Dim aaa As String
+            aaa = "OBJECT_ID_"
+            a = "object_id"
+            b = tabela
+            Dim a12, a13 As String
+            a12 = Retorna(Me.cboColunas.Text)
+            a13 = RetornaID(Me.cboColunas.Text, Me.cboFiltro.Text)
+            If TypeConn <> 4 Then
+                Filtro = "object_id in (select object_id_ from " & tabela & " WHERE " + a12 + sinal & "'" & a13 & "'"
+            Else
+                Filtro = """" + a + """" + " in (select " + """" + aaa + """" + " from " + """" + tabela + """" + " WHERE" + """" + a12 + """" + sinal & "'" & a13 & "'"
+            End If
+            If Me.cboOperador2.Text <> "" Then
+                'adiciona o segunto filtro
+                If TypeConn <> 4 Then
+                    a12 = Retorna(Me.cboColunas2.Text)
+                    a13 = RetornaID2(Me.cboColunas2.Text, Me.cboFiltro2.Text)
+                    Filtro = Filtro + "AND " + a12 + sinal2 & "'" & a13 & "')"
+                Else
+                    Filtro = Filtro + "AND " + """" + a12 + """" + sinal2 & "'" & a13 & "')"
+                End If
+                If Me.cboColunas.Text = "" Or Me.cboFiltro = "" Or Me.cboOperador.Text = "" Then
+                    Filtro = ""
+                End If
+            Else
+                'não precisa adicionar o terceiro filtro
+                Filtro = Filtro + ")"
+            End If
             If Me.cboColunas.Text = "" Or Me.cboFiltro = "" Or Me.cboOperador.Text = "" Then
-               Filtro = ""
+                Filtro = ""
             End If
+            a = "te_theme"
+            b = "theme_id"
+            'abre a conexão com a tabela de themas, onde existe a cláusula Where a ser preenchida
+            If TypeConn <> 4 Then
+                'se SQLServer ou Oracle
+                rs.Open "SELECT * FROM TE_THEME WHERE THEME_ID = " & intTema, conn, adOpenDynamic, adLockOptimistic
             Else
-            
-            Filtro = Filtro + ")"
-            
-            
+                'se Postgres
+                rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
             End If
-
-
-If Me.cboColunas.Text = "" Or Me.cboFiltro = "" Or Me.cboOperador.Text = "" Then
-               Filtro = ""
-            End If
-
-
-
-
-
-
-
-
-
-
-a = "te_theme"
-b = "theme_id"
-If TypeConn <> 4 Then
-            rs.Open "SELECT * FROM TE_THEME WHERE THEME_ID = " & intTema, conn, adOpenDynamic, adLockOptimistic
-            Else
-            rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
-            End If
-            
+            'verifica se retornou pelo menos uma linha, deve retornar apenas uma, e então atualiza o filtro na cláusula where da tabela de temas, TE_THEME
             If rs.EOF = False Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
                 rs!generate_attribute_where = Filtro
                 rs.Update
             End If
             rs.Close
-   
-        
         Else
-        ' GetThemeWhere
-           
-           'With tvm
-              ' If Not (chkFiltro.Value = 1 And cboColunas.ListIndex = -1 And cboColunas2.ListIndex = -1) Then
-                 ' .setThemeWhere .getactiveview, ThemeName, IIf(chkFiltro.Value = 1, GetThemeWhere, "")
-               
-             ' End If
-         '  End With
-           
-           
-      
-
-           
-           
-           
-           'SALVAMENTO DE FILTRO DE DATA
-           Dim nCmdo As String
-           Dim DTA_INI As String
-           Dim DTA_FIM As String
-           
-           If TypeConn = 1 Then  'CASO CONEXÃO SEJA SQL - formata a data
-               'INVERTE A DATA E COLOCA HH,MM,SS
-               DTA_INI = "'20" & Mid(Me.txtDataInicio.Text, 7, 2) & "-" & Mid(Me.txtDataInicio.Text, 4, 2) & "-" & Mid(Me.txtDataInicio.Text, 1, 2) & " 00:00:00.000'"
-               DTA_FIM = "'20" & Mid(Me.txtDataFim.Text, 7, 2) & "-" & Mid(Me.txtDataFim.Text, 4, 2) & "-" & Mid(Me.txtDataFim.Text, 1, 2) & " 23:59:59.998'"
-           End If
-   
-           If Me.chkFiltraData.Value = 1 Then 'SE O CHKFILTRODATA = SELECIONADO
-               If IsDate(Me.txtDataInicio.Text) = True And IsDate(Me.txtDataFim.Text) = True Then
-                   If Len(Me.txtDataInicio.Text) = 8 And Len(Me.txtDataFim.Text) = 8 Then
-                       'TRATAMENTO ESPECIAL CASO O FILTRO SEJA DATA DO CADASTRO, GRAVA A STRING DIRETO NO BANCO
-                       Dim sGENERATE_ATTRIBUTE_WHERE As String
-                       Dim sql1 As String
-   
-                       If TypeConn = 1 Then  'SQL
-                           
-                         sGENERATE_ATTRIBUTE_WHERE = "object_id in(select a.object_id_ from WATERLINES A left join WATERLINESdata B on A.Object_id_=B.Object_id_ where A.DATALOG Between " & DTA_INI & " AND " & DTA_FIM & ")"
-                       
-                       ElseIf TypeConn = 2 Then  'ORACLE
-                           sGENERATE_ATTRIBUTE_WHERE = "object_id in(select a.object_id_ from WATERLINES A left join WATERLINESdata B on A.Object_id_=B.Object_id_ where A.DATALOG BETWEEN TO_DATE('" & Me.txtDataInicio.Text & "','DD/MM/YY" & "') and TO_DATE('" & Me.txtDataFim & "','DD/MM/YY" & "'))"
-                       
-                       ElseIf TypeConn = 4 Then  'POSTGRES
-
-
-a = "OBJECT_ID_"
-b = "WATERLINES"
-c = "WATERLINESDATA"
-d = "TIPO"
-e = "DATALOG"
-
-
-                       
-sGENERATE_ATTRIBUTE_WHERE = "" + """" + a + """" + " in(select " + """" + b + """" + "." + """" + a + """" + " from " + """" + b + """" + " left join " + """" + c + """" + " on " + """" + b + """" + "." + """" + a + """" + " = " + """" + c + """" + "." + """" + a + """" + " where " + """" + b + """" + "." + """" + e + """" + " Between " + """" + "'" + """" + DTA_INI + """" + "'" + """" + " AND " + """" + "'" + """" + DTA_FIM + """" + "'" + """" + ")"
-                       
-                       End If
-                       Dim rsTheme As New ADODB.Recordset
-a = "te_theme"
-b = "theme_id"
-                       
-If TypeConn <> 4 Then
-                       rsTheme.Open "SELECT * FROM te_theme WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
-                       Else
-                       rsTheme.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & "'", conexao, adOpenKeyset, adLockOptimistic
-                       End If
-                       
-                       If rsTheme.EOF = False Then
-   a = "NXGS_FILT_TEMA"
-b = "THEME_ID"
-                       
- If TypeConn <> 4 Then
-                           rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
-                           If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
-                               rs.AddNew
-                               rs!theme_id = intTema
-                               rs.Update
-                               rs.Close
-                               rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = '" & intTema & "'", conn, adOpenKeyset, adLockOptimistic
-                           End If
-   Else
-    rs.Open "SELECT * FROM " + a + " WHERE " + b + " = " & intTema, conexao, adOpenDynamic, adLockOptimistic
-                           If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
-                               rs.AddNew
-                               rs!theme_id = intTema
-                               rs.Update
-                               rs.Close
-                               rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & "'", conexao, adOpenDynamic, adLockOptimistic
-                           End If
-   
-   End If
-   
-   
-   
-                           If (rsTheme!generate_attribute_where & "a") = "a" Then 'testa se esta vazio, caso sim é salvo apenas o filtro de data
-                               rsTheme!generate_attribute_where = sGENERATE_ATTRIBUTE_WHERE
-                               rs!FILT_3 = Me.txtDataInicio.Text & ";" & Me.txtDataFim.Text
-   
-                           Else 'ALÉM DA DATA HÁ OUTROS FILTROS
-                               nCmdo = Mid(rsTheme!generate_attribute_where, 1, (Len(rsTheme!generate_attribute_where) - 1)) 'pega todo o comando menos o ultimo parênteses
-                               'acrescenta no comando o comando de filtro de data
-                               
-                               If TypeConn = 1 Then 'SQL
-                                   nCmdo = nCmdo & " AND A.DATALOG BETWEEN " & DTA_INI & " AND " & DTA_FIM & ")"
-                               ElseIf TypeConn = 2 Then 'ORACLE
-                                   nCmdo = nCmdo & " AND A.DATALOG BETWEEN TO_DATE('" & Me.txtDataInicio.Text & "','DD/MM/YY" & "') and TO_DATE('" & Me.txtDataFim & "','DD/MM/YY" & "'))"
-                               Else
-                               Dim ss As String
-                               Dim ff As String
-                               ss = "DATALOG"
-                               ff = "A"
-                               nCmdo = nCmdo & " AND " + """" + ff + """" + "." + """" + ss + """" + " BETWEEN '" & DTA_INI & "' AND '" & DTA_FIM & "')"
-                               End If
-   
-                               rsTheme!generate_attribute_where = nCmdo
-                               rs!FILT_3 = Me.txtDataInicio.Text & ";" & Me.txtDataFim.Text
-                               
-                           End If
-                           rsTheme.Update
-                           rs.Update
-                       End If
-                       rsTheme.Close
-                       rs.Close
-                       conn.Close
-                       conn.Open
-                   Else
-                       MsgBox "As datas não possuem formatação correta. Utilize 'DD/MM/AA'", vbExclamation, "Filtro de Data"
-                   End If
-               Else
-                   MsgBox "As datas não possuem formatação correta. Utilize 'DD/MM/AA'", vbExclamation, "Filtro de Data"
-               End If
-           End If
-        
+            'caso não seja rede de água e esgoto, nem componentes de água e esgoto. Por exemplo, caso sejam ramais
+            ' GetThemeWhere
+            'With tvm
+            ' If Not (chkFiltro.Value = 1 And cboColunas.ListIndex = -1 And cboColunas2.ListIndex = -1) Then
+            ' .setThemeWhere .getactiveview, ThemeName, IIf(chkFiltro.Value = 1, GetThemeWhere, "")
+            ' End If
+            '  End With
+            'SALVAMENTO DE FILTRO DE DATA
+            Dim nCmdo As String
+            Dim DTA_INI As String
+            Dim DTA_FIM As String
+            If TypeConn = 1 Then  'CASO CONEXÃO SEJA SQL - formata a data
+                'INVERTE A DATA E COLOCA HH,MM,SS
+                DTA_INI = "'20" & Mid(Me.txtDataInicio.Text, 7, 2) & "-" & Mid(Me.txtDataInicio.Text, 4, 2) & "-" & Mid(Me.txtDataInicio.Text, 1, 2) & " 00:00:00.000'"
+                DTA_FIM = "'20" & Mid(Me.txtDataFim.Text, 7, 2) & "-" & Mid(Me.txtDataFim.Text, 4, 2) & "-" & Mid(Me.txtDataFim.Text, 1, 2) & " 23:59:59.998'"
+            End If
+            If Me.chkFiltraData.Value = 1 Then 'SE O CHKFILTRODATA = SELECIONADO
+                'Se o filtro por data foi selecionado
+                If IsDate(Me.txtDataInicio.Text) = True And IsDate(Me.txtDataFim.Text) = True Then
+                    If Len(Me.txtDataInicio.Text) = 8 And Len(Me.txtDataFim.Text) = 8 Then
+                        'TRATAMENTO ESPECIAL CASO O FILTRO SEJA DATA DO CADASTRO, GRAVA A STRING DIRETO NO BANCO
+                        Dim sGENERATE_ATTRIBUTE_WHERE As String
+                        Dim sql1 As String
+                        If TypeConn = 1 Then  'SQL
+                            sGENERATE_ATTRIBUTE_WHERE = "object_id in(select a.object_id_ from WATERLINES A left join WATERLINESdata B on A.Object_id_=B.Object_id_ where A.DATALOG Between " & DTA_INI & " AND " & DTA_FIM & ")"
+                        ElseIf TypeConn = 2 Then  'ORACLE
+                            sGENERATE_ATTRIBUTE_WHERE = "object_id in(select a.object_id_ from WATERLINES A left join WATERLINESdata B on A.Object_id_=B.Object_id_ where A.DATALOG BETWEEN TO_DATE('" & Me.txtDataInicio.Text & "','DD/MM/YY" & "') and TO_DATE('" & Me.txtDataFim & "','DD/MM/YY" & "'))"
+                        ElseIf TypeConn = 4 Then  'POSTGRES
+                            a = "OBJECT_ID_"
+                            b = "WATERLINES"
+                            c = "WATERLINESDATA"
+                            d = "TIPO"
+                            e = "DATALOG"
+                            sGENERATE_ATTRIBUTE_WHERE = "" + """" + a + """" + " in(select " + """" + b + """" + "." + """" + a + """" + " from " + """" + b + """" + " left join " + """" + c + """" + " on " + """" + b + """" + "." + """" + a + """" + " = " + """" + c + """" + "." + """" + a + """" + " where " + """" + b + """" + "." + """" + e + """" + " Between " + """" + "'" + """" + DTA_INI + """" + "'" + """" + " AND " + """" + "'" + """" + DTA_FIM + """" + "'" + """" + ")"
+                        End If
+                        Dim rsTheme As New ADODB.Recordset
+                        a = "te_theme"
+                        b = "theme_id"
+                        If TypeConn <> 4 Then
+                            rsTheme.Open "SELECT * FROM te_theme WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
+                        Else
+                            rsTheme.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & "'", conexao, adOpenKeyset, adLockOptimistic
+                        End If
+                        If rsTheme.EOF = False Then
+                            a = "NXGS_FILT_TEMA"
+                            b = "THEME_ID"
+                            If TypeConn <> 4 Then
+                                rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
+                                If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
+                                    rs.AddNew
+                                    rs!theme_id = intTema
+                                    rs.Update
+                                    rs.Close
+                                    rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = '" & intTema & "'", conn, adOpenKeyset, adLockOptimistic
+                                End If
+                            Else
+                                rs.Open "SELECT * FROM " + a + " WHERE " + b + " = " & intTema, conexao, adOpenDynamic, adLockOptimistic
+                                If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
+                                    rs.AddNew
+                                    rs!theme_id = intTema
+                                    rs.Update
+                                    rs.Close
+                                    rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & "'", conexao, adOpenDynamic, adLockOptimistic
+                                End If
+                            End If
+                            If (rsTheme!generate_attribute_where & "a") = "a" Then 'testa se esta vazio, caso sim é salvo apenas o filtro de data
+                                rsTheme!generate_attribute_where = sGENERATE_ATTRIBUTE_WHERE
+                                rs!FILT_3 = Me.txtDataInicio.Text & ";" & Me.txtDataFim.Text
+                            Else 'ALÉM DA DATA HÁ OUTROS FILTROS
+                                nCmdo = Mid(rsTheme!generate_attribute_where, 1, (Len(rsTheme!generate_attribute_where) - 1)) 'pega todo o comando menos o ultimo parênteses
+                                'acrescenta no comando o comando de filtro de data
+                                If TypeConn = 1 Then 'SQL
+                                    nCmdo = nCmdo & " AND A.DATALOG BETWEEN " & DTA_INI & " AND " & DTA_FIM & ")"
+                                ElseIf TypeConn = 2 Then 'ORACLE
+                                    nCmdo = nCmdo & " AND A.DATALOG BETWEEN TO_DATE('" & Me.txtDataInicio.Text & "','DD/MM/YY" & "') and TO_DATE('" & Me.txtDataFim & "','DD/MM/YY" & "'))"
+                                Else
+                                    Dim ss As String
+                                    Dim ff As String
+                                    ss = "DATALOG"
+                                    ff = "A"
+                                    nCmdo = nCmdo & " AND " + """" + ff + """" + "." + """" + ss + """" + " BETWEEN '" & DTA_INI & "' AND '" & DTA_FIM & "')"
+                                End If
+                                rsTheme!generate_attribute_where = nCmdo
+                                rs!FILT_3 = Me.txtDataInicio.Text & ";" & Me.txtDataFim.Text
+                            End If
+                            rsTheme.Update
+                            rs.Update
+                        End If
+                        rsTheme.Close
+                        rs.Close
+                        conn.Close
+                        conn.Open
+                    Else
+                        MsgBox "As datas não possuem formatação correta. Utilize 'DD/MM/AA'", vbExclamation, "Filtro de Data"
+                    End If
+                Else
+                    MsgBox "As datas não possuem formatação correta. Utilize 'DD/MM/AA'", vbExclamation, "Filtro de Data"
+                End If
+            End If
         End If
-        
         cmdModificar.Caption = "Modificar"
         Me.chkFiltro.Enabled = False
         Me.chkFiltraData.Enabled = False
@@ -2491,7 +2354,6 @@ b = "THEME_ID"
         Me.Label7.Enabled = False
         MsgBox "Filtro salvo com sucesso!", vbInformation, ""
     End If
-
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -2502,7 +2364,6 @@ Trata_Erro:
         Close #1
         MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrencia.", vbInformation
     End If
-    
 End Sub
 Private Sub chkFiltraData_Click()
 

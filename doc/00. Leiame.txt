@@ -1,6 +1,29 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+
+04-12-2012 - GeoSan 06.08.01
+Corrigida não conformidade para os filtros de dados de ramais que não estavam 
+funcionando.
+
+
+Para alterar a localização de onde se encontra o banco de dados comercial, 
+basta alterar o link de conexão com o banco de dados na tabela GS_PARAMETERS.
+Por exemplo:
+Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.16
+Caso não possua acesso ao banco de dados comercial, vc pode colocar os dados
+do banco de dados comercial nas tabelas
+
+NXGS_V_LIG_COMERCIAL
+NXGS_V_LIG_COMERCIAL_CONSUMO
+NXGS_V_LIG_COM_CONSUMO_MEDIO
+
+não se esquecendo de renomear as vistas, pois a ligação com o banco comercial
+é realizada através destas vistas.
+
+
+
+
 29-11-2012 - GeoSan 06.08.00
 Gerada nova versão final de liberação.
 

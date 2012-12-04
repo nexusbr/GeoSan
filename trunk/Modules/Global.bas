@@ -189,7 +189,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.08.08"
+    Versao_Geo = "06.08.01"
     connn = ""
     If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
         If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
