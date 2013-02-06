@@ -31,7 +31,7 @@ Public Property Get String_Connection_Secundary() As String
 End Property
 
 
-Public Function getData(Conn As ADODB.Connection, tipo As String) As Boolean
+Public Function getData(Conn As ADODB.connection, tipo As String) As Boolean
    Dim rs As ADODB.Recordset
    
    

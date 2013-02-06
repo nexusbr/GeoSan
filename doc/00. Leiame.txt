@@ -1,11 +1,48 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+02-01-2012 - GeoSan 06.09.00
+Criados os índices para as tabelas contendo dados das ligações. Lembrando que
+este índice deve ser criado na vista do banco de dados comercial. Aqui foi
+criado para testar a exportação Web
+
+CREATE NONCLUSTERED INDEX [NXGS_V_LIG_COMERCIAL_NUM_LIGACAO] ON [dbo].[NXGS_V_LIG_COMERCIAL] 
+(
+	[NRO_LIGACAO] ASC,
+	[NRO_LIGACAO_SEM_DV] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+CREATE NONCLUSTERED INDEX [NXGS_V_LIG_COM_CONSUMO_MEDIO_NRO_LIGACAO] ON [dbo].[NXGS_V_LIG_COM_CONSUMO_MEDIO] 
+(
+	[NRO_LIGACAO] ASC,
+	[NRO_LIGACAO_SEM_DV] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+
+11-12-2012 - GeoSan 06.08.02
+
+VALIDABASE
+Inserida a função ApagaPointsSemWatercomponents que elimina todos os nós de rede
+(POINTS2) que não possuem atributos associados.
+
+Inserida a função VefificaUnicidadeNos que verifica se para cada atributo de nó
+existe um object_id da geometria deste nó.
+
+GEOSAN
+Inserido item no menu que exporta os dados do GeoSan para o formato shape
+mnuExporta_GeoSan_Click(). 
+Esta rotina desnormaliza as tabelas torre para uma tabela de atributos única
+com todas as informações de nós e redes de água.
+
+Para apoiar a exportação foi criada a classe GeoSanExport e seus respectivos
+métodos.
+
+
+
 
 04-12-2012 - GeoSan 06.08.01
 Corrigida não conformidade para os filtros de dados de ramais que não estavam 
 funcionando.
-
 
 Para alterar a localização de onde se encontra o banco de dados comercial, 
 basta alterar o link de conexão com o banco de dados na tabela GS_PARAMETERS.

@@ -231,7 +231,7 @@ Public Property Get SupplierID() As Long
     SupplierID = mvarSupplierID
 End Property
 
-Public Function InsertData(Conn As ADODB.Connection) As Boolean
+Public Function InsertData(Conn As ADODB.connection) As Boolean
      'Código inserido em 15/05/2007 por ®viviani em substituição das linhas comentadas abaixo para eliminação de procedures
     Dim rs As New ADODB.Recordset
     Dim strExecute As String
@@ -281,7 +281,7 @@ Public Function InsertData(Conn As ADODB.Connection) As Boolean
 '   Exit Function
 End Function
 
-Public Function UpdateData(Conn As ADODB.Connection, Optional Upd As Boolean = False) As Boolean
+Public Function UpdateData(Conn As ADODB.connection, Optional Upd As Boolean = False) As Boolean
    If Upd Then
         Dim strExecute As String
         strExecute = X_SuppliersNewUpd()

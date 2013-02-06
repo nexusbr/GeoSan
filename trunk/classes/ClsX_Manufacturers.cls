@@ -229,7 +229,7 @@ End Property
 
 
 
-Public Function InsertData(Conn As ADODB.Connection) As Boolean
+Public Function InsertData(Conn As ADODB.connection) As Boolean
    'Código inserido em 15/05/2007 por ®viviani em substituição das linhas comentadas abaixo para eliminação de procedures
     Dim rs As New ADODB.Recordset
     Dim strExecute As String
@@ -279,7 +279,7 @@ If frmCanvas.TipoConexao <> 4 Then
 '   Exit Function
 End Function
 
-Public Function UpdateData(Conn As ADODB.Connection, Optional Upd As Boolean = False) As Boolean
+Public Function UpdateData(Conn As ADODB.connection, Optional Upd As Boolean = False) As Boolean
    If Upd Then
    'Código inserido em 15/05/2007 por ®viviani em substituição das linhas comentadas abaixo para eliminação de procedures
         Dim strExecute As String

@@ -378,6 +378,173 @@ Private Function WcSemGeometrias(numTabGeomPoints As String, ByRef rsSemPoints A
             MsgBox "Banco de dados incorreto, somente são aceitos SQLServer, Oracle e Postgres. Entre em contato com o suporte."
     End Select
 End Function
+'Esta rotina apaga os pontos (geometrias) dos nós das redes que não possuem atributos associados aos mesmos
+'
+'José Maria Villac Pinheiro - 11/12/2012
+'
+'numTabGeomPoints - recebe o número da tabela contento as geometrias dos pontos/nós das redes
+'
+Private Function ApagaPointsSemWatercomponents(numTabGeomPoints As String)
+    Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile    'Classe para ler dados de inicialização
+    Dim TpConexao As String                             'Tipo de conexão, se SQLServer, Oracle ou Postgres
+    Dim strSql As String
+    Dim rs As New ADODB.Recordset
+    
+    On Error GoTo Trata_Erro:
+    
+    'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
+    leGeoSanIni.arquivo = App.Path & "\Controles\GeoSan.ini"
+    TpConexao = leGeoSanIni.TipoBDados
+    Select Case TpConexao
+        Case "1-SQL Server 2005"
+            'gera um Recordset contendo todos os OBJECT_ID_s da tabela de geometrias (POINTS2) que não possuem atrubutos em WATERCOMPONENTS
+            strSql = "SELECT OBJECT_ID FROM POINTS" & numTabGeomPoints & " WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERCOMPONENTS)"
+            Print #1, vbCrLf & "PointsSemWatercomponents; " & strSql
+            Set rs = Conn.Execute(strSql)
+            Print #1, "ApagaPointsSemWatercomponents;Fim do SELECT."
+        Case "Oracle"
+            'Não testado com Oracle ainda. Necessita testar novamente
+            IMPRIME_COMPONENTE_SEM_GEOMETRIA 'CARREGA UM ARRAY QUE SERÁ USADO NO LUGAR DO RECORDSET
+        Case "Postgres"
+            'Implementar
+        Case Else
+            MsgBox "Banco de dados incorreto, somente são aceitos SQLServer, Oracle e Postgres. Entre em contato com o suporte."
+    End Select
+    'para cada object_id da tabela POINTS2 que não possui atributo, apaga-o, pois é um ponto no espaço sem associação com nada
+    Do While Not rs.EOF
+        Dim objId As String
+        objId = rs.Fields("OBJECT_ID").Value
+        strSql = "DELETE FROM Points" & numTabGeomPoints & " WHERE object_id = '" & objId & "'"
+        Conn.Execute (strSql)
+        Print #1, "ApagaPointsSemWatercomponents;Apagado o ponto com object_id: " & objId & " da tabela Points" & numTabGeomPoints & " que não tinha um atributo associado."
+        rs.MoveNext
+    Loop
+    rs.Close
+    Print #1, "ApagaPointsSemWatercomponents;Fim do processamento."
+    Close #1
+Trata_Erro:
+
+If Err.Number = 0 Or Err.Number = 20 Then
+    Resume Next
+Else
+   'Resume
+   Me.MousePointer = vbDefault
+   Open App.Path & "\Controles\GeoSanLog.txt" For Append As #1
+   Print #1, Now & " - Function ApagaPointsSemWatercomponents - " & Err.Number & " - " & Err.Description
+   Close #1
+   PrintErro CStr(Me.Name), "Function ApagaPointsSemWatercomponents, tipo de erro: ", CStr(Err.Number), CStr(Err.Description), True
+   MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo: " & App.Path & "\Controles\GeoSanLog.txt" & " com informações desta ocorrência.", vbInformation
+End If
+
+End Function
+'Esta rotina verifica se para cada atributo de nó existe um object_id da geometria deste nó.
+'Depois faz o contrário, verifica se para cada object_id de uma geometria de nó, existe o respectivo atributo
+'
+'José Maria Villac Pinheiro - 11/12/2012
+'
+'numTabGeomPoints - recebe o número da tabela contento as geometrias dos pontos/nós das redes
+'
+Private Function VefificaUnicidadeNos(numTabGeomPoints As String)
+    Dim leGeoSanIni As New ValidaBase.CGeoSanIniFile    'Classe para ler dados de inicialização
+    Dim TpConexao As String                             'Tipo de conexão, se SQLServer, Oracle ou Postgres
+    Dim strSql As String
+    Dim strSql2 As String
+    Dim rs As New ADODB.Recordset
+    Dim rs2 As New ADODB.Recordset
+    Dim numeroNos As Integer
+    Dim objId As String
+    
+    On Error GoTo Trata_Erro:
+    
+    'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
+    leGeoSanIni.arquivo = App.Path & "\Controles\GeoSan.ini"
+    TpConexao = leGeoSanIni.TipoBDados
+    Select Case TpConexao
+        Case "1-SQL Server 2005"
+            'gera um Recordset contendo todos os OBJECT_ID_s da tabela de geometria POINTS2, sem restrições
+            strSql = "SELECT OBJECT_ID FROM POINTS" & numTabGeomPoints
+            Print #1, vbCrLf & "VefificaUnicidadeNos; " & strSql
+            Set rs = Conn.Execute(strSql)
+            Print #1, "VefificaUnicidadeNos;Fim do SELECT."
+        Case "Oracle"
+            'Não testado com Oracle ainda. Necessita testar novamente
+            IMPRIME_COMPONENTE_SEM_GEOMETRIA 'CARREGA UM ARRAY QUE SERÁ USADO NO LUGAR DO RECORDSET
+        Case "Postgres"
+        
+        Case Else
+            MsgBox "VefificaUnicidadeNos;Banco de dados incorreto, somente são aceitos SQLServer, Oracle e Postgres. Entre em contato com o suporte."
+    End Select
+    'para cada geometria (object_id) do ponto
+    Do While Not rs.EOF
+        objId = rs.Fields("OBJECT_ID").Value
+        'procura na tabela de atrubutos WATERCOMPONENTS quantos atributos deste nó estão lá cadastrados
+        strSql2 = "select count(object_id_) from watercomponents where object_id_ = '" & objId & "'"
+        Set rs2 = Conn.Execute(strSql2)
+        numeroNos = rs2.Fields(0)
+        If numeroNos = 0 Then
+            'indica no arquio de log a não conformidade de que os atributos do nó não foram encontrados
+            Print #1, "VefificaUnicidadeNos;O nó numero: " & objId & " existe na tabela Points" & numTabGeomPoints & " mas não existe na tabela watercomponents."
+        ElseIf numeroNos > 1 Then
+            'indica no arquivo de log que existe mais de um atributo associado a geometria, deveria existir apenas um
+            Print #1, "VefificaUnicidadeNos;O nó numero: " & objId & " existe na tabela Points" & numTabGeomPoints & " e existe na tabela watercomponents: " & numeroNos & " vezes, deveria existir uma única vez."
+        Else
+            'está tudo certo, existe um atributo na tabela de atributos que está associado a geometria e então não precisa fazer nada
+        End If
+        rs.MoveNext                         'vamos a próxima geometria de ponto
+    Loop
+
+    Print #1, "VefificaUnicidadeNos;Fim do processamento."
+    
+    'Agora verifica ao contrário
+    'Informa onde estão as informações sobre a localização, nome e tipo de banco de dados
+    Select Case TpConexao
+        Case "1-SQL Server 2005"
+            'gera um Recordset contendo todos os OBJECT_ID_s sem geometrias
+            strSql = "SELECT OBJECT_ID_ FROM WATERCOMPONENTS"
+            Print #1, vbCrLf & "VefificaUnicidadeNos; " & strSql
+            Set rs = Conn.Execute(strSql)
+            Print #1, "VefificaUnicidadeNos;Fim do SELECT."
+        Case "Oracle"
+            'Não testado com Oracle ainda. Necessita testar novamente
+            IMPRIME_COMPONENTE_SEM_GEOMETRIA 'CARREGA UM ARRAY QUE SERÁ USADO NO LUGAR DO RECORDSET
+        Case "Postgres"
+        
+        Case Else
+            MsgBox "VefificaUnicidadeNos;Banco de dados incorreto, somente são aceitos SQLServer, Oracle e Postgres. Entre em contato com o suporte."
+    End Select
+    Do While Not rs.EOF
+        objId = rs.Fields("OBJECT_ID_").Value
+        strSql2 = "select count(object_id) from points" & numTabGeomPoints & " where object_id = '" & objId & "'"
+        Set rs2 = Conn.Execute(strSql2)
+        numeroNos = rs2.Fields(0)
+        If numeroNos = 0 Then
+            Print #1, "VefificaUnicidadeNos;O nó numero: " & objId & " existe na tabela WATERCOMPONENTS mas não existe na tabela POINTS" & numTabGeomPoints
+        ElseIf numeroNos > 1 Then
+            Print #1, "VefificaUnicidadeNos;O nó numero: " & objId & " existe na tabela WATERCOMPONENTS e existe na tabela POINTS" & numTabGeomPoints & ": " & numeroNos & " vezes, deveria existir uma única vez."
+        Else
+        End If
+        rs.MoveNext
+    Loop
+    rs.Close
+    rs2.Close
+    Print #1, "VefificaUnicidadeNos;Fim do processamento."
+    Close #1
+
+Trata_Erro:
+
+If Err.Number = 0 Or Err.Number = 20 Then
+    Resume Next
+Else
+   'Resume
+   Me.MousePointer = vbDefault
+   Open App.Path & "\Controles\GeoSanLog.txt" For Append As #1
+   Print #1, Now & " - Function VefificaUnicidadeNos - " & Err.Number & " - " & Err.Description
+   Close #1
+   PrintErro CStr(Me.Name), "Function VefificaUnicidadeNos, tipo de erro: ", CStr(Err.Number), CStr(Err.Description), True
+   MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo: " & App.Path & "\Controles\GeoSanLog.txt" & " com informações desta ocorrência.", vbInformation
+End If
+   
+End Function
 Private Sub ProcuraSeEhNoInicial(id_componente As String, rsNoInicial As ADODB.Recordset)
     'Procura se este nó de Watercomponents é um nó inicial de alguma rede de água em Waterlines
     Set rsNoInicial = Conn.Execute("SELECT LINE_ID,OBJECT_ID_,INITIALCOMPONENT FROM WATERLINES WHERE INITIALCOMPONENT ='" & id_componente & "'")
@@ -1010,6 +1177,14 @@ Private Sub ProcessaBancoDados_Click()
     TeDatabase1.Connection = dbConn                                 'Atribui a conexão para TeDatabase
     TeDatabase1.setCurrentLayer ("waterlines")                      'Indica que o layer ativo é o de redes de água, WATERLINES
        
+    'Verifica se para cada object_id em Points2 existe outro em Watercomponents e vice-versa
+    Call VefificaUnicidadeNos(numeroTabelaGeomWc)
+    
+    'Apaga todos os pontos dos nós que não possuem atributo associado
+    'Ele vai na tabela POINTS2 e verifica se existem geometrias de nós (pontos) que não possuem atributos associados
+    'Ele elimina as geometrias que não possuem atributos e registra as eliminadas no arquivo de log
+    Call ApagaPointsSemWatercomponents(numeroTabelaGeomWc)
+    
     'Identifica se existem NÓS existentes como atributos mas sem a presença da respectiva geometria
     'Ele vai na tabela WATERCOMPONENTS e verifica se existem atributos de componentes (nós) que não possuem uma geometria associada
     'Em nosso modelo sempre deve existir uma geometria associada a um atributo
