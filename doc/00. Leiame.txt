@@ -1,7 +1,57 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
-02-01-2012 - GeoSan 06.09.00
+19-03-2013 - GeoSan 06.09.01
+Novos requisitos levantados:
+
+1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
+descargas, etc. exportar somente como nó.
+
+1-A - Existem registros que por serem de divisão de setor de abastecimento que
+ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
+fechado ai ele deve ser exportado.
+
+2 - Não exportar redes desativadas para o EPANET, onde o ESTADO da rede esteja
+como fora
+de operação.
+
+3 - GeoSan não está exportando o RESERVATÓRIO (no código está RNV e RNF e no
+dado está como RESERVATÓRIO) , BOOSTER (é uma bomba o nome correto,
+no código está como PUMP) para o EPANET
+
+4 - Como vai fazer no caso da BOMBA para especificar o sentido da mesma, pois
+ela é um nó.
+
+5 - Definir forma em que será colocado o sentido de uma BOMBA ou VÁLVULA 
+RETENTORA
+
+6 - Definir uma forma de associar e entrar os dados de uma curva de bomba, 
+curva de rendimento de uma bomba, curva de volume de reservatório (para aqueles
+reservatórios em forma de taça, ou qualquer tipo de obra de arte), curva de 
+rendimento da bomba, curva de perdas para VÁLVULA GENÉRICA (conforme a abertura
+da válvula existe uma curva de perda de carga, em um dos eixos é cumprimento e
+no outro unidade de vazão)
+
+7 - Inserir duas novas ícones, uma CURVAS e outra PADRÕES (temporais). Posso 
+ter várias curvas de padrão de consumo, cidade, indústrica, hospital.
+
+8 - A simulação utiliza apenas um padrão, mas no arquivo .inp posso ter vários
+padrões. Posso associar em um nó um padrão de consumo específico, se nenhuma 
+informação estiver no nó, utiliza o padrão de consumo default.
+
+9 - Já existe um campo no nó que é o padrão de consumo que está sempre indo 
+como zero e que está exportando.
+
+10 - Inserir botão para colocar os CONTROLES
+
+11 - Quando seleciona RESERVATÓRIO teria que abrir outros campos como DIAMETRO 
+(equivalente), ALTURA MÁXIMA (altura do reservatório) - 1 que assim tem a 
+ALTURA INICIAL (que inicia a lamina dágua no reservatório para simulação)
+
+12 - Possibilitar o sistema simular hidraulicamente com as demandas de consumo
+espeficiadas pelo usuário do GeoSan.
+
+02-01-2013 - GeoSan 06.09.00
 Criados os índices para as tabelas contendo dados das ligações. Lembrando que
 este índice deve ser criado na vista do banco de dados comercial. Aqui foi
 criado para testar a exportação Web

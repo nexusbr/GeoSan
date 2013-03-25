@@ -1,6 +1,72 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+04-12-2012 - GeoSan 06.08.01
+Corrigida não conformidade para os filtros de dados de ramais que não estavam 
+funcionando.
+
+Para alterar a localização de onde se encontra o banco de dados comercial, 
+basta alterar o link de conexão com o banco de dados na tabela GS_PARAMETERS.
+Por exemplo:
+Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.16
+Caso não possua acesso ao banco de dados comercial, vc pode colocar os dados
+do banco de dados comercial nas tabelas
+
+NXGS_V_LIG_COMERCIAL
+NXGS_V_LIG_COMERCIAL_CONSUMO
+NXGS_V_LIG_COM_CONSUMO_MEDIO
+
+não se esquecendo de renomear as vistas, pois a ligação com o banco comercial
+é realizada através destas vistas.
+
+
+
+
+29-11-2012 - GeoSan 06.08.00
+Gerada nova versão final de liberação.
+
+Foi detectado que em uma simulação de manobra que inicia por um nó de trecho que
+é um registro, ele para a localização dos demais trechos conectados.
+Foi inserido um "continue for" para corrigir esta não conformidade.
+
+Uma válvula é quando eu posso abrir a mesma progressivamente determinando a
+quantidade de água que irá passar pela mesma. Uma válvula não possui o status de
+aberto, fechado ou desconhecido.
+Um registro é quando posso somente abrir e fechar o mesmo. Ele possui o status
+de aberto, fechado ou desconhecido, que pode ser preenchido pelo usuário.
+
+Correção da lista de consumidores desabastecidos que estava incorreta.
+
+Criados/atualizados índices das tabelas, ficando da seguinte forma:
+________________________________________________________________________________
+Tabela RAMAIS_AGUA_LIGACAO
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [IDX_RAMAIS_AGUA_LIGACAO_NRO_LIGACAO]    Script Date: 11/29/2012 11:03:28 ******/
+CREATE NONCLUSTERED INDEX [IDX_RAMAIS_AGUA_LIGACAO_NRO_LIGACAO] ON [dbo].[RAMAIS_AGUA_LIGACAO] 
+(
+	[NRO_LIGACAO] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [IDX_RAMAIS_AGUA_LIGACAO_OBJECT_ID]    Script Date: 11/29/2012 11:03:47 ******/
+CREATE NONCLUSTERED INDEX [IDX_RAMAIS_AGUA_LIGACAO_OBJECT_ID] ON [dbo].[RAMAIS_AGUA_LIGACAO] 
+(
+	[OBJECT_ID_] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+
+Na exportação para o Epanet foi alterado para o registro estar sempre aberto 
+quando não estiver preechido, inserindo o atrubuto [STATUS], pois isto auxilia
+a simulação no Epanet, sem que o usuário tenha que abrir todos os registros 
+para poder simular.
+
 28-11-2012 - GeoSan 06.00.07.14
 Atualizada a template do banco de dados SQLServer onde foram incluídos os
 índices.

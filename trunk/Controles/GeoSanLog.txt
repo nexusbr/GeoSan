@@ -396,3 +396,14 @@ DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           07/02/2013 14:38:53 
+USUÁRIO        Administrador
+VERSÃO         06.08.01
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionWrite (send()).]General network error. Check your network documentation.
+
+-----------------------------------------------------------------------------------------------------
+
