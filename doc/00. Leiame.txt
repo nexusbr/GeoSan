@@ -1,7 +1,14 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+26-03-2013 - GeoSan 06.09.03
+Atendimento ao requisito de exportar somente valvulas redutoras de pressão - 
+VRP. Nos registros, descargas, etc. exportar somente como nó.
+
+
+
 26-03-2013 - GeoSan 06.09.02
+COMENTÁRIOS
 Foram feitas correções nas chamadas diretas para o diretório 
 c:\arquivos de programas\GeoSan
 onde foi criada um tipo de dado glo o qual armazenará a partir de hoje todas
@@ -13,21 +20,42 @@ code inicial do diretório "c:\arquivos de programas\GeoSan"
 O arquivo FTema.txt possui uma lista de todos os temas ativos do usuário e vista
 bem como as cláusulas de filtro where, caso existam.
 
+Sempre ao exportar deve-se lembrar que a exportação utiliza sempre o nome
+do usuário ativo que está registrado no arquivo UserLog.txt no diretório
+"Controles"
+
+ATENDIMENTO AOS REQUISITOS DE EXPORTAÇÃO EPANET
+1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
+descargas, etc. exportar somente como nó. 
+Para atender a este requisito foi-se na tabela WATERCOMPONETSTYPE e na coluna
+"Description_" onde a linha constava como REGISTRO, foi modificada a coluna 
+"Specification_" de VALVE para JUNCTION. Assim o exportador entenderá que todo
+o registro é um nó.
+Em VRP mudou-se de JUNCTION para VALVE, então ele passou a entender uma VRP como
+válvula e exportará como válvula.
+O mesmo foi feito para REGISTRO FIXO colocando como VALVE.
+A exportação funcionou com sucesso sem necessidade de alteração do código.
+
+1-A - Existem registros que por serem de divisão de setor de abastecimento que
+ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
+fechado ai ele deve ser exportado. 
+Ao utilizar o GeoSan o registro de divisão de setor de abastecimento devem ser
+cadastrados como REGISTRO FIXO. Na exportação ele exportará como válvula.
+
 
 
 19-03-2013 - GeoSan 06.09.01
 Novos requisitos levantados:
 
 1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
-descargas, etc. exportar somente como nó.
+descargas, etc. exportar somente como nó. 
 
 1-A - Existem registros que por serem de divisão de setor de abastecimento que
 ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
-fechado ai ele deve ser exportado.
+fechado ai ele deve ser exportado. 
 
 2 - Não exportar redes desativadas para o EPANET, onde o ESTADO da rede esteja
-como fora
-de operação.
+como fora de operação.
 
 3 - GeoSan não está exportando o RESERVATÓRIO (no código está RNV e RNF e no
 dado está como RESERVATÓRIO) , BOOSTER (é uma bomba o nome correto,

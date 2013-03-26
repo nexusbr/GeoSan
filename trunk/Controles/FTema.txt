@@ -1,5 +1,8 @@
 1435;FOTO2010;
 1437;WATERCOMPONENTS;
-1454;REGISTROS;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='27')
-1436;WATERLINES;
+1457;REGISTRO FIXO DIV SETOR ABAST;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='35')
+1454;VRPs;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='32')
+1436;WATERLINES;object_id in (select object_id_ from WATERLINES WHERE STATE='2')
 1455;RAMAIS_AGUA;
+1456;REGISTROS;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='27')
+1458;Todas as redes;

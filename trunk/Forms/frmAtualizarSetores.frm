@@ -304,6 +304,8 @@ Private Sub cmdOperacoes_Click()
 End Sub
 'Rotina responsável por carregar os dados do polígono de seleção para a tabela POLIGONO_SELECAO para depois gerar relatórios
 'ou exportar para o Epanet
+'
+'XXX - Aqui é que terá que entrar o código para desconsiderar as redes desativadas
 Private Sub cmdCarregar_Click()
     On Error GoTo Trata_Erro
     Dim i As Long

@@ -1120,9 +1120,12 @@ End Sub
 '
 'End Function
 
+'Rotina que ao selecionar duplo clique do mouse, vai identificar todas as redes que estão dentro do polígono finalizado.
+'
+'
 Private Sub TCanvas_onDblClick(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
 On Error GoTo Trata_Erro
-
+'XXX - para lembrar que é aqui que ele fecha o poligono de seleção de redes com duplo clique
 'A FUNÇÃO DUPLO CLIQUE É UTILIZADA PARA FECHAR UM POLÍGONO QUE ESTÁ SENDO DESENHADO E
 'APOS ISSO, INSERIR OS OBJECT_ID_ DAS LINHAS QUE ESTÃO DENTRO OU NA BORDA DO POLÍGONO E O NOME DO
 'USUÁRIO QUE FEZ A SELEÇÃO EM UMA TABELA CHAMADA POLIGONO_SELEAO
