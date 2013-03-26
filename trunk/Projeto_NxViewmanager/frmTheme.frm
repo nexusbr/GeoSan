@@ -313,6 +313,7 @@ Begin VB.Form frmTheme
             _ExtentX        =   2408
             _ExtentY        =   2037
             _Version        =   393217
+            Enabled         =   -1  'True
             TextRTF         =   $"frmTheme.frx":0074
          End
       End
@@ -2164,6 +2165,11 @@ Private Sub cmdModificar_Click()
             FILT = Me.cboColunas.Text
             tabela = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)                                'obtem o nome do tema ativo
             'modifica o nome da tabela, pois quando o usuário seleciona o layer de ramais, são duas tabelas que estão associadas ao mesmo, a de ramais e a de ligações
+            '
+            '
+            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX AQUI ESTÁ O PROBLEMA ELE ACHA QUE É RAMAL E NAO NÓ
+            '
+            
             If FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS" Then    'RAMAIS_AGUA_LIGACAO
                 tabela = "RAMAIS_AGUA_LIGACAO"
             ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
