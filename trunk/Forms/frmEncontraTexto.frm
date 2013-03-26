@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmEncontraTexto 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Localizar Textos"
@@ -152,26 +152,17 @@ Dim gu7 As String
 Dim gu8 As String
 Dim gu9 As String
  Dim str3, str2, str4 As String
-
-
 Private Sub Combo1_Click()
-On Error GoTo Trata_Erro
-    
+    On Error GoTo Trata_Erro
     Dim rs As New ADODB.Recordset
-    
-    
     Dim Vetor As Variant
-   
     Dim intTema As Integer
     
     Me.Lista.ListItems.Clear
-    
-    
-    
-    
+
       intTema = 0
 
-    Open App.path & "\CONTROLES\FTema.txt" For Input As #3
+    Open glo.diretorioGeoSan & "\CONTROLES\FTema.txt" For Input As #3   'LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO DE ABERTURA DO MAPA
     Do While Not EOF(3)
         Line Input #3, str4
         Vetor = Split(str4, ";")
@@ -184,9 +175,6 @@ On Error GoTo Trata_Erro
         ' vetor(2) 'É O COMANDO DO FILTRO
     Loop
     Close #3
-    
-    'Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\CONTROLES\FTema.txt" For Input As #3 ' LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO
-                                                                                
     If frmCanvas.TipoConexao <> 4 Then
     str3 = "SELECT THEME_ID, LAYER_ID FROM TE_THEME WHERE THEME_ID =" & intTema & ""
     Else
@@ -243,33 +231,24 @@ Else
     Me.cmdPesquisar.Enabled = False
 End If
 End Sub
-
 Private Sub Form_Load()
-On Error GoTo Trata_Erro
-    
+    On Error GoTo Trata_Erro
     Dim Vetor As Variant
     Dim str As String
     Close #3
-    'Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\CONTROLES\FTema.txt" For Input As #3 ' LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO
-                                                                                ' DE ABERTURA DO MAPA
-
-    Open App.path & "\CONTROLES\FTema.txt" For Input As #3
+    Open glo.diretorioGeoSan & "\CONTROLES\FTema.txt" For Input As #3 'LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO DE ABERTURA DO MAPA
     Do While Not EOF(3)
         Line Input #3, str
         Vetor = Split(str, ";")
         Combo1.AddItem Vetor(1)
     Loop
     Close #3
-    
-
 Trata_Erro:
-
-If Err.Number = 0 Or Err.Number = 20 Then
-    Resume Next
-Else
-    Err.Clear
-End If
-    
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Err.Clear
+    End If
 End Sub
 
 

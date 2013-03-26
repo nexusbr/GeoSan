@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TECOMC~1.DLL"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Object = "{F03ABD98-7B60-43E4-9934-DA5F0D19FDAC}#1.0#0"; "TeComViewManager.dll"
-Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TECOMV~2.DLL"
+Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Begin VB.UserControl ViewManager 
    ClientHeight    =   4605
    ClientLeft      =   0
@@ -288,196 +288,141 @@ Public Sub UserControl_Resize()
    Tv.Height = Height
    Tv.Width = Width
 End Sub
-
-
-
+'Esta Subrotina roda logo no início quando vai carregar a árvore de temas a direita do GeoSan
+'Nela são carregados os temas ativos da vista do usuário e salvos no arquivo FTema.txt
 Private Sub LoadTheme()
-   
-On Error GoTo Trata_Erro
-Dim aa As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-aa = "te_theme"
-b = "te_view"
-c = "theme_id"
-d = "generate_attribute_where"
-e = "name"
-f = "te_layer"
-g = "view_id"
-h = "layer_id"
-i = "user_name"
-j = "priority"
+    On Error GoTo Trata_Erro
+    Dim aa As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
 
-
-   'Me.Caption = "Vista: " & tvw.getActiveView
-   Tv.Nodes.Clear
-   Dim rs As ADODB.Recordset
-     If TypeConn <> 4 Then
-     
-     
-     ' Dim ff As String
-  ' ff = "Select t.THEME_ID as TID_T, T.GENERATE_ATTRIBUTE_WHERE AS GAW_T, t.Name as name_T, v.Name as name_V, l.name as name_l From ((Te_Theme t inner join Te_View v on v.view_id=t.view_id) inner join te_layer l on t.layer_id=l.layer_id) where v.name='" & tvw.getactiveview & "' and v.user_name='" & tvw.UserName & "' order by t.priority"
-  ' WritePrivateProfileString "A", "A", ff, App.Path & "\DEBUG.INI"
-   
-   Set rs = mConn.Execute("Select t.THEME_ID as " + """" + "TID_T" + """" + ", T.GENERATE_ATTRIBUTE_WHERE AS " + """" + "GAW_T" + """" + ", t.Name as " + """" + "name_T" + """" + ", v.Name as " + """" + "name_V" + """" + ", l.name as " + """" + "name_l" + """" + " From ((Te_Theme t inner join Te_View v on v.view_id=t.view_id) inner join te_layer l on t.layer_id=l.layer_id) where v.name='" & tvw.getActiveView & "' and v.user_name='" & tvw.UserName & "' order by t.priority")
-   
- 
-   Else
-  ' Select "te_theme"."theme_id" as TID_T, "te_theme"."generate_attribute_where" AS GAW_T, "te_theme"."name" as name_T, "te_view"."name" as name_V,
-' "te_layer"."name" as name_l From (("te_theme" inner join "te_view" on "te_view"."view_id"="te_theme"."view_id") inner join "te_layer"  on "te_theme"."layer_id"="te_layer"."layer_id")
-' where "te_view"."name"='Nova Vista'
- 'and "te_view"."user_name"='Administrador' order by "te_theme"."priority";
-   
-   'Dim aaa As String
-   'aaa = "Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_T" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getactiveview & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + ""
-   'WritePrivateProfileString "A", "A", aaa, App.Path & "\DEBUG.INI"
-   
-   
-
-   'MsgBox "ARQUIVO DEBUG SALVO"
-   'Dim aaaa2 As String
-   'aaaa2 = "Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_t" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getactiveview & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + ""
- 'WritePrivateProfileString "A", "A", aaaa2, App.Path & "\DEBUG.INI"
-   Set rs = mConn.Execute("Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_t" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getActiveView & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + "")
-   
-'Dim ay As String
-'ay = "Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_t" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getactiveview & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + ""
-
-'MsgBox "ARQUIVO DEBUG SALVO"
-'WritePrivateProfileString "A", "A", ay, App.Path & "\DEBUG.INI"
-   
-   
-  ' While Not rs.EOF
-   
-   'MsgBox ("Entrei")
-   
-   ' rs.MoveNext
-    '    Wend
-   
-   End If
-   
- 
-
-   
-   'Set Rs = mConn.Execute("Select t.Name as name_T, v.Name as name_V, l.name as name_l From ((Te_Theme t inner join Te_View v on v.view_id=t.view_id) inner join te_layer l on t.layer_id=l.layer_id) where v.name='" & tvw.getactiveview & "' and v.user_name='" & tvw.userName & "' order by t.priority desc")
-   Dim a As Integer, T As Node
-  ' With tvw
-        
-   
-   
-        If tvw.getActiveView = "" Then
-        
-    
-        
-          Exit Sub
+    Call SaveLoadGlobalData("C:\Arquivos de programas\GeoSan" + "\controles\variaveisGlobais.txt", False) 'Carrega as variáveis globais do GeoSan.exe
+    aa = "te_theme"
+    b = "te_view"
+    c = "theme_id"
+    d = "generate_attribute_where"
+    e = "name"
+    f = "te_layer"
+    g = "view_id"
+    h = "layer_id"
+    i = "user_name"
+    j = "priority"
+    'Me.Caption = "Vista: " & tvw.getActiveView
+    Tv.Nodes.Clear
+    Dim rs As ADODB.Recordset
+    If TypeConn <> 4 Then
+        ' Dim ff As String
+        ' ff = "Select t.THEME_ID as TID_T, T.GENERATE_ATTRIBUTE_WHERE AS GAW_T, t.Name as name_T, v.Name as name_V, l.name as name_l From ((Te_Theme t inner join Te_View v on v.view_id=t.view_id) inner join te_layer l on t.layer_id=l.layer_id) where v.name='" & tvw.getactiveview & "' and v.user_name='" & tvw.UserName & "' order by t.priority"
+        ' WritePrivateProfileString "A", "A", ff, App.Path & "\DEBUG.INI"
+        Set rs = mConn.Execute("Select t.THEME_ID as " + """" + "TID_T" + """" + ", T.GENERATE_ATTRIBUTE_WHERE AS " + """" + "GAW_T" + """" + ", t.Name as " + """" + "name_T" + """" + ", v.Name as " + """" + "name_V" + """" + ", l.name as " + """" + "name_l" + """" + " From ((Te_Theme t inner join Te_View v on v.view_id=t.view_id) inner join te_layer l on t.layer_id=l.layer_id) where v.name='" & tvw.getActiveView & "' and v.user_name='" & tvw.UserName & "' order by t.priority")
+    Else
+        ' Select "te_theme"."theme_id" as TID_T, "te_theme"."generate_attribute_where" AS GAW_T, "te_theme"."name" as name_T, "te_view"."name" as name_V,
+        ' "te_layer"."name" as name_l From (("te_theme" inner join "te_view" on "te_view"."view_id"="te_theme"."view_id") inner join "te_layer"  on "te_theme"."layer_id"="te_layer"."layer_id")
+        ' where "te_view"."name"='Nova Vista'
+        'and "te_view"."user_name"='Administrador' order by "te_theme"."priority";
+        'Dim aaa As String
+        'aaa = "Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_T" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getactiveview & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + ""
+        'WritePrivateProfileString "A", "A", aaa, App.Path & "\DEBUG.INI"
+        'MsgBox "ARQUIVO DEBUG SALVO"
+        'Dim aaaa2 As String
+        'aaaa2 = "Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_t" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getactiveview & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + ""
+        'WritePrivateProfileString "A", "A", aaaa2, App.Path & "\DEBUG.INI"
+        Set rs = mConn.Execute("Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_t" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getActiveView & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + "")
+        'Dim ay As String
+        'ay = "Select " + """" + aa + """" + "." + """" + c + """" + " as " + """" + "TID_T" + """" + ", " + """" + aa + """" + "." + """" + d + """" + " AS " + """" + "GAW_T" + """" + ", " + """" + aa + """" + "." + """" + e + """" + " as " + """" + "name_t" + """" + ", " + """" + b + """" + "." + """" + e + """" + " as " + """" + "name_V" + """" + ", " + """" + f + """" + "." + """" + e + """" + " as " + """" + "name_l" + """" + " From ((" + """" + aa + """" + "  inner join " + """" + b + """" + "  on " + """" + b + """" + "." + """" + g + """" + "=" + """" + aa + """" + "." + """" + g + """" + ") inner join " + """" + f + """" + "  on " + """" + aa + """" + "." + """" + h + """" + "=" + """" + f + """" + " ." + """" + h + """" + " ) where " + """" + b + """" + " ." + """" + e + """" + " ='" & tvw.getactiveview & "' and " + """" + b + """" + " ." + """" + i + """" + "='" & tvw.UserName & "' order by " + """" + aa + """" + "." + """" + j + """" + ""
+        'MsgBox "ARQUIVO DEBUG SALVO"
+        'WritePrivateProfileString "A", "A", ay, App.Path & "\DEBUG.INI"
+        ' While Not rs.EOF
+        'MsgBox ("Entrei")
+        ' rs.MoveNext
+        '    Wend
+    End If
+    'Set Rs = mConn.Execute("Select t.Name as name_T, v.Name as name_V, l.name as name_l From ((Te_Theme t inner join Te_View v on v.view_id=t.view_id) inner join te_layer l on t.layer_id=l.layer_id) where v.name='" & tvw.getactiveview & "' and v.user_name='" & tvw.userName & "' order by t.priority desc")
+    Dim a As Integer, T As Node
+    ' With tvw
+    If tvw.getActiveView = "" Then
+        Exit Sub
+    End If
+    Close #3
+    Open glo.diretorioGeoSan & "\Controles\FTema.txt" For Output As #3 ' GRAVA UM ARQUIVO EXTERNO QUE SERÁ USADO COMO LOG
+    While Not rs.EOF
+        'THEME_ID; STRING DO FILTRO
+        '                 ID DO TEMA          ;            NOME DA LAYER        ;       COMANDO DO FILTRO
+        Print #3, rs.Fields("TID_T").Value & ";" & rs.Fields("name_t").Value & ";" & rs.Fields("GAW_T").Value
+        Set T = Tv.Nodes.Add(, , rs.Fields("name_t").Value, rs.Fields("name_t").Value, GetVisibledTheme(rs.Fields("name_t").Value))
+        If tvw.existPoint(tvw.getActiveView(), rs.Fields("name_t").Value) Then
+            T.ForeColor = tvw.getPointColor(tvw.getActiveView(), rs.Fields("name_t").Value)
+        ElseIf tvw.existLine(tvw.getActiveView(), rs.Fields("name_t").Value) Then
+            T.ForeColor = tvw.getLineColor(tvw.getActiveView(), rs.Fields("name_t").Value)
+        ElseIf tvw.existPolygon(tvw.getActiveView(), rs.Fields("name_t").Value) Then
+            If tvw.getPolygonStyle(tvw.getActiveView(), rs.Fields("name_t").Value) > 0 Then
+                T.ForeColor = tvw.getPolygonColor(tvw.getActiveView(), rs.Fields("name_t").Value)
+            Else
+                T.ForeColor = tvw.getPolygonContourColor(tvw.getActiveView(), rs.Fields("name_t").Value)
+            End If
         End If
-      
-     
-        Close #3
-        Open App.Path & "\FTema.txt" For Output As #3 ' GRAVA UM ARQUIVO EXTERNO QUE SERÁ USADO COMO LOG
-        
-        
-         
-        While Not rs.EOF
-            'THEME_ID; STRING DO FILTRO
-           
-           '                 ID DO TEMA          ;            NOME DA LAYER        ;       COMANDO DO FILTRO
-           Print #3, rs.Fields("TID_T").Value & ";" & rs.Fields("name_t").Value & ";" & rs.Fields("GAW_T").Value
-          
-              
-           Set T = Tv.Nodes.Add(, , rs.Fields("name_t").Value, rs.Fields("name_t").Value, GetVisibledTheme(rs.Fields("name_t").Value))
-           If tvw.existPoint(tvw.getActiveView(), rs.Fields("name_t").Value) Then
-                T.ForeColor = tvw.getPointColor(tvw.getActiveView(), rs.Fields("name_t").Value)
-           ElseIf tvw.existLine(tvw.getActiveView(), rs.Fields("name_t").Value) Then
-                T.ForeColor = tvw.getLineColor(tvw.getActiveView(), rs.Fields("name_t").Value)
-           ElseIf tvw.existPolygon(tvw.getActiveView(), rs.Fields("name_t").Value) Then
-                If tvw.getPolygonStyle(tvw.getActiveView(), rs.Fields("name_t").Value) > 0 Then
-                   T.ForeColor = tvw.getPolygonColor(tvw.getActiveView(), rs.Fields("name_t").Value)
-                Else
-                   T.ForeColor = tvw.getPolygonContourColor(tvw.getActiveView(), rs.Fields("name_t").Value)
-                End If
-           End If
-           T.Tag = tvw.getLayerNameFromTheme(tvw.getActiveView(), rs.Fields("name_t").Value)
-           
-           rs.MoveNext
-        Wend
- 
-        Close #3
-      'For A = 0 To .getThemeCount(.getActiveView()) - 1
-'         Set T = Tv.Nodes.Add(, , .getThemeName(A), .getThemeName(A), GetVisibledTheme(.getThemeName(A)))
-'         If .existPoint(.getActiveView(), .getThemeName(A)) Then
-'            T.ForeColor = .getPointColor(.getActiveView(), .getThemeName(A))
-'         ElseIf .existLine(.getActiveView(), .getThemeName(A)) Then
-'            T.ForeColor = .getLineColor(.getActiveView(), .getThemeName(A))
-'         ElseIf .existPolygon(.getActiveView(), .getThemeName(A)) Then
-'            If .getPolygonStyle(.getActiveView(), .getThemeName(A)) > 0 Then
-'               T.ForeColor = .getPolygonStyle(.getActiveView(), .getThemeName(A))
-'            Else
-'               T.ForeColor = .getPolygonContourColor(.getActiveView(), .getThemeName(A))
-'            End If
-'         End If
-'         T.Tag = .getLayerNameFromTheme(.getActiveView(), .getThemeName(A))
-      'Next
-  ' End With
-   rs.Close
-aa = "te_theme"
-
-g = "view_id"
-
-j = "priority"
-   
-   'MsgBox "ressequenciando temas"
-   
-   '******** RESSEQUENCIAMENTO DE TEMAS
-   
- Dim conexao As New ADODB.Connection
-Dim strConn As String
-If TypeConn = 4 Then
-strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + decriptada + "; ByteaAsLongVarBinary=1;"
-conexao.Open strConn
-   End If
-   
-   
-   
-   
-   
-   
-   
-   
-   Dim rs2 As ADODB.Recordset
-Set rs2 = New ADODB.Recordset
-   Dim ViewOld As String, ViewAtual As String
-        If TypeConn <> 4 Then
-   rs2.Open "SELECT * FROM TE_THEME ORDER BY VIEW_ID, PRIORITY", conn, adOpenDynamic, adLockOptimistic
-   Else
-      rs2.Open "SELECT * FROM " + """" + "te_theme" + """" + " ORDER BY " + """" + "view_id" + """" + "," + """" + "priority" + """", conexao, adOpenDynamic, adLockOptimistic
-   End If
-   
-   
-   Do While Not rs2.EOF = True
-      If ViewOld = rs2!view_id Then
-         cont = cont + 1
-      Else
-         cont = 0
-      End If
-
-      rs2!priority = cont
-      rs2.Update
-    
-      ViewOld = rs2!view_id
-      rs2.MoveNext
-   Loop
-   rs2.Close
-   '******** RESSEQUENCIAMENTO DE TEMAS FIM
+        T.Tag = tvw.getLayerNameFromTheme(tvw.getActiveView(), rs.Fields("name_t").Value)
+        rs.MoveNext
+    Wend
+    Close #3
+    'For A = 0 To .getThemeCount(.getActiveView()) - 1
+    '         Set T = Tv.Nodes.Add(, , .getThemeName(A), .getThemeName(A), GetVisibledTheme(.getThemeName(A)))
+    '         If .existPoint(.getActiveView(), .getThemeName(A)) Then
+    '            T.ForeColor = .getPointColor(.getActiveView(), .getThemeName(A))
+    '         ElseIf .existLine(.getActiveView(), .getThemeName(A)) Then
+    '            T.ForeColor = .getLineColor(.getActiveView(), .getThemeName(A))
+    '         ElseIf .existPolygon(.getActiveView(), .getThemeName(A)) Then
+    '            If .getPolygonStyle(.getActiveView(), .getThemeName(A)) > 0 Then
+    '               T.ForeColor = .getPolygonStyle(.getActiveView(), .getThemeName(A))
+    '            Else
+    '               T.ForeColor = .getPolygonContourColor(.getActiveView(), .getThemeName(A))
+    '            End If
+    '         End If
+    '         T.Tag = .getLayerNameFromTheme(.getActiveView(), .getThemeName(A))
+    'Next
+    ' End With
+    rs.Close
+    aa = "te_theme"
+    g = "view_id"
+    j = "priority"
+    'MsgBox "ressequenciando temas"
+    '******** RESSEQUENCIAMENTO DE TEMAS
+    Dim conexao As New ADODB.Connection
+    Dim strConn As String
+    If TypeConn = 4 Then
+        strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + decriptada + "; ByteaAsLongVarBinary=1;"
+        conexao.Open strConn
+    End If
+    Dim rs2 As ADODB.Recordset
+    Set rs2 = New ADODB.Recordset
+    Dim ViewOld As String, ViewAtual As String
+    If TypeConn <> 4 Then
+        rs2.Open "SELECT * FROM TE_THEME ORDER BY VIEW_ID, PRIORITY", conn, adOpenDynamic, adLockOptimistic
+    Else
+        rs2.Open "SELECT * FROM " + """" + "te_theme" + """" + " ORDER BY " + """" + "view_id" + """" + "," + """" + "priority" + """", conexao, adOpenDynamic, adLockOptimistic
+    End If
+    Do While Not rs2.EOF = True
+        If ViewOld = rs2!view_id Then
+            cont = cont + 1
+        Else
+            cont = 0
+        End If
+        rs2!priority = cont
+        rs2.Update
+        ViewOld = rs2!view_id
+        rs2.MoveNext
+    Loop
+    rs2.Close
+    '******** RESSEQUENCIAMENTO DE TEMAS FIM
      'conexao.Close
-   Set rs = Nothing
+    Set rs = Nothing
     Set rs2 = Nothing
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -489,8 +434,6 @@ Trata_Erro:
         Close #1
         'MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & "Não foi possível estabelecer a conexão" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrencia.", vbInformation
     End If
-
-   
 End Sub
 
 Private Function LoadThemeProperties() As Boolean

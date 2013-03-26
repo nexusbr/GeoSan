@@ -931,72 +931,58 @@ Private tvm As Object, ThemeName As String, Confirm As Boolean
 Private rs As ADODB.Recordset, NameIcon As String, InserirIcon As Boolean, ColorTransp As OLE_COLOR
 Private blnMudaFiltro As Boolean
 Dim rs2 As New ADODB.Recordset
-Dim intTema As Integer
+Dim intTema As Integer                          'número do tema selecionado no menu da direita do GeoSan
 Dim ThemeName2 As String                        'tema que está ativo na vista
 Public LayerAtivo As String
 Dim conexao As New ADODB.Connection
 Dim man2 As Object
-
-
-
-
-
-
+' Esta função é executada quando o usuário seleciona que deseja alterar as propriedades de visualização de um Tema
+' Ela lê na tabela NXGS_FILT_TEMA os filtros anteriormente selecionados pelo usuário e então preenche na caixa de
+' diálogo
+'
 Public Function Init(mtvm As Object, mtheme As String, mLayerName As String) As Boolean
-   On Error GoTo Trata_Erro
-   'LoozeXP1.InitSubClassing
-   Confirm = False
-      
-   Set tvm = mtvm
-  
-   LoadCboLine cboLineStyle
-   LoadCboLine cboPolStyleBorder
-   LoadCboPolygon cboPolStyleFill
-   LoadCboPoints cboPointStyle
-
-   Representarion_Visibled mtheme, tvm.getActiveView
-   txtMin.Text = tvm.getMinScale(tvm.getActiveView, mtheme)
-   txtMax.Text = tvm.getMaxScale(tvm.getActiveView, mtheme)
-
-
-
-   Me.cboColunas.Clear
-   Me.cboColunas2.Clear
-   Me.cboFiltro.Clear
-   Me.cboFiltro2.Clear
-   
-   cboOperador.Clear
-   cboOperador.AddItem "Igual"
-   cboOperador.AddItem "Maior"
-   cboOperador.AddItem "Menor"
-   cboOperador.AddItem "Diferente"
-   
-   cboOperador2.Clear
-   cboOperador2.AddItem "Igual"
-   cboOperador2.AddItem "Maior"
-   cboOperador2.AddItem "Menor"
-   cboOperador2.AddItem "Diferente"
-   
-   ThemeName = mtheme
-   
- 
-   'LoadThemeFilter
-    
-    blnMudaFiltro = False
+    On Error GoTo Trata_Erro
     
     Dim vetor As Variant
     Dim str As String
+    'LoozeXP1.InitSubClassing
+    Call SaveLoadGlobalData("C:\Arquivos de programas\GeoSan" + "\controles\variaveisGlobais.txt", False) 'recupera as variáveis globais da aplicação principal do GeoSan
+    Confirm = False
+    Set tvm = mtvm
+    LoadCboLine cboLineStyle
+    LoadCboLine cboPolStyleBorder
+    LoadCboPolygon cboPolStyleFill
+    LoadCboPoints cboPointStyle
+    Representarion_Visibled mtheme, tvm.getActiveView
+    txtMin.Text = tvm.getMinScale(tvm.getActiveView, mtheme)
+    txtMax.Text = tvm.getMaxScale(tvm.getActiveView, mtheme)
+    Me.cboColunas.Clear
+    Me.cboColunas2.Clear
+    Me.cboFiltro.Clear
+    Me.cboFiltro2.Clear
+    cboOperador.Clear
+    cboOperador.AddItem "Igual"
+    cboOperador.AddItem "Maior"
+    cboOperador.AddItem "Menor"
+    cboOperador.AddItem "Diferente"
+    cboOperador2.Clear
+    cboOperador2.AddItem "Igual"
+    cboOperador2.AddItem "Maior"
+    cboOperador2.AddItem "Menor"
+    cboOperador2.AddItem "Diferente"
+    ThemeName = mtheme
+    'LoadThemeFilter
+    blnMudaFiltro = False
     Close #3
-    Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\CONTROLES\FTema.txt" For Input As #3 ' LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO
-                                                                                ' DE ABERTURA DO MAPA
+    Open glo.diretorioGeoSan + "\CONTROLES\FTema.txt" For Input As #3  ' Abre o arquivo que contém a lista com todos os temas existentes e filtros where da vista atual do usuário logado
     intTema = 0
     strCmdFiltro = ""
-    'Open App.Path & "\FTema.txt" For Input As #3
+    'Localiza o número (intTema) do tema em que o usuário selecionou a direita na listas de temas do GeoSan
     Do While Not EOF(3)
         Line Input #3, str
         vetor = Split(str, ";")
         If CStr(vetor(1)) = ThemeName Then
-            intTema = vetor(0)
+            intTema = vetor(0)              'achou o tema selecionado pelo usuário
             Exit Do
         End If
         'MsgBox vetor(0) & " É O NÚMERO THEME_ID QUE IDENTIFICA O LAYER E É FEITO O SELECT"
@@ -1004,118 +990,83 @@ Public Function Init(mtvm As Object, mtheme As String, mLayerName As String) As 
         ' vetor(2) 'É O COMANDO DO FILTRO
     Loop
     Close #3
-    
     Dim rs As New ADODB.Recordset
-'    Dim rs2 As New ADODB.Recordset
-'    rs2.Open "SELECT * FROM NXGS_FILT_TEMA", conn, adOpenKeyset, adLockOptimistic
-'    If rs2.EOF = True Then
-'        Rs.Open "SELECT * FROM TE_THEME", conn, adOpenKeyset, adLockOptimistic
-'        If Rs.EOF = False Then
-'            Do While Not Rs.EOF = True
-'                rs2.AddNew
-'                rs2!theme_id = Rs!theme_id
-''                rs2!FILT_1 = rs!FILT_1
-''                rs2!FILT_2 = rs!FILT_2
-''                rs2!FILT_3 = rs!FILT_3
-'                rs2.Update
-'                Rs.MoveNext
-'            Loop
-'        End If
-'        Rs.Close
-'    End If
-'    rs2.Close
-    
+    '    Dim rs2 As New ADODB.Recordset
+    '    rs2.Open "SELECT * FROM NXGS_FILT_TEMA", conn, adOpenKeyset, adLockOptimistic
+    '    If rs2.EOF = True Then
+    '        Rs.Open "SELECT * FROM TE_THEME", conn, adOpenKeyset, adLockOptimistic
+    '        If Rs.EOF = False Then
+    '            Do While Not Rs.EOF = True
+    '                rs2.AddNew
+    '                rs2!theme_id = Rs!theme_id
+    ''                rs2!FILT_1 = rs!FILT_1
+    ''                rs2!FILT_2 = rs!FILT_2
+    ''                rs2!FILT_3 = rs!FILT_3
+    '                rs2.Update
+    '                Rs.MoveNext
+    '            Loop
+    '        End If
+    '        Rs.Close
+    '    End If
+    '    rs2.Close
     'mudado 6-1-2011
-    If intTema = 0 Then ' desabilita a opção de filtro
-    '    Me.cmdModificar.Enabled = False
+    If intTema = 0 Then                 'desabilita a opção de filtro, pois nenhum tema foi encontrado, ou seja o tema selecionado não foi encontrato em Ftema.txt
+        'Me.cmdModificar.Enabled = False
     Else
-
-      'OBTEM O NOME DO LAYER DA VISTA QUE ESTÁ SENDO EDITADA
-Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-a = "te_layer"
-b = "te_theme"
-c = "layer_id"
-d = "theme_id"
-e = "name"
-
-      If TypeConn <> 4 Then
-      rs.Open "SELECT NAME FROM TE_LAYER WHERE LAYER_ID = (SELECT LAYER_ID FROM TE_THEME WHERE THEME_ID = " & intTema & ")", conn, adOpenKeyset, adLockReadOnly
-      Else
-      rs.Open "SELECT " + """" + e + """" + " FROM " + """" + a + """" + " WHERE " + """" + c + """" + " = (SELECT " + """" + c + """" + " FROM " + """" + b + """" + " WHERE " + """" + d + """" + " = '" & intTema & "')", conn, adOpenDynamic, adLockOptimistic
-      End If
-      
-      If rs.EOF = False Then
-         LayerAtivo = rs!Name
-      End If
-      rs.Close
-   ThemeName2 = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)
-      If ThemeName2 = "SEWERCOMPONENTS" Or ThemeName2 = "SEWERLINES" Then
-         'cboColunas2.Visible = False
-         'cboOperador2.Visible = False
-         'cboFiltro2.Visible = False
-         
-         Me.chkFiltraData.Enabled = True
-         chkFiltraData.Visible = True
-         Line2.Visible = True
-         
-     
-          Label7.Visible = True
-         Label6.Visible = True
-         Label5.Visible = True
-         txtDataInicio.Visible = True
-         txtDataFim.Visible = True
-      End If
-  If ThemeName2 = "WATERLINES" Or ThemeName2 = "WATERCOMPONENTS" Then
-  Line2.Visible = False
-         chkFiltraData.Visible = False
-         Label7.Visible = False
-         Label6.Visible = False
-         Label5.Visible = False
-         txtDataInicio.Visible = False
-         txtDataFim.Visible = False
-         
-          Line2.Visible = False
-         
-         
-         
-         
-         
-          chkFiltraData.Visible = True
-         Label7.Visible = True
-         Label6.Visible = True
-         Label5.Visible = True
-         txtDataInicio.Visible = True
-         txtDataFim.Visible = True
-  End If
-  
-        'Carrega nos campos os filtros ja existentes
-Dim aa As String
-Dim bb As String
-
-
-aa = "NXGS_FILT_TEMA"
-bb = "THEME_ID"
-
-' MsgBox "SELECT * FROM " + """" + aa + """" + " WHERE " + """" + bb + """" + " = '" & intTema & "'"
- 
-      If TypeConn <> 4 Then
-        rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE THEME_ID = " & intTema, conn, adOpenKeyset, adLockOptimistic
+        'Agora é rodada uma querie junto ao banco de dados para descobrir a que layer pertence o tema que o usuário selecionou para alterar
+        If TypeConn <> 4 Then
+            rs.Open "SELECT NAME FROM TE_LAYER WHERE LAYER_ID = (SELECT LAYER_ID FROM TE_THEME WHERE THEME_ID = " & intTema & ")", conn, adOpenKeyset, adLockReadOnly
         Else
-        
-       
-                rs.Open "SELECT * FROM " + """" + aa + """" + " WHERE " + """" + bb + """" + " = '" & intTema & "'", conn, adOpenDynamic, adLockOptimistic
-            
+            rs.Open "SELECT " + """" + e + """" + " FROM " + """" + a + """" + " WHERE " + """" + c + """" + " = (SELECT " + """" + c + """" + " FROM " + """" + b + """" + " WHERE " + """" + d + """" + " = '" & intTema & "')", conn, adOpenDynamic, adLockOptimistic
         End If
-        
-        
-        
-        
-        
-        
+        If rs.EOF = False Then
+            LayerAtivo = rs!Name        'descobriu o nome do layer que o usuário selecionou
+        End If
+        rs.Close
+        ThemeName2 = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)
+        If ThemeName2 = "SEWERCOMPONENTS" Or ThemeName2 = "SEWERLINES" Then
+            'cboColunas2.Visible = False
+            'cboOperador2.Visible = False
+            'cboFiltro2.Visible = False
+            Me.chkFiltraData.Enabled = True
+            chkFiltraData.Visible = True
+            Line2.Visible = True
+            Label7.Visible = True
+            Label6.Visible = True
+            Label5.Visible = True
+            txtDataInicio.Visible = True
+            txtDataFim.Visible = True
+        End If
+        If ThemeName2 = "WATERLINES" Or ThemeName2 = "WATERCOMPONENTS" Then
+            Line2.Visible = False
+            chkFiltraData.Visible = False
+            Label7.Visible = False
+            Label6.Visible = False
+            Label5.Visible = False
+            txtDataInicio.Visible = False
+            txtDataFim.Visible = False
+            Line2.Visible = False
+            chkFiltraData.Visible = True
+            Label7.Visible = True
+            Label6.Visible = True
+            Label5.Visible = True
+            txtDataInicio.Visible = True
+            txtDataFim.Visible = True
+        End If
+        'Carrega nos campos os filtros ja existentes
+        Dim aa As String
+        Dim bb As String
+        aa = "NXGS_FILT_TEMA"
+        bb = "THEME_ID"
+        ' MsgBox "SELECT * FROM " + """" + aa + """" + " WHERE " + """" + bb + """" + " = '" & intTema & "'"
+        'Prepara uma pesquisa para todos os filtros criados pelos usuários. Isso é feito pois precisamos preencher a caixa de diálogo com os filtros que já foram
+        'entrados pelo usuário. Para isso ele roda a querie e procura pelo tema selecionado (intTema) os filtros existentes na tabela NXGS_FILT_TEMA
+        If TypeConn <> 4 Then
+            rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE THEME_ID = " & intTema, conn, adOpenKeyset, adLockOptimistic
+        Else
+            rs.Open "SELECT * FROM " + """" + aa + """" + " WHERE " + """" + bb + """" + " = '" & intTema & "'", conn, adOpenDynamic, adLockOptimistic
+        End If
+        'Preenche agora na caixa de diálogo com os dados dos filtros existentes para aquele tema
         If rs.EOF = False Then
             If (rs!FILT_1 & "A") <> "A" Then
                 'Me.chkFiltro.Enabled = True
@@ -1125,7 +1076,6 @@ bb = "THEME_ID"
                 Me.cboOperador.Text = vetor(1)
                 Me.cboFiltro.Text = vetor(2)
             End If
-
             If (rs!FILT_2 & "A") <> "A" Then
                 'Me.chkFiltro.Enabled = True
                 Me.chkFiltro.Value = 1
@@ -1134,7 +1084,6 @@ bb = "THEME_ID"
                 Me.cboOperador2.Text = vetor(1)
                 Me.cboFiltro2.Text = vetor(2)
             End If
-
             If (rs!FILT_3 & "A") <> "A" Then
                 'Me.chkFiltraData.Enabled = True
                 Me.chkFiltraData.Value = 1
@@ -1147,14 +1096,9 @@ bb = "THEME_ID"
         End If
         rs.Close
     End If
-   
-   
-   
-   
-   Me.Show vbModal
-   
-   Init = Confirm
-   Exit Function
+    Me.Show vbModal
+    Init = Confirm
+    Exit Function
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -1263,6 +1207,7 @@ End Sub
 
 
 
+
 Private Sub cboLineStyle_Click()
    If cboLineStyle.ItemData(cboLineStyle.ListIndex) <= 5 Then
       Line1.BorderStyle = cboLineStyle.ItemData(cboLineStyle.ListIndex)
@@ -1348,11 +1293,11 @@ End Sub
 
 Private Sub cmdIcone_Click()
    If cmdIcone.Caption = "Inserir" Then
-      Cdl.FileName = ""
+      Cdl.filename = ""
       Cdl.Filter = "Pictures (*.bmp;*.png;*.jpg)|*.bmp;*.ico;*.jpg"
       Cdl.ShowOpen
-      If Not Cdl.FileName = "" Then
-         NameIcon = Cdl.FileName
+      If Not Cdl.filename = "" Then
+         NameIcon = Cdl.filename
          InserirIcon = True
       End If
     Else
@@ -2048,7 +1993,7 @@ Private Sub cmdModificar_Click()
     Dim decriptada As String
     Dim conexao As New ADODB.Connection
     Dim Filtro As String
- 
+    
     If TypeConn = 4 Then
         'caso seja Postgres
         mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\GEOSAN.ini")
@@ -2169,8 +2114,7 @@ Private Sub cmdModificar_Click()
             '
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX AQUI ESTÁ O PROBLEMA ELE ACHA QUE É RAMAL E NAO NÓ
             '
-            
-            If FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS" Then    'RAMAIS_AGUA_LIGACAO
+            If (FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS") And ThemeName2 <> "WATERCOMPONENTS" Then    'RAMAIS_AGUA_LIGACAO
                 tabela = "RAMAIS_AGUA_LIGACAO"
             ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
                 tabela = "RAMAIS_AGUA"
@@ -2386,18 +2330,17 @@ Private Sub chkFiltraData_Click()
     End If
     
 End Sub
-
+'Habilita a edição dos filtros
+'
+'
 Private Sub chkFiltro_Click()
-   'QUANDO SE SELECIONA O CHECK BOX DE FILTRAR CAMPOS O SEGUINTE EVENTO É PROVOCADO
-      ThemeName2 = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)
- If ThemeName2 = "SEWERLINES" Or ThemeName2 = "SEWERCOMPONENTS" Then
- 'Me.chkFiltro.Enabled = True
- 
- End If
+    'QUANDO SE SELECIONA O CHECK BOX DE FILTRAR CAMPOS O SEGUINTE EVENTO É PROVOCADO
+    ThemeName2 = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)
+    If ThemeName2 = "SEWERLINES" Or ThemeName2 = "SEWERCOMPONENTS" Then
+        'Me.chkFiltro.Enabled = True
+    End If
     If chkFiltro.Value = 1 Then
-
         LoadCboAttribute
-        
         Me.cboColunas.Enabled = True
         Me.cboColunas2.Enabled = True
         Me.cboFiltro.Enabled = True
@@ -2405,7 +2348,6 @@ Private Sub chkFiltro_Click()
         Me.cboOperador.Enabled = True
         Me.cboOperador2.Enabled = True
     Else
-
         Me.cboColunas.Enabled = False
         Me.cboColunas2.Enabled = False
         Me.cboFiltro.Enabled = False
@@ -2413,7 +2355,6 @@ Private Sub chkFiltro_Click()
         Me.cboOperador.Enabled = False
         Me.cboOperador2.Enabled = False
     End If
-
 End Sub
 
 Private Function GetThemeWhere() As String
@@ -2930,111 +2871,75 @@ Exit Sub
 cboColunas2_Click_err:
    MsgBox Err.Description
 End Sub
-
+'Carrega os atributos de filtros possíveis para o tema selecionado, na caixa de diálogo para que o usuário possa selecioná-lo
+'e realizar o filtro pelo mesmo
+'
+'
 Private Sub LoadCboAttribute()
-   
-   'LIMPA E CARREGA OS COMBOS DE ATRIBUTOS
-   cboColunas.Clear
-   cboColunas2.Clear
-   Dim AttributeTable As String, AttributeLink As String, strCMD As String
-   
-   If LayerAtivo = "RAMAIS_AGUA" Then
-   
-      cboColunas.AddItem "TIPO"
-      cboColunas.AddItem "HIDROMETRADO"
-      cboColunas.AddItem "ECONOMIAS"
-      cboColunas.AddItem "CONSUMO_LPS"
-     
-      cboColunas.AddItem "DISTANCIA_TESTADA"
-      cboColunas.AddItem "DISTANCIA_LADO"
-      cboColunas.AddItem "COMPRIMENTO_RAMAL"
-      cboColunas.AddItem "PROFUNDIDADE_RAMAL"
-      cboColunas.AddItem "USUARIO_LOG"
-   
-  ' strCMD = getPmsdp(tvm.getLayerNameFromTheme(tvm.getactiveview, ThemeName), 2, 0, TypeConn, conn)
-   Else
-  
-   ThemeName2 = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)
-    If (ThemeName2 = "WATERLINES" Or ThemeName2 = "SEWERLINES") Then
-    'strCMD = getPmsdp(tvm.getLayerNameFromTheme(tvm.getactiveview, ThemeName), 2, 0, TypeConn, conn)
-      If RetornaNomeAtr(conn, tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), AttributeTable, AttributeLink) Then
-          strCMD = ""
-         
-          strCMD = getPmsdp(tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), 2, 0, TypeConn, conn)
-         
-           
-        
-          strCMD = UCase(strCMD)
-          Set rs = New ADODB.Recordset
-          
-         ' MsgBox "ARQUIVO DEBUG SALVO"
- 'WritePrivateProfileString "A", "A", strCMD, App.Path & "\DEBUG.INI"
-          
-          Set rs = conn.Execute(strCMD)
-          
-          
-
-          
-          
-                   
-          For a = 0 To rs.Fields.Count - 1
-                   
-              cboColunas.AddItem rs(a).Name
-              cboColunas.ItemData(cboColunas.NewIndex) = a
-              cboColunas2.AddItem rs(a).Name
-              cboColunas2.ItemData(cboColunas2.NewIndex) = a
-           
-          Next
-           
-      End If
-      
-      ElseIf (ThemeName2 = "WATERCOMPONENTS" Or ThemeName2 = "SEWERCOMPONENTS") Then
-      
-       If RetornaNomeAtr(conn, tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), AttributeTable, AttributeLink) Then
-          strCMD = ""
-        
-            strCMD = getPmsdp2(tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), 2, 0, TypeConn, conn)
-      
-          strCMD = UCase(strCMD)
-          Set rs = New ADODB.Recordset
-          
-         ' MsgBox "ARQUIVO DEBUG SALVO"
- 'WritePrivateProfileString "A", "A", strCMD, App.Path & "\DEBUG.INI"
-          
-          Set rs = conn.Execute(strCMD)
-          
-          
-
-          
-          
-                   
-          For a = 0 To rs.Fields.Count - 1
-                   
-              cboColunas.AddItem rs(a).Name
-              cboColunas.ItemData(cboColunas.NewIndex) = a
-              cboColunas2.AddItem rs(a).Name
-              cboColunas2.ItemData(cboColunas2.NewIndex) = a
-           
-          Next
-           
-      End If
-    
-      
-      End If
-      
-      
-      
-      
-      
-      
-    
-   End If
-    
+    Dim AttributeTable As String, AttributeLink As String, strCMD As String
+    'LIMPA E CARREGA OS COMBOS DE ATRIBUTOS
+    cboColunas.Clear
+    cboColunas2.Clear
+    'XXXXXX  AQUI O LAYER ATIVO PARA QUANTO SELECIONA RAMAIS, ESTÁ VINDO COMO WATERCOMPONENTS, QUANDO CORRIGIDO, RETIRAR ESTA LINHA
+    'Agora iremos verificar pelos ifs qual o tipo de layer que estamos tratando
+    If LayerAtivo = "RAMAIS_AGUA" Then
+        '*** TRATANDO RAMAIS DE ÁGUA
+        'aqui os atributos estão sendo carregados em hardcode
+        cboColunas.AddItem "TIPO"
+        cboColunas.AddItem "HIDROMETRADO"
+        cboColunas.AddItem "ECONOMIAS"
+        cboColunas.AddItem "CONSUMO_LPS"
+        cboColunas.AddItem "DISTANCIA_TESTADA"
+        cboColunas.AddItem "DISTANCIA_LADO"
+        cboColunas.AddItem "COMPRIMENTO_RAMAL"
+        cboColunas.AddItem "PROFUNDIDADE_RAMAL"
+        cboColunas.AddItem "USUARIO_LOG"
+        ' strCMD = getPmsdp(tvm.getLayerNameFromTheme(tvm.getactiveview, ThemeName), 2, 0, TypeConn, conn)
+    Else
+        ThemeName2 = tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)
+        If (ThemeName2 = "WATERLINES" Or ThemeName2 = "SEWERLINES") Then
+            '*** TRATANDO REDES DE ÁGUA OU ESGOTO
+            'carrega os atributos de redes
+            If RetornaNomeAtr(conn, tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), AttributeTable, AttributeLink) Then
+                strCMD = ""
+                strCMD = getPmsdp(tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), 2, 0, TypeConn, conn)
+                strCMD = UCase(strCMD)
+                Set rs = New ADODB.Recordset
+                ' MsgBox "ARQUIVO DEBUG SALVO"
+                'WritePrivateProfileString "A", "A", strCMD, App.Path & "\DEBUG.INI"
+                Set rs = conn.Execute(strCMD)
+                For a = 0 To rs.Fields.Count - 1
+                    cboColunas.AddItem rs(a).Name
+                    cboColunas.ItemData(cboColunas.NewIndex) = a
+                    cboColunas2.AddItem rs(a).Name
+                    cboColunas2.ItemData(cboColunas2.NewIndex) = a
+                Next
+            End If
+        ElseIf (ThemeName2 = "WATERCOMPONENTS" Or ThemeName2 = "SEWERCOMPONENTS") Then
+            '*** TRATANDO NÓS DAS REDES
+            'carrega os atributos de nós
+            If RetornaNomeAtr(conn, tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), AttributeTable, AttributeLink) Then
+                strCMD = ""
+                strCMD = getPmsdp2(tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName), 2, 0, TypeConn, conn)
+                strCMD = UCase(strCMD)
+                Set rs = New ADODB.Recordset
+                ' MsgBox "ARQUIVO DEBUG SALVO"
+                'WritePrivateProfileString "A", "A", strCMD, App.Path & "\DEBUG.INI"
+                Set rs = conn.Execute(strCMD)
+                For a = 0 To rs.Fields.Count - 1
+                    cboColunas.AddItem rs(a).Name
+                    cboColunas.ItemData(cboColunas.NewIndex) = a
+                    cboColunas2.AddItem rs(a).Name
+                    cboColunas2.ItemData(cboColunas2.NewIndex) = a
+                Next
+            End If
+        End If
+    End If
     If Not rs Is Nothing Then
         If rs.State = adStateOpen Then rs.Close
         Set rs = Nothing
     End If
-    
+
 End Sub
 
 Private Sub cboFiltro_Click()

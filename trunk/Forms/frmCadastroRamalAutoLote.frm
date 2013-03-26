@@ -179,9 +179,8 @@ Private Sub Form_Load()
    Dim str As String
    
    Close #3
-   Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\CONTROLES\FTema.txt" For Input As #3 ' LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO
    
-   'Open App.path & "\CONTROLES\FTema.txt" For Input As #1
+   Open glo.diretorioGeoSan + "\CONTROLES\FTema.txt" For Input As #3    'LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO DE ABERTURA DO MAPA
    Do While Not EOF(3)
       Line Input #3, str
       Vetor = Split(str, ";")
@@ -244,9 +243,7 @@ Private Sub ValidaTema()
    
    'PROCURAR NO VETOR O ID DO TEMA SELECIONADO
    Close #3
-   Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\CONTROLES\FTema.txt" For Input As #3 ' LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO
-
-   'Open App.path & "\CONTROLES\FTema.txt" For Input As #1
+   Open glo.diretorioGeoSan + "\GEOSAN\CONTROLES\FTema.txt" For Input As #3     'LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO DE ABERTURA DO MAPA
    Do While Not EOF(3)
        Line Input #3, str
        Vetor = Split(str, ";")

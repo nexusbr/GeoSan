@@ -40,12 +40,10 @@ Dim i As String
 Dim j As String
 Dim k As String
 Dim l As String
-
 Private Type Usuarios
    UsrId As Long
    UseName As String
 End Type
-
 ' typeconnection - represents the database type
 ' access = 0
 ' sqlserver = 1
@@ -58,103 +56,70 @@ Public strUser As String 'VARIAVEL GLOBAL DE USUÁRIO LOGADO
 Public xWorld As Double
 Public yWorld As Double
 Public canvasScale As Double
-
 Public Object_id_Show As String
 Public blnLocalizandoConsumidor As Boolean
-
 Public strLayerAtivo As String
 Public idPoligonSel As String
-
 Public ramal_Object_id_trecho As Long
 Public idAutoLote As String 'CODIGO DO LOTE QUE é UTILIZADO NO CADASTRO DO RAMAL
-
 'MEDIR DISTANCIA ENTRE DOIS PONTOS
 Public X1 As Double
 Public Y1 As Double
-
 Public CanvasXmin_ As Double
 Public CanvasYmin_ As Double
 Public CanvasXmax_ As Double
 Public CanvasYmax_ As Double
 Public strViewAtiva_ As String
-
-
-
-
 Public blnGeraRel As Boolean
-
 Type TListaNo
     indice As Integer
     object_id As String
     x As Double
     y As Double
 End Type
-
 Public Enum nxSqlOperations
    nxSELECT = 1
    nxUpdate = 2
    nxInsert = 3
    nxDelete = 4
 End Enum
-
 Public blnMonitorar As Boolean
 'Public frmCanvas.TipoConexao As Integer
-
 Public ConnPostgresPorta As String ' informa ao a conexão TeConnectio a porta de conexão postgres
-
 Public blnAutoLogin As Boolean
-
 Public dblFatorZoomMais As Double
 Public dblFatorZoomMenos As Double
-
 'Public Conn As ADODB.Connection
 Public Conn As New ADODB.connection
 
 Public stopProcess As Boolean
-
 Public Sec As New NSecurity.AppMode
-
-
-
-
 Public nxUser As New NexusUsers.clsUsers
-
 Public ConnSec As New ADODB.connection
-
 Public msEmpresa As String
 Public msconexao As String
 Public msServidor As String
 Public msBanco As String
 Public msPathFileName As String
 Public msServiceName As String
-
 Public MyConn As ADODB.connection
-
 Public idLinhaEmDesenho As String
-
 'Variáveis para operações com polígonos
-
 'IDENTIFICAÇÃO PARA SABER SE ESTÁ SENDO ANALISADO UM POLÍGONO VIRTUAL OU POLÍGONO DE LAYER
 Public blnPoligonoVirtual As Boolean
-
 Public lngTotalRedesDentro As Long
 Public lngTotalRedesDivisa As Long
 Public lngTotalRamaisDentro As Long
 Public lngTotalRamaisDivisa As Long
 Public lngTotalPontosDentro As Long
 Public lngTotalPontosDivisa As Long
-
-
 Public ArrRedesDentro() As Long
 Public ArrRedesDivisa() As Long
 Public ArrRamaisDentro() As Long
 Public ArrRamaisDivisa() As Long
 Public ArrPontosDentro() As Long
 Public ArrPontosDivisa() As Long
-
-
 '**************************************************************************************
-
 Private aListaNo() As TListaNo
 Public Enum mSaveType
    Single_Point = 0
@@ -162,14 +127,12 @@ Public Enum mSaveType
    Multiples_Point = 2
    Multiples_Line = 3
 End Enum
-
 Public Enum TypeGeometry
    Polyguns = 1
    points = 4
    lines = 2
    texts = 128
 End Enum
-
 Enum TipoRelatorio
    RedeMaterialDiametro = 0
    RegistrosEstadoEstado = 1
@@ -190,6 +153,8 @@ Public Sub Main()
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
     Versao_Geo = "06.08.01"
+    glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
+    Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
     If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
         If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
@@ -1443,10 +1408,10 @@ End Function
 '   ConectaBanco = False
 'End Function
 
-Public Function GetCboListIndex(ID As Long, mCbo As ComboBox) As Integer
+Public Function GetCboListIndex(id As Long, mCbo As ComboBox) As Integer
    Dim a As Integer
    For a = 0 To mCbo.ListCount - 1
-       If mCbo.ItemData(a) = ID Then
+       If mCbo.ItemData(a) = id Then
          GetCboListIndex = a
          Exit Function
        End If
@@ -2797,3 +2762,4 @@ Function GetMyDocumentsDirectory() As String
     End If
     RegCloseKey lRes
 End Function
+

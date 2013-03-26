@@ -128,7 +128,7 @@ Dim count1, count2 As Integer
 Private Sub cmdAtivar_Click()
     If Me.optExportEpanet.value = True Then
         'deseja exportar para o Epanet
-        Shell "C:\arquivos de programas\geosan\Exporte EPANet.exe", vbNormalFocus
+        Shell glo.diretorioGeoSan + "\Exporte EPANet.exe", vbNormalFocus
     ElseIf Me.optAlteraConsumo.value = True Then
         'deseja alterar os consumos das ligações
         Me.Visible = False
@@ -261,11 +261,11 @@ usuario = ReadINI("CONEXAO", "USER", App.path & "\CONTROLES\GEOSAN.ini")
 
 If frmCanvas.TipoConexao <> 4 Then
 If count1 <> 10 Then
- TeDatabase1.username = usuario
+ TeDatabase1.UserName = usuario
  TeDatabase1.Provider = frmCanvas.TipoConexao
  TeDatabase1.connection = Conn
  
- TeDatabase2.username = usuario
+ TeDatabase2.UserName = usuario
   TeDatabase2.Provider = typeconnection
  TeDatabase2.connection = Conn
  count1 = 10
@@ -278,10 +278,10 @@ End If
       If count2 <> 10 Then
   TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
 
-TeDatabase1.username = usuario
+TeDatabase1.UserName = usuario
  TeDatabase1.Provider = frmCanvas.TipoConexao
  TeDatabase1.connection = TeAcXConnection1.objectConnection_
-TeDatabase2.username = usuario
+TeDatabase2.UserName = usuario
  TeDatabase2.Provider = frmCanvas.TipoConexao
  TeDatabase2.connection = TeAcXConnection1.objectConnection_
 

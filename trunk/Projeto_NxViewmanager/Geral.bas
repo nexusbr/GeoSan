@@ -1217,54 +1217,46 @@ Public Function convertQuery(sql As String, Tipo As Integer) As String
    
    
 End Function
-
-
-
+'
+'
+'
 Public Function RetornaNomeAtr(conn As ADODB.Connection, LayerName As String, AttributeTable As String, AttributeLink As String) As Boolean
-       Dim rs As New ADODB.Recordset
-       Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
+    Dim rs As New ADODB.Recordset
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+    Dim ate As String
 
-
-a = "attr_table"
-b = "attr_link"
-c = "te_layer_table"
-d = "layer_id"
-e = "name"
-f = "te_layer"
-
-   If TypeConn <> 4 Then
-       Set rs = conn.Execute("Select attr_table,attr_link from Te_Layer_table where layer_id in(select layer_id from te_layer where name='" & LayerName & "')")
-       Else
+    a = "attr_table"
+    b = "attr_link"
+    c = "te_layer_table"
+    d = "layer_id"
+    e = "name"
+    f = "te_layer"
+    If TypeConn <> 4 Then
+        Set rs = conn.Execute("Select attr_table,attr_link from Te_Layer_table where layer_id in(select layer_id from te_layer where name='" & LayerName & "')")
+    Else
         Set rs = conn.Execute("Select " + """" + a + """" + "," + """" + b + """" + " from " + """" + c + """" + " where " + """" + d + """" + " in(select " + """" + d + """" + " from " + """" + f + """" + " where " + """" + e + """" + "='" & LayerName & "')")
-       End If
-       
-       
-       Dim ate As String
-       ate = "Select " + """" + a + """" + "," + """" + b + """" + " from " + """" + c + """" + " where " + """" + d + """" + " in(select " + """" + d + """" + " from " + """" + f + """" + " where " + """" + e + """" + "='" & LayerName & "')"
-       
-       'MsgBox "ARQUIVO DEBUG SALVO"
-' WritePrivateProfileString "A", "A", ate, App.Path & "\DEBUG.INI"
-       
-       
-       
-       If Not rs.EOF Then
-         AttributeLink = rs(1).Value
-         AttributeTable = rs(0).Value
-         RetornaNomeAtr = True
-       End If
-       rs.Close
-       Set rs = Nothing
+    End If
+    ate = "Select " + """" + a + """" + "," + """" + b + """" + " from " + """" + c + """" + " where " + """" + d + """" + " in(select " + """" + d + """" + " from " + """" + f + """" + " where " + """" + e + """" + "='" & LayerName & "')"
+    'MsgBox "ARQUIVO DEBUG SALVO"
+    ' WritePrivateProfileString "A", "A", ate, App.Path & "\DEBUG.INI"
+    If Not rs.EOF Then
+        AttributeLink = rs(1).Value
+        AttributeTable = rs(0).Value
+        RetornaNomeAtr = True
+    End If
+    rs.Close
+    Set rs = Nothing
 End Function
 
 

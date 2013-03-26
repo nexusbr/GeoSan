@@ -1,6 +1,20 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+26-03-2013 - GeoSan 06.09.02
+Foram feitas correções nas chamadas diretas para o diretório 
+c:\arquivos de programas\GeoSan
+onde foi criada um tipo de dado glo o qual armazenará a partir de hoje todas
+as variáveis globais.
+Também o glo é salvo no disco para que possam ser recuperadas por outros módulos
+do GeoSan, como o NxViewManager. É necessário ainda tirar no furturo o hard
+code inicial do diretório "c:\arquivos de programas\GeoSan"
+
+O arquivo FTema.txt possui uma lista de todos os temas ativos do usuário e vista
+bem como as cláusulas de filtro where, caso existam.
+
+
+
 19-03-2013 - GeoSan 06.09.01
 Novos requisitos levantados:
 

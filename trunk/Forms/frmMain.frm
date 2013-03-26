@@ -188,12 +188,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             AutoSize        =   2
-            TextSave        =   "04/01/2013"
+            TextSave        =   "26/03/2013"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             AutoSize        =   2
-            TextSave        =   "14:24"
+            TextSave        =   "11:39"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1428,7 +1428,7 @@ If frmCanvas.TipoConexao <> 4 Then
 Open CAMINHO For Output As #1
       Print #1, "CONSUMIDOR;NRO_LIGACAO;CONSUMO;LOWER_X;UPPER_X;LOWER_Y;UPPER_Y;MES,ANO"
       Do While Not rs.EOF = True
-         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!CONSUMO_MEDIDO & ";" & rs3!lower_x & ";" & rs3!upper_x & ";" & rs3!lower_y & ";" & rs3!upper_y & ";" & rs!Mes & ";" & rs!ANO
+         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!consumo_medido & ";" & rs3!lower_x & ";" & rs3!upper_x & ";" & rs3!lower_y & ";" & rs3!upper_y & ";" & rs!Mes & ";" & rs!ANO
          rs.MoveNext
       Loop
    Close #1
@@ -1441,7 +1441,7 @@ Open CAMINHO For Output As #1
 Open CAMINHO For Output As #1
       Print #1, "CONSUMIDOR;NRO_LIGACAO;CONSUMO;COORDENADAS ESPACIAIS;MES,ANO"
       Do While Not rs.EOF = True
-         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!CONSUMO_MEDIDO & ";" & rs3!spatial_data & ";" & rs!Mes & ";" & rs!ANO
+         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!consumo_medido & ";" & rs3!spatial_data & ";" & rs!Mes & ";" & rs!ANO
          rs.MoveNext
       Loop
    Close #1
