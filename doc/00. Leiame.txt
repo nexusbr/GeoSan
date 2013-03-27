@@ -1,11 +1,24 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
-26-03-2013 - GeoSan 06.09.03
+27-03-2013 - GeoSan 06.09.03
 Atendimento ao requisito de exportar somente valvulas redutoras de pressão - 
 VRP. Nos registros, descargas, etc. exportar somente como nó.
 
+Quando gera o relatório, sai da aplicação.
 
+Ao exportar uma válvula ele não considera o diâmetro da tubulação, vem como
+o diâmetro padrão do EPANET, tem que pegar o diametro da tubulação e colocar
+na válvula
+
+Na simulação de fechamento de rede, ele tem que parar sempre no registro,
+ignorar o registro fixo e não parar na válvula. Verificar o funcionamento.
+
+Foi realizada a correção da simulação de consumidores desabastecidos até
+encontrar um registro. 
+Foram alterados dados na tabela WATERCOMPONETSTYPES
+É necessário atualizar o modelo de banco de dados integrando com as alterações
+realizadas na última atualização para exportar para shp.
 
 26-03-2013 - GeoSan 06.09.02
 COMENTÁRIOS
@@ -43,7 +56,6 @@ Ao utilizar o GeoSan o registro de divisão de setor de abastecimento devem ser
 cadastrados como REGISTRO FIXO. Na exportação ele exportará como válvula.
 
 
-
 19-03-2013 - GeoSan 06.09.01
 Novos requisitos levantados:
 
@@ -52,17 +64,20 @@ descargas, etc. exportar somente como nó.
 
 1-A - Existem registros que por serem de divisão de setor de abastecimento que
 ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
-fechado ai ele deve ser exportado. 
+fechado ai ele deve ser exportado. A propriedade do mesmo tem que vir sempre
+como fechado. 
 
 2 - Não exportar redes desativadas para o EPANET, onde o ESTADO da rede esteja
 como fora de operação.
 
-3 - GeoSan não está exportando o RESERVATÓRIO (no código está RNV e RNF e no
-dado está como RESERVATÓRIO) , BOOSTER (é uma bomba o nome correto,
-no código está como PUMP) para o EPANET
+3 - GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
+TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO) , 
+BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 
 4 - Como vai fazer no caso da BOMBA para especificar o sentido da mesma, pois
-ela é um nó.
+ela é um nó. Quando seleciono BOMBA no GeoSan, não aparecem os parâmetros da
+mesma para serem preenchidos. Se não fornecer ele adota uma curva genérica.
+O sentido é necessário verificar como entrar no GeoSan.
 
 5 - Definir forma em que será colocado o sentido de uma BOMBA ou VÁLVULA 
 RETENTORA
@@ -84,7 +99,8 @@ informação estiver no nó, utiliza o padrão de consumo default.
 9 - Já existe um campo no nó que é o padrão de consumo que está sempre indo 
 como zero e que está exportando.
 
-10 - Inserir botão para colocar os CONTROLES
+10 - Inserir botão para colocar os CONTROLES. IF, etc. Caixa de diálogo
+que facilita entrar os controles.
 
 11 - Quando seleciona RESERVATÓRIO teria que abrir outros campos como DIAMETRO 
 (equivalente), ALTURA MÁXIMA (altura do reservatório) - 1 que assim tem a 

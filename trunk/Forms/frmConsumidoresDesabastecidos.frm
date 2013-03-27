@@ -314,11 +314,11 @@ End Function
 Private Sub cmdGerartxt_Click()
 On Error GoTo Trata_Erro
     Dim a As Integer
-    cdl1.FileName = GetMyDocumentsDirectory() & "\ClientesAfetadosManobra_" & Format(Now, "YYYY-MM-DD-HHMMSS") & ".txt"
+    cdl1.filename = GetMyDocumentsDirectory() & "\ClientesAfetadosManobra_" & Format(Now, "YYYY-MM-DD-HHMMSS") & ".txt"
     cdl1.Filter = "Arquivos texto (*.txt)|*.txt"
     cdl1.ShowSave
-    If cdl1.FileName <> "" Then
-        Open cdl1.FileName For Output As #1
+    If cdl1.filename <> "" Then
+        Open cdl1.filename For Output As #1
         For a = 1 To lv.ListItems.count
             Print #1, lv.ListItems.Item(a).Text & ";" & _
                         lv.ListItems.Item(a).SubItems(1) & ";" & _
@@ -327,8 +327,8 @@ On Error GoTo Trata_Erro
                         lv.ListItems.Item(a).SubItems(4)
         Next
         Close #1
-        MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.FileName, vbInformation
-        Shell "notepad.exe " & cdl1.FileName, vbNormalFocus
+        MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.filename, vbInformation
+        Shell "notepad.exe " & cdl1.filename, vbNormalFocus
     End If
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
@@ -341,6 +341,5 @@ End Sub
 Private Sub cmdOK_Click()
    Unload Me
 End Sub
-
 
 

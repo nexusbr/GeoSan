@@ -67,7 +67,9 @@ End Property
 Public Property Get tdbcon() As TeDatabase
     Set tdbcon = mvartdbcon
 End Property
-
+'Propriedade do Canvas
+'
+'
 Public Property Set tcs(ByVal vData As TeCanvas)
     Set mvartcs = vData
 End Property
@@ -211,7 +213,7 @@ End Function
 
 Public Function InsertTextInPoint(geom_id As Long, object_id As String, Layer As String, Optional CotaI As Double, Optional CotaF As Double) As Boolean
    
-   Dim x As Double, y As Double, Distancia As Integer
+   Dim X As Double, Y As Double, Distancia As Integer
    
    Dim TbRefTexto As String
    Dim SQL As String
@@ -277,10 +279,10 @@ d = "COMPONENT_ID"
          tdbcon.setCurrentLayer Layer
          
          'LOCALIZA O CENTRO DA GEOMETRIA DO PONTO EM X E Y
-         tdbcon.getCenterGeometry CLng(rs!Object_id_), rs!Object_id_, tpPOINTS, x, y
+         tdbcon.getCenterGeometry CLng(rs!Object_id_), rs!Object_id_, tpPOINTS, X, Y
                   
-         tdbcon.InsertTextInDatabase rs!Object_id_, Round(rs!ini, 3), 1, x, y + 2, 0, , , True
-         tdbcon.InsertTextInDatabase rs!Object_id_, Round(rs!fim, 3), 1, x, y - 3, 0, , , True
+         tdbcon.InsertTextInDatabase rs!Object_id_, Round(rs!ini, 3), 1, X, Y + 2, 0, , , True
+         tdbcon.InsertTextInDatabase rs!Object_id_, Round(rs!fim, 3), 1, X, Y - 3, 0, , , True
          
          'INSERE OS TEXTOS COM A DIFERENÇA ENTRE COTA TERRENO E COTA PROFUNDIDADE NUMA NOVA LOCALIZAÇÃO
          
@@ -290,7 +292,7 @@ d = "COMPONENT_ID"
          dblDIF = rs!ini - rs!fim
          strDIF = Round(dblDIF, 3)
          
-         tdbcon.InsertTextInDatabase rs!Object_id_, strDIF, 1, x + 3, y - 0.5, 0, , , True
+         tdbcon.InsertTextInDatabase rs!Object_id_, strDIF, 1, X + 3, Y - 0.5, 0, , , True
          
       End If
 
@@ -648,12 +650,12 @@ On Error GoTo Trata_Erro
    '####### DECLARAÇÃO DE VARIAVEIS LOCAIS ##########
    'On Error GoTo InsertTextInDatabase_Err
    Dim SEG As Integer, QtdePontos As Integer, ANGULO As Double, Side As TeGeometrySide
-   Dim x As Double, y As Double, l As Double, Distancia As Integer
+   Dim X As Double, Y As Double, l As Double, Distancia As Integer
    '####### ROTINA DE INSERÇÃO ##############
    With tdb
       ' retorna em x, y as coordenadas da bissetriz da cadeia de linhas (meio dela),
       ' para sabermos onde colocaremos os textos da linha (comprimento, etc.)
-      .getCenterGeometry geom_id, object_id, tpLINES, x, y
+      .getCenterGeometry geom_id, object_id, tpLINES, X, Y
       
       
       ' obtem a quantidade de pontos (vértices) em uma cadeia de linhas
@@ -671,7 +673,7 @@ On Error GoTo Trata_Erro
       ' obtem a informação se a linha foi desenhada da direita para esquerda, ou da esquerda para direita, indefinido ou leftRight (???)
       
       
-      Side = .getSide(x, y, object_id, geom_id, tpLINES)
+      Side = .getSide(X, Y, object_id, geom_id, tpLINES)
       
       If Side = TeRight Then
          Distancia = 6
@@ -688,123 +690,123 @@ On Error GoTo Trata_Erro
          'L = comprimento
          If l > 10 Then 'textos do diametro e material um ao lado do outro
             If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
-               .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 3), -2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
             Else
-               .getPerpendicularPoint geom_id, object_id, (l / 3), -2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
             End If
-            .InsertTextInDatabase object_id, Diametro, 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+            .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
             
             ' --- Material em baixo, esquerda
             If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
-              .getPerpendicularPoint geom_id, object_id, (l / 3), 2, x, y
+              .getPerpendicularPoint geom_id, object_id, (l / 3), 2, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
             Else 'Q2 Q3
-              .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, x, y
+              .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
             End If
-            .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+            .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
          Else
             If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
-               .getPerpendicularPoint geom_id, object_id, (l / 2), 2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 2), 2, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 2), -2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
             Else
-               .getPerpendicularPoint geom_id, object_id, (l / 2), -2, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
             End If
-            .InsertTextInDatabase object_id, Diametro, 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+            .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
             
             ' --- Material em baixo, esquerda
             If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
-              .getPerpendicularPoint geom_id, object_id, (l / 2), 3.5, x, y
+              .getPerpendicularPoint geom_id, object_id, (l / 2), 3.5, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, X, Y
             Else 'Q2 Q3
-              .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, x, y
+              .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, X, Y
             End If
-            .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+            .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
          
          End If
          '--- Comprimento em cima da linha , no meio
          If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
-            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, X, Y
          ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
          Else 'Q2 Q3
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
          End If
-         .InsertTextInDatabase object_id, Round(comprimento, 2), 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+         .InsertTextInDatabase object_id, Round(comprimento, 2), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
 
      Else
          '--- Inclinação a esquerda
          
          If ANGULO <= 90 Or ANGULO > 270 Then
-           .getPerpendicularPoint geom_id, object_id, (l / 3), 2, x, y
+           .getPerpendicularPoint geom_id, object_id, (l / 3), 2, X, Y
          ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
          Else
-           .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, x, y
+           .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
          End If
          
          If Not (CotaI = 0 Or CotaF = 0) Then
-            .InsertTextInDatabase object_id, Round(((CotaI - CotaF) / comprimento) * 100, 2) & "%", 1, x, y, ANGULO, , , True
+            .InsertTextInDatabase object_id, Round(((CotaI - CotaF) / comprimento) * 100, 2) & "%", 1, X, Y, ANGULO, , , True
          Else
-            .InsertTextInDatabase object_id, 0 & "%", 1, x, y, ANGULO, , , True
+            .InsertTextInDatabase object_id, 0 & "%", 1, X, Y, ANGULO, , , True
          End If
          
         '--- Diametro em baixo, direita
          
          
          If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
-            .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, X, Y
          ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 3), -2, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
          Else
-            .getPerpendicularPoint geom_id, object_id, (l / 3), -2, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
          End If
-         .InsertTextInDatabase object_id, Diametro, 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+         .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
          
           ' --- Material em baixo, meio
          If ANGULO <= 90 Or ANGULO > 270 Then
-           .getPerpendicularPoint geom_id, object_id, (l / 2), 2, x, y
+           .getPerpendicularPoint geom_id, object_id, (l / 2), 2, X, Y
          ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), -2, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
          Else
-           .getPerpendicularPoint geom_id, object_id, (l / 2), -2, x, y
+           .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
          End If
-         .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+         .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
         
          '--- Comprimento em cima da linha , no meio
          If ANGULO <= 90 Or ANGULO > 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, X, Y
          ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
          Else
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, x, y
+            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
          End If
-         .InsertTextInDatabase object_id, Round(comprimento, 2), 1, x, y, IIf(ANGULO = 270, 90, ANGULO), , , True
+         .InsertTextInDatabase object_id, Round(comprimento, 2), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
          With tdb
             
             '--- CotaInicial
             If ANGULO <= 90 Or ANGULO > 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.15), -0.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l * 0.15), -0.5, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, X, Y
             Else
-               .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, X, Y
             End If
-            .InsertTextInDatabase object_id, CotaI, 1, x, y, ANGULO, , , True
+            .InsertTextInDatabase object_id, CotaI, 1, X, Y, ANGULO, , , True
 
             '--- CotaFinal
             If ANGULO <= 90 Or ANGULO > 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.85), -0.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l * 0.85), -0.5, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, X, Y
             Else
-               .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, x, y
+               .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, X, Y
             End If
-            .InsertTextInDatabase object_id, CotaF, 1, x, y, ANGULO, , , True
+            .InsertTextInDatabase object_id, CotaF, 1, X, Y, ANGULO, , , True
             
             
          End With
@@ -1218,6 +1220,9 @@ End Function
 ' Nome      : SELECTRede
 ' Descrição : Colore a rede até encontrar válvula
 '###############################################################
+'a partir do object_id selecionado pelo usuário ele vai localizar todos os trechos de redes até encontrar registros. Válvulas (VRPs) e registros fixos (divisa de setor de abastecimento), não são considerados. Ele procura somente até encontrar um nó do tipo REGISTRO
+'
+'
 Public Function SELECTRede(Object_id_ As String)
     On Error GoTo Trata_Erro
     Dim rs As ADODB.Recordset
@@ -1293,7 +1298,7 @@ continuaFor:
                     ACHOU = False
                     rsType.Filter = "ID_TYPE='" & rs!id_Type & "'"
                     If rsType.EOF = False Then
-                        If Trim(rsType!Specification_) = "VALVE" Then
+                        If Trim(rsType!Specification_) = "REGISTER" Then
                             ACHOU = True
                         End If
                     End If
@@ -1868,7 +1873,7 @@ a = "name"
 End Function
 
 Public Sub AddAtributesLinesOut(LayerName As String)
-   Dim rs As ADODB.Recordset, str As String, Point1 As String, Point2 As String, compr As Double, a As Integer, x As Double, y As Double
+   Dim rs As ADODB.Recordset, str As String, Point1 As String, Point2 As String, compr As Double, a As Integer, X As Double, Y As Double
    If frmCanvas.TipoConexao <> 4 Then
    str = "SELECT object_id from lines38 left join waterlines on object_id=object_id_ where object_id_ is null"
    Else
@@ -1888,8 +1893,8 @@ i = "object_id"
       compr = 0
       tdb.getLengthOfLine 0, rs(0).value, compr
       For a = 0 To 1
-         tdb.getPointOfLine 0, rs(0).value, a, x, y
-         If tdbcon.locateGeometry(x, y, tpPOINTS, 1) Then
+         tdb.getPointOfLine 0, rs(0).value, a, X, Y
+         If tdbcon.locateGeometry(X, Y, tpPOINTS, 1) Then
              If a = 0 Then
                Point1 = tdbcon.objectIds(0)
              Else
@@ -2375,6 +2380,4 @@ gu = "SPECIFICATION_"
       End If
    End If
 End Sub
-
-
 

@@ -6,7 +6,7 @@ Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
-Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager.ocx"
+Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager2.ocx"
 Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
@@ -188,12 +188,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             AutoSize        =   2
-            TextSave        =   "26/03/2013"
+            TextSave        =   "27/03/2013"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             AutoSize        =   2
-            TextSave        =   "11:39"
+            TextSave        =   "15:36"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1176,9 +1176,9 @@ End Sub
 
 
 
-Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    msngStartX = x
+    msngStartX = X
     
     With imgSplitter
         picSplitter.Move .Left, .Top, .Width \ 2, .Height - 20
@@ -1190,12 +1190,12 @@ Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
     Dim sglPos As Single
     
     If mbMoving Then
-        sglPos = x + imgSplitter.Left
+        sglPos = X + imgSplitter.Left
         If sglPos < sglSplitLimit Then
         
             picSplitter.Left = sglSplitLimit
@@ -1208,9 +1208,9 @@ Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    pctSfondo.Width = pctSfondo.Width + msngStartX - x
+    pctSfondo.Width = pctSfondo.Width + msngStartX - X
     pctSfondo.Refresh
     picSplitter.Visible = False
     mbMoving = False
@@ -1308,13 +1308,13 @@ End Sub
 
 Private Sub mnuEncontraCoordenada_Click()
 On Error GoTo Trata_Erro
-    Dim x As Double, y As Double
+    Dim X As Double, Y As Double
    
-    x = InputBox("Informe a Coordena X ")
-    y = InputBox("Informe a Coordena Y ")
+    X = InputBox("Informe a Coordena X ")
+    Y = InputBox("Informe a Coordena Y ")
     
-    If x <> 0 And y <> 0 Then
-        ActiveForm.TCanvas.setWorld x - 50, y - 50, x + 50, y + 50
+    If X <> 0 And Y <> 0 Then
+        ActiveForm.TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50
         ActiveForm.TCanvas.plotView
     End If
 
@@ -1547,7 +1547,7 @@ g = "OBJECT_ID_"
    Open CAMINHO For Output As #1
       Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
       Do While Not rs.EOF = True
-         Print #1, rs!object_id & ";" & rs!x & ";" & rs!y & ";" & rs!cota
+         Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
          rs.MoveNext
       Loop
    Close #1
@@ -1589,6 +1589,8 @@ End Sub
 Private Sub mnuJPG_Click()
    SalvaImagem "JPG"
 End Sub
+
+
 
 Private Sub mnuTIF_Click()
    SalvaImagem "TIF"
@@ -1633,7 +1635,7 @@ Dim strCaminho As String
    'ABRE O CPMPONENTE DE LOCALIZAÇÃO DE ARQUIVOS
    Me.cmmSalvaImg.ShowOpen
    
-   strCaminho = Me.cmmSalvaImg.FileName
+   strCaminho = Me.cmmSalvaImg.filename
          
    'SE NÃO FOI DEFINIDO UM CAMINHO, SAI DA FUNÇÃO
    If Trim(strCaminho) = "" Then
@@ -1837,12 +1839,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
-           .FileName = ""
+        With Cdl
+           .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
-           If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
+           If .filename <> "" Then
+              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2479,6 +2481,7 @@ Private Sub TePrinter_Click()
    
 
 End Sub
+
 Private Sub txtEscala_KeyPress(KeyAscii As Integer)
 
 'AO RECEBER UM COMANDO ENTER, É FORÇADO UM LOST_FOCUS
@@ -2500,6 +2503,7 @@ Private Sub txtEscala_LostFocus()
    End If
    
 End Sub
+
 
 Private Sub ViewManager1_onReset(ViewName As String)
 On Error GoTo Trata_Erro

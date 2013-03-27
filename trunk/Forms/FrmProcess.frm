@@ -81,11 +81,11 @@ Public Function FindValvulas(Object_id_ As String, tcs As TeCanvas) As String
    txtRecord = 0
    Objectid = Object_id_                                    'rede de agua selecionada
    Me.Show
-   Set cgeo.tcs = tcs
+   Set cgeo.tcs = tcs                                       'passa o Canvas para a classe
    tcs.setDetachedLineStyle 3, 1, RGB(255, 255, 0), True    'método para indicar o estilo de visual de plotagem para as próximas linhas que serão destacadas. Somente serão aplicadas a este estilo as próximos linhas adicionadas à lista de destacadas. Vai destacar em amarelo.
    tcs.addDetachedIds tpLINES, , Object_id_                 'método para destacar as geometrias que possuem a identificação especificada.
    cgeo.object_ids = "'" & Objectid & "'"                   'obtem os object_id_s
-   cgeo.SELECTRede Objectid
+   cgeo.SELECTRede Objectid                                 'a partir do object_id selecionado pelo usuário ele vai localizar todos os trechos de redes até encontrar registros. Válvulas (VRPs) e registros fixos (divisa de setor de abastecimento), não são considerados. Ele procura somente até encontrar um nó do tipo REGISTRO
    FindValvulas = cgeo.object_ids
    tcs.plotView
    Unload Me
