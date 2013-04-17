@@ -1,6 +1,214 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+
+
+Quando for REGSECTOR, para EPANET é uma válvula e para encontrar registros
+ele deve parar no mesmo.
+
+Mudar o código para isso acontecer.
+
+17-04-2013 - GeoSan 06.09.05
+Gerada versão instalável.
+Projetos em que as componentes foram recompiladas
+Projeto_ExportEpaNe - Exporte EPANet.exe
+Projeto_NxViewmanager - NxViewManager2.ocx
+Projeto_ValidaBase - ValidaBase.exe
+
+Dependências
+GeoSan.exe
+\trunk\Projeto_NxConnection\NexusConnection.dll - 13/07/11 - 11:15
+\trunk\Projeto_NxUsers\NUsers.dll - 08/04/11 - 15:55 
+Componentes
+\trunk\Projeto_NxViewmanager\NxViewManager2.ocx - 17/04/13 - 17:20
+\trunk\Projeto_PManager4\NexusPM4.ocx - 08/04/11 - 16:54
+
+Exporte EPANet.exe
+\trunk\Projeto_NxConnection\NexusConnection.dll - 13/07/11 - 11:15
+
+NxViewManager2.ocx
+não há
+
+ValidaBase.exe
+não há
+
+
+
+16-04-2013 - GeoSan 06.09.04
+Corrigido bug que quando o usuário fazia um zoom extremamente longe no mapa o
+canvas apresentava um erro de número 6 ao mover o mouse em frmCanvas.frm
+na rotina TCanvas - onMouseMove. Era um overflow na conta de subtração da
+posição do mouse (xOld - X).
+
+
+27-03-2013 - GeoSan 06.09.03
+Atendimento ao requisito de exportar somente valvulas redutoras de pressão - 
+VRP. Nos registros, descargas, etc. exportar somente como nó.
+
+Quando gera o relatório, sai da aplicação.
+
+Ao exportar uma válvula ele não considera o diâmetro da tubulação, vem como
+o diâmetro padrão do EPANET, tem que pegar o diametro da tubulação e colocar
+na válvula
+
+Na simulação de fechamento de rede, ele tem que parar sempre no registro,
+ignorar o registro fixo e não parar na válvula. Verificar o funcionamento.
+
+Foi realizada a correção da simulação de consumidores desabastecidos até
+encontrar um registro. 
+Foram alterados dados na tabela WATERCOMPONETSTYPES
+É necessário atualizar o modelo de banco de dados integrando com as alterações
+realizadas na última atualização para exportar para shp.
+
+26-03-2013 - GeoSan 06.09.02
+COMENTÁRIOS
+Foram feitas correções nas chamadas diretas para o diretório 
+c:\arquivos de programas\GeoSan
+onde foi criada um tipo de dado glo o qual armazenará a partir de hoje todas
+as variáveis globais.
+Também o glo é salvo no disco para que possam ser recuperadas por outros módulos
+do GeoSan, como o NxViewManager. É necessário ainda tirar no furturo o hard
+code inicial do diretório "c:\arquivos de programas\GeoSan"
+
+O arquivo FTema.txt possui uma lista de todos os temas ativos do usuário e vista
+bem como as cláusulas de filtro where, caso existam.
+
+Sempre ao exportar deve-se lembrar que a exportação utiliza sempre o nome
+do usuário ativo que está registrado no arquivo UserLog.txt no diretório
+"Controles"
+
+ATENDIMENTO AOS REQUISITOS DE EXPORTAÇÃO EPANET
+1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
+descargas, etc. exportar somente como nó. 
+Para atender a este requisito foi-se na tabela WATERCOMPONETSTYPE e na coluna
+"Description_" onde a linha constava como REGISTRO, foi modificada a coluna 
+"Specification_" de VALVE para JUNCTION. Assim o exportador entenderá que todo
+o registro é um nó.
+Em VRP mudou-se de JUNCTION para VALVE, então ele passou a entender uma VRP como
+válvula e exportará como válvula.
+O mesmo foi feito para REGISTRO FIXO colocando como VALVE.
+A exportação funcionou com sucesso sem necessidade de alteração do código.
+
+1-A - Existem registros que por serem de divisão de setor de abastecimento que
+ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
+fechado ai ele deve ser exportado. 
+Ao utilizar o GeoSan o registro de divisão de setor de abastecimento devem ser
+cadastrados como REGISTRO FIXO. Na exportação ele exportará como válvula.
+
+
+19-03-2013 - GeoSan 06.09.01
+Novos requisitos levantados:
+
+1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
+descargas, etc. exportar somente como nó. 
+
+1-A - Existem registros que por serem de divisão de setor de abastecimento que
+ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
+fechado ai ele deve ser exportado. A propriedade do mesmo tem que vir sempre
+como fechado. 
+
+2 - Não exportar redes desativadas para o EPANET, onde o ESTADO da rede esteja
+como fora de operação.
+
+3 - GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
+TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO) , 
+BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
+
+4 - Como vai fazer no caso da BOMBA para especificar o sentido da mesma, pois
+ela é um nó. Quando seleciono BOMBA no GeoSan, não aparecem os parâmetros da
+mesma para serem preenchidos. Se não fornecer ele adota uma curva genérica.
+O sentido é necessário verificar como entrar no GeoSan.
+
+5 - Definir forma em que será colocado o sentido de uma BOMBA ou VÁLVULA 
+RETENTORA
+
+6 - Definir uma forma de associar e entrar os dados de uma curva de bomba, 
+curva de rendimento de uma bomba, curva de volume de reservatório (para aqueles
+reservatórios em forma de taça, ou qualquer tipo de obra de arte), curva de 
+rendimento da bomba, curva de perdas para VÁLVULA GENÉRICA (conforme a abertura
+da válvula existe uma curva de perda de carga, em um dos eixos é cumprimento e
+no outro unidade de vazão)
+
+7 - Inserir duas novas ícones, uma CURVAS e outra PADRÕES (temporais). Posso 
+ter várias curvas de padrão de consumo, cidade, indústrica, hospital.
+
+8 - A simulação utiliza apenas um padrão, mas no arquivo .inp posso ter vários
+padrões. Posso associar em um nó um padrão de consumo específico, se nenhuma 
+informação estiver no nó, utiliza o padrão de consumo default.
+
+9 - Já existe um campo no nó que é o padrão de consumo que está sempre indo 
+como zero e que está exportando.
+
+10 - Inserir botão para colocar os CONTROLES. IF, etc. Caixa de diálogo
+que facilita entrar os controles.
+
+11 - Quando seleciona RESERVATÓRIO teria que abrir outros campos como DIAMETRO 
+(equivalente), ALTURA MÁXIMA (altura do reservatório) - 1 que assim tem a 
+ALTURA INICIAL (que inicia a lamina dágua no reservatório para simulação)
+
+12 - Possibilitar o sistema simular hidraulicamente com as demandas de consumo
+espeficiadas pelo usuário do GeoSan.
+
+02-01-2013 - GeoSan 06.09.00
+Criados os índices para as tabelas contendo dados das ligações. Lembrando que
+este índice deve ser criado na vista do banco de dados comercial. Aqui foi
+criado para testar a exportação Web
+
+CREATE NONCLUSTERED INDEX [NXGS_V_LIG_COMERCIAL_NUM_LIGACAO] ON [dbo].[NXGS_V_LIG_COMERCIAL] 
+(
+	[NRO_LIGACAO] ASC,
+	[NRO_LIGACAO_SEM_DV] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+CREATE NONCLUSTERED INDEX [NXGS_V_LIG_COM_CONSUMO_MEDIO_NRO_LIGACAO] ON [dbo].[NXGS_V_LIG_COM_CONSUMO_MEDIO] 
+(
+	[NRO_LIGACAO] ASC,
+	[NRO_LIGACAO_SEM_DV] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+
+11-12-2012 - GeoSan 06.08.02
+
+VALIDABASE
+Inserida a função ApagaPointsSemWatercomponents que elimina todos os nós de rede
+(POINTS2) que não possuem atributos associados.
+
+Inserida a função VefificaUnicidadeNos que verifica se para cada atributo de nó
+existe um object_id da geometria deste nó.
+
+GEOSAN
+Inserido item no menu que exporta os dados do GeoSan para o formato shape
+mnuExporta_GeoSan_Click(). 
+Esta rotina desnormaliza as tabelas torre para uma tabela de atributos única
+com todas as informações de nós e redes de água.
+
+Para apoiar a exportação foi criada a classe GeoSanExport e seus respectivos
+métodos.
+
+
+
+
+04-12-2012 - GeoSan 06.08.01
+Corrigida não conformidade para os filtros de dados de ramais que não estavam 
+funcionando.
+
+Para alterar a localização de onde se encontra o banco de dados comercial, 
+basta alterar o link de conexão com o banco de dados na tabela GS_PARAMETERS.
+Por exemplo:
+Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.16
+Caso não possua acesso ao banco de dados comercial, vc pode colocar os dados
+do banco de dados comercial nas tabelas
+
+NXGS_V_LIG_COMERCIAL
+NXGS_V_LIG_COMERCIAL_CONSUMO
+NXGS_V_LIG_COM_CONSUMO_MEDIO
+
+não se esquecendo de renomear as vistas, pois a ligação com o banco comercial
+é realizada através destas vistas.
+
+
+
+
 29-11-2012 - GeoSan 06.08.00
 Gerada nova versão final de liberação.
 

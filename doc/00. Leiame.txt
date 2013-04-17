@@ -17,11 +17,22 @@ Projeto_ValidaBase - ValidaBase.exe
 
 Dependências
 GeoSan.exe
-\Controles\NexusConnection.dll
-\Projeto_NxUsers\NUsers.dll
+\trunk\Projeto_NxConnection\NexusConnection.dll - 13/07/11 - 11:15
+\trunk\Projeto_NxUsers\NUsers.dll - 08/04/11 - 15:55 
 Componentes
-\Projeto_NxViewmanager\NxViewManager2.ocx
-C:\Arquivos de programas\GeoSan\Controles\NexusPM4.ocx
+\trunk\Projeto_NxViewmanager\NxViewManager2.ocx - 17/04/13 - 17:20
+\trunk\Projeto_PManager4\NexusPM4.ocx - 08/04/11 - 16:54
+
+Exporte EPANet.exe
+\trunk\Projeto_NxConnection\NexusConnection.dll - 13/07/11 - 11:15
+
+NxViewManager2.ocx
+não há
+
+ValidaBase.exe
+não há
+
+
 
 16-04-2013 - GeoSan 06.09.04
 Corrigido bug que quando o usuário fazia um zoom extremamente longe no mapa o

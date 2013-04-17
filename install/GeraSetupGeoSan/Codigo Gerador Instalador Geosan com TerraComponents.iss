@@ -42,7 +42,7 @@ Source: "ArquivosInstGeoSan\ValidaBase.exe";      DestDir: "{app}"; CopyMode: al
 Source: "ArquivosInstGeoSan\NSecurity.dll";       DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NUsers.dll";          DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NexusConnection.dll"; DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\NxViewManager.ocx";   DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\NxViewManager2.ocx";   DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NexusPM4.ocx";        DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 
 ;Source: "ArquivosInstGeoSan\LoozeXP.ocx";        DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
