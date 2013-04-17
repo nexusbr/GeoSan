@@ -57,3 +57,6 @@ Public Function OpenUsers(Conn As ADODB.Connection) As Boolean
    OpenUsers = FrmUsers.Init(Conn)
 End Function
 
+Private Sub Class_Initialize()
+
+End Sub

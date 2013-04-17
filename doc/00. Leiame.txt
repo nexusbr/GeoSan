@@ -1,6 +1,35 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+
+
+Quando for REGSECTOR, para EPANET é uma válvula e para encontrar registros
+ele deve parar no mesmo.
+
+Mudar o código para isso acontecer.
+
+17-04-2013 - GeoSan 06.09.05
+Gerada versão instalável.
+Projetos em que as componentes foram recompiladas
+Projeto_ExportEpaNe - Exporte EPANet.exe
+Projeto_NxViewmanager - NxViewManager2.ocx
+Projeto_ValidaBase - ValidaBase.exe
+
+Dependências
+GeoSan.exe
+\Controles\NexusConnection.dll
+\Projeto_NxUsers\NUsers.dll
+Componentes
+\Projeto_NxViewmanager\NxViewManager2.ocx
+C:\Arquivos de programas\GeoSan\Controles\NexusPM4.ocx
+
+16-04-2013 - GeoSan 06.09.04
+Corrigido bug que quando o usuário fazia um zoom extremamente longe no mapa o
+canvas apresentava um erro de número 6 ao mover o mouse em frmCanvas.frm
+na rotina TCanvas - onMouseMove. Era um overflow na conta de subtração da
+posição do mouse (xOld - X).
+
+
 27-03-2013 - GeoSan 06.09.03
 Atendimento ao requisito de exportar somente valvulas redutoras de pressão - 
 VRP. Nos registros, descargas, etc. exportar somente como nó.

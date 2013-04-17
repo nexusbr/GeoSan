@@ -407,3 +407,58 @@ DESCRIÇÃO      [DBNETLIB][ConnectionWrite (send()).]General network error. Check
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           16/04/2013 08:34:30 
+USUÁRIO        nexus
+VERSÃO         06.08.01
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseMove
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           16/04/2013 08:38:33 
+USUÁRIO        nexus
+VERSÃO         06.08.01
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseMove
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           16/04/2013 08:42:26 
+USUÁRIO        nexus
+VERSÃO         06.08.01
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseMove
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           16/04/2013 10:32:37 
+USUÁRIO        nexus
+VERSÃO         06.08.01
+MÓDULO         frmCanvas
+EVENTO         Private Sub Form_Unload
+LINHA          0
+MOTIVO         -2147418105
+DESCRIÇÃO      Method 'ResetView' of object '_ViewManager' failed
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           16/04/2013 10:51:06 
+USUÁRIO        nexus
+VERSÃO         06.08.01
+MÓDULO         frmCanvas
+EVENTO         Private Sub Form_Unload
+LINHA          0
+MOTIVO         -2147418105
+DESCRIÇÃO      Method 'ResetView' of object '_ViewManager' failed
+
+-----------------------------------------------------------------------------------------------------
+

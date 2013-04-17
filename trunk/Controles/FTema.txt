@@ -1,9 +1,9 @@
-1435;FOTO2010;
-1437;WATERCOMPONENTS;
-1457;REGISTRO FIXO DIV SETOR ABAST;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='35')
-1454;VRPs;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='32')
-1436;WATERLINES;object_id in (select object_id_ from WATERLINES WHERE STATE='2')
-1455;RAMAIS_AGUA;object_id in (select object_id_ from RAMAIS_AGUA WHERE PROFUNDIDADE_RAMAL>'0')
-1456;REGISTROS;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='27')
-1458;Todas as redes;
-1459;REGISTRO DE SETOR;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='36')
+1479;WATERCOMPONENTS;
+1478;WATERLINES;
+1480;RAMAIS_AGUA;
+1481;Quadras-lin;
+1483;Ortofoto_2003;
+1484;Ortofoto_2007;
+1485;Ortofoto_2010;
+1486;Lotes-pol;
+1487;Curvas_Nível-lin;
