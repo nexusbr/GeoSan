@@ -1861,7 +1861,7 @@ a = "name"
        If rs.EOF = False Then
       GetLayerNameLayerID = rs(0).value
    Else
-      MsgBox "Falha em : SELECT name from te_Layer where layer_id= " & layer_id
+      MsgBox "Falha em: SELECT name from te_Layer where layer_id= " & layer_id & " - Function GetLayerNameLayerID. Tabela GS_LAYER_CONFIG_LAYERS não possui o LAYER_REFERENCE para encontrar os ramais em um lote da Prefeitura (LOTEGIS)"
    End If
    
 

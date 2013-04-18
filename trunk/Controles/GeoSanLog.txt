@@ -462,3 +462,102 @@ DESCRIÇÃO      Method 'ResetView' of object '_ViewManager' failed
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           17/04/2013 19:28:00 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onEndSELECT
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O Nome do Plano não pode ser Nulo!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 08:26:20 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onEndSELECT
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O Nome do Plano não pode ser Nulo!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 08:49:52 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onEndSELECT
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O Nome do Plano não pode ser Nulo!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 08:50:01 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         clsTerraLib
+EVENTO         Public Function OnRamal
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 08:50:09 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         clsTerraLib
+EVENTO         Public Function OnRamal
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 08:54:33 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         clsTerraLib
+EVENTO         Public Function OnRamal
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 10:21:16 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         clsTerraLib
+EVENTO         Public Function OnRamal
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 10:22:29 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('86452')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           18/04/2013 10:27:58 
+USUÁRIO        nexus
+VERSÃO         06.09.05
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('86304')), 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
+
+-----------------------------------------------------------------------------------------------------
+

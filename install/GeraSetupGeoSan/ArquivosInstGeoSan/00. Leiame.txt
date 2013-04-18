@@ -8,6 +8,10 @@ ele deve parar no mesmo.
 
 Mudar o código para isso acontecer.
 
+18-04-2013 - GeoSan 06.09.06
+Corrigida mensagem de erro e atualizado o banco de dados modelo do curso.
+Dados de usuários foram embaralhados e retirados dados principais.
+
 17-04-2013 - GeoSan 06.09.05
 Gerada versão instalável.
 Projetos em que as componentes foram recompiladas
