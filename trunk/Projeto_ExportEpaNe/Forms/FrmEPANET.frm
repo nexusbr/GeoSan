@@ -337,6 +337,7 @@ Private Function INICIAR()
     'Agora que temos trechos a serem exportados, vamos exportar para o Epanet
     Set Rs = New ADODB.Recordset
     tipoErro = "sql abertura cursor: " & str & " - string de conexão: " & conn
+    Print #5, tipoErro
     Rs.Open str, conn, adOpenDynamic, adLockReadOnly
     conn.CommandTimeout = 300
     tipoErro = "Erro não localizado"

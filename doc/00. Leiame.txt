@@ -8,6 +8,16 @@ ele deve parar no mesmo.
 
 Mudar o código para isso acontecer.
 
+18-04-2013 - GeoSan 06.09.07
+Na exportação para o EPANET estava ocorrendo erro de time-out. O problema era
+a falta de um índice. Foi acrescentada uma linha de log da exportação.
+Inserida criação de índice 
+CREATE NONCLUSTERED INDEX [ObjectId] ON [dbo].[POLIGONO_SELECAO] 
+(
+	[OBJECT_ID_] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+
 18-04-2013 - GeoSan 06.09.06
 Corrigida mensagem de erro e atualizado o banco de dados modelo do curso.
 Dados de usuários foram embaralhados e retirados dados principais.

@@ -152,7 +152,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.09.06"
+    Versao_Geo = "06.09.07"
     glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
     Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
