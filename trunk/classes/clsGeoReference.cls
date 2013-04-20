@@ -1227,7 +1227,8 @@ Public Function SELECTRede(Object_id_ As String)
     On Error GoTo Trata_Erro
     Dim rs As ADODB.Recordset
     Dim iContA As Integer, iContB As Integer
-    Dim MyLocalLines() As String, iLn As Integer, iPnt
+    Dim MyLocalLines() As String        'object_id s do vetor de trechos de redes que estão conectados aos nós inicial e final do último trecho de rede pesquisado
+    Dim iLn As Integer, iPnt
     Dim MyComponents(1) As String
     Dim ACHOU As Boolean
     Dim rsType As ADODB.Recordset
@@ -1298,11 +1299,11 @@ continuaFor:
                     ACHOU = False
                     rsType.Filter = "ID_TYPE='" & rs!id_Type & "'"
                     If rsType.EOF = False Then
-                        If Trim(rsType!Specification_) = "REGISTER" Then
+                        If Trim(rsType!Specification_) = "VALVE" Then       'verifica se é um ponto de parada
                             ACHOU = True
                         End If
                     End If
-                    'O PROBLEMA ESTÁ AQUI POIS QUANDO ELE ACHA UM REGISTRO ELE ABANDONA SE PROCURAR O OUTRO LADO
+                    'O PROBLEMA ESTÁ AQUI POIS QUANDO ELE ACHA UMA VALVULA(VALVE) ELE ABANDONA SE PROCURAR O OUTRO LADO
                     If ACHOU = True Then 'valor original = 1 mas não há nada cadastrado como tipo 1
                         If iContA = 0 Then
                             iContA = 1
@@ -1312,13 +1313,14 @@ continuaFor:
                     Else
                         rs.Close
                         Set rs = Nothing
+                        'procura por outros trechos de redes os quais estão conectados aos nós inicial e final
                         If frmCanvas.TipoConexao <> 4 Then
                             Set rs = Conn.execute("SELECT object_id_ from waterlines where InitialComponent=" & MyComponents(iContA) & " or FinalComponent= " & MyComponents(iContA))
                         Else
                             ' Set rs = Conn.execute("SELECT " + """" + fo + """" + " from " + """" + fn + """" + " where " + """" + fl + """" + "='" & MyComponents(iContA) & "' or " + """" + fm + """" + "= '" & MyComponents(iContA)) & "'"
                             Set rs = Conn.execute("SELECT " + """" + "OBJECT_ID_" + """" + " from " + """" + "WATERLINES" + """" + " where " + """" + "INITIALCOMPONENT" + """" + "=" & MyComponents(iContA) & " or " + """" + "FINALCOMPONENT" + """" + "= " & MyComponents(iContA))
                         End If
-                        While Not rs.EOF
+                        While Not rs.EOF 'caso tenha encontrado outros trechos de rede (novos trechos) conectados as extremidades inicial e final
                             ReDim Preserve MyLocalLines(iLn)
                             MyLocalLines(iLn) = rs!Object_id_
                             iLn = iLn + 1
@@ -1360,30 +1362,32 @@ Trata_Erro:
 End Function
 
 Private Sub SubSELECTRede(Object_id_ As String)
-   Dim a As Integer, naoChamar As Boolean
-   If Not p Then
-      ReDim Preserve MyLines(i)
-      p = True
-   End If
-   For a = 0 To i
-     If MyLines(a) = Object_id_ Then naoChamar = True
-   Next
-   If Not naoChamar Then
-     FrmProcess.txtRecord = i
-     FrmProcess.Refresh
-     MyLines(i) = Object_id_
-     If Object_id_ <> "" Then
-      If object_ids = "" Then
-        object_ids = "'" & Object_id_ & "'"
-      Else
-        object_ids = object_ids & ",'" & Object_id_ & "'"
+    Dim a As Integer, naoChamar As Boolean
+    If Not p Then
+        ReDim Preserve MyLines(i)
+        p = True
+    End If
+    For a = 0 To i
+        If MyLines(a) = Object_id_ Then
+            naoChamar = True
+        End If
+    Next
+    If Not naoChamar Then
+        FrmProcess.txtRecord = i
+        FrmProcess.Refresh
+        MyLines(i) = Object_id_
+        If Object_id_ <> "" Then
+            If object_ids = "" Then
+                object_ids = "'" & Object_id_ & "'"
+            Else
+                object_ids = object_ids & ",'" & Object_id_ & "'"
+            End If
       End If
-     End If
-     i = i + 1
-     ReDim Preserve MyLines(i)
-     tcs.setDetachedLineStyle 3, 1, RGB(255, 255, 0), True
-     tcs.addDetachedIds tpLINES, , Object_id_
-     SELECTRede Object_id_
+      i = i + 1
+      ReDim Preserve MyLines(i)
+      tcs.setDetachedLineStyle 3, 1, RGB(255, 255, 0), True
+      tcs.addDetachedIds tpLINES, , Object_id_
+      SELECTRede Object_id_
    End If
 End Sub
 

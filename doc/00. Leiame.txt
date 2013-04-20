@@ -94,7 +94,7 @@ do usuário ativo que está registrado no arquivo UserLog.txt no diretório
 ATENDIMENTO AOS REQUISITOS DE EXPORTAÇÃO EPANET
 1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
 descargas, etc. exportar somente como nó. 
-Para atender a este requisito foi-se na tabela WATERCOMPONETSTYPE e na coluna
+Para atender a este requisito foi-se na tabela WATERCOMPONETSTYPES e na coluna
 "Description_" onde a linha constava como REGISTRO, foi modificada a coluna 
 "Specification_" de VALVE para JUNCTION. Assim o exportador entenderá que todo
 o registro é um nó.

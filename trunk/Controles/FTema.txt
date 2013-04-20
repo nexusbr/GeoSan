@@ -1,5 +1,4 @@
 1479;WATERCOMPONENTS;
-1478;WATERLINES;
 1480;RAMAIS_AGUA;
 1481;Quadras-lin;
 1483;Ortofoto_2003;
@@ -7,3 +6,7 @@
 1485;Ortofoto_2010;
 1486;Lotes-pol;
 1487;Curvas_Nível-lin;
+1488;Registros;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='27')
+1490;Registro Fixo;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='35')
+1478;WATERLINES;
+1489;VRP;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='32')
