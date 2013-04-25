@@ -561,3 +561,14 @@ DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           19/04/2013 06:26:30 
+USUÁRIO        nexus
+VERSÃO         06.09.07
+MÓDULO         clsTerraLib
+EVENTO         Public Function Delete
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+

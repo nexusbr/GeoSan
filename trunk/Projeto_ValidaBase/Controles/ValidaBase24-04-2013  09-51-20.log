@@ -1,0 +1,36 @@
+
+ValidaBase;*************************************************************************************************
+ValidaBase;Início do processamento do banco de dados GeoSan: 24/04/2013 - 09:51:20
+
+ApagaLinhasAtributosSemGeometriasWaterlines;SELECT OBJECT_ID_ FROM WATERLINES WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM LINES1)
+ApagaLinhasAtributosSemGeometriasWaterlines;Fim do SELECT. 0 linhas de atributos em WATERLINES encontradas sem geometrias associadas
+
+ApagaLinhasAtributosSemGeometriasWaterlines; SELECT OBJECT_ID FROM LINES1 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERLINES)
+ApagaGeometriasSemAtributosWaterlines;Fim do SELECT. 0 linhas de geometrias de WATERLINES encontradas sem atributos associados
+
+VefificaUnicidadeNos; SELECT OBJECT_ID FROM POINTS2
+VefificaUnicidadeNos;Fim do SELECT.
+VefificaUnicidadeNos;Fim do processamento.
+
+VefificaUnicidadeNos; SELECT OBJECT_ID_ FROM WATERCOMPONENTS
+VefificaUnicidadeNos;Fim do SELECT.
+VefificaUnicidadeNos;Fim do processamento.
+
+PointsSemWatercomponents; SELECT OBJECT_ID FROM POINTS2 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERCOMPONENTS)
+ApagaPointsSemWatercomponents;Fim do SELECT.
+ApagaPointsSemWatercomponents;Fim do processamento.
+
+WcSemGeometrias; SELECT OBJECT_ID_ FROM WATERCOMPONENTS WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM POINTS2)
+WcSemGeometrias;Fim do SELECT.
+
+ProcessaBancoDados_Click;Início da investigação dos nós que possuem atributos mas não possuem geometrias
+ProcessaBancoDados_Click;Fim da investigação dos nós que possuem atributos mas não possuem geometrias
+
+Início;ValidaComponentesIniciaisDeWaterlines
+Fim;ValidaComponentesIniciaisDeWaterlines
+
+Início;ValidaComponentesFinaisDeWaterlines
+Fim;ValidaComponentesFinaisDeWaterlines
+
+ValidaBase;Fim do processamento do banco de dados GeoSan: 24/04/2013 - 10:10:10
+ValidaBase;*************************************************************************************************

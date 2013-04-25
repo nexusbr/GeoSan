@@ -1,0 +1,137 @@
+
+ValidaBase;*************************************************************************************************
+ValidaBase;Início do processamento do banco de dados GeoSan: 23/04/2013 - 08:41:07
+
+ApagaLinhasAtributosSemGeometriasWaterlines;SELECT OBJECT_ID_ FROM WATERLINES WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM LINES1)
+ApagaLinhasAtributosSemGeometriasWaterlines;Fim do SELECT. 0 linhas de atributos em WATERLINES encontradas sem geometrias associadas
+
+ApagaLinhasAtributosSemGeometriasWaterlines; SELECT OBJECT_ID FROM LINES1 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERLINES)
+ApagaGeometriasSemAtributosWaterlines;Fim do SELECT. 0 linhas de geometrias de WATERLINES encontradas sem atributos associados
+
+Não encontra uma linha encostada no nó de object_id_ = 1319
+
+Não encontra uma linha encostada no nó de object_id_ = 1728
+
+Apagada a geometria e atributo do nó de object_id_ = 1728 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 2128
+
+Apagada a geometria e atributo do nó de object_id_ = 2128 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 2794
+
+Apagada a geometria e atributo do nó de object_id_ = 2794 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 5142
+
+Apagada a geometria e atributo do nó de object_id_ = 5142 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 5643
+
+Apagada a geometria e atributo do nó de object_id_ = 5643 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 5644
+
+Apagada a geometria e atributo do nó de object_id_ = 5644 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 5664
+
+Apagada a geometria e atributo do nó de object_id_ = 5664 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 5723
+
+Apagada a geometria e atributo do nó de object_id_ = 5723 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 5734
+
+Apagada a geometria e atributo do nó de object_id_ = 5734 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 6043
+
+Apagada a geometria e atributo do nó de object_id_ = 6043 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 6138
+
+Apagada a geometria e atributo do nó de object_id_ = 6138 que não estava associado a nenhum trecho de rede.
+
+Não encontra uma linha encostada no nó de object_id_ = 9466
+
+Apagada a geometria e atributo do nó de object_id_ = 9466 que não estava associado a nenhum trecho de rede.
+
+VefificaUnicidadeNos; SELECT OBJECT_ID FROM POINTS2
+VefificaUnicidadeNos;Fim do SELECT.
+VefificaUnicidadeNos;Fim do processamento.
+
+VefificaUnicidadeNos; SELECT OBJECT_ID_ FROM WATERCOMPONENTS
+VefificaUnicidadeNos;Fim do SELECT.
+VefificaUnicidadeNos;Fim do processamento.
+
+PointsSemWatercomponents; SELECT OBJECT_ID FROM POINTS2 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERCOMPONENTS)
+ApagaPointsSemWatercomponents;Fim do SELECT.
+ApagaPointsSemWatercomponents;Fim do processamento.
+
+WcSemGeometrias; SELECT OBJECT_ID_ FROM WATERCOMPONENTS WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM POINTS2)
+WcSemGeometrias;Fim do SELECT.
+
+ProcessaBancoDados_Click;Início da investigação dos nós que possuem atributos mas não possuem geometrias
+ProcessaBancoDados_Click;Fim da investigação dos nós que possuem atributos mas não possuem geometrias
+
+Início;ValidaComponentesIniciaisDeWaterlines
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     815      da linha 881       NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 815 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     815      da linha 9221      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 815 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     1319     da linha 1449      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 1319 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     1728     da linha 1908      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 1728 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     5643     da linha 6163      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 5643 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     5643     da linha 6165      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 5643 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     5723     da linha 6255      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 5723 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     5734     da linha 6266      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 5734 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     5734     da linha 6268      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 5734 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesIniciaisDeWaterlines-20;Componente Inicial:
+                     6043     da linha 6593      NÃO ENCONTRADO.
+ValidaComponentesIniciaisDeWaterlines-22;Componente 6043 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+Fim;ValidaComponentesIniciaisDeWaterlines
+
+Início;ValidaComponentesFinaisDeWaterlines
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     815      da linha 880       NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 815 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     1319     da linha 1448      NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 1319 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     1728     da linha 1907      NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 1728 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     5142     da linha 5629      NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 5142 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     5644     da linha 6167      NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 5644 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     5723     da linha 6258      NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 5723 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+ValidaComponentesFinaisDeWaterlines-30;Componente Final:
+                     5734     da linha 6255      NÃO ENCONTRADO.
+ValidaComponentesFinaisDeWaterlines-32;Componente 5734 NÃO PODE SER CRIADO AUTOMATICAMENTE.
+Fim;ValidaComponentesFinaisDeWaterlines
+
+ValidaBase;Fim do processamento do banco de dados GeoSan: 23/04/2013 - 09:40:55
+ValidaBase;*************************************************************************************************

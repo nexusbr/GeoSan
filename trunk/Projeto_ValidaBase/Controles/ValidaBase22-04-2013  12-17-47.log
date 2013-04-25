@@ -1,0 +1,62 @@
+
+ValidaBase;*************************************************************************************************
+ValidaBase;Início do processamento do banco de dados GeoSan: 22/04/2013 - 12:17:47
+
+ApagaLinhasAtributosSemGeometriasWaterlines;SELECT OBJECT_ID_ FROM WATERLINES WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM LINES1)
+ApagaLinhasAtributosSemGeometriasWaterlines;Fim do SELECT. 0 linhas de atributos em WATERLINES encontradas sem geometrias associadas
+
+ApagaLinhasAtributosSemGeometriasWaterlines; SELECT OBJECT_ID FROM LINES1 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERLINES)
+ApagaGeometriasSemAtributosWaterlines;Fim do SELECT. 0 linhas de geometrias de WATERLINES encontradas sem atributos associados
+
+Não encontra uma linha encostada no nó de object_id_ = 815 Object_id do trecho: 
+
+Não encontra uma linha encostada no nó de object_id_ = 1319 Object_id do trecho: 5611
+
+Não encontra uma linha encostada no nó de object_id_ = 1728 Object_id do trecho: 1907
+
+Não encontra uma linha encostada no nó de object_id_ = 2128 Object_id do trecho: 2307
+
+Não encontra uma linha encostada no nó de object_id_ = 2794 Object_id do trecho: 3488
+
+Não encontra uma linha encostada no nó de object_id_ = 5142 Object_id do trecho: 
+
+Não encontra uma linha encostada no nó de object_id_ = 5643 Object_id do trecho: 
+
+Não encontra uma linha encostada no nó de object_id_ = 5644 Object_id do trecho: 
+
+Não encontra uma linha encostada no nó de object_id_ = 5664 Object_id do trecho: 12748
+
+Não encontra uma linha encostada no nó de object_id_ = 5723 Object_id do trecho: 6270
+
+Não encontra uma linha encostada no nó de object_id_ = 6043 Object_id do trecho: 6903
+
+Não encontra uma linha encostada no nó de object_id_ = 6138 Object_id do trecho: 6699
+
+Não encontra uma linha encostada no nó de object_id_ = 9466 Object_id do trecho: 12590
+
+VefificaUnicidadeNos; SELECT OBJECT_ID FROM POINTS2
+VefificaUnicidadeNos;Fim do SELECT.
+VefificaUnicidadeNos;Fim do processamento.
+
+VefificaUnicidadeNos; SELECT OBJECT_ID_ FROM WATERCOMPONENTS
+VefificaUnicidadeNos;Fim do SELECT.
+VefificaUnicidadeNos;Fim do processamento.
+
+PointsSemWatercomponents; SELECT OBJECT_ID FROM POINTS2 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERCOMPONENTS)
+ApagaPointsSemWatercomponents;Fim do SELECT.
+ApagaPointsSemWatercomponents;Fim do processamento.
+
+WcSemGeometrias; SELECT OBJECT_ID_ FROM WATERCOMPONENTS WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM POINTS2)
+WcSemGeometrias;Fim do SELECT.
+
+ProcessaBancoDados_Click;Início da investigação dos nós que possuem atributos mas não possuem geometrias
+ProcessaBancoDados_Click;Fim da investigação dos nós que possuem atributos mas não possuem geometrias
+
+Início;ValidaComponentesIniciaisDeWaterlines
+Fim;ValidaComponentesIniciaisDeWaterlines
+
+Início;ValidaComponentesFinaisDeWaterlines
+Fim;ValidaComponentesFinaisDeWaterlines
+
+ValidaBase;Fim do processamento do banco de dados GeoSan: 22/04/2013 - 12:37:15
+ValidaBase;*************************************************************************************************

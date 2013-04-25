@@ -8,6 +8,15 @@ ele deve parar no mesmo.
 
 Mudar o código para isso acontecer.
 
+25-04-2013 - GeoSan 06.09.09
+Feitas alterações no ValidaBase para encontrar nós soltos nas redes que por
+ventura possam existir. Isto estava afetando a simulação de consumidores 
+desabastecidos.
+
+20-04-2013 - GeoSan 06.09.08
+Foi modificado na simulação de consumidores desabastecidos para parar em 
+válvulas e não em registros. Feita modificação no código e no banco de dados.
+
 18-04-2013 - GeoSan 06.09.07
 Na exportação para o EPANET estava ocorrendo erro de time-out. O problema era
 a falta de um índice. Foi acrescentada uma linha de log da exportação.
