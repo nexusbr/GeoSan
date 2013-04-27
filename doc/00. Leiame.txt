@@ -1,6 +1,52 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+27-04-2013 - GeoSan 06.09.12
+GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
+TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO)
+
+Foi realizada a alteração na tabela WaterComponentsTypes e alterado onde consta
+RESERVATÓRIO para a especificação de RNF. Ficando a tabela como apresentado
+abaixo. 
+
+É necessário verificar como ficarão os RNV e RNF.
+
+id_Type	Description_	Specification_
+0	DESC.				JUNCTION
+1	ADAPTADOR			JUNCTION
+2	ATUADOR				JUNCTION
+3	BOMBA				PUMP
+4	BOOSTER				JUNCTION
+5	CAP					JUNCTION
+6	CAPTAÇÃO AGUA BRUTA	JUNCTION
+7	CRUZETA				JUNCTION
+8	CURVA 11-15			JUNCTION
+9	CURVA 22-30			JUNCTION
+10	CURVA 45			JUNCTION
+11	CURVA 90			JUNCTION
+12	DESCARGA			JUNCTION
+13	ELEVATORIA DE AGUA	JUNCTION
+14	FILTRO				JUNCTION
+15	HIDRANTE			JUNCTION
+16	HIDRÔMETRO			JUNCTION
+17	JUNÇÃO				JUNCTION
+18	JUNTA DE ADAPTAÇÃO	JUNCTION
+19	LUVA				JUNCTION
+20	MACRO MEDIDOR		JUNCTION
+21	MEDIDOR DE NÍVEL	JUNCTION
+22	MEDIDOR PRESSÃO		JUNCTION
+23	MEDIDOR VAZÃO		JUNCTION
+24	NÃO IDENTIFICADO	JUNCTION
+25	POÇO PROFUNDO		JUNCTION
+26	REDUÇÃO				JUNCTION
+27	REGISTRO			JUNCTION
+28	RESERVATÓRIO		JUNCTION
+29	TE					JUNCTION
+30	VALVULA RETENÇÃO	JUNCTION
+31	VENTOSA				JUNCTION
+32	VRP					VALVE
+35	REGISTRO FIXO		VALVE
+
 27-04-2013 - GeoSan 06.09.11
 Corrigido bug de geraão de relatórios que não apareciam devido as novas versões
 do Windows lancadas. Foi feito de forma que ele chama o browser padrão do
