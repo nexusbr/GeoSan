@@ -152,7 +152,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.09.10"
+    Versao_Geo = "06.09.11"
     glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
     Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -2364,9 +2364,11 @@ Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    Close #1
    rs.Close
    Set rs = Nothing
-   Shell "C:\Arquivos de programas\Internet Explorer\iexplore.exe c:\RelatorioRede.htm", vbNormalFocus
+   Call ShellExecute(0, "open", "c:\RelatorioRede.htm", "", "", 1) 'chama o navegador padrão e abre o relatório
 End Function
-
+' Função para gerar relatórios de registros cadastrados
+'
+'
 Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
    Dim rs As ADODB.Recordset, Material As String
    Dim TotalComp As Integer
@@ -2498,9 +2500,7 @@ Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
    Open "c:\RelatorioRegistros.htm" For Output As #1
    Print #1, str
    Close #1
-   Shell "C:\Arquivos de programas\Internet Explorer\iexplore.exe c:\RelatorioRegistros.htm", vbNormalFocus
-
-
+   Call ShellExecute(0, "open", "c:\RelatorioRegistros.htm", "", "", 1) 'chama o navegador padrão e abre o relatório
 End Function
 
 Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Filtro As Boolean)
@@ -2615,7 +2615,7 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
    Open "c:\RelatorioComponentes.htm" For Output As #1
    Print #1, str
    Close #1
-   Shell "C:\Arquivos de programas\Internet Explorer\iexplore.exe c:\RelatorioComponentes.htm", vbNormalFocus
+   Call ShellExecute(0, "open", "c:\RelatorioComponentes.htm", "", "", 1) 'chama o navegador padrão e abre o relatório
 End Function
 
 
