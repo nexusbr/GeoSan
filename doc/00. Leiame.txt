@@ -1,6 +1,9 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
+Verificar como fica isso na tabela WaterComponentsTypes
+
 27-04-2013 - GeoSan 06.09.12
 GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
 TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO)

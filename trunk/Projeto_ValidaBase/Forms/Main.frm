@@ -74,7 +74,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-'Versão 01.00.01 VALIDABASE
 'Checa a base de dados para verificação da integridade da mesma para exportação para simulação hidráulica
 
 Option Explicit                         'Impede que uma variável seja utilizada sem que a mesma seja antes criada
