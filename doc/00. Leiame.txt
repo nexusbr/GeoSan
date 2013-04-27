@@ -1,12 +1,11 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
-
-
-Quando for REGSECTOR, para EPANET é uma válvula e para encontrar registros
-ele deve parar no mesmo.
-
 Mudar o código para isso acontecer.
+
+27-04-2013 - GeoSan 06.09.10
+Na exportação para o EPANET foi incluído o diâmetro da rede na válvula, que
+estava vindo com o padrão do EPANET.
 
 25-04-2013 - GeoSan 06.09.09
 Feitas alterações no ValidaBase para encontrar nós soltos nas redes que por
@@ -16,6 +15,16 @@ desabastecidos.
 20-04-2013 - GeoSan 06.09.08
 Foi modificado na simulação de consumidores desabastecidos para parar em 
 válvulas e não em registros. Feita modificação no código e no banco de dados.
+
+Quando for REGSECTOR (registro fixo), para EPANET é uma válvula e para encontrar registros
+ele deve parar no mesmo.
+
+Ficou da seguinte forma: Ele percorre a rede ate encontrar um REGISTRO FIXO ou
+VRP, quando encontra, para. Nos demais ele continua.
+
+Existe um bug em que quando você cancela a operação de localizar os consumidores
+desabastecidos, nas próximas simulações você precisa entrar e sair do software
+novamente. Não cancelando, funciona várias vezes normalmente.
 
 18-04-2013 - GeoSan 06.09.07
 Na exportação para o EPANET estava ocorrendo erro de time-out. O problema era

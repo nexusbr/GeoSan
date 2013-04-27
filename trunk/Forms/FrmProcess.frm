@@ -66,7 +66,7 @@ Private Objectid As String
 Private cgeo As New clsGeoReference
 
 Private Sub cmdCancel_Click()
-   If MsgBox("Deseja para a execução do processo", 36) = vbYes Then
+   If MsgBox("Deseja parar a execução do processo", 36) = vbYes Then
       stopProcess = True
    End If
 End Sub
