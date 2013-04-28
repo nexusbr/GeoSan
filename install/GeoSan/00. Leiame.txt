@@ -4,6 +4,10 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+28-04-2013 - GeoSan 06.09.14
+Modificado o diretório de onde são salvos os relatórios para salvar no diretório
+Meus Documentos do usuário.
+
 28-04-2013 - GeoSan 06.09.13
 Corrigida e melhorada a função que abre arquivos com a aplicação associada a
 extensão do mesmo.

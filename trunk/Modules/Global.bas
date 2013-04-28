@@ -152,7 +152,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.09.13"
+    Versao_Geo = "06.09.14"
     glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
     Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -2222,7 +2222,10 @@ Public Function GeraRelatorioHtm(tipo As TipoRelatorio, Layer As String, Optiona
    End Select
 
 End Function
-
+' Função para gerar relatório de redes
+'
+' LayerName - nome do layer em que será gerado o relatório
+'
 Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    Dim rs As ADODB.Recordset, Material As String
    Dim CompCalc As Double, ComplMed As Double, Qtde As Long
@@ -2237,6 +2240,7 @@ Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    Dim hh As String
    Dim ii As String
    Dim ll As String
+   Dim sPathUser As String              ' caminho do diretório do usuário em My Documents
    
    aa = "MATERIALNAME"
    bb = "INTERNALDIAMETER"
@@ -2360,39 +2364,42 @@ Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    str = str & ""
    str = str & "</BODY>"
    str = str & "</HTML>"
-   Open "c:\RelatorioRede.htm" For Output As #1
+   sPathUser = Environ$("USERPROFILE") & "\my documents\"
+   sPathUser = sPathUser + "RelatorioRede.htm"
+   Open sPathUser For Output As #1
    Print #1, str
    Close #1
    rs.Close
    Set rs = Nothing
-   AbrirArquivo.Abre ("c:\RelatorioRede.htm")
+   AbrirArquivo.Abre (sPathUser)
 End Function
 ' Função para gerar relatórios de registros cadastrados
 '
 '
 Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
-   Dim rs As ADODB.Recordset, Material As String
-   Dim TotalComp As Integer
-   Dim str As String
-   Dim COD_VRP As Integer
-   'alterei em 19/10/2010 manoel
-   Dim ff As String
-   Dim vv As String
+    Dim rs As ADODB.Recordset, Material As String
+    Dim TotalComp As Integer
+    Dim str As String
+    Dim COD_VRP As Integer
+    'alterei em 19/10/2010 manoel
+    Dim ff As String
+    Dim vv As String
     Dim xx As String
-     Dim hh As String
-      Dim oo As String
-       Dim rr As String
-        Dim ss As String
-         Dim ww As String
-          Dim jj As String
-           Dim gg As String
-            Dim tt As String
-            Dim nn As String
-          Dim uu As String
-           Dim qq As String
-            Dim pp As String
-               Dim zz As String
-            'Dim ss As String
+    Dim hh As String
+    Dim oo As String
+    Dim rr As String
+    Dim ss As String
+    Dim ww As String
+    Dim jj As String
+    Dim gg As String
+    Dim tt As String
+    Dim nn As String
+    Dim uu As String
+    Dim qq As String
+    Dim pp As String
+    Dim zz As String
+    Dim sPathUser As String                     ' caminho do diretório do usuário em My Documents
+    'Dim ss As String
    
    'PEGA O CÓDIGO IDENTIFICADOR
     If frmCanvas.TipoConexao <> 4 Then
@@ -2498,16 +2505,24 @@ Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
    str = str & "</BODY>"
    str = str & "</HTML>"
    
-   Open "c:\RelatorioRegistros.htm" For Output As #1
+   sPathUser = Environ$("USERPROFILE") & "\my documents\"
+   sPathUser = sPathUser + "RelatorioRegistros.htm"
+   Open sPathUser For Output As #1
    Print #1, str
    Close #1
-   AbrirArquivo.Abre ("c:\RelatorioRegistros.htm")
+   AbrirArquivo.Abre (sPathUser)
 End Function
-
+' Gera relatório de todas componentes de uma rede
+'
+' LayerName - nome do layer em que será gerado o relatório
+' Filtro -
+'
 Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Filtro As Boolean)
-   Dim rs As ADODB.Recordset, Material As String
-   Dim TotalComp As Long
-   Dim str As String
+    Dim rs As ADODB.Recordset, Material As String
+    Dim TotalComp As Long
+    Dim str As String
+    Dim sPathUser As String                     ' caminho do diretório do usuário em My Documents
+    
     If frmCanvas.TipoConexao <> 4 Then
    
    blnGeraRel = True
@@ -2613,10 +2628,13 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
    str = str & "Total Componentes: &nbsp; &nbsp;&nbsp; " & TotalComp
    str = str & "</body>"
    str = str & "</html>"
-   Open "c:\RelatorioComponentes.htm" For Output As #1
-   Print #1, str
-   Close #1
-   AbrirArquivo.Abre ("c:\RelatorioComponentes.htm")
+   
+    sPathUser = Environ$("USERPROFILE") & "\my documents\"
+    sPathUser = sPathUser + "RelatorioComponentes.htm"
+    Open sPathUser For Output As #1
+    Print #1, str
+    Close #1
+    AbrirArquivo.Abre (sPathUser)
 End Function
 
 
