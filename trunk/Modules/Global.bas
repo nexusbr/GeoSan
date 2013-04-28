@@ -1,7 +1,7 @@
 Attribute VB_Name = "Global"
 Option Explicit
 
-Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+Private AbrirArquivo As New clsAbreArquivo      'Classe que abre um arquivo conforme a extensão do mesmo
 
 Public Versao_Geo As String             'Número da versão do software no formato XX.YY.ZZ.WW
 
@@ -152,7 +152,7 @@ Public Sub Main()
     Dim connn As String
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.09.12"
+    Versao_Geo = "06.09.13"
     glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
     Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -494,7 +494,7 @@ Trata_Erro:
 End Sub
 
 
-Public Function ReadINI(Secao As String, Entrada As String, Arquivo As String)
+Public Function ReadINI(Secao As String, Entrada As String, arquivo As String)
   
   'Arquivo=nome do arquivo ini
   'Secao=O que esta entre []
@@ -504,20 +504,20 @@ Public Function ReadINI(Secao As String, Entrada As String, Arquivo As String)
  Dim Ret As String
  
  Ret = String$(255, 0)
- retlen = GetPrivateProfileString(Secao, Entrada, "", Ret, Len(Ret), Arquivo)
+ retlen = GetPrivateProfileString(Secao, Entrada, "", Ret, Len(Ret), arquivo)
  Ret = Left$(Ret, retlen)
  ReadINI = Ret
 
 End Function
 
-Public Sub WriteINI(Secao As String, Entrada As String, Texto As String, Arquivo As String)
+Public Sub WriteINI(Secao As String, Entrada As String, Texto As String, arquivo As String)
   
   'Arquivo=nome do arquivo ini
   'Secao=O que esta entre []
   'Entrada=nome do que se encontra antes do sinal de igual
   'texto= valor que vem depois do igual
   
-  WritePrivateProfileString Secao, Entrada, Texto, Arquivo
+  WritePrivateProfileString Secao, Entrada, Texto, arquivo
 
 End Sub
 
@@ -2237,6 +2237,7 @@ Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    Dim hh As String
    Dim ii As String
    Dim ll As String
+   
    aa = "MATERIALNAME"
    bb = "INTERNALDIAMETER"
    cc = "LENGTH"
@@ -2364,7 +2365,7 @@ Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    Close #1
    rs.Close
    Set rs = Nothing
-   Call ShellExecute(0, "open", "c:\RelatorioRede.htm", "", "", 1) 'chama o navegador padrão e abre o relatório
+   AbrirArquivo.Abre ("c:\RelatorioRede.htm")
 End Function
 ' Função para gerar relatórios de registros cadastrados
 '
@@ -2500,7 +2501,7 @@ Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
    Open "c:\RelatorioRegistros.htm" For Output As #1
    Print #1, str
    Close #1
-   Call ShellExecute(0, "open", "c:\RelatorioRegistros.htm", "", "", 1) 'chama o navegador padrão e abre o relatório
+   AbrirArquivo.Abre ("c:\RelatorioRegistros.htm")
 End Function
 
 Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Filtro As Boolean)
@@ -2615,7 +2616,7 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
    Open "c:\RelatorioComponentes.htm" For Output As #1
    Print #1, str
    Close #1
-   Call ShellExecute(0, "open", "c:\RelatorioComponentes.htm", "", "", 1) 'chama o navegador padrão e abre o relatório
+   AbrirArquivo.Abre ("c:\RelatorioComponentes.htm")
 End Function
 
 

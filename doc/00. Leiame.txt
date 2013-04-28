@@ -4,6 +4,12 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+28-04-2013 - GeoSan 06.09.13
+Corrigida e melhorada a função que abre arquivos com a aplicação associada a
+extensão do mesmo.
+
+Foi criada uma nova classe (clsAbreArquivo) para esta tarefa.
+
 27-04-2013 - GeoSan 06.09.12
 GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
 TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO)

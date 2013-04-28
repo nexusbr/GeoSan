@@ -1,6 +1,5 @@
 Attribute VB_Name = "calcDetecta"
 Option Explicit
-'Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" ()
 Public nomeIn, nomeOut As String
 Public quantTubos, quantNos, quantBombas As Integer
 Public linhas

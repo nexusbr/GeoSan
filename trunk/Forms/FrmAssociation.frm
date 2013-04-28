@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form FrmAssociation 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "  Associação de Documentos"
@@ -175,11 +175,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Option Explicit
+Private AbrirArquivo As New clsAbreArquivo      'Classe que abre um arquivo conforme a extensão do mesmo
 Private object_id As String, Lv As ListItem
 Private rs As ADODB.Recordset
-Private tcs As TeCanvas, tdb As TeDatabase, x As Double, y As Double
+Private tcs As TeCanvas, tdb As TeDatabase, X As Double, Y As Double
 Const SW_SHOW As Long = 5
 Dim er As String
 
@@ -189,8 +189,8 @@ Public Function init(ObjectID_ As String, mtcs As TeCanvas, mtdb As TeDatabase, 
 On Error GoTo Trata_Erro
    Set tcs = mtcs
    Set tdb = mtdb
-   x = mx
-   y = my
+   X = mx
+   Y = my
    LvAssociations.ListItems.Clear
    'LvAssociations.ColumnHeaders(1).Width = 2100
    'LvAssociations.ColumnHeaders(2).Width = LvAssociations.Width - 2600
@@ -257,49 +257,37 @@ Else
 End If
 
 End Function
-
+' Subrotina para abrir um arquivo de um documento associado ao layer DOCUMENTS
+' Abre a aplicação associada a extensão do mesmo
+'
 Private Sub cmdAbrirDoc_Click()
-On Error GoTo Trata_Erro
-   Dim Cont As Integer
-   
-
-   
-   
-   With LvAssociations
-      If .ListItems.count > 0 Then
-         If .SelectedItem.Selected = True Then
-            For Cont = 1 To .ListItems.count
-               If .ListItems.Item(Cont).Selected = True Then
-                  Dim i&
-                  i& = ShellExecute(0, "open", IIf(Right(.ListItems(Cont).Text, 1) = "\", .ListItems(Cont).Text, .ListItems(Cont).Text & "\") & .ListItems(Cont).SubItems(1) & .ListItems(Cont).SubItems(2), "", "", SW_SHOW)
-                  Exit Sub
-               End If
-            Next
-         Else
-            MsgBox "Selecione um documento para excluir", vbExclamation, "GeoSan"
-         End If
-      Else
-         MsgBox "Não foi selecionado nenhum arquivo", vbExclamation, "GeoSan"
-      End If
-   End With
-   
-   
-   
- 
-   
-   
-   
-
+    On Error GoTo Trata_Erro
+    Dim Cont As Integer
+    Dim arquivo As String
+    
+    With LvAssociations
+        If .ListItems.count > 0 Then
+            If .SelectedItem.Selected = True Then
+                For Cont = 1 To .ListItems.count
+                    If .ListItems.Item(Cont).Selected = True Then
+                        arquivo = IIf(Right(.ListItems(Cont).Text, 1) = "\", .ListItems(Cont).Text, .ListItems(Cont).Text & "\") & .ListItems(Cont).SubItems(1) & .ListItems(Cont).SubItems(2)
+                        AbrirArquivo.Abre (arquivo)
+                        Exit Sub
+                    End If
+                Next
+            Else
+                MsgBox "Selecione um documento para excluir", vbExclamation, "GeoSan"
+            End If
+        Else
+            MsgBox "Não foi selecionado nenhum arquivo", vbExclamation, "GeoSan"
+        End If
+    End With
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   
-   PrintErro CStr(Me.Name), "Private Sub cmdAbrirDoc", CStr(Err.Number), CStr(Err.Description), True
-   
-End If
-
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Private Sub cmdAbrirDoc", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Sub
 
 
@@ -488,16 +476,16 @@ Dim stringconexao As String
        ' If frmCanvas.TipoConexao <> 4 Then
         
         
-          If Dialog.FileName <> "" Then
+          If Dialog.filename <> "" Then
         'guarda caminho diretório
         'path = fso.GetParentFolderName(Dialog.fileName)
-        path = Left(Dialog.FileName, InStrRev(Dialog.FileName, "\") - 1)
+        path = Left(Dialog.filename, InStrRev(Dialog.filename, "\") - 1)
         'guarda nome do arquivo
         'file = fso.GetBaseName(Dialog.fileName)
-        file = mid(Dialog.FileName, InStrRev(Dialog.FileName, "\") + 1, InStrRev(Dialog.FileName, ".") - (InStrRev(Dialog.FileName, "\") + 1))
+        file = mid(Dialog.filename, InStrRev(Dialog.filename, "\") + 1, InStrRev(Dialog.filename, ".") - (InStrRev(Dialog.filename, "\") + 1))
         'guarda extensão do arquivo
         'extension = "." & fso.GetExtensionName(Dialog.fileName)
-        extension = Right(Dialog.FileName, Len(Dialog.FileName) - (InStrRev(Dialog.FileName, ".") - 1))
+        extension = Right(Dialog.filename, Len(Dialog.filename) - (InStrRev(Dialog.filename, ".") - 1))
         Set Lv = LvAssociations.ListItems.Add(, , path)
             Lv.SubItems(1) = file
             Lv.SubItems(2) = extension
