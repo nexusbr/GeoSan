@@ -4,6 +4,80 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+
+01-05-2013 - GeoSan 06.09.16
+
+Foram alterados os valores na coluna Specification_ conforme abaixo, ficando:
+
+Exportação para EPANET - coluna Specification_
+REGISTER - exporta como um nó normal
+VALVE - exporta como válvula
+RNF - exporta como reservatório
+REGSECTOR - xxxx
+
+Simulação de desabastecimento - coluna Specification_
+REGISTER - indica ponto de parada
+REGSECTOR - xxxx
+
+id_Type	Description_	Specification_
+0	DESC.				JUNCTION
+1	ADAPTADOR			JUNCTION
+2	ATUADOR				JUNCTION
+3	BOMBA				PUMP
+4	BOOSTER				JUNCTION
+5	CAP					JUNCTION
+6	CAPTAÇÃO AGUA BRUTA	JUNCTION
+7	CRUZETA				JUNCTION
+8	CURVA 11-15			JUNCTION
+9	CURVA 22-30			JUNCTION
+10	CURVA 45			JUNCTION
+11	CURVA 90			JUNCTION
+12	DESCARGA			JUNCTION
+13	ELEVATORIA DE AGUA	JUNCTION
+14	FILTRO				JUNCTION
+15	HIDRANTE			JUNCTION
+16	HIDRÔMETRO			JUNCTION
+17	JUNÇÃO				JUNCTION
+18	JUNTA DE ADAPTAÇÃO	JUNCTION
+19	LUVA				JUNCTION
+20	MACRO MEDIDOR		JUNCTION
+21	MEDIDOR DE NÍVEL	JUNCTION
+22	MEDIDOR PRESSÃO		JUNCTION
+23	MEDIDOR VAZÃO		JUNCTION
+24	NÃO IDENTIFICADO	JUNCTION
+25	POÇO PROFUNDO		JUNCTION
+26	REDUÇÃO				JUNCTION
+27	REGISTRO			REGISTER
+28	RESERVATÓRIO		RNF
+29	TE					JUNCTION
+30	VALVULA RETENÇÃO	JUNCTION
+31	VENTOSA				JUNCTION
+32	VRP					VALVE
+35	REG. FIXO			JUNCTION
+36	REG. SETOR			REGSECTOR
+
+Foi modificado no código para simulação de consumidores desabastecidos para
+ele parar sempre nos elementos tipos REGISTER e não VALVE como estava.
+
+Foi gerado o executável de instalação desta versão.
+
+01-05-2013 - GeoSan 06.09.15
+Corrigido bug de abertura de arquivo log do ValidaBase que estava sem.
+
+Realizada documentação dos eventos de desenhar redes e salvar redes.
+
+Todas as rotinas de eventos de desenho de redes foram documentadas e foi feita
+uma revisão na tolerância de localização. Foi verificado que quando existem nós
+muito pertos um do outro, pode acontecer de ao desenhar uma rede perto deles ele
+desenhar iniciando no local onde o usuário selecionou, mas ele acabar pegando o
+no da outra rede. Algumas vezes desenhando o trecho de rede sem um nó, pois
+utilizou o nó da rede que está perto. Será verificada uma solução para esta 
+questão.
+
+O que foi verificado é que diminuindo as tolerâncias este erro é minimizado, mas
+fazendo isso, fica as vezes difícil de localizar um nó existente para desenhar
+uma rede sendo necessário afastar o zoom para poder selecioná-lo.
+
 28-04-2013 - GeoSan 06.09.14
 Modificado o diretório de onde são salvos os relatórios para salvar no diretório
 Meus Documentos do usuário.
@@ -19,7 +93,7 @@ GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS
 TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO)
 
 Foi realizada a alteração na tabela WaterComponentsTypes e alterado onde consta
-RESERVATÓRIO para a especificação de RNF. Ficando a tabela como apresentado
+RESERVATÓRIO para a especificação de RNF, na coluna Specification_. Ficando a tabela como apresentado
 abaixo. 
 
 É necessário verificar como ficarão os RNV e RNF.
@@ -53,7 +127,7 @@ id_Type	Description_	Specification_
 25	POÇO PROFUNDO		JUNCTION
 26	REDUÇÃO				JUNCTION
 27	REGISTRO			JUNCTION
-28	RESERVATÓRIO		JUNCTION
+28	RESERVATÓRIO		RNF
 29	TE					JUNCTION
 30	VALVULA RETENÇÃO	JUNCTION
 31	VENTOSA				JUNCTION

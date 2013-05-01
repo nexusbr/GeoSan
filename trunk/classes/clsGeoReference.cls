@@ -1266,7 +1266,7 @@ continuaFor:
                     ACHOU = False
                     rsType.Filter = "ID_TYPE='" & rs!id_Type & "'"
                     If rsType.EOF = False Then
-                        If Trim(rsType!Specification_) = "VALVE" Then       'verifica se é um ponto de parada
+                        If Trim(rsType!Specification_) = "REGISTER" Then       'verifica se é um ponto de parada
                             ACHOU = True
                         End If
                     End If
