@@ -298,285 +298,170 @@ Public Static Function Senha() As String
 Senha = nStr
 
 End Function
-
-
-
-
-
+' Esta função é automaticamente sempre chamada quando é solicitada a inicialização de um novo canvas
+'
+' Conn - conexão realizada
+' username - nome do usuário que logou no GeoSan
+'
 Public Function init(Conn As ADODB.connection, username As String) As Boolean
-On Error GoTo Trata_Erro
-
-Dim rs As ADODB.Recordset
-
-1
-2 Dim linha As Integer
-
-tipoDeConexao = typeconnection
-
-
-If typeconnection <> postgreSQL Then
-
-3 TeViewDatabase1.username = username
-
-4 TeViewDatabase1.Provider = typeconnection
-
-5 TeViewDatabase1.connection = Conn
-       'LoadThemes
-'user = username
-'con = Conn
-6 TeDatabase1.username = username
-7 TeDatabase1.Provider = typeconnection
-8 TeDatabase1.connection = Conn
-
-9  TeDatabase2.Provider = typeconnection
-10 TeDatabase2.connection = Conn
-
-11 TeDatabase3.Provider = typeconnection
-
-12 TeDatabase3.connection = Conn
-
-13 TeDatabaseRamais.Provider = typeconnection
-14 TeDatabaseRamais.connection = Conn
-
-     
-17 TCanvas.Provider = typeconnection '
-      
-19 TCanvas.user = username
-
-20 TCanvas.connection = Conn ' SE DER ERRO AQUI, VERIFICAR A VERSÃO DA TECOM INSTALADA NA MÁQUINA
-
-  ' ViewName = TeViewDatabase1.getActiveView
-
-21        If Tc.GetWorldByUser(username, xmin, ymin, xmax, ymax, typeconnection) Then
-22            TCanvas.setProjection "WATERLINES"
-23            TCanvas.setWorld CDbl(xmin), CDbl(ymin), CDbl(xmax), CDbl(ymax)
-24        End If
-        
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset
+    Dim linha As Integer
+    tipoDeConexao = typeconnection
+    If typeconnection <> postgreSQL Then
+        'se não for Postgresss
+        TeViewDatabase1.username = username
+        TeViewDatabase1.Provider = typeconnection
+        TeViewDatabase1.connection = Conn
+        'LoadThemes
+        'user = username
+        'con = Conn
+        TeDatabase1.username = username
+        TeDatabase1.Provider = typeconnection
+        TeDatabase1.connection = Conn
+        TeDatabase2.Provider = typeconnection
+        TeDatabase2.connection = Conn
+        TeDatabase3.Provider = typeconnection
+        TeDatabase3.connection = Conn
+        TeDatabaseRamais.Provider = typeconnection
+        TCanvas.Provider = typeconnection '
+        TCanvas.user = username
+        TCanvas.connection = Conn ' SE DER ERRO AQUI, VERIFICAR A VERSÃO DA TECOM INSTALADA NA MÁQUINA
+        'ViewName = TeViewDatabase1.getActiveView
+        If Tc.GetWorldByUser(username, xmin, ymin, xmax, ymax, typeconnection) Then
+            TCanvas.setProjection "WATERLINES"
+            TCanvas.setWorld CDbl(xmin), CDbl(ymin), CDbl(xmax), CDbl(ymax)
+        End If
         '***************************************************
         'incluido em 16/01/2009 - Jonathas
         'Recurso Tecom 3.2 - Configuração do tamanho do ponto do acordo com o zoom
-        
-25
-If ReadINI("MAPA", "FIXAR_ICONE", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
-    TCanvas.fixedPoint = True
-
-Else
-   TCanvas.fixedPoint = False
-
-End If
-
-
-
+        If ReadINI("MAPA", "FIXAR_ICONE", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
+            TCanvas.fixedPoint = True
+        Else
+            TCanvas.fixedPoint = False
+        End If
         '***************************************************
-   
-   
-   'DEIXA COMO CURRENT LAYER O RAMAIS AGUA CASO SEJA USUÁRIO VISUALIZADOR
-   Set rs = New ADODB.Recordset
-   rs.Open "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG", Conn, adOpenDynamic, adLockOptimistic
-   If rs.EOF = False Then
-      If rs!UsrFun = 4 Then 'VISUALIZADOR
-        MsgBox "Layer corrente: RAMAIS_AGUA", vbInformation, ""
-        TCanvas.setCurrentLayer "RAMAIS_AGUA"
-         
-      End If
-   End If
-   rs.Close
-   
-   
-26 Me.Show
-        
-27 TCanvas.plotView
-
-
-
-28 TCanvas.snapOn = 1
-        
-29 mUserName = username
-    'Para saber quantos canvas estão abertos...
-30    If FrmMain.Tag = "" Then
-31        FrmMain.Tag = 0
-32    Else
-33        FrmMain.Tag = Int(FrmMain.Tag) + 1
-34    End If
-
-
-
-   
-   
-   
-   Else
-   
-
-Dim mPROVEDOR As String
-Dim mSERVIDOR As String
-Dim mPORTA As String
-Dim mBANCO As String
-Dim mUSUARIO As String
-Dim Senha As String
-Dim decriptada As String
-                         
-
-mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
-mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
-Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
-nStr = FunDecripta(Senha)
-decriptada = nStr
- Call WriteINI("CONEXAO", "USER", username, App.path & "\CONTROLES\GEOSAN.INI")
- TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
-
-
- 
- TeViewDatabase1.username = username
- TeViewDatabase1.Provider = typeconnection
- TeViewDatabase1.connection = TeAcXConnection1.objectConnection_
-
- 
-' TeViewDatabase1.addView ("TESTE2000")
- 
- 'TeViewDatabase1.addTheme("WATERLINES", "TESTE2000", "WATERLINES") = True
-
-
-
- TeDatabase1.username = username
- TeDatabase1.Provider = typeconnection
- TeDatabase1.connection = TeAcXConnection1.objectConnection_
-
- TeDatabase2.Provider = typeconnection
- TeDatabase2.connection = TeAcXConnection1.objectConnection_
-
- TeDatabase3.Provider = typeconnection
-
- TeDatabase3.connection = TeAcXConnection1.objectConnection_
-
- TeDatabaseRamais.Provider = typeconnection
- TeDatabaseRamais.connection = TeAcXConnection1.objectConnection_
-
-
-
-    
-    TCanvas.Provider = typeconnection 'Provider 4 = PostgreSQL
-    TCanvas.user = username
-    TCanvas.connection = TeAcXConnection1.objectConnection_ 'É nessa parte que é setada a conexão com
-                                                          'a TeComConnection. Isso é válido para
-                                                          'todas as outras TeComs. Porém, quando for
-                                                          'realizar as querys de atributos, as mesmas
-                                                          'devem ser feitas pela conexão ado do vb.
-                                                          'Se quiser trabalhar com transação, deve-se
-                                                          'abrir a transação da conexão ado e da
-                                                          'TeComConnection. Ex:
-                                                          'conexao.BeginTrans
-                                                          'TeConnection.beginTransaction
-                                                          'O mesmo vale para o Commit e para o
-                                                          'Rollback.
-
-    
-     
-     
-     
-     
-  'TCanvas.saveOnMemory
-'TCanvas.SaveInDatabase
-     
-     
-
-
-
-       If Tc.GetWorldByUser(username, xmin, ymin, xmax, ymax, typeconnection) Then
-           TCanvas.setProjection "WATERLINES"
-           TCanvas.setWorld CDbl(xmin), CDbl(ymin), CDbl(xmax), CDbl(ymax)
-       End If
-        
+        'DEIXA COMO CURRENT LAYER O RAMAIS AGUA CASO SEJA USUÁRIO VISUALIZADOR
+        Set rs = New ADODB.Recordset
+        rs.Open "SELECT USRLOG, USRFUN FROM SYSTEMUSERS WHERE USRLOG = '" & strUser & "' ORDER BY USRLOG", Conn, adOpenDynamic, adLockOptimistic
+        If rs.EOF = False Then
+            If rs!UsrFun = 4 Then 'VISUALIZADOR
+                MsgBox "Layer corrente: RAMAIS_AGUA", vbInformation, ""
+                TCanvas.setCurrentLayer "RAMAIS_AGUA"
+            End If
+        End If
+        rs.Close
+        Me.Show
+        TCanvas.plotView            'mostra o mapa na tela
+        TCanvas.snapOn = 1
+        mUserName = username
+        'Para saber quantos canvas estão abertos...
+        If FrmMain.Tag = "" Then
+            FrmMain.Tag = 0
+        Else
+            FrmMain.Tag = Int(FrmMain.Tag) + 1
+        End If
+    Else
+        'se for Postgress
+        Dim mPROVEDOR As String
+        Dim mSERVIDOR As String
+        Dim mPORTA As String
+        Dim mBANCO As String
+        Dim mUSUARIO As String
+        Dim Senha As String
+        Dim decriptada As String
+        mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
+        mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
+        mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
+        mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
+        Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
+        nStr = FunDecripta(Senha)
+        decriptada = nStr
+        Call WriteINI("CONEXAO", "USER", username, App.path & "\CONTROLES\GEOSAN.INI")
+        TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
+        TeViewDatabase1.username = username
+        TeViewDatabase1.Provider = typeconnection
+        TeViewDatabase1.connection = TeAcXConnection1.objectConnection_
+        ' TeViewDatabase1.addView ("TESTE2000")
+        'TeViewDatabase1.addTheme("WATERLINES", "TESTE2000", "WATERLINES") = True
+        TeDatabase1.username = username
+        TeDatabase1.Provider = typeconnection
+        TeDatabase1.connection = TeAcXConnection1.objectConnection_
+        TeDatabase2.Provider = typeconnection
+        TeDatabase2.connection = TeAcXConnection1.objectConnection_
+        TeDatabase3.Provider = typeconnection
+        TeDatabase3.connection = TeAcXConnection1.objectConnection_
+        TeDatabaseRamais.Provider = typeconnection
+        TeDatabaseRamais.connection = TeAcXConnection1.objectConnection_
+        TCanvas.Provider = typeconnection 'Provider 4 = PostgreSQL
+        TCanvas.user = username
+        TCanvas.connection = TeAcXConnection1.objectConnection_       'É nessa parte que é setada a conexão com
+                                                                      'a TeComConnection. Isso é válido para
+                                                                      'todas as outras TeComs. Porém, quando for
+                                                                      'realizar as querys de atributos, as mesmas
+                                                                      'devem ser feitas pela conexão ado do vb.
+                                                                      'Se quiser trabalhar com transação, deve-se
+                                                                      'abrir a transação da conexão ado e da
+                                                                      'TeComConnection. Ex:
+                                                                      'conexao.BeginTrans
+                                                                      'TeConnection.beginTransaction
+                                                                      'O mesmo vale para o Commit e para o
+                                                                      'Rollback.
+        'TCanvas.saveOnMemory
+        'TCanvas.SaveInDatabase
+        If Tc.GetWorldByUser(username, xmin, ymin, xmax, ymax, typeconnection) Then
+            TCanvas.setProjection "WATERLINES"
+            TCanvas.setWorld CDbl(xmin), CDbl(ymin), CDbl(xmax), CDbl(ymax)
+        End If
         '***************************************************
         'incluido em 16/01/2009 - Jonathas
         'Recurso Tecom 3.2 - Configuração do tamanho do ponto do acordo com o zoom
-        
-
-If ReadINI("MAPA", "FIXAR_ICONE", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
-    TCanvas.fixedPoint = True
-
-Else
-   TCanvas.fixedPoint = False
-
-End If
-
- 
-
-
-
+        If ReadINI("MAPA", "FIXAR_ICONE", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
+            TCanvas.fixedPoint = True
+        Else
+            TCanvas.fixedPoint = False
+        End If
         '***************************************************
-   
-   
-   'DEIXA COMO CURRENT LAYER O RAMAIS AGUA CASO SEJA USUÁRIO VISUALIZADOR
-   Set rs = New ADODB.Recordset
-  
-   
-   Dim stringconexao As String
+        'DEIXA COMO CURRENT LAYER O RAMAIS AGUA CASO SEJA USUÁRIO VISUALIZADOR
+        Set rs = New ADODB.Recordset
+        Dim stringconexao As String
+        Dim a As String
+        Dim b As String
+        Dim c As String
+        Dim d As String
+        Dim e As String
+        a = "USRLOG"
+        b = "USRFUN"
+        c = "SYSTEMUSERS"
+        stringconexao = "Select " + """" + a + """" + "," + """" + b + """" + " from " + """" + c + """" + " where " + """" + a + """" + "=" + "'" & strUser & "' ORDER BY " + """" + a + """" + ""
+        ' rs.Open stringconexao, Conn, adOpenDynamic, adLockReadOnly
+        rs.Open stringconexao, Conn, adOpenDynamic, adLockOptimistic
+        If rs.EOF = False Then
+            If rs!UsrFun = 4 Then 'VISUALIZADOR
+                MsgBox "Layer corrente: RAMAIS_AGUA", vbInformation, ""
+                TCanvas.setCurrentLayer "RAMAIS_AGUA"
+            End If
+        End If
+        rs.Close
+        Me.Show
+        TCanvas.plotView
+        TCanvas.snapOn = 1
+        mUserName = username
+        'Para saber quantos canvas estão abertos...
+        If FrmMain.Tag = "" Then
+            FrmMain.Tag = 0
+        Else
+            FrmMain.Tag = Int(FrmMain.Tag) + 1
+        End If
+    End If
 
-    Dim a As String
-    Dim b As String
-    Dim c As String
-     Dim d As String
-     Dim e As String
-    a = "USRLOG"
-      b = "USRFUN"
-       c = "SYSTEMUSERS"
-      
-
-   stringconexao = "Select " + """" + a + """" + "," + """" + b + """" + " from " + """" + c + """" + " where " + """" + a + """" + "=" + "'" & strUser & "' ORDER BY " + """" + a + """" + ""
-  
-
-   
-  ' rs.Open stringconexao, Conn, adOpenDynamic, adLockReadOnly
-    rs.Open stringconexao, Conn, adOpenDynamic, adLockOptimistic
-   
-   
-   If rs.EOF = False Then
-      If rs!UsrFun = 4 Then 'VISUALIZADOR
-        MsgBox "Layer corrente: RAMAIS_AGUA", vbInformation, ""
-        TCanvas.setCurrentLayer "RAMAIS_AGUA"
-         
-      End If
-   End If
-   rs.Close
-   
-   
- Me.Show
-        
-TCanvas.plotView
-
-
-
- TCanvas.snapOn = 1
-        
-mUserName = username
-    'Para saber quantos canvas estão abertos...
-   If FrmMain.Tag = "" Then
-        FrmMain.Tag = 0
-   Else
-      FrmMain.Tag = Int(FrmMain.Tag) + 1
-   End If
-
-
- 
-   
-   
-   
-   
-   End If
-   
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   Else
-      
-      
-      PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True, Erl
-      End
-      
-   End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True, Erl
+        End
+    End If
 End Function
 
 'Sub CorrigeBug()
@@ -658,7 +543,11 @@ Private Sub Form_Activate()
    LoadToolsBar
    TCanvas_onEndSELECT
 End Sub
-
+' Rotina responsável por verificar qual ícone foi selecionada
+' ativa o comando selecionado, caso seja desenho de rede, zoom área, etc. Para o programa ficar sabendo o que ele está fazendo
+'
+'
+'
 Private Sub LoadToolsBar()
    Dim a As Integer
    For a = 1 To FrmMain.tbToolBar.Buttons.count
@@ -666,7 +555,6 @@ Private Sub LoadToolsBar()
    Next
    Select Case Tr.TerraEvent
       Case tg_SelectObject
-      
          FrmMain.tbToolBar.Buttons("kselection").value = tbrPressed
       Case tg_ZoomArea
          FrmMain.tbToolBar.Buttons("kzoomarea").value = tbrPressed
@@ -773,246 +661,172 @@ Trata_Erro:
     
    End If
 End Sub
-'Rotina para determinar qual o botão foi selecionado pelo usuário
+' Rotina para determinar qual o botão foi selecionado pelo usuário
+' Referente as ícones no menu principal do GeoSan
+' Sempre que uma ícone na janela principal do GeoSan é selecionada este é o primeiro lugar onde a aplicação entra
 '
 '
 '
 Public Sub Tb_SELECT(ByVal Button As String)
-On Error GoTo Trata_Erro 'trata erros
-
+    On Error GoTo Trata_Erro 'trata erros
     Dim a As Integer, object_ids As String ' declaração das variáveis a  do tipo integer e object_ids do tipo string
     Dim retval As String ' declaração da variável retval do tipo string
-
+    
     LastEvent = Tr.TerraEvent 'LastEvent recebe o conteúdo de Tr.TerraEvent
-   
-   TCanvas.ToolTipText = "" 'em branco
-   
+    TCanvas.ToolTipText = "" 'em branco
     With TCanvas ' Com o TCanvas
-      
-      Select Case Button    'selecione um case
-         
-         Case "kselection"
-            
-            TCanvas.Normal ' TCanvas da area normal desmarca item 1, item2, item3, item4 e 128
-            TCanvas.Select
-            Tr.TerraEvent = tg_SelectObject
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-
-         Case "kplotview" ' plota a vista desmarca item 1, item2, item3, item4 e 128
-            
-            TCanvas.plotView
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-         
-         Case "krecompose" 'recompõe a vista desmarca item 1, item2, item3, item4 e 128
-            
-            TCanvas.recompose
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-
-         Case "kzoomarea" ' zoom da area desmarca item 1, item2, item3, item4 e 128
-            
-            TCanvas.zoomArea
-            Tr.TerraEvent = tg_ZoomArea
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-
-         Case "kpan" ' recorta plotview desmarcaitem 1, item2, item3, item4 e 128
-            
-            TCanvas.pan
-            Tr.TerraEvent = tg_Pan
-
-         Case "kundoview" 'retorna a visualização anterior desmarca item 1, item2, item3, item4 e 128
-            
-            TCanvas.undoView
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-
-         Case "kredoview"  'desfaz a última visualização desmarca item 1, item2, item3, item4 e 128
-            
-            TCanvas.redoView
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-
-         Case "KFindCoordenadas" 'final das coordenadas desmarca item 1, item2, item3, item4 e 128
-            
-            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-            'Declaração das variáveis x,y
-            Dim X As Double, Y As Double
-
-            X = InputBox("Informe a Coordena X ") ' entrada da coordenada x
-            Y = InputBox("Informe a Coordena Y ") ' entrada da coordenada y
-            If X <> 0 And Y <> 0 Then ' se x e y for diferente de zero
-                TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50 '  'configura as coordenadas mundo a serem utilizadas para desenho
-
-                TCanvas.plotView ' plota o layer
-            End If ' final do if
-         
-         Case "KEncontraConsumidor" ' localizar consumidores
-            
-           
-            
-            TCanvas.setCurrentLayer "RAMAIS_AGUA" ''configura o plano "RAMAIS_AGUA" como corrente
-
-            frmEncontraConsumidor.Show 1 ' encontra consumidor e adiciona
-         
-         Case "KEncontraTexto" ' case encontra texto e adiciona
-
-            frmEncontraTexto.Show 1
-
-         Case "kzoomin" ' zoom menos -
-
-            TCanvas.zoomIn dblFatorZoomMenos
-
-         Case "kzoomout" ' zoom mais +
-
-
-           TCanvas.zoomOut dblFatorZoomMais
-
-
-         Case Else
-            If TCanvas.getCurrentLayer <> "" Then                   'configura o plano corrente e se for diferente da falta de seleção
-               TeDatabase1.setCurrentLayer TCanvas.getCurrentLayer  'aciona atabela para modificar o plano e configura um plano corrente
-               Set Tr.tcs = TCanvas                                 'seta e TCanvas passa ser valor para a variável Tr.tcs
-               Set Tr.tdb = TeDatabase1                             'seta e TeDatabase1 passa ser valor para a variável Tr.tdb
-               Set Tr.tdbcon = TeDatabase2                          'seta e TeDatabase2 passa ser valor para a variável Tr.tdbcon
-               Set Tr.tdbconref = TeDatabase3                       'seta e TeDatabase3 passa ser valor para a variável Tr.tdbconref
-               Set Tr.CtrlMgr = FrmMain.Manager1                    'CtrlMgr recebe o form.Manager1
-                                                                    'TCanvas.getRepresentationTheme(
-               Select Case Button ' selecione uma das opções
-                  
-                  Case "kCalcularArea"
-                  
-                     TCanvas.calculateArea
-                     TCanvas.ToolTipText = "" ' se for igual em branco
-                     
-               
-                  Case "kdrawnetworkline" 'desenhar rede de agua
-
-                     TCanvas.clearSelectItens 0 'desmarca se há item selecionado
-
-'                     Tr.TerraEvent = tg_DrawNetWorkline
-
-                     If Tr.DrawNetWorkLine = True Then
-                        frmNetWorkLegth.init TCanvas, FrmMain
-                        FrmMain.ViewManager1.LoadImageSnap Tr.cgeo.GetReferenceLayer(.getCurrentLayer), mOnSnapLock
-                        FrmMain.TabStrip1.Tabs(2).Selected = True
-                     Else
-
-                        FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrUnpressed
-
-                        .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-                        Exit Sub
-                     End If
-
-                  Case "kmovenetworknode" 'mover nó da rede
-                        Tr.MoveNetWorkNode
-
-                  Case "kinsertnetworknode"
-'                        fraRedes.Visible = T rue
-                        Tr.DrawNetWorkNode
-
-                  Case "kdrawtext"
-                        'A implantar
-
-                  Case "kinsertdoc" ' este
-                     Tr.DrawPoint: Tr.TerraEvent = tg_DrawGeometrys
-
-                  Case "kdrawramal"
-                        If ConnSec.State = 1 Then
-                            TCanvas.clearSelectItens 0 'desmarca se há item selecionado
-                            Tr.DrawRamal: Tr.TerraEvent = tg_DrawRamal
-                        Else
-                            MsgBox "A conexão com o banco de dados comercial não foi configurada para realizar esta operação.", vbInformation, "Conexão Comercial"
-                        End If
-
-                  Case "kdelete"
-
-                     Tr.Delete
-
-                  Case "ksearchinnetwork" ''obtem a quantidade de poligonos selecionados em memória
-                     If .getSelectCount(lines) = 1 Then
-
-                        Dim Trecho As String
-                        Trecho = TCanvas.getSelectObjectId(0, lines) 'CAPTURA O TRECHO SELECIONADO
-                        TCanvas.Normal                               'LIMPA A SELEÇÃO DE QUALQUER OBJETO NO MAPA
-                        TCanvas.Select
-
-                        object_ids = FrmProcess.FindValvulas(Trecho, TCanvas)   'Tr.CGeo.SELECTRede TCanvas.getSELECTObjectId(0, lines)
-
-                        If object_ids <> "" Then
-
-                           frmConsumidoresDesabastecidos.init object_ids
-                        End If
-                     Else
-                        MsgBox "Selecione 1 trecho de rede de agua para esta função.", vbInformation, ""
-                     End If
-
-                  Case "kdeclivity"
-                     If .getSelectCount(lines) = 1 Then
-                        Set Tr.cgeo.tcs = TCanvas
-                        Tr.cgeo.GetDeclivity .getCurrentLayer, Tr.cgeo.GetReferenceLayer(.getCurrentLayer), .getSelectObjectId(0, lines)
-                     End If
-
-                  Case "ksearchattribute"
-                     Tr.SearchGeomtryForAttribute
-
-                  Case "ksave"
-
-
-                     Tr.SaveInDatabase
-
-                     If FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrUnpressed Then
-                         With TCanvas
-                            .Normal
-                            .Select: Tr.TerraEvent = tg_SelectObject
-                            .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-                         End With
-                     End If
-                   TCanvas.plotView
-                     LoadToolsBar
-
-                  Case "kdrawintersection"
-                     Tr.DrawInterSection
-
-                  Case "kdrawline"
-
-                  Case "kdrawpoint"
-
-                  Case "kdrawtext"
-
-                  Case "mnuPoligono"
-                     'TCanvas.Select True
-
-                     Tr.TerraEvent = 0
-                     TCanvas.Normal
-                     TCanvas.drawPolygon
-
-
-               End Select
-            Else
-               MsgBox "Nenhum plano está ativo", vbExclamation
-            End If
-      End Select
-      
-      'comprimento da linha
-      If Tr.TerraEvent = tg_DrawNetWorkline Then
-         frmNetWorkLegth.init TCanvas, FrmMain
-         Dim Lh As Double
-         TCanvas.getLengthOfLastSegmentOfLine Lh
-         frmNetWorkLegth.txtLength.Text = Lh
-      Else
-         Unload frmNetWorkLegth
-      End If
-      TCanvas_onEndPlotView
-      LoadToolsBar
-      
-      
-   End With
+        Select Case Button    'selecione um case
+            Case "kselection"
+                TCanvas.Normal ' TCanvas da area normal desmarca item 1, item2, item3, item4 e 128
+                TCanvas.Select
+                Tr.TerraEvent = tg_SelectObject
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            Case "kplotview" ' plota a vista desmarca item 1, item2, item3, item4 e 128
+                TCanvas.plotView
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            Case "krecompose" 'recompõe a vista desmarca item 1, item2, item3, item4 e 128
+                TCanvas.recompose
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            Case "kzoomarea" ' zoom da area desmarca item 1, item2, item3, item4 e 128
+                TCanvas.zoomArea
+                Tr.TerraEvent = tg_ZoomArea
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            Case "kpan" ' recorta plotview desmarcaitem 1, item2, item3, item4 e 128
+                TCanvas.pan
+                Tr.TerraEvent = tg_Pan
+            Case "kundoview" 'retorna a visualização anterior desmarca item 1, item2, item3, item4 e 128
+                TCanvas.undoView
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            Case "kredoview"  'desfaz a última visualização desmarca item 1, item2, item3, item4 e 128
+                TCanvas.redoView
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            Case "KFindCoordenadas" 'final das coordenadas desmarca item 1, item2, item3, item4 e 128
+                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+                'Declaração das variáveis x,y
+                Dim X As Double, Y As Double
+                X = InputBox("Informe a Coordena X ") ' entrada da coordenada x
+                Y = InputBox("Informe a Coordena Y ") ' entrada da coordenada y
+                If X <> 0 And Y <> 0 Then ' se x e y for diferente de zero
+                    TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50 '  'configura as coordenadas mundo a serem utilizadas para desenho
+                    TCanvas.plotView ' plota o layer
+                End If ' final do if
+            Case "KEncontraConsumidor" ' localizar consumidores
+                TCanvas.setCurrentLayer "RAMAIS_AGUA" ''configura o plano "RAMAIS_AGUA" como corrente
+                frmEncontraConsumidor.Show 1 ' encontra consumidor e adiciona
+            Case "KEncontraTexto" ' case encontra texto e adiciona
+                frmEncontraTexto.Show 1
+            Case "kzoomin" ' zoom menos -
+                TCanvas.zoomIn dblFatorZoomMenos
+            Case "kzoomout" ' zoom mais +
+                TCanvas.zoomOut dblFatorZoomMais
+            Case Else
+                If TCanvas.getCurrentLayer <> "" Then                    'configura o plano corrente e se for diferente da falta de seleção
+                    TeDatabase1.setCurrentLayer TCanvas.getCurrentLayer  'aciona atabela para modificar o plano e configura um plano corrente
+                    Set Tr.tcs = TCanvas                                 'seta e TCanvas passa ser valor para a variável Tr.tcs
+                    Set Tr.tdb = TeDatabase1                             'seta e TeDatabase1 passa ser valor para a variável Tr.tdb
+                    Set Tr.tdbcon = TeDatabase2                          'seta e TeDatabase2 passa ser valor para a variável Tr.tdbcon
+                    Set Tr.tdbconref = TeDatabase3                       'seta e TeDatabase3 passa ser valor para a variável Tr.tdbconref
+                    Set Tr.CtrlMgr = FrmMain.Manager1                    'CtrlMgr recebe o form.Manager1
+                                                                         'TCanvas.getRepresentationTheme(
+                    Select Case Button ' selecione uma das opções
+                        Case "kCalcularArea"
+                            TCanvas.calculateArea
+                            TCanvas.ToolTipText = "" ' se for igual em branco
+                        Case "kdrawnetworkline" ' foi selecionada a ícone de desenhar rede de agua (esgoto ou drenagem)
+                            TCanvas.clearSelectItens 0                     'desmarca se há item selecionado
+                            'Tr.TerraEvent = tg_DrawNetWorkline
+                            If Tr.DrawNetWorkLine = True Then              'chama a classe drawnetworkline para iniciar o desenho da linha. Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
+                                frmNetWorkLegth.init TCanvas, FrmMain
+                                FrmMain.ViewManager1.LoadImageSnap Tr.cgeo.GetReferenceLayer(.getCurrentLayer), mOnSnapLock
+                                FrmMain.TabStrip1.Tabs(2).Selected = True
+                            Else
+                                FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrUnpressed
+                                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+                                Exit Sub
+                            End If
+                        Case "kmovenetworknode" 'mover nó da rede
+                            Tr.MoveNetWorkNode
+                        Case "kinsertnetworknode"
+                            'fraRedes.Visible = T rue
+                            Tr.DrawNetWorkNode
+                        Case "kdrawtext"
+                            'A implantar
+                        Case "kinsertdoc" ' este
+                            Tr.DrawPoint: Tr.TerraEvent = tg_DrawGeometrys
+                        Case "kdrawramal"
+                            If ConnSec.State = 1 Then
+                                TCanvas.clearSelectItens 0 'desmarca se há item selecionado
+                                Tr.DrawRamal: Tr.TerraEvent = tg_DrawRamal
+                            Else
+                                MsgBox "A conexão com o banco de dados comercial não foi configurada para realizar esta operação.", vbInformation, "Conexão Comercial"
+                            End If
+                        Case "kdelete"
+                            Tr.Delete
+                        Case "ksearchinnetwork" ''obtem a quantidade de poligonos selecionados em memória
+                            If .getSelectCount(lines) = 1 Then
+                                Dim Trecho As String
+                                Trecho = TCanvas.getSelectObjectId(0, lines) 'CAPTURA O TRECHO SELECIONADO
+                                TCanvas.Normal                               'LIMPA A SELEÇÃO DE QUALQUER OBJETO NO MAPA
+                                TCanvas.Select
+                                object_ids = FrmProcess.FindValvulas(Trecho, TCanvas)   'Tr.CGeo.SELECTRede TCanvas.getSELECTObjectId(0, lines)
+                                If object_ids <> "" Then
+                                    frmConsumidoresDesabastecidos.init object_ids
+                                End If
+                            Else
+                                MsgBox "Selecione 1 trecho de rede de agua para esta função.", vbInformation, ""
+                            End If
+                        Case "kdeclivity"
+                            If .getSelectCount(lines) = 1 Then
+                                Set Tr.cgeo.tcs = TCanvas
+                                Tr.cgeo.GetDeclivity .getCurrentLayer, Tr.cgeo.GetReferenceLayer(.getCurrentLayer), .getSelectObjectId(0, lines)
+                            End If
+                        Case "ksearchattribute"
+                            Tr.SearchGeomtryForAttribute
+                        Case "ksave"
+                            Tr.SaveInDatabase
+                            If FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrUnpressed Then
+                                With TCanvas
+                                    .Normal
+                                    .Select: Tr.TerraEvent = tg_SelectObject
+                                    .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+                                End With
+                            End If
+                            'TCanvas.plotView  2013-05-01 - retirado pois após desenhar uma rede ele plotava a vista 3 vezes
+                            LoadToolsBar
+                        Case "kdrawintersection"
+                            Tr.DrawInterSection
+                        Case "kdrawline"
+                        Case "kdrawpoint"
+                        Case "kdrawtext"
+                        Case "mnuPoligono"
+                            'TCanvas.Select True
+                            Tr.TerraEvent = 0
+                            TCanvas.Normal
+                            TCanvas.drawPolygon
+                    End Select
+                Else
+                    MsgBox "Nenhum plano está ativo. Selecione antes o plano de informação que deseja realizar esta operação.", vbExclamation
+                End If
+        End Select
+        'comprimento da linha
+        If Tr.TerraEvent = tg_DrawNetWorkline Then
+            frmNetWorkLegth.init TCanvas, FrmMain
+            Dim Lh As Double
+            TCanvas.getLengthOfLastSegmentOfLine Lh
+            frmNetWorkLegth.txtLength.Text = Lh
+        Else
+            Unload frmNetWorkLegth
+        End If
+        TCanvas_onEndPlotView                   'chama Tcanvas_onEndPlotView para acertar x,y,min e max e a tolerância de localização para desenho de redes
+        LoadToolsBar                            'ativa o comando selecionado, caso seja desenho de rede, zoom área, etc. Para o programa ficar sabendo o que ele está fazendo
+    End With
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
     ElseIf Err.Number = 13 Then
        Exit Sub
     Else
-
        PrintErro CStr(Me.Name), "Public Sub Tb_SELECT", CStr(Err.Number), CStr(Err.Description), True
-
     End If
 End Sub
 
@@ -1244,84 +1058,74 @@ Trata_Erro:
       PrintErro CStr(Me.Name), "Private Sub TCanvas_onEndPlotView", CStr(Err.Number), CStr(Err.Description), True
    End If
 End Sub
-
-
-
-'Private Sub TCanvas_onBeginPlotView()
-'   MsgBox "Inicio: " & tempo & "Fim: " & Time
-'End Sub
-
-'############################################################################
-'Autor: Luis CLaudio
-'Data: 31/08/06
-'Especificação:
-'Este Evento ocorre quando é selecionado um ou mais objetos no canvas
-'A rotina dentro do evento  carrega as propridades
-'na componente manage1(Gerenciador de Propridades) do Form Principal
-'Obs: Havendo apenas um objeto selecionado é disparado .LoadDefaultProperties
-'     Havendo mais de um objeto selecionado é disparado .LoadComunsObjects
-'##########################################################################
-
+Private Sub TCanvas_onBeginPlotView()
+    'MsgBox "Inicio: " & tempo & "Fim: " & Time
+End Sub
+' Evento que ocorre quando é selecionado um ou mais objetos no canvas
+' A rotina dentro do evento  carrega as propridades
+' na componente manage1(Gerenciador de Propridades) do Form Principal
+' Obs: Havendo apenas um objeto selecionado é disparado .LoadDefaultProperties
+'      Havendo mais de um objeto selecionado é disparado .LoadComunsObjects
+' Autor: Luis CLaudio
+' Data: 31/08/06
+' Nesta rotina é configurada a escala da tolerância de localização
+'
+'
+'
 Private Sub TCanvas_onEndPlotView()
-On Error GoTo Trata_Erro
-   Dim MyScale As Double
-   MyScale = TCanvas.getScale
-   
-   TCanvas.getWorld xmin, ymin, xmax, ymax
-
-   
-   ViewName = TeViewDatabase1.getActiveView
-
-
-
-
-
-'End If
-   'CARREGA AS VARIÁVEIS GLOBAIS PARA O MÓDULO DE IMPRESSÃO
-   CanvasXmin_ = xmin
-   CanvasYmin_ = ymin
-   CanvasXmax_ = xmax
-   CanvasYmax_ = ymax
-   strViewAtiva_ = ViewName
-   
-   FrmMain.txtEscala.Text = "1 / " & Round(MyScale, 0)
-   
-   If TCanvas.getCurrentLayer <> "" Then
+    On Error GoTo Trata_Erro
+    Dim MyScale As Double
+    
+    MyScale = TCanvas.getScale
+    TCanvas.getWorld xmin, ymin, xmax, ymax
+    ViewName = TeViewDatabase1.getActiveView
+    'carrega as variáveis globais para o módulo de impressão
+    CanvasXmin_ = xmin
+    CanvasYmin_ = ymin
+    CanvasXmax_ = xmax
+    CanvasYmax_ = ymax
+    strViewAtiva_ = ViewName
+    FrmMain.txtEscala.Text = "1 / " & Round(MyScale, 0)
+    If TCanvas.getCurrentLayer <> "" Then
         strLayerAtivo = TCanvas.getCurrentLayer
-   Else
+    Else
         strLayerAtivo = ""
-   End If
-   
-   TCanvas.ToolTipText = ""
-   
-   ' p/ corrigir o DrawNetWorkLine - Luis
-   If Tr.TerraEvent = 1 Then 'tg_DrawNetWorkline
-      With TCanvas
-         MyScale = .getScale
-         Select Case MyScale
+    End If
+    TCanvas.ToolTipText = ""
+    'para corrigir o DrawNetWorkLine - Luis
+    'aqui é definida a tolerância de localização quando estiver desenhando uma rede (snap)
+    'foram inseridas algumas tolerâncias a mais para ver se resolve quando não localiza o nó ou pega o do lado por engano
+    If Tr.TerraEvent = 1 Then 'tg_DrawNetWorkline - caso esteja desenhando uma rede muda a tolerância conforme a escala em que o usuário estiver
+        With TCanvas
+            MyScale = .getScale
+            Select Case MyScale
             Case Is < 10
-               .tolerance = 0.001
+                .tolerance = 0.001
+            Case Is < 50
+                .tolerance = 0.005
             Case Is < 100
-               .tolerance = 0.01
+                .tolerance = 0.01
+            Case Is < 200
+                .tolerance = 0.05
+            Case Is < 300
+                .tolerance = 0.075
             Case Is < 500
-               .tolerance = 0.1
+                .tolerance = 0.1
             Case Is < 1000
-               .tolerance = 0.5
+                .tolerance = 0.5
             Case Is >= 1000
-               .tolerance = 1
-         End Select
-      End With
-   Else
-      TCanvas.tolerance = 1
-   End If
+                .tolerance = 1
+            End Select
+        End With
+    Else
+        TCanvas.tolerance = 1
+    End If
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
-   Else
-    
-      PrintErro CStr(Me.Name), "Private Sub TCanvas_onEndPlotView", CStr(Err.Number), CStr(Err.Description), True
-    
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Sub
 
 Private Sub TCanvas_onEndSELECT()
@@ -1524,23 +1328,22 @@ Trata_Erro:
    End If
 
 End Sub
-
-
-
+' Evento quando estou desenhando uma linha e entro o segundo ponto da mesma
+' Este evento está sendo utilizado apenas quando desenho ramais
+'
+' distance - distância da linha do primeiro ponto até o segundo ponto
+'
 Private Sub TCanvas_onLine(ByVal distance As Double)
-On Error GoTo Trata_Erro
-   If Tr.TerraEvent = tg_DrawRamal Then 'SE ESTA DESENHANDO RAMAL
-      Tr.OnRamal Position_X, Position_Y, ""
-   End If
-   
-  
+    On Error GoTo Trata_Erro
+    If Tr.TerraEvent = tg_DrawRamal Then 'SE ESTA DESENHANDO RAMAL
+        Tr.OnRamal Position_X, Position_Y, ""
+    End If
+
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-       PrintErro CStr(Me.Name), "Private Sub TCanvas_onLine", CStr(Err.Number), CStr(Err.Description), True
-       
+        PrintErro CStr(Me.Name), "Private Sub TCanvas_onLine", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Sub
 
@@ -1608,15 +1411,15 @@ Trata_Erro:
        
   ' End If
 End Function
-
+' Entra nesta rotina quando o mouse é pressionado
+'
+' Button - botão do mouse selecionado
+' x, y, z - coordenada em que o mouse foi selecionado
+'
 Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
-
-On Error GoTo Trata_Erro
-    
-            
-   X1 = 0 'passa as coordenadas para calculo e exibição
-   Y1 = 0
-    
+    On Error GoTo Trata_Erro
+    X1 = 0 'passa as coordenadas para calculo e exibição
+    Y1 = 0
     If Button = 1 And FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrPressed Then
         Select Case LastEvent
             Case tg_DrawNetWorkline
@@ -1626,7 +1429,6 @@ On Error GoTo Trata_Erro
         End Select
     ElseIf Button = 0 Then
         If Tr.TerraEvent = tg_DrawNetWorkNode Then
-
             Tr.SaveInDatabase: FrmMain.Manager1.GridEnabled True
             With TCanvas
                 .Normal
@@ -1634,166 +1436,125 @@ On Error GoTo Trata_Erro
                 .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
             End With
             LoadToolsBar
-        
         ElseIf Tr.TerraEvent = tg_DrawRamal Then
-        
-       If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Or UCase(TCanvas.getCurrentLayer) = "RAMAIS_ESGOTO" Then
-           
-        
-        
-        
-            'ESTA DESENHANDO RAMAL, CAPTURA O PRIMEIRO CLIQUE DO MOUSE E TESTA SE ESTE CLIQUE
-            'FOI FEITO SOBRE UMA REDE
-            
-            If CLIQUE_RAMAL = 0 Then
-               
-               'VERIFICA SE O LAYER CORRENTE É O DE RAMAIS DE AGUA OU ESGOTO
-               'SE FOR O DE AGUA, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_AGUA
-               'SE FOR O DE ESGOTO, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_ESGOTO
-               If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Then
-                  TeDatabaseRamais.setCurrentLayer "WATERLINES"
-               Else
-                  TeDatabaseRamais.setCurrentLayer "SEWERLINES"
-               End If
-               
-               
-            
-               
-               
-               
-               
-               'VERIFICA SE O USUÁRIO CLICOU SOBRE UMA REDE DE AGUA OU ESGOTO
-               intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(X, Y, tpLINES, 1)
-               
-                '  intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometryXY(x, y, tpLINES)
-                  
-     
-               'CASO NÃO, EXIBE MENSAGEM E REINICIA O PROCESSO
-               If intQtdLinhasNaCoordenada = 0 Then
-                  
-                  MsgBox "Inicie o desenho do ramal partindo do trecho de rede.", vbInformation, ""
-                  TCanvas.Normal
-                  TCanvas.Select
-                  CLIQUE_RAMAL = 0
-                  TCanvas.clearSelectItens 0 'desmarca se há item selecionado
-                  Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
-                  Tr.TerraEvent = tg_DrawRamal
-                
-               'CASO HÁ MAIS DE UMA REDE SOB O CLIQUE, EXIBE MENSAGEM E REINICIA O PROCESSO
-               ElseIf intQtdLinhasNaCoordenada > 1 Then
-                  
-                  MsgBox "Foi identificado mais de um trecho de rede no local selecionado." & Chr(13) & Chr(13) & "tente novamente.", vbInformation, ""
-                  TCanvas.Normal
-                  TCanvas.Select
-                  CLIQUE_RAMAL = 0
-                  TCanvas.clearSelectItens 0 'desmarca se há item selecionado
-                  Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
-                  Tr.TerraEvent = tg_DrawRamal
-               
-               'CASO SIM, CAPTURA O OBJECT_ID_ DA REDE QUE FOI SELECIONADA E PASSA
-               'PARA A VARIÁVEL QUE VAI SALVAR O RAMAL
-               Else
-                  
-                  ramal_Object_id_trecho = TeDatabaseRamais.objectIds(0)
-                  'TCanvas.ToolTipText = "Rede: " & ramal_Object_id_trecho
-                  'GUARDA A INFORMAÇÃO DE QUE O PRIMEIRO CLIQUE JA FOI DADO PARA DESENHAR O RAMAL
-                  CLIQUE_RAMAL = 1
-               End If
-            
+            If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Or UCase(TCanvas.getCurrentLayer) = "RAMAIS_ESGOTO" Then
+                'ESTA DESENHANDO RAMAL, CAPTURA O PRIMEIRO CLIQUE DO MOUSE E TESTA SE ESTE CLIQUE
+                'FOI FEITO SOBRE UMA REDE
+                If CLIQUE_RAMAL = 0 Then
+                    'VERIFICA SE O LAYER CORRENTE É O DE RAMAIS DE AGUA OU ESGOTO
+                    'SE FOR O DE AGUA, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_AGUA
+                    'SE FOR O DE ESGOTO, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_ESGOTO
+                    If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Then
+                        TeDatabaseRamais.setCurrentLayer "WATERLINES"
+                    Else
+                        TeDatabaseRamais.setCurrentLayer "SEWERLINES"
+                    End If
+                    'VERIFICA SE O USUÁRIO CLICOU SOBRE UMA REDE DE AGUA OU ESGOTO
+                    intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(X, Y, tpLINES, 1)
+                    'intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometryXY(x, y, tpLINES)
+                    'CASO NÃO, EXIBE MENSAGEM E REINICIA O PROCESSO
+                    If intQtdLinhasNaCoordenada = 0 Then
+                        MsgBox "Inicie o desenho do ramal partindo do trecho de rede.", vbInformation, ""
+                        TCanvas.Normal
+                        TCanvas.Select
+                        CLIQUE_RAMAL = 0
+                        TCanvas.clearSelectItens 0 'desmarca se há item selecionado
+                        Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
+                        Tr.TerraEvent = tg_DrawRamal
+                    'CASO HÁ MAIS DE UMA REDE SOB O CLIQUE, EXIBE MENSAGEM E REINICIA O PROCESSO
+                    ElseIf intQtdLinhasNaCoordenada > 1 Then
+                        MsgBox "Foi identificado mais de um trecho de rede no local selecionado." & Chr(13) & Chr(13) & "tente novamente.", vbInformation, ""
+                        TCanvas.Normal
+                        TCanvas.Select
+                        CLIQUE_RAMAL = 0
+                        TCanvas.clearSelectItens 0 'desmarca se há item selecionado
+                        Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
+                        Tr.TerraEvent = tg_DrawRamal
+                        'CASO SIM, CAPTURA O OBJECT_ID_ DA REDE QUE FOI SELECIONADA E PASSA
+                        'PARA A VARIÁVEL QUE VAI SALVAR O RAMAL
+                    Else
+                        ramal_Object_id_trecho = TeDatabaseRamais.objectIds(0)
+                        'TCanvas.ToolTipText = "Rede: " & ramal_Object_id_trecho
+                        'GUARDA A INFORMAÇÃO DE QUE O PRIMEIRO CLIQUE JA FOI DADO PARA DESENHAR O RAMAL
+                        CLIQUE_RAMAL = 1
+                    End If
+                Else
+                    CLIQUE_RAMAL = 0
+                End If
+            ElseIf Tr.TerraEvent = tg_DrawNetWorkline Or Tr.TerraEvent = tg_MoveNetWorkNode Then
+                FrmMain.Manager1.GridEnabled True
+                X1 = X 'passa as coordenadas para calculo e exibição
+                Y1 = Y
             Else
-                CLIQUE_RAMAL = 0
-                
+                FrmMain.Manager1.GridEnabled False
             End If
-        
-        ElseIf Tr.TerraEvent = tg_DrawNetWorkline Or Tr.TerraEvent = tg_MoveNetWorkNode Then
-            
-            FrmMain.Manager1.GridEnabled True
-            
-            X1 = X 'passa as coordenadas para calculo e exibição
-            Y1 = Y
-            
-        Else
-            FrmMain.Manager1.GridEnabled False
-            
-        End If
         End If
     End If
 Trata_Erro:
-    
-    
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     ElseIf Err.Number = -2147467259 Then
-       
-       PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseDown", CStr(Err.Number), CStr(Err.Description), True
-       End
+        PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseDown", CStr(Err.Number), CStr(Err.Description), True
+        End
     Else
-       PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseDown", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseDown", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Sub
-
+' Entra nesta rotina quando o usuário move o mouse, independente de qualquer coisa ou botão ter sido selecionado
+' Ele sempre entra nesta rotina quando o mouse move dentro da área do mapa
+' Atualmente ela está apenas atualizando as coordenadas na barra de status e verificando o comprimento
+'
+' x, y - coordenadas UTM da posição do mouse na tela
+' lat, long - latitude e longitude da posição do mouse na tela
+'
 Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat As String, ByVal lon As String)
-On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
+    Dim TBP As String
+    Dim TBA As String
+    Dim pesquisar As Boolean
+    Dim dist As Integer
+    Dim COMP As Double
+    pesquisar = False
+    If (xOld - X) > 3 Or (X - xOld) > 3 Then
+        xOld = X
+        pesquisar = True
+        'TCanvas.ToolTipText = ""
+    ElseIf (yOld - Y) > 3 Or (Y - yOld) > 3 Then
+        yOld = Y
+        pesquisar = True
+        'TCanvas.ToolTipText = ""
+    End If
+    If pesquisar = True Then
+        'PEGAR O NOME DA TABELA NO GEOSAN.INI
+        'acredito que esta rotina não é mais utilizada, pois o GeoSan não mais lê os dados do lote da prefeitura. O consumidor agora é salvo no ramal diretamente
+        If UCase(TCanvas.getCurrentLayer) = UCase("RAMAIS_AGUA") Or _
+            UCase(TCanvas.getCurrentLayer) = UCase("RAMAIS_ESGOTO") Then
+            If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
+                TBP = ReadINI("RAMAISFILTROLOTES", "TABELA_PLANO", App.path & "\CONTROLES\GEOSAN.INI")
+                TBA = ReadINI("RAMAISFILTROLOTES", "TABELA_ATRIB", App.path & "\CONTROLES\GEOSAN.INI")
+                Call Pesquisa_Dados_Lote(X, Y, lat, lon, TBA, TBP)
+            End If
+        End If
+    End If
+    FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(X, 2) & " - y:" & Round(Y, 2)
+    If X1 <> 0 Then ' SE A VARIAVEL DE PRIMEIRO CLICK ESTIVER ZERADA...
+        COMP = Sqr((Abs(X - X1) ^ 2) + (Abs(Y - Y1) ^ 2))
+        FrmMain.sbStatusBar.Panels(1).Text = "Comprimento da rede: " & Format(COMP, "0.00") & " m"
+        'TCanvas.ToolTipText = Format(COMP, "0.00") & " m"
+    'Else
+        'FrmMain.sbStatusBar.Panels(1).Text = ""
+    End If
 
-Dim TBP As String
-Dim TBA As String
-Dim pesquisar As Boolean
-Dim dist As Integer
-Dim COMP As Double
-
-
-   pesquisar = False
-   If (xOld - X) > 3 Or (X - xOld) > 3 Then
-      xOld = X
-      pesquisar = True
-      'TCanvas.ToolTipText = ""
-   ElseIf (yOld - Y) > 3 Or (Y - yOld) > 3 Then
-      yOld = Y
-      pesquisar = True
-      'TCanvas.ToolTipText = ""
-   End If
-
-   If pesquisar = True Then
-      'PEGAR O NOME DA TABELA NO GEOSAN.INI
-      
-      If UCase(TCanvas.getCurrentLayer) = UCase("RAMAIS_AGUA") Or _
-         UCase(TCanvas.getCurrentLayer) = UCase("RAMAIS_ESGOTO") Then
-         
-         If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
-            
-            TBP = ReadINI("RAMAISFILTROLOTES", "TABELA_PLANO", App.path & "\CONTROLES\GEOSAN.INI")
-            TBA = ReadINI("RAMAISFILTROLOTES", "TABELA_ATRIB", App.path & "\CONTROLES\GEOSAN.INI")
-            
-            
-            Call Pesquisa_Dados_Lote(X, Y, lat, lon, TBA, TBP)
-   
-         End If
-   
-      End If
-   End If
-   
-   FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(X, 2) & " - y:" & Round(Y, 2)
-   
-   If X1 <> 0 Then ' SE A VARIAVEL DE PRIMEIRO CLICK ESTIVER ZERADA...
-      COMP = Sqr((Abs(X - X1) ^ 2) + (Abs(Y - Y1) ^ 2))
-      FrmMain.sbStatusBar.Panels(1).Text = "Comprimento da rede: " & Format(COMP, "0.00") & " m"
-      'TCanvas.ToolTipText = Format(COMP, "0.00") & " m"
-   'Else
-      'FrmMain.sbStatusBar.Panels(1).Text = ""
-   End If
-   
-   
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     ElseIf Err.Number = 11 Then
-       Exit Sub
+        Exit Sub
     ElseIf Err.Number = 6 Then  'Está com zoom muito longe fora do permissível, o mapa do usuário está errado
-       Exit Sub
+        Exit Sub
     Else
-       MsgBox Err.Number
-       PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseMove", CStr(Err.Number), CStr(Err.Description), True
-       
+        MsgBox Err.Number
+        PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseMove", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Sub
 
@@ -1931,183 +1692,134 @@ Trata_Erro:
    End If
 
 End Sub
-
 '###########################################################################
 'ROTINA QUE SALVA OS DADOS VERTORIAIS DAS REDES
 'LINE_ID = NOVA LINHA
 'NODE_ID1 = NOVO NÓ OU NÓ EXISTENTE
 'NODE_ID2 = NOVO NÓ
 '###########################################################################
-
+'
 'APÓS O SAVEINDATABASE O TECANVAS RETORNA, ATRAVÉS DO MÉTODO OnSaveNetworkLine
 'OS CÓDIGOS GEOM_ID DOS PONTOS CRIADOS E O CODIGO LINE_ID DA LINHA CRIADA.
 'SENDO NOVOS OU NÃO, OS CÓDIGOS DE PONTOS SÃO RETORNADOS
 'SE RETORNADO 0(ZERO) PARA ALGUM PONTO, SIGNIFICA QUE A REDE ESTÁ SENDO MOVIDA
 'NESTE CASO ENTÃO DEVE SER EXCLUIDO E REFEITO O TEXTO DAS LINHAS QUE ESTÃO SENDO MOVIDAS
-
-
-
+'
+' LINE_ID - Id da linha de rede que foi desenhada
+' Node_id1 - Id do nó inicial que foi desenhado
+' Node_id2 - Id do nó final que foi desenhado
+'
 Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As Long, ByVal Node_id2 As Long)
-On Error GoTo Trata_Erro
-
-Dim TbGeometriaLinhas As String
-Dim TbGeometriaPontos As String
-
-Dim CompCalc As Long
-Dim CompCalc2 As Long
-Dim CompCalc3 As Double
-
-Dim LayerName As String
-Dim RefLayer As String
-
-
-
-a = "LENGTHCALCULATED"
-b = "USUARIO_LOG"
-c = "INSCRICAO_LOTE"
-d = "DATA_LOG"
-e = "OBJECT_ID_"
-f = Replace(Round(CompCalc3, 2), ",", ".")
-g = Format(Now, "DD/MM/YY HH:MM")
-h = RefLayer
-X1 = 0 ' ZERA A COORDENADA DE PRIMEIRO CLIQUE USADA PARA CALCULO DA DISTÂNCIA
-
-LayerName = TCanvas.getCurrentLayer
-RefLayer = TCanvas.GetReferenceLayer
-
-If Node_id1 = 0 Or Node_id2 = 0 Then 'ESTA MOVENDO A REDE
-
-   'CALCULAR O NOVO COMPRIMENTO DA LINHA E ATUALIZAR NA BASE
-   TeDatabase1.setCurrentLayer RefLayer
-   
-   'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA LINHA
-   TeDatabase1.getLengthOfLine LINE_ID, CStr(LINE_ID), CompCalc3
-    If frmCanvas.TipoConexao <> 4 Then
-   'ATUALIZAR O COMPRIMENTO DA REDE, USUÁRIO E DATA DE ATUALIZAÇÃO
-   Conn.execute ("UPDATE " & RefLayer & " SET LENGTHCALCULATED = " & Replace(Round(CompCalc3, 2), ",", ".") & ", USUARIO_LOG = '" & strUser & "', DATA_LOG = '" & Format(Now, "DD/MM/YY HH:MM") & "' WHERE OBJECT_ID_ = '" & LINE_ID & "'")
-  Else
-  'MsgBox "UPDATE  " + """" + h + """" + "SET " + """" + a + """" + " =  '" & Replace(Round(CompCalc3, 2), ",", ".") & "', " + """" + b + """" + " = '" & strUser & "', " + """" + d + """" + "= '" & Format(Now, "DD/MM/YY HH:MM") & "' WHERE " + """" + e + """" + " = '" & LINE_ID & "'"
-   'UPDATE "DRAINLINES" SET "LENGTHCALCULATED" = CAST(regexp_replace ('34', '3', '1') As Integer), "USUARIO_LOG" = 'Administrador', "DATA_LOG" = 'Format(Now, "DD/MM/YY HH:MM")' WHERE "OBJECT_ID_" = '5'
-   Conn.execute ("UPDATE  " + """" + RefLayer + """" + "SET " + """" + a + """" + " =  '" & Replace(Round(CompCalc3), ",", ".") & "', " + """" + b + """" + " = '" & strUser & "', " + """" + d + """" + "= '" & Format(Now, "DD/MM/YY HH:MM") & "' WHERE " + """" + e + """" + " = '" & LINE_ID & "'")
-   
-   End If
-   'CHAMA O MÉTODO DE EXCLUIR E CRIAR TEXTOS DENTRO DO MÉTODO Tr.CreatNetWorkAttribute
-   Tr.CreatNetWorkAttribute LINE_ID, Node_id1, Node_id2, True
-   
-   FrmMain.sbStatusBar.Panels(1).Text = "Rede " & LINE_ID & " movida com sucesso."
-
-Else  'ESTÁ DESENHANDO A REDE
-   
-   Dim JaExisteRede As Boolean
-   JaExisteRede = False
-   
-   TbGeometriaLinhas = LCase(TeDatabase1.getRepresentationTableName(TCanvas.getCurrentLayer, tpLINES))
-   TbGeometriaPontos = LCase(TeDatabase1.getRepresentationTableName(TCanvas.GetReferenceLayer, tpPOINTS))
-   
-   'VERIFICA SE NÃO JA EXISTE UMA REDE COM ESTES MESMOS NÓS INICIAIS E FINAIS
-   Dim rs As ADODB.Recordset
-   Set rs = New ADODB.Recordset 'alterado em 20/10/2010
-   Dim dt As String
-   Dim dm As String
-   Dim dg As String
-   Dim dv As String
-   dv = "OBJECT_ID_"
-   dt = "INITIALCOMPONENT"
-   dm = "FINALCOMPONENT"
-   dg = "d"
-   
-   If frmCanvas.TipoConexao <> 4 Then
-
-  
-   rs.Open ("SELECT OBJECT_ID_ FROM " & LayerName & " WHERE INITIALCOMPONENT = '" & Node_id1 & "' AND FINALCOMPONENT = '" & Node_id2 & "'"), Conn, adOpenForwardOnly, adLockReadOnly
-   Else
-  rs.Open ("SELECT " + """" + dv + """" + " FROM " + """" + LayerName + """" + " WHERE " + """" + dt + """" + " = '" & Node_id1 & "' AND " + """" + dm + """" + " = '" & Node_id2 & "'"), Conn, adOpenDynamic, adLockOptimistic
-  End If
-  
-   If rs.EOF = False Then
-      JaExisteRede = True
-
-      
- Else
-  
-  
-  
-      Set rs = New ADODB.Recordset
-If frmCanvas.TipoConexao <> 4 Then
-
-      rs.Open ("SELECT OBJECT_ID_ FROM " & LayerName & " WHERE FINALCOMPONENT = '" & Node_id1 & "' AND INITIALCOMPONENT = '" & Node_id2 & "'"), Conn, adOpenForwardOnly, adLockReadOnly
-      Else
-      rs.Open ("SELECT " + """" + dv + """" + " FROM " + """" + LayerName + """" + " WHERE " + """" + dm + """" + " = '" & Node_id1 & "' AND " + """" + dt + """" + " = '" & Node_id2 & "'"), Conn, adOpenDynamic, adLockOptimistic
-      End If
-      If rs.EOF = False Then
-         JaExisteRede = True
-      End If
-   End If
-   rs.Close
-   
-
+    On Error GoTo Trata_Erro
+    Dim TbGeometriaLinhas As String
+    Dim TbGeometriaPontos As String
+    Dim CompCalc As Long
+    Dim CompCalc2 As Long
+    Dim CompCalc3 As Double
+    Dim LayerName As String
+    Dim RefLayer As String
     
-  
+    a = "LENGTHCALCULATED"
+    b = "USUARIO_LOG"
+    c = "INSCRICAO_LOTE"
+    d = "DATA_LOG"
+    e = "OBJECT_ID_"
+    f = Replace(Round(CompCalc3, 2), ",", ".")
+    g = Format(Now, "DD/MM/YY HH:MM")
+    h = RefLayer
+    X1 = 0 ' ZERA A COORDENADA DE PRIMEIRO CLIQUE USADA PARA CALCULO DA DISTÂNCIA
+    LayerName = TCanvas.getCurrentLayer
+    RefLayer = TCanvas.GetReferenceLayer
+    If Node_id1 = 0 Or Node_id2 = 0 Then 'ESTA MOVENDO A REDE
+        'CALCULAR O NOVO COMPRIMENTO DA LINHA E ATUALIZAR NA BASE
+        TeDatabase1.setCurrentLayer RefLayer
+        'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA LINHA
+        TeDatabase1.getLengthOfLine LINE_ID, CStr(LINE_ID), CompCalc3
+        If frmCanvas.TipoConexao <> 4 Then
+            'ATUALIZAR O COMPRIMENTO DA REDE, USUÁRIO E DATA DE ATUALIZAÇÃO
+            Conn.execute ("UPDATE " & RefLayer & " SET LENGTHCALCULATED = " & Replace(Round(CompCalc3, 2), ",", ".") & ", USUARIO_LOG = '" & strUser & "', DATA_LOG = '" & Format(Now, "DD/MM/YY HH:MM") & "' WHERE OBJECT_ID_ = '" & LINE_ID & "'")
+        Else
+            'MsgBox "UPDATE  " + """" + h + """" + "SET " + """" + a + """" + " =  '" & Replace(Round(CompCalc3, 2), ",", ".") & "', " + """" + b + """" + " = '" & strUser & "', " + """" + d + """" + "= '" & Format(Now, "DD/MM/YY HH:MM") & "' WHERE " + """" + e + """" + " = '" & LINE_ID & "'"
+            'UPDATE "DRAINLINES" SET "LENGTHCALCULATED" = CAST(regexp_replace ('34', '3', '1') As Integer), "USUARIO_LOG" = 'Administrador', "DATA_LOG" = 'Format(Now, "DD/MM/YY HH:MM")' WHERE "OBJECT_ID_" = '5'
+            Conn.execute ("UPDATE  " + """" + RefLayer + """" + "SET " + """" + a + """" + " =  '" & Replace(Round(CompCalc3), ",", ".") & "', " + """" + b + """" + " = '" & strUser & "', " + """" + d + """" + "= '" & Format(Now, "DD/MM/YY HH:MM") & "' WHERE " + """" + e + """" + " = '" & LINE_ID & "'")
+        End If
+        'CHAMA O MÉTODO DE EXCLUIR E CRIAR TEXTOS DENTRO DO MÉTODO Tr.CreatNetWorkAttribute
+        Tr.CreatNetWorkAttribute LINE_ID, Node_id1, Node_id2, True
+        FrmMain.sbStatusBar.Panels(1).Text = "Rede " & LINE_ID & " movida com sucesso."
+    Else  'ESTÁ DESENHANDO A REDE
+        Dim JaExisteRede As Boolean
+        Dim rs As ADODB.Recordset
+        JaExisteRede = False
+        TbGeometriaLinhas = LCase(TeDatabase1.getRepresentationTableName(TCanvas.getCurrentLayer, tpLINES))
+        TbGeometriaPontos = LCase(TeDatabase1.getRepresentationTableName(TCanvas.GetReferenceLayer, tpPOINTS))
+                'VERIFICA SE NÃO JA EXISTE UMA REDE COM ESTES MESMOS NÓS INICIAIS E FINAIS
+                Set rs = New ADODB.Recordset 'alterado em 20/10/2010
+                Dim dt As String
+                Dim dm As String
+                Dim dg As String
+                Dim dv As String
+                dv = "OBJECT_ID_"
+                dt = "INITIALCOMPONENT"
+                dm = "FINALCOMPONENT"
+                dg = "d"
+                'aqui ele vai verificar se a rede que está sendo desenhada, está sendo desenhada por cima de outra, tanto num sentido quanto no outro
+                If frmCanvas.TipoConexao <> 4 Then
+                    rs.Open ("SELECT OBJECT_ID_ FROM " & LayerName & " WHERE INITIALCOMPONENT = '" & Node_id1 & "' AND FINALCOMPONENT = '" & Node_id2 & "'"), Conn, adOpenForwardOnly, adLockReadOnly
+                Else
+                    rs.Open ("SELECT " + """" + dv + """" + " FROM " + """" + LayerName + """" + " WHERE " + """" + dt + """" + " = '" & Node_id1 & "' AND " + """" + dm + """" + " = '" & Node_id2 & "'"), Conn, adOpenDynamic, adLockOptimistic
+                End If
+                If rs.EOF = False Then
+                    JaExisteRede = True
+                Else
+                    Set rs = New ADODB.Recordset
+                    If frmCanvas.TipoConexao <> 4 Then
+                        rs.Open ("SELECT OBJECT_ID_ FROM " & LayerName & " WHERE FINALCOMPONENT = '" & Node_id1 & "' AND INITIALCOMPONENT = '" & Node_id2 & "'"), Conn, adOpenForwardOnly, adLockReadOnly
+                    Else
+                        rs.Open ("SELECT " + """" + dv + """" + " FROM " + """" + LayerName + """" + " WHERE " + """" + dm + """" + " = '" & Node_id1 & "' AND " + """" + dt + """" + " = '" & Node_id2 & "'"), Conn, adOpenDynamic, adLockOptimistic
+                    End If
+                    If rs.EOF = False Then
+                        JaExisteRede = True
+                    End If
+                End If
+                rs.Close
+                If JaExisteRede = True Then
+                    MsgBox "Já existe uma rede desenhada entre estas 2 peças.", vbExclamation, ""
+                    'DELETA GEOMETRIA DE LINHA QUE FOI CRIADA
+                    If frmCanvas.TipoConexao <> 4 Then
+                        Conn.execute ("DELETE FROM " & TbGeometriaLinhas & " WHERE GEOM_ID = " & LINE_ID)
+                    Else
+                        Dim ga As String
+                        ga = "geom_id"
+                        Conn.execute ("DELETE FROM " + """" + TbGeometriaLinhas + """" + " WHERE " + """" + ga + """" + " = '" & LINE_ID & "'")
+                    End If
+                    FrmMain.sbStatusBar.Panels(1).Text = "Rede " & LINE_ID & " não criada."
+                    'SAI DO EVENTO
+                    Exit Sub
+                End If
+                'termina a verificação (e aviso se for o caso) de que a rede está sendo desenhada sobre outra já existente
+        a = "tbgeometrialinhas"
+        b = "object_id"
+        c = "geom_id"
+        'ATUALIZA OS OBJECTS_ID COM O MESMO CÓDIGO DO AUTO NUMERADOR
+        If frmCanvas.TipoConexao <> 4 Then
+            Conn.execute ("UPDATE " & TbGeometriaLinhas & " SET OBJECT_ID = GEOM_ID WHERE GEOM_ID = " & LINE_ID)
+            Conn.execute ("UPDATE " & TbGeometriaPontos & " SET OBJECT_ID = GEOM_ID WHERE GEOM_ID = " & Node_id1)
+            Conn.execute ("UPDATE " & TbGeometriaPontos & " SET OBJECT_ID = GEOM_ID WHERE GEOM_ID = " & Node_id2)
+        Else
+            Conn.execute ("UPDATE " + """" & TbGeometriaLinhas & """" + " SET " + """" + "object_id" + """" + " = " + """" + "geom_id" + """" + " WHERE " + """" + "geom_id" + """" + " =  '" & LINE_ID & "'")
+            Conn.execute ("UPDATE " + """" & TbGeometriaPontos & """" + " SET " + """" + "object_id" + """" + " = " + """" + "geom_id" + """" + " WHERE " + """" + "geom_id" + """" + " =  '" & Node_id1 & "'")
+            Conn.execute ("UPDATE " + """" & TbGeometriaPontos & """" + " SET " + """" + "object_id" + """" + " = " + """" + "geom_id" + """" + " WHERE " + """" + "geom_id" + """" + " =  '" & Node_id2 & "'")
+        End If
+        Tr.CreatNetWorkAttribute LINE_ID, Node_id1, Node_id2, False
+        FrmMain.sbStatusBar.Panels(1).Text = "Rede " & LINE_ID & " salva com sucesso."
+    End If
 
-   
-   If JaExisteRede = True Then
-       MsgBox "Já existe uma rede desenhada entre estas 2 peças.", vbExclamation, ""
-       
-       'DELETA GEOMETRIA DE LINHA QUE FOI CRIADA
-       If frmCanvas.TipoConexao <> 4 Then
-       Conn.execute ("DELETE FROM " & TbGeometriaLinhas & " WHERE GEOM_ID = " & LINE_ID)
-       Else
-       Dim ga As String
-       ga = "geom_id"
-        Conn.execute ("DELETE FROM " + """" + TbGeometriaLinhas + """" + " WHERE " + """" + ga + """" + " = '" & LINE_ID & "'")
-       End If
-       
-   
-       FrmMain.sbStatusBar.Panels(1).Text = "Rede " & LINE_ID & " não criada."
-       
-       'SAI DO EVENTO
-       Exit Sub
-   End If
-a = "tbgeometrialinhas"
-b = "object_id"
-c = "geom_id"
-
-
-  
-   'ATUALIZA OS OBJECTS_ID COM O MESMO CÓDIGO DO AUTO NUMERADOR
-   
-    If frmCanvas.TipoConexao <> 4 Then
-         
-   Conn.execute ("UPDATE " & TbGeometriaLinhas & " SET OBJECT_ID = GEOM_ID WHERE GEOM_ID = " & LINE_ID)
-   Conn.execute ("UPDATE " & TbGeometriaPontos & " SET OBJECT_ID = GEOM_ID WHERE GEOM_ID = " & Node_id1)
-   Conn.execute ("UPDATE " & TbGeometriaPontos & " SET OBJECT_ID = GEOM_ID WHERE GEOM_ID = " & Node_id2)
-     Else
-     
-     Conn.execute ("UPDATE " + """" & TbGeometriaLinhas & """" + " SET " + """" + "object_id" + """" + " = " + """" + "geom_id" + """" + " WHERE " + """" + "geom_id" + """" + " =  '" & LINE_ID & "'")
-     Conn.execute ("UPDATE " + """" & TbGeometriaPontos & """" + " SET " + """" + "object_id" + """" + " = " + """" + "geom_id" + """" + " WHERE " + """" + "geom_id" + """" + " =  '" & Node_id1 & "'")
-     Conn.execute ("UPDATE " + """" & TbGeometriaPontos & """" + " SET " + """" + "object_id" + """" + " = " + """" + "geom_id" + """" + " WHERE " + """" + "geom_id" + """" + " =  '" & Node_id2 & "'")
-   
-     End If
-     
-
-   Tr.CreatNetWorkAttribute LINE_ID, Node_id1, Node_id2, False
-   
-   FrmMain.sbStatusBar.Panels(1).Text = "Rede " & LINE_ID & " salva com sucesso."
-
-
-     End If
-    
-    
-    
-    
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
-   Else
-    
-      PrintErro CStr(Me.Name), "Private Sub TCanvas_onSaveNetWorkLine", CStr(Err.Number), CStr(Err.Description), True
-    
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Private Sub TCanvas_onSaveNetWorkLine", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Sub
 
 Private Sub TCanvas_onSaveNetWorkNode(ByVal node_id As Long, ByVal line1_id As Long, ByVal line2_id As Long)
@@ -2199,38 +1911,29 @@ Trata_Erro:
       PrintErro CStr(Me.Name), "Private Sub TCanvas_onSnap", CStr(Err.Number), CStr(Err.Description), True
    End If
 End Sub
-
-
-
-
+' Fica aguardando o usuário fazer alguma coisa
+'
+'
+'
 Private Sub TimerSetWorld_Timer()
-On Error GoTo Trata_Erro
-   'timer para inicializar o método SetWorld do TeCanvas
-   
-   If xWorld > 0 And yWorld > 0 Then
-      
-      TCanvas.setWorld xWorld - 100, yWorld - 100, xWorld + 100, yWorld + 100
-      
-      If blnLocalizandoConsumidor = True Then
-         blnLocalizandoConsumidor = False
-         TCanvas.setScale 80
-      End If
-
-      xWorld = 0
-      TCanvas.plotView
-
-   End If
-   
-   If canvasScale > 0 Then
-      TCanvas.setScale canvasScale
-      canvasScale = 0
-   End If
-   
-
-   
-   'TimerSetWorld.Enabled = False
+    On Error GoTo Trata_Erro
+    'timer para inicializar o método SetWorld do TeCanvas
+    If xWorld > 0 And yWorld > 0 Then
+        TCanvas.setWorld xWorld - 100, yWorld - 100, xWorld + 100, yWorld + 100
+        If blnLocalizandoConsumidor = True Then
+            blnLocalizandoConsumidor = False
+            TCanvas.setScale 80
+        End If
+        xWorld = 0
+        TCanvas.plotView
+    End If
+    If canvasScale > 0 Then
+        TCanvas.setScale canvasScale
+        canvasScale = 0
+    End If
+    'TimerSetWorld.Enabled = False
+    
 Trata_Erro:
-
 End Sub
 
 Public Function FunDecripta(ByVal strDecripta As String) As String

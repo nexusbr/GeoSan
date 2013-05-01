@@ -642,239 +642,206 @@ Trata_Erro:
     End If
    
 End Function
-
+' Calcula os posicionamentos dos textos na linha e insere os mesmos
+'
+' geom_id - da linha
+' object_id - da linha
+' Diametro - do trecho de rede
+' Material - do trecho de rede
+' comprimento - do trecho de rede
+' InsCotas - se serão colocadas as cotas
+' CotaI - cota inicial do trecho
+' CotaF - cota final do trecho
+'
 Public Function InsertTextInDatabase(geom_id As Long, object_id As String, _
                   Diametro As String, Material As String, comprimento As Double, Optional InsCotas As Boolean = False, Optional CotaI As Double, Optional CotaF As Double) As Boolean
-On Error GoTo Trata_Erro
-   
-   '####### DECLARAÇÃO DE VARIAVEIS LOCAIS ##########
-   'On Error GoTo InsertTextInDatabase_Err
-   Dim SEG As Integer, QtdePontos As Integer, ANGULO As Double, Side As TeGeometrySide
-   Dim X As Double, Y As Double, l As Double, Distancia As Integer
-   '####### ROTINA DE INSERÇÃO ##############
-   With tdb
-      ' retorna em x, y as coordenadas da bissetriz da cadeia de linhas (meio dela),
-      ' para sabermos onde colocaremos os textos da linha (comprimento, etc.)
-      .getCenterGeometry geom_id, object_id, tpLINES, X, Y
-      
-      
-      ' obtem a quantidade de pontos (vértices) em uma cadeia de linhas
-      QtdePontos = .getQuantityPointsLine(geom_id, object_id)
-      
-      
-      '  divide por dois para saber em que segmento de linha iremos inserir o texto. se a divisao nao for exata pegaremos o segmento mais a esquerda.
-      SEG = CInt(QtdePontos / 2)
-      
-      
-      ' obtem o angulo do segmento escolhido
-      ANGULO = .getAngle(geom_id, object_id, SEG, 2)
-      
-      .getLengthOfLine geom_id, object_id, l
-      ' obtem a informação se a linha foi desenhada da direita para esquerda, ou da esquerda para direita, indefinido ou leftRight (???)
-      
-      
-      Side = .getSide(X, Y, object_id, geom_id, tpLINES)
-      
-      If Side = TeRight Then
-         Distancia = 6
-      Else
-         Distancia = 6
-         'Distancia = -1
-      End If
-      
-      If Not InsCotas Then
-         '--- Diametro
-         ' obtem as coords. x e y perpendiculares a linha (object_id), no meio da linha + 1 metro (L/2+1),
-         ' a uma distância (-Distancia) perpendicular a linha
-         
-         'L = comprimento
-         If l > 10 Then 'textos do diametro e material um ao lado do outro
-            If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
-               .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, X, Y
-            ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
+    On Error GoTo Trata_Erro
+    '####### DECLARAÇÃO DE VARIAVEIS LOCAIS ##########
+    'On Error GoTo InsertTextInDatabase_Err
+    Dim SEG As Integer, QtdePontos As Integer, ANGULO As Double, Side As TeGeometrySide
+    Dim X As Double, Y As Double, l As Double, Distancia As Integer
+    '####### ROTINA DE INSERÇÃO ##############
+    
+    With tdb
+        'retorna em x, y as coordenadas da bissetriz da cadeia de linhas (meio dela),
+        'para sabermos onde colocaremos os textos da linha (comprimento, etc.)
+        .getCenterGeometry geom_id, object_id, tpLINES, X, Y
+        'obtem a quantidade de pontos (vértices) em uma cadeia de linhas
+        QtdePontos = .getQuantityPointsLine(geom_id, object_id)
+        'divide por dois para saber em que segmento de linha iremos inserir o texto. se a divisao nao for exata pegaremos o segmento mais a esquerda.
+        SEG = CInt(QtdePontos / 2)
+        'obtem o angulo do segmento escolhido
+        ANGULO = .getAngle(geom_id, object_id, SEG, 2)
+        .getLengthOfLine geom_id, object_id, l
+        'obtem a informação se a linha foi desenhada da direita para esquerda, ou da esquerda para direita, indefinido ou leftRight (???)
+        Side = .getSide(X, Y, object_id, geom_id, tpLINES)
+        If Side = TeRight Then
+            Distancia = 6
+        Else
+            Distancia = 6
+            'Distancia = -1
+        End If
+        If Not InsCotas Then
+            '--- Diametro
+            ' obtem as coords. x e y perpendiculares a linha (object_id), no meio da linha + 1 metro (L/2+1),
+            ' a uma distância (-Distancia) perpendicular a linha
+            'L = comprimento
+            If l > 10 Then 'textos do diametro e material um ao lado do outro
+                If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
+                    .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, X, Y
+                ElseIf ANGULO = 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
+                Else
+                    .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
+                End If
+                .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
+                ' --- Material em baixo, esquerda
+                If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
+                    .getPerpendicularPoint geom_id, object_id, (l / 3), 2, X, Y
+                ElseIf ANGULO = 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
+                Else 'Q2 Q3
+                    .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
+                End If
+                .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
             Else
-               .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
+                If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
+                    .getPerpendicularPoint geom_id, object_id, (l / 2), 2, X, Y
+                ElseIf ANGULO = 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
+                Else
+                    .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
+                End If
+                .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
+                ' --- Material em baixo, esquerda
+                If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
+                    .getPerpendicularPoint geom_id, object_id, (l / 2), 3.5, X, Y
+                ElseIf ANGULO = 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, X, Y
+                Else 'Q2 Q3
+                    .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, X, Y
+                End If
+                .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
+            End If
+            '--- Comprimento em cima da linha , no meio
+            If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
+            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, X, Y
+            ElseIf ANGULO = 270 Then
+            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
+            Else 'Q2 Q3
+            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
+            End If
+            .InsertTextInDatabase object_id, Round(comprimento, 2), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
+        Else
+            '--- Inclinação a esquerda
+            If ANGULO <= 90 Or ANGULO > 270 Then
+                .getPerpendicularPoint geom_id, object_id, (l / 3), 2, X, Y
+            ElseIf ANGULO = 270 Then
+                .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
+            Else
+                .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
+            End If
+            If Not (CotaI = 0 Or CotaF = 0) Then
+                .InsertTextInDatabase object_id, Round(((CotaI - CotaF) / comprimento) * 100, 2) & "%", 1, X, Y, ANGULO, , , True
+            Else
+                .InsertTextInDatabase object_id, 0 & "%", 1, X, Y, ANGULO, , , True
+            End If
+            '--- Diametro em baixo, direita
+            If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
+                .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, X, Y
+            ElseIf ANGULO = 270 Then
+                .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
+            Else
+                .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
             End If
             .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-            
-            ' --- Material em baixo, esquerda
-            If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
-              .getPerpendicularPoint geom_id, object_id, (l / 3), 2, X, Y
+            '--- Material em baixo, meio
+            If ANGULO <= 90 Or ANGULO > 270 Then
+                .getPerpendicularPoint geom_id, object_id, (l / 2), 2, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
-            Else 'Q2 Q3
-              .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
+                .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
+            Else
+                .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
             End If
             .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-         Else
-            If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
-               .getPerpendicularPoint geom_id, object_id, (l / 2), 2, X, Y
-            ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
-            Else
-               .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
-            End If
-            .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-            
-            ' --- Material em baixo, esquerda
-            If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
-              .getPerpendicularPoint geom_id, object_id, (l / 2), 3.5, X, Y
-            ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, X, Y
-            Else 'Q2 Q3
-              .getPerpendicularPoint geom_id, object_id, (l / 2), -3.5, X, Y
-            End If
-            .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-         
-         End If
-         '--- Comprimento em cima da linha , no meio
-         If ANGULO <= 90 Or ANGULO > 270 Then 'Q1 Q4
-            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, X, Y
-         ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
-         Else 'Q2 Q3
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
-         End If
-         .InsertTextInDatabase object_id, Round(comprimento, 2), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-
-     Else
-         '--- Inclinação a esquerda
-         
-         If ANGULO <= 90 Or ANGULO > 270 Then
-           .getPerpendicularPoint geom_id, object_id, (l / 3), 2, X, Y
-         ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
-         Else
-           .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, -2, X, Y
-         End If
-         
-         If Not (CotaI = 0 Or CotaF = 0) Then
-            .InsertTextInDatabase object_id, Round(((CotaI - CotaF) / comprimento) * 100, 2) & "%", 1, X, Y, ANGULO, , , True
-         Else
-            .InsertTextInDatabase object_id, 0 & "%", 1, X, Y, ANGULO, , , True
-         End If
-         
-        '--- Diametro em baixo, direita
-         
-         
-         If ANGULO <= 90 Or ANGULO > 270 Then 'quadrante 1 e 4
-            .getPerpendicularPoint geom_id, object_id, (l / 3) * 2, 2, X, Y
-         ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
-         Else
-            .getPerpendicularPoint geom_id, object_id, (l / 3), -2, X, Y
-         End If
-         .InsertTextInDatabase object_id, Diametro, 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-         
-          ' --- Material em baixo, meio
-         If ANGULO <= 90 Or ANGULO > 270 Then
-           .getPerpendicularPoint geom_id, object_id, (l / 2), 2, X, Y
-         ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
-         Else
-           .getPerpendicularPoint geom_id, object_id, (l / 2), -2, X, Y
-         End If
-         .InsertTextInDatabase object_id, IIf(Material = "0", "", Material), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-        
-         '--- Comprimento em cima da linha , no meio
-         If ANGULO <= 90 Or ANGULO > 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, X, Y
-         ElseIf ANGULO = 270 Then
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
-         Else
-            .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
-         End If
-         .InsertTextInDatabase object_id, Round(comprimento, 2), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
-         With tdb
-            
-            '--- CotaInicial
+            '--- Comprimento em cima da linha , no meio
             If ANGULO <= 90 Or ANGULO > 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.15), -0.5, X, Y
+                .getPerpendicularPoint geom_id, object_id, (l / 2), -0.5, X, Y
             ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, X, Y
+                .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
             Else
-               .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, X, Y
+                .getPerpendicularPoint geom_id, object_id, (l / 2), 0.5, X, Y
             End If
-            .InsertTextInDatabase object_id, CotaI, 1, X, Y, ANGULO, , , True
-
-            '--- CotaFinal
-            If ANGULO <= 90 Or ANGULO > 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.85), -0.5, X, Y
-            ElseIf ANGULO = 270 Then
-               .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, X, Y
-            Else
-               .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, X, Y
-            End If
-            .InsertTextInDatabase object_id, CotaF, 1, X, Y, ANGULO, , , True
-            
-            
-         End With
-      End If
-   End With
-   Exit Function
+            .InsertTextInDatabase object_id, Round(comprimento, 2), 1, X, Y, IIf(ANGULO = 270, 90, ANGULO), , , True
+            With tdb
+                '--- CotaInicial
+                If ANGULO <= 90 Or ANGULO > 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l * 0.15), -0.5, X, Y
+                ElseIf ANGULO = 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, X, Y
+                Else
+                    .getPerpendicularPoint geom_id, object_id, (l * 0.15), 0.5, X, Y
+                End If
+                .InsertTextInDatabase object_id, CotaI, 1, X, Y, ANGULO, , , True
+                '--- CotaFinal
+                If ANGULO <= 90 Or ANGULO > 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l * 0.85), -0.5, X, Y
+                ElseIf ANGULO = 270 Then
+                    .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, X, Y
+                Else
+                    .getPerpendicularPoint geom_id, object_id, (l * 0.85), 0.5, X, Y
+                End If
+                .InsertTextInDatabase object_id, CotaF, 1, X, Y, ANGULO, , , True
+            End With
+        End If
+    End With
+    Exit Function
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-      PrintErro "clsGeoReference", "Public Function InsertTextInDatabase", CStr(Err.Number), CStr(Err.Description), True
-       
+        PrintErro "clsGeoReference", "Public Function InsertTextInDatabase", CStr(Err.Number), CStr(Err.Description), True
     End If
-
-'InsertTextInDatabase_Err:
-'   MsgBox "Não foi possível inserir o texto automaticamente,contate o suporte:(011) 381602034 - Nexus ", vbExclamation, "Atenção"
+    'InsertTextInDatabase_Err:
+    'MsgBox "Não foi possível inserir o texto automaticamente,contate o suporte:(011) 381602034 - Nexus ", vbExclamation, "Atenção"
 End Function
-
+' Obtem a identificação do layer
+' Retorna o número de identificação do layer
+'
+' LayerName_ - nome do layer
+'
 Public Function GetLayerID(LayerName_ As String) As Integer
-On Error GoTo Trata_Erro
-
-   Dim rs As ADODB.Recordset
-   Dim a As String
-   Dim b As String
-   Dim c As String
-     a = "layer_id"
-     b = "te_layer"
-     c = "name"
-      
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & LayerName_ & "' or name='" & UCase(LayerName_) & "'", CInt(typeconnection)))
-
-   If rs.EOF = False Then
-        GetLayerID = rs(0).value
-   End If
- 
-   rs.Close
-   Set rs = Nothing
-
-
-Else
-
-
-   Set rs = Conn.execute(convertQuery("SELECT " + """" + a + """" + " from " + """" + b + """" + " where " + """" + c + """" + "='" & LayerName_ & "'", CInt(typeconnection)))
-   
-      
-
-   If rs.EOF = False Then
-        GetLayerID = rs(0).value
-   End If
- 
-   
-   rs.Close
-   Set rs = Nothing
-
-End If
-   
-   
-   
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    
+    a = "layer_id"
+    b = "te_layer"
+    c = "name"
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & LayerName_ & "' or name='" & UCase(LayerName_) & "'", CInt(typeconnection)))
+        If rs.EOF = False Then
+            GetLayerID = rs(0).value            'obtem o número do layer (id)
+        End If
+        rs.Close
+        Set rs = Nothing
+    Else
+        Set rs = Conn.execute(convertQuery("SELECT " + """" + a + """" + " from " + """" + b + """" + " where " + """" + c + """" + "='" & LayerName_ & "'", CInt(typeconnection)))
+        If rs.EOF = False Then
+            GetLayerID = rs(0).value            'obtem o número do layer (id)
+        End If
+        rs.Close
+        Set rs = Nothing
+    End If
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-      PrintErro "clsGeoReference", "Public Function GetLayerID", CStr(Err.Number), CStr(Err.Description), True
-       
+        PrintErro "clsGeoReference", "Public Function GetLayerID", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Function
 
@@ -1768,26 +1735,28 @@ ii = "TYPE_REFERENCE"
    rs.Close
    Set rs = Nothing
 End Function
-
+' Retorna o tipo de layer de referência
+'
+' LayerName - nome do layer
+'
 Public Function GetLayerTypeReference(LayerName As String) As LayerTypeRefence
-   Dim rs As ADODB.Recordset, layer_id As Integer
-   layer_id = GetLayerID(LayerName)
-   g = "GS_LAYER_CONFIG"
-h = "LAYER_ID"
-
-
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute("SELECT * from gs_layer_config where layer_id=" & layer_id)
-   Else
-   Set rs = Conn.execute("SELECT * from " + """" + g + """" + " where " + """" + h + """" + "='" & layer_id & "'")
-   End If
-   If rs.EOF Then
-       GetLayerTypeReference = 0
-   Else
-      GetLayerTypeReference = rs.Fields("type_reference").value
-   End If
-   rs.Close
-   Set rs = Nothing
+    Dim rs As ADODB.Recordset, layer_id As Integer
+    
+    layer_id = GetLayerID(LayerName)                            'obtem o id do layer
+    g = "GS_LAYER_CONFIG"                                       'para adequar a sintaxe do banco de dados utilizado
+    h = "LAYER_ID"                                              'para adequar a sintaxe do banco de dados utilizado
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute("SELECT * from gs_layer_config where layer_id=" & layer_id)
+    Else
+        Set rs = Conn.execute("SELECT * from " + """" + g + """" + " where " + """" + h + """" + "='" & layer_id & "'")
+    End If
+    If rs.EOF Then
+        GetLayerTypeReference = 0
+    Else
+       GetLayerTypeReference = rs.Fields("type_reference").value
+    End If
+    rs.Close
+    Set rs = Nothing
 End Function
 
 Public Function GetLayerNameByTypeReference(Refence As LayerTypeRefence) As String
@@ -1808,72 +1777,62 @@ If frmCanvas.TipoConexao <> 4 Then
    rs.Close
    Set rs = Nothing
 End Function
-
+'
+'
+' LayerName - recebe o nome do layer que foi selecionado pelo usuário
+' T_Operation - tipo de operação
+'
 Public Function GetLayerOperation(LayerName As String, T_Operation As Integer) As String
-   
-   Dim rs As ADODB.Recordset, layer_id As Integer
-   Dim s As String
-
-
-   k = "GS_LAYER_CONFIG_LAYERS"
-h = "LAYER_ID"
-
-   l = "TYPE_OPERATION"
-   layer_id = GetLayerID(LayerName) ' RETORNA O NUMERO ID DE UM DETERMINADO LAYER
-  'layer_id = 3
-    If frmCanvas.TipoConexao <> 4 Then
-   s = "SELECT * from gs_layer_config_layers where layer_id='" & layer_id & "' and type_operation='" & T_Operation & "'"
-   Else
-    s = "SELECT * from " + """" + k + """" + " where " + """" + h + """" + "='" & layer_id & "' and " + """" + l + """" + "='" & T_Operation & "'"
-    
-       End If
-       
-   Set rs = New ADODB.Recordset
-
-      rs.Open s, Conn, adOpenDynamic, adLockOptimistic
-   
-   If rs.EOF = False Then
-      GetLayerOperation = GetLayerNameLayerID(rs("LAYER_REFERENCE").value)
-   Else
-      MsgBox "Não foi localizada referencia para para o layer " & LayerName & ", ID = " & layer_id & " na tabela gs_layer_config_layers com o tipo de operação = " & T_Operation, vbExclamation, ""
-   End If
-   
-   rs.Close
-   Set rs = Nothing
-   
-End Function
-
-Public Function GetLayerNameLayerID(layer_id As Integer) As String
-   
-   Dim rs As ADODB.Recordset
-   Set rs = New ADODB.Recordset
+    Dim rs As ADODB.Recordset, layer_id As Integer
     Dim s As String
-  Dim str As String
-  
-   k = "te_layer"
-h = "layer_id"
-a = "name"
- If frmCanvas.TipoConexao <> 4 Then
-  str = "SELECT name from Te_Layer where layer_id=" & layer_id
     
-   Else
-    str = "SELECT " + """" + a + """" + " from " + """" + k + """" + " where " + """" + h + """" + "='" & layer_id & "'"
-
-   End If
+    k = "GS_LAYER_CONFIG_LAYERS"
+    h = "LAYER_ID"
+    l = "TYPE_OPERATION"
+    layer_id = GetLayerID(LayerName)                    'RETORNA O NUMERO ID DE UM DETERMINADO LAYER
+    'layer_id = 3
+    If frmCanvas.TipoConexao <> 4 Then
+        s = "SELECT * from gs_layer_config_layers where layer_id='" & layer_id & "' and type_operation='" & T_Operation & "'"
+    Else
+        s = "SELECT * from " + """" + k + """" + " where " + """" + h + """" + "='" & layer_id & "' and " + """" + l + """" + "='" & T_Operation & "'"
+    End If
+    Set rs = New ADODB.Recordset
+    rs.Open s, Conn, adOpenDynamic, adLockOptimistic
+    If rs.EOF = False Then
+        GetLayerOperation = GetLayerNameLayerID(rs("LAYER_REFERENCE").value)
+    Else
+        MsgBox "Não foi localizada referencia para para o layer " & LayerName & ", ID = " & layer_id & " na tabela gs_layer_config_layers com o tipo de operação = " & T_Operation, vbExclamation, ""
+    End If
+    rs.Close
+    Set rs = Nothing
+End Function
+' Função para localizar o nome de um layer na tabela te_layer, tendo o número do mesmo
+' Retorna nome do layer a partir do número (id) do layer
+'
+' layer_id - número (id) do layer a ser procurado
+'
+Public Function GetLayerNameLayerID(layer_id As Integer) As String
+    Dim rs As ADODB.Recordset
+    Dim s As String
+    Dim str As String
+    
+    Set rs = New ADODB.Recordset
+    k = "te_layer"
+    h = "layer_id"
+    a = "name"
+    If frmCanvas.TipoConexao <> 4 Then
+        str = "SELECT name from Te_Layer where layer_id=" & layer_id
+    Else
+        str = "SELECT " + """" + a + """" + " from " + """" + k + """" + " where " + """" + h + """" + "='" & layer_id & "'"
+    End If
     Set rs = Conn.execute(str)
-    
-       If rs.EOF = False Then
-      GetLayerNameLayerID = rs(0).value
-   Else
-      MsgBox "Falha em: SELECT name from te_Layer where layer_id= " & layer_id & " - Function GetLayerNameLayerID. Tabela GS_LAYER_CONFIG_LAYERS não possui o LAYER_REFERENCE para encontrar os ramais em um lote da Prefeitura (LOTEGIS)"
-   End If
-   
-
-   
-   rs.Close
-   
-   Set rs = Nothing
-   
+    If rs.EOF = False Then
+        GetLayerNameLayerID = rs(0).value
+    Else
+        MsgBox "Falha em: SELECT name from te_Layer where layer_id= " & layer_id & " - Function GetLayerNameLayerID. Tabela GS_LAYER_CONFIG_LAYERS não possui o LAYER_REFERENCE para encontrar os ramais em um lote da Prefeitura (LOTEGIS)"
+    End If
+    rs.Close
+    Set rs = Nothing
 End Function
 
 Public Sub AddAtributesLinesOut(LayerName As String)
@@ -2384,4 +2343,5 @@ gu = "SPECIFICATION_"
       End If
    End If
 End Sub
+
 

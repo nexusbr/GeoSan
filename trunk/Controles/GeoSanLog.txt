@@ -572,3 +572,58 @@ DESCRIÇÃO      Object variable or With block variable not set
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           30/04/2013 19:28:43 
+USUÁRIO        nexus
+VERSÃO         06.09.14
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/04/2013 19:28:54 
+USUÁRIO        nexus
+VERSÃO         06.09.14
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/04/2013 19:40:08 
+USUÁRIO        nexus
+VERSÃO         06.09.14
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/04/2013 19:40:15 
+USUÁRIO        nexus
+VERSÃO         06.09.14
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/04/2013 20:21:25 
+USUÁRIO        nexus
+VERSÃO         06.09.14
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near '='.
+
+-----------------------------------------------------------------------------------------------------
+

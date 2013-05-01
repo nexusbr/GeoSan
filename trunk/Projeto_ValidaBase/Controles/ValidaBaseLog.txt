@@ -218,3 +218,47 @@ DESCRIÇÃO      Operation is not allowed when the object is closed.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           01/05/2013 09:43:48 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=geosan_curso;Data Source=192.168.0.16 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionOpen (Connect()).]SQL Server does not exist or access denied.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 09:45:12 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 09:47:08 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 10:01:23 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near '='.
+
+-----------------------------------------------------------------------------------------------------
+

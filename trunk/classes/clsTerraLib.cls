@@ -111,54 +111,47 @@ End Property
 Public Property Get tcs() As TeCanvas
     Set tcs = mvartcs
 End Property
-
+'Classe responsável pelo desenho da rede
+'
+'
+'
 Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
-On Error GoTo Trata_Erro
-   With tcs
-      LayerReference = cgeo.GetLayerOperation(.getCurrentLayer, 0)
-      
-      If Trim(LayerReference) <> "" Then
-      
-         tdbcon.setCurrentLayer LayerReference
-      Else
-         
-         MsgBox "Selecione antes o plano em que deseja desenhar!", vbInformation, "Desenho de Rede"
-         DrawNetWorkLine = False
-         Exit Function
-      
-      End If
-      
-      'tdbconref.setCurrentLayer "CEL_PONTO_ATRIB"
-      
-      Select Case cgeo.GetLayerTypeReference(.getCurrentLayer)
-         Case LayerTypeRefence.Trecho_Rede_Agua, LayerTypeRefence.Trecho_Rede_Drenagem, LayerTypeRefence.Trecho_Rede_esgoto
-            If Not mback Then
-               .object_id = ""
-               .addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)
-               .setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)
-               CtrlMgr.LoadDefaultProperties 0, tcs.getCurrentLayer, True
-               CtrlMgr.GridEnabled True: CtrlMgr.GridVisibled True
-            End If
-            .DrawNetWorkLine
-            TerraEvent = tg_DrawNetWorkline
-            DrawNetWorkLine = True
-      Case Else
-         DrawNetWorkLine = False
-         MsgBox "Não é possivel desenhar rede neste plano: " & .getCurrentLayer, vbExclamation
-         Exit Function
-      End Select
-   End With
-
-
+    On Error GoTo Trata_Erro
+    With tcs                                                             'com o objeto teCanvas
+        LayerReference = cgeo.GetLayerOperation(.getCurrentLayer, 0)      'obtem o nome do layer de referencia, por exemplo se o principal é waterlines o de referência é watercomponents, sewerlines é sewercomponents, etc.
+        If Trim(LayerReference) <> "" Then
+            tdbcon.setCurrentLayer LayerReference                          'define como ativo o layer de nós
+        Else
+            MsgBox "Selecione antes o plano em que deseja desenhar!", vbInformation, "Desenho de Rede"
+            DrawNetWorkLine = False
+            Exit Function
+        End If
+        'tdbconref.setCurrentLayer "CEL_PONTO_ATRIB"
+        Select Case cgeo.GetLayerTypeReference(.getCurrentLayer)                      'obtem o tipo de layer de referência
+            Case LayerTypeRefence.Trecho_Rede_Agua, LayerTypeRefence.Trecho_Rede_Drenagem, LayerTypeRefence.Trecho_Rede_esgoto
+                If Not mback Then
+                    .object_id = ""
+                    .addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)          'obtem o layer de referência e coloca-o como de snap
+                    .setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)       'seta o nome do layer de referência
+                    CtrlMgr.LoadDefaultProperties 0, tcs.getCurrentLayer, True
+                    CtrlMgr.GridEnabled True: CtrlMgr.GridVisibled True
+                End If
+                .DrawNetWorkLine
+                TerraEvent = tg_DrawNetWorkline
+                DrawNetWorkLine = True
+            Case Else
+                DrawNetWorkLine = False
+                MsgBox "Não é possivel desenhar rede neste plano: " & .getCurrentLayer, vbExclamation
+                Exit Function
+        End Select
+    End With
+       
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   Else
-    
-      PrintErro "clsTerraLib", "Public Function DrawNetWorkLine", CStr(Err.Number), CStr(Err.Description), True
-      
-   End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro "clsTerraLib", "Public Function DrawNetWorkLine", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Function
 
 Public Function MoveNetWorkNode()
@@ -466,11 +459,11 @@ Trata_Erro:
     
 End Function
 
-Public Function OnPoint(x As Double, y As Double)
+Public Function OnPoint(X As Double, Y As Double)
 On Error GoTo Trata_Erro
    Dim object_id As String, frm As New FrmAssociation
    tdb.setCurrentLayer tcs.getCurrentLayer
-   If tdb.locateGeometry(x, y, tpPOINTS, 1) = 1 Then
+   If tdb.locateGeometry(X, Y, tpPOINTS, 1) = 1 Then
       TerraEvent = tg_SelectObject
       tcs.Normal
       tcs.Select
@@ -479,7 +472,7 @@ On Error GoTo Trata_Erro
       
    Else
       TerraEvent = tg_DrawGeometrys
-      frm.init "", tcs, tdb, x, y
+      frm.init "", tcs, tdb, X, Y
       tcs.Normal
       tcs.Select
       TerraEvent = tg_SelectObject
@@ -498,7 +491,7 @@ Trata_Erro:
    
 End Function
 
-Public Function OnRamal(x As Double, y As Double, object_id_ramal As String) As Boolean
+Public Function OnRamal(X As Double, Y As Double, object_id_ramal As String) As Boolean
 On Error GoTo Trata_Erro
     
     Dim frm As New FrmCadastroRamal, Qtde As Long, a As Long
@@ -520,7 +513,7 @@ On Error GoTo Trata_Erro
     
     
     With tcs
-       Qtde = tdbconref.locateGeometryXY(x, y, 1)
+       Qtde = tdbconref.locateGeometryXY(X, Y, 1)
        For a = 0 To Qtde - 1
           If object_id_lote = "" Then
              object_id_lote = "'" & tdbconref.objectIds(a) & "'"
@@ -557,74 +550,58 @@ Trata_Erro:
 
       
 End Function
-
-
+' Função chamada para salvar no banco de dados
+'
+'
+'
+'
 Public Function SaveInDatabase() As Boolean
-On Error GoTo Trata_Erro
- tcs.saveOnMemory
- tcs.SaveInDatabase
-
-            '.saveOnMemory
-             tcs.saveOnMemory
- tcs.SaveInDatabase
-           
-   With tcs
-      'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
-      Select Case TerraEvent
-         'caso o usuario esteja desenhando uma ou mais geometrias, salva as geometrias
-         
-         Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys
-            Screen.MousePointer = vbHourglass
-            
-            'Conn.BeginTrans
-            
-            Dim USR As String
-            
-           
-            
-           ' Exit Sub
-            
-            
-            
-            'Conn.CommitTrans
-
-            Screen.MousePointer = vbNormal
-         Case tg_SelectObject
-            'Caso o ususario estiver apenas consultando os atribuitos de uma ou mais geometria
-            'Salva apenas os atributos
-            Select Case cgeo.GetLayerTypeReference(tcs.getCurrentLayer)
-               Case LayerTypeRefence.OUTROS
-                  MsgBox "Somente leitura", vbExclamation
-               Case Else
-                  If tcs.getSelectCount(GetGeometrySELECTed()) = 1 Then
-                     
-                     SaveNetWorkAttributesSingle GetGeometrySELECTed()
-                  ElseIf tcs.getSelectCount(GetGeometrySELECTed()) > 1 Then
-                     
-                     SaveNetWorkAttributesMultiple GetGeometrySELECTed()
-                  End If
-            End Select
-            .plotView
-      End Select
-      
-   End With
-   Exit Function
+    On Error GoTo Trata_Erro
+    'verificar o motivo de por que existem dois comentos SaveInDatabase repetidos. Ver diagrama de sequência
+    tcs.saveOnMemory
+    tcs.SaveInDatabase
+    '.saveOnMemory
+    tcs.saveOnMemory
+    tcs.SaveInDatabase
+    With tcs
+        'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
+        Select Case TerraEvent
+            'caso o usuario esteja desenhando uma ou mais geometrias, salva as geometrias
+            Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys
+                Screen.MousePointer = vbHourglass
+                'Conn.BeginTrans
+                Dim USR As String
+                ' Exit Sub
+                'Conn.CommitTrans
+                Screen.MousePointer = vbNormal
+            Case tg_SelectObject
+                'Caso o ususario estiver apenas consultando os atribuitos de uma ou mais geometria
+                'Salva apenas os atributos
+                Select Case cgeo.GetLayerTypeReference(tcs.getCurrentLayer)
+                    Case LayerTypeRefence.OUTROS
+                        MsgBox "Somente leitura", vbExclamation
+                    Case Else
+                        If tcs.getSelectCount(GetGeometrySELECTed()) = 1 Then
+                            SaveNetWorkAttributesSingle GetGeometrySELECTed()
+                        ElseIf tcs.getSelectCount(GetGeometrySELECTed()) > 1 Then
+                            SaveNetWorkAttributesMultiple GetGeometrySELECTed()
+                        End If
+                End Select
+                .plotView
+        End Select
+    End With
+    Exit Function
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     ElseIf mid(Err.Description, 1, 9) = "ORA-03114" Then
-       
-       PrintErro "clsTerraLib", "Public Function SaveInDatabase()", CStr(Err.Number), CStr(Err.Description), True
-       End
-    
+        PrintErro "clsTerraLib", "Public Function SaveInDatabase()", CStr(Err.Number), CStr(Err.Description), True
+        End
     Else
-       
-       PrintErro "clsTerraLib", "Public Function SaveInDatabase()", CStr(Err.Number), CStr(Err.Description), True
-       
+        PrintErro "clsTerraLib", "Public Function SaveInDatabase()", CStr(Err.Number), CStr(Err.Description), True
     End If
-   
-   Screen.MousePointer = vbNormal
-   
+    Screen.MousePointer = vbNormal
 End Function
 
 Public Function GetGeometrySELECTed() As TypeGeometry
@@ -703,213 +680,148 @@ Trata_Erro:
        
     End If
 End Function
-
-
+' Cria agora a tabela de atributos de rede
+'
+' LINE_ID - Id da linha a ser criada
+' Node_id1 - Nó inicial da linha a ser criado ou atualizado
+' Node_id2 - Nó final da linha a ser criado ou atualizado
+' Movendo - indica se está criando ou movendo um trecho de rede
+'
 Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id2 As Long, Movendo As Boolean) As Boolean
-   On Error GoTo Trata_Erro
-   Dim az As String
-   Dim object_id As String, CompCalc As Double, a As Integer, ld As String, nd1 As String, nd2 As String
-   Dim LayerName As String
-   Dim LayerReferencia As String
+    On Error GoTo Trata_Erro
+    Dim az As String
+    Dim object_id As String, CompCalc As Double, a As Integer, ld As String, nd1 As String, nd2 As String
+    Dim LayerName As String
+    Dim LayerReferencia As String
    
-   
-   If Movendo = True Then ' SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA
-      
-      LayerName = tcs.GetReferenceLayer 'SETA O LAYER DE REFERENCIA COMO ATIVO
-      
-      cgeo.DeleteTextObjectWithInsertText LayerName, LINE_ID, CStr(LINE_ID)
-   
-   Else
-      
-      If TerraEvent = tg_DrawNetWorkline Then
-         LayerName = tcs.getCurrentLayer
-      Else
-         LayerName = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
-      End If
-      
-      LayerReferencia = cgeo.GetReferenceLayer(LayerName)
-      
-      Dim rs As ADODB.Recordset
-      Set rs = New ADODB.Recordset
-      Dim stringSQL As String
-      
-      
-      If frmCanvas.TipoConexao <> 4 Then
-      rs.Open ("SELECT * FROM " & LayerName & " WHERE OBJECT_ID_ = " & LINE_ID), Conn, adOpenDynamic, adLockReadOnly
-      Else
-      b = "OBJECT_ID_"
-       rs.Open ("SELECT * FROM " + """" + LayerName + """" + " WHERE " + """" + b + """" + " = '" & LINE_ID & "'"), Conn, adOpenDynamic, adLockOptimistic
-      End If
-      
-      
-      
-      If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO
-      
-         'CRIA UM NOVO REGISTRO NA TABELA DE ATRIBUTOS DE LINHAS COM LINE_ID,OBJECT_ID_ IGUAL AO CÓDIGO DA GEOMETRIA
-         ' O PRIMNEIRO LINE ID É NUMERICO E O SEGUNDO É TEXTO
-   
-   
-
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-        stringSQL = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & LINE_ID & ",'" & LINE_ID & "')"
-     
-     Else
-             az = "LINE_ID"
-      b = "OBJECT_ID_"
-      c = "INSCRICAO_LOTE"
-   
-       stringSQL = "INSERT INTO  " + """" + LayerName + """" + " ( " + """" + az + """" + "," + """" + b + """" + ") VALUES ('" & LINE_ID & "','" & LINE_ID & "')"
-     End If
-         
-         
-
-         Conn.execute (stringSQL)
-      Else
-         'NÃO DEVERIA TER ENCONTRADO
-      End If
-      rs.Close
-            
-      'DLL Pm4Manager SALAVA AS PRORPIEDADES DA LINHA NA TABELA DE ATRIBUTOS
-      CtrlMgr.SaveProperties CStr(LINE_ID), strUser
-      
-      'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA NOVA LINHA
-      tdb.getLengthOfLine LINE_ID, CStr(LINE_ID), CompCalc
-      
-      'ATUALIZADO O COMPRIMENTO, NÓ INICIAL E NÓ FINAL DA LINHA NA TABELA DE ATRIBUTOS
-      
-      Dim compMax As Double
-      
-      compMax = CompCalc  ' Replace(Round(CompCalc, 2), ",", ".")
-      
- 
-       If frmCanvas.TipoConexao <> 4 Then
-      If compMax > 9999.99 Then
-          ' SE O COMPRIMENTO MAXIMO DE UMA REDE FOR ULTRAPASSADO, ELA SERÁ SALVA NO ENTANTO COM O LIMITE MAXIMO DE COMPRIMENTO
-          MsgBox "Rede com comprimento máximo '9999.99' ultrapassado.", vbExclamation, "Aviso"
-          stringSQL = "UPDATE " & LayerName & " SET LENGTHCALCULATED = 9999.99, INITIALCOMPONENT = '" & Node_id1 & "', FINALCOMPONENT = '" & Node_id2 & "' WHERE OBJECT_ID_ = '" & LINE_ID & "'"
-      Else
-           
-      
-          stringSQL = "UPDATE " & LayerName & " SET LENGTHCALCULATED = " & Replace(Round(CompCalc, 2), ",", ".") & ", INITIALCOMPONENT = '" & Node_id1 & "', FINALCOMPONENT = '" & Node_id2 & "' WHERE OBJECT_ID_ = '" & LINE_ID & "'"
-      End If
-      Else
-      
-        az = LayerName
-       
-        c = "LENGTHCALCULATED"
-        d = "INITIALCOMPONENT"
-        e = "FINALCOMPONENT"
-        f = "OBJECT_ID_"
-        g = Round(Replace(Round(CompCalc, 2), ",", "."))
-        h = Round(g)
-       If compMax > 9999.99 Then
-          ' SE O COMPRIMENTO MAXIMO DE UMA REDE FOR ULTRAPASSADO, ELA SERÁ SALVA NO ENTANTO COM O LIMITE MAXIMO DE COMPRIMENTO
-          MsgBox "Rede com comprimento máximo '9999.99' ultrapassado.", vbExclamation, "Aviso"
-          stringSQL = "UPDATE " + """" + az + """" + " SET " + """" + c + """" + " = '9999.99', " + """" + d + """" + " = '" & Node_id1 & "', " + """" + e + """" + " = '" & Node_id2 & "' WHERE " + """" + f + """" + " = '" & LINE_ID & "'"
-      Else
-     ' MsgBox "UPDATE " + """" + az + """" + " SET " + """" + c + """" + " = '" + g + "', " + """" + d + """" + " = '" & Node_id1 & "', " + """" + e + """" + " = '" & Node_id2 & "' WHERE " + """" + f + """" + " = '" & line_id & "'"
-   
-          stringSQL = "UPDATE " + """" + LayerName + """" + " SET " + """" + c + """" + " = '" + h + "', " + """" + d + """" + " = '" & Node_id1 & "', " + """" + e + """" + " = '" & Node_id2 & "' WHERE " + """" + f + """" + " = '" & LINE_ID & "'"
-       'WritePrivateProfileString "A", "A", stringSQL, App.path & "\DEBUG.INI"
-      
-      
-      End If
-      
-      
-      End If
-      
-      Conn.execute (stringSQL)
-      
-      'DEPOIS DE CARREGADAS AS INFORMAÇÕES NA TABELA DE ATRIBUTOS, CHAMA O MÉTODO DE CRIAR TEXTOS
-      InsertTextAttributesLine LayerName, LINE_ID, CStr(LINE_ID)
-      
-      Dim TBGeometria As String
-      TBGeometria = tdb.getRepresentationTableName(LayerReferencia, tpPOINTS)
-           
-      
-      
-      'INSERE O ATRIBUTO DO NÓ 1 E NÓ 2 NA TABELA DE ATRIBUTOS COM O SEGUINTE LOOP
-      
-      Dim i As Byte
-      Dim No As String
-      
-      For i = 1 To 2 'EXECUTA 2 VEZES A ROTINA ABAIXO
-         
-         If i = 1 Then No = Node_id1 Else No = Node_id2
-         
-         Set rs = New ADODB.Recordset
-         
-          If frmCanvas.TipoConexao <> 4 Then
-         rs.Open ("SELECT * FROM " & LayerReferencia & " WHERE OBJECT_ID_ = '" & No & "'"), Conn, adOpenDynamic, adLockReadOnly
-         Else
-         az = "OBJECT_ID_"
-         rs.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
-         End If
-         
-         
-         
-         If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO
-         
-          
-
-
-
-     If frmCanvas.TipoConexao <> 4 Then
-         
-    Conn.execute ("INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & No & ",'" & No & "')")
-     Else
-      az = "OBJECT_ID_"
-      b = "COMPONENT_ID"
-      c = "INSCRICAO_LOTE"
-      d = "TIPO"
-      e = "HIDROMETRADO"
-      f = "ECONOMIAS"
-      g = "CONSUMO_LPS"
-      h = "TB_LIGACOES"
-     Conn.execute ("INSERT INTO " + """" + LayerReferencia + """" + " (" + """" + b + """" + "," + """" + az + """" + ") VALUES ('" & No & "','" & No & "')")
-     
-     End If
-         
-            'CRIA UM NOVO REGISTRO NA TABELA DE ATRIBUTOS DE NÓS COM COMPONENT_ID,OBJECT_ID_
-            
-          
-            
-            If cgeo.GetTypeText(LayerName) = 2 Then
-               cgeo.InsertTextInPoint CLng(No), CStr(No), LayerReferencia, 0, 0
+    If Movendo = True Then ' SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA
+        LayerName = tcs.GetReferenceLayer 'SETA O LAYER DE REFERENCIA COMO ATIVO
+        cgeo.DeleteTextObjectWithInsertText LayerName, LINE_ID, CStr(LINE_ID)
+    Else
+        If TerraEvent = tg_DrawNetWorkline Then
+            LayerName = tcs.getCurrentLayer
+        Else
+            LayerName = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
+        End If
+        LayerReferencia = cgeo.GetReferenceLayer(LayerName)
+        Dim rs As ADODB.Recordset
+        Set rs = New ADODB.Recordset
+        Dim stringSQL As String
+        'prepara querie para procurar em todas as linhas de rede se já existe alguma com o object_id_ da que será criada
+        If frmCanvas.TipoConexao <> 4 Then
+            rs.Open ("SELECT * FROM " & LayerName & " WHERE OBJECT_ID_ = " & LINE_ID), Conn, adOpenDynamic, adLockReadOnly
+        Else
+            b = "OBJECT_ID_"
+            rs.Open ("SELECT * FROM " + """" + LayerName + """" + " WHERE " + """" + b + """" + " = '" & LINE_ID & "'"), Conn, adOpenDynamic, adLockOptimistic
+        End If
+        If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO
+            'CRIA UM NOVO REGISTRO NA TABELA DE ATRIBUTOS DE LINHAS COM LINE_ID,OBJECT_ID_ IGUAL AO CÓDIGO DA GEOMETRIA
+            ' O PRIMNEIRO LINE ID É NUMERICO E O SEGUNDO É TEXTO
+            If frmCanvas.TipoConexao <> 4 Then
+                stringSQL = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & LINE_ID & ",'" & LINE_ID & "')"
+            Else
+                az = "LINE_ID"
+                b = "OBJECT_ID_"
+                c = "INSCRICAO_LOTE"
+                stringSQL = "INSERT INTO  " + """" + LayerName + """" + " ( " + """" + az + """" + "," + """" + b + """" + ") VALUES ('" & LINE_ID & "','" & LINE_ID & "')"
             End If
-         
-         End If
-         rs.Close
-      Next
-
-      
-'      'Rotina que procura Atributos por referencia
-'      If FrmMain.mnuLoadAttributeByReference.Checked Then
-'         LoadAttributeByReference Node_id1
-'         LoadAttributeByReference Node_id2
-'      End If
-   
-   
-   
-   End If
-   
-   CreatNetWorkAttribute = True
+            Conn.execute (stringSQL)
+        Else
+            'NÃO DEVERIA TER ENCONTRADO
+        End If
+        rs.Close
+        'DLL Pm4Manager SALAVA AS PRORPIEDADES DA LINHA NA TABELA DE ATRIBUTOS
+        CtrlMgr.SaveProperties CStr(LINE_ID), strUser
+        'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA NOVA LINHA
+        tdb.getLengthOfLine LINE_ID, CStr(LINE_ID), CompCalc
+        'ATUALIZADO O COMPRIMENTO, NÓ INICIAL E NÓ FINAL DA LINHA NA TABELA DE ATRIBUTOS
+        Dim compMax As Double
+        compMax = CompCalc  ' Replace(Round(CompCalc, 2), ",", ".")
+        If frmCanvas.TipoConexao <> 4 Then
+            If compMax > 9999.99 Then
+                ' SE O COMPRIMENTO MAXIMO DE UMA REDE FOR ULTRAPASSADO, ELA SERÁ SALVA NO ENTANTO COM O LIMITE MAXIMO DE COMPRIMENTO
+                MsgBox "Rede com comprimento máximo '9999.99' ultrapassado.", vbExclamation, "Aviso"
+                stringSQL = "UPDATE " & LayerName & " SET LENGTHCALCULATED = 9999.99, INITIALCOMPONENT = '" & Node_id1 & "', FINALCOMPONENT = '" & Node_id2 & "' WHERE OBJECT_ID_ = '" & LINE_ID & "'"
+            Else
+                stringSQL = "UPDATE " & LayerName & " SET LENGTHCALCULATED = " & Replace(Round(CompCalc, 2), ",", ".") & ", INITIALCOMPONENT = '" & Node_id1 & "', FINALCOMPONENT = '" & Node_id2 & "' WHERE OBJECT_ID_ = '" & LINE_ID & "'"
+            End If
+        Else
+            az = LayerName
+            c = "LENGTHCALCULATED"
+            d = "INITIALCOMPONENT"
+            e = "FINALCOMPONENT"
+            f = "OBJECT_ID_"
+            g = Round(Replace(Round(CompCalc, 2), ",", "."))
+            h = Round(g)
+            If compMax > 9999.99 Then
+                ' SE O COMPRIMENTO MAXIMO DE UMA REDE FOR ULTRAPASSADO, ELA SERÁ SALVA NO ENTANTO COM O LIMITE MAXIMO DE COMPRIMENTO
+                MsgBox "Rede com comprimento máximo '9999.99' ultrapassado.", vbExclamation, "Aviso"
+                stringSQL = "UPDATE " + """" + az + """" + " SET " + """" + c + """" + " = '9999.99', " + """" + d + """" + " = '" & Node_id1 & "', " + """" + e + """" + " = '" & Node_id2 & "' WHERE " + """" + f + """" + " = '" & LINE_ID & "'"
+            Else
+                ' MsgBox "UPDATE " + """" + az + """" + " SET " + """" + c + """" + " = '" + g + "', " + """" + d + """" + " = '" & Node_id1 & "', " + """" + e + """" + " = '" & Node_id2 & "' WHERE " + """" + f + """" + " = '" & line_id & "'"
+                stringSQL = "UPDATE " + """" + LayerName + """" + " SET " + """" + c + """" + " = '" + h + "', " + """" + d + """" + " = '" & Node_id1 & "', " + """" + e + """" + " = '" & Node_id2 & "' WHERE " + """" + f + """" + " = '" & LINE_ID & "'"
+                'WritePrivateProfileString "A", "A", stringSQL, App.path & "\DEBUG.INI"
+            End If
+        End If
+        Conn.execute (stringSQL)
+        'DEPOIS DE CARREGADAS AS INFORMAÇÕES NA TABELA DE ATRIBUTOS, CHAMA O MÉTODO DE CRIAR TEXTOS
+        InsertTextAttributesLine LayerName, LINE_ID, CStr(LINE_ID)
+        Dim TBGeometria As String
+        TBGeometria = tdb.getRepresentationTableName(LayerReferencia, tpPOINTS)
+        'INSERE O ATRIBUTO DO NÓ 1 E NÓ 2 NA TABELA DE ATRIBUTOS COM O SEGUINTE LOOP
+        Dim i As Byte
+        Dim No As String
+        For i = 1 To 2 'EXECUTA 2 VEZES A ROTINA ABAIXO
+            If i = 1 Then
+                No = Node_id1
+            Else
+                No = Node_id2
+            End If
+            Set rs = New ADODB.Recordset
+            If frmCanvas.TipoConexao <> 4 Then
+                rs.Open ("SELECT * FROM " & LayerReferencia & " WHERE OBJECT_ID_ = '" & No & "'"), Conn, adOpenDynamic, adLockReadOnly
+            Else
+                az = "OBJECT_ID_"
+                rs.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
+            End If
+            If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
+                If frmCanvas.TipoConexao <> 4 Then
+                    Conn.execute ("INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & No & ",'" & No & "')")
+                Else
+                    az = "OBJECT_ID_"
+                    b = "COMPONENT_ID"
+                    c = "INSCRICAO_LOTE"
+                    d = "TIPO"
+                    e = "HIDROMETRADO"
+                    f = "ECONOMIAS"
+                    g = "CONSUMO_LPS"
+                    h = "TB_LIGACOES"
+                    Conn.execute ("INSERT INTO " + """" + LayerReferencia + """" + " (" + """" + b + """" + "," + """" + az + """" + ") VALUES ('" & No & "','" & No & "')")
+                End If
+                'CRIA UM NOVO REGISTRO NA TABELA DE ATRIBUTOS DE NÓS COM COMPONENT_ID,OBJECT_ID_
+                If cgeo.GetTypeText(LayerName) = 2 Then
+                    cgeo.InsertTextInPoint CLng(No), CStr(No), LayerReferencia, 0, 0
+                End If
+            End If
+            rs.Close
+        Next
+        'Rotina que procura Atributos por referencia
+        'If FrmMain.mnuLoadAttributeByReference.Checked Then
+        '   LoadAttributeByReference Node_id1
+        '   LoadAttributeByReference Node_id2
+        'End If
+    End If
+    CreatNetWorkAttribute = True
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-       PrintErro "clsTerraLib", "Public Function CreatNetWorkAttribute", CStr(Err.Number), CStr(Err.Description), True
-       
+        PrintErro "clsTerraLib", "Public Function CreatNetWorkAttribute", CStr(Err.Number), CStr(Err.Description), True
     End If
-  
 End Function
 
-Private Function NewObject(LayerName As String, ID As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
+Private Function NewObject(LayerName As String, id As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
 On Error GoTo Trata_Erro
    Dim LenghtCalc As Double
    Dim rsNew As ADODB.Recordset
@@ -923,7 +835,7 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
+    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
      Else
      a = "OBJECT_ID_"
       b = "LINE_ID"
@@ -932,7 +844,7 @@ On Error GoTo Trata_Erro
       e = "HIDROMETRADO"
       f = "LENGTHCALCULATED"
      
-      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
+      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
      End If
 
 
@@ -954,7 +866,7 @@ On Error GoTo Trata_Erro
          Conn.execute "Update " + """" + LayerName + """" + " set " + """" + f + """" + " = '" & Replace(Round(compr, 2), ",", ".") & "' where " + """" + a + """" + " = '" & object_id & "'"
          End If
       'CHAMA O MÉTODO DE CRIAR TEXTOS
-      InsertTextAttributesLine LayerName, ID, object_id
+      InsertTextAttributesLine LayerName, id, object_id
 
    
    ElseIf Geometry = points Then
@@ -964,14 +876,14 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
+    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
      Else
       a = "OBJECT_ID_"
       b = "COMPONENT_ID"
       c = "INSCRICAO_LOTE"
      
      
-     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
+     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
      End If
       
       
@@ -979,7 +891,7 @@ On Error GoTo Trata_Erro
      
       Conn.execute (strsql)
       If cgeo.GetTypeText(LayerName) = 2 Then
-         cgeo.InsertTextInPoint ID, object_id, LayerName, 0, 0
+         cgeo.InsertTextInPoint id, object_id, LayerName, 0, 0
       End If
     
    End If
@@ -995,59 +907,53 @@ Trata_Erro:
        
     End If
 End Function
-
+' Insere os atributos de texto da linha no banco de dados
+'
+' LayerName - nome do layer
+' geom_id - da linha
+' object_id - da linha
+'
 Private Function InsertTextAttributesLine(LayerName As String, geom_id As Long, object_id As String) As Boolean
-On Error GoTo Trata_Erro
-   Dim LENGTH As Double, Diameter As String, Material As String, CotaIni As Double, CotaFim As Double
-   a = "X_MATERIAL"
-   b = "MATERIAL"
-   c = "MATERIALID"
-   d = "OBJECT_ID_"
+    On Error GoTo Trata_Erro
+    Dim LENGTH As Double, Diameter As String, Material As String, CotaIni As Double, CotaFim As Double
+    
+    a = "X_MATERIAL"
+    b = "MATERIAL"
+    c = "MATERIALID"
+    d = "OBJECT_ID_"
     If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute("SELECT * From  " & tcs.getCurrentLayer & " left JOIN x_Material on material=materialid where object_id_='" & object_id & "'")
-   Else
-   'MsgBox "ARQUIVO DEBUG SALVO"
- 'WritePrivateProfileString "A", "A", "SELECT * From  " + """" + tcs.getCurrentLayer + """" + " left JOIN " + """" + a + """" + " on" + """" + b + """" + "=" + """" + c + """" + " where " + """" + d + """" + "='" & object_id & "'", App.path & "\DEBUG.INI"
- 
-   
-   Set rs = Conn.execute("SELECT * From  " + """" + tcs.getCurrentLayer + """" + " left JOIN " + """" + a + """" + " on" + """" + b + """" + "=" + """" + c + """" + " where " + """" + d + """" + "='" & object_id & "'")
-  
-
-  
-  End If
-   If Not rs.EOF Then
-      
-      Diameter = Chr$(216) & " " & IIf(IsNull(rs!INTERNALDIAMETER), 0, rs!INTERNALDIAMETER)
-      Material = IIf(IsNull(rs!MATERIALNAME), 0, rs!MATERIALNAME)
-      LENGTH = IIf(rs!LENGTH = 0, rs!LENGTHCALCULATED, rs!LENGTH)
-      
-      If tcs.getCurrentLayer = "SEWERLINES" Then
-         CotaIni = rs!INITIALTUBEDEEPNESS
-         CotaFim = rs!FINALTUBEDEEPNESS
-      Else
-         CotaIni = rs!INITIALGROUNDHEIGHT
-         CotaFim = rs!FINALGROUNDHEIGHT
-      End If
-         
-      
-      If cgeo.GetTypeText(tcs.getCurrentLayer) = 1 Then
-         cgeo.InsertTextInDatabase geom_id, object_id, Diameter, Material, LENGTH
-      Else
-         cgeo.InsertTextInDatabase geom_id, object_id, Diameter, Material, LENGTH, True, CotaIni, CotaFim
-      End If
-
-   End If
-   rs.Close
-   Set rs = Nothing
-   
+        Set rs = Conn.execute("SELECT * From  " & tcs.getCurrentLayer & " left JOIN x_Material on material=materialid where object_id_='" & object_id & "'")
+    Else
+        'MsgBox "ARQUIVO DEBUG SALVO"
+        'WritePrivateProfileString "A", "A", "SELECT * From  " + """" + tcs.getCurrentLayer + """" + " left JOIN " + """" + a + """" + " on" + """" + b + """" + "=" + """" + c + """" + " where " + """" + d + """" + "='" & object_id & "'", App.path & "\DEBUG.INI"
+        Set rs = Conn.execute("SELECT * From  " + """" + tcs.getCurrentLayer + """" + " left JOIN " + """" + a + """" + " on" + """" + b + """" + "=" + """" + c + """" + " where " + """" + d + """" + "='" & object_id & "'")
+    End If
+    If Not rs.EOF Then
+        Diameter = Chr$(216) & " " & IIf(IsNull(rs!INTERNALDIAMETER), 0, rs!INTERNALDIAMETER)
+        Material = IIf(IsNull(rs!MATERIALNAME), 0, rs!MATERIALNAME)
+        LENGTH = IIf(rs!LENGTH = 0, rs!LENGTHCALCULATED, rs!LENGTH)
+        If tcs.getCurrentLayer = "SEWERLINES" Then
+            CotaIni = rs!INITIALTUBEDEEPNESS
+            CotaFim = rs!FINALTUBEDEEPNESS
+        Else
+            CotaIni = rs!INITIALGROUNDHEIGHT
+            CotaFim = rs!FINALGROUNDHEIGHT
+        End If
+        'insere no banco de dado os textos do trecho de rede
+        If cgeo.GetTypeText(tcs.getCurrentLayer) = 1 Then
+            cgeo.InsertTextInDatabase geom_id, object_id, Diameter, Material, LENGTH                           'insere sem as cotas iniciais e finais (redes de água)
+        Else
+            cgeo.InsertTextInDatabase geom_id, object_id, Diameter, Material, LENGTH, True, CotaIni, CotaFim   'insere com as cotas iniciais e finais (redes de esgoto e drenagem)
+        End If
+    End If
+    rs.Close
+    Set rs = Nothing
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
     Else
-       
       PrintErro "clsTerraLib", "Private Function InsertTextAttributes", CStr(Err.Number), CStr(Err.Description), True
-       
     End If
 End Function
 
@@ -1493,7 +1399,7 @@ Private Sub LoadAttributeByReference(geom_id As Long)
             
             .setCurrentLayer "WATERCOMPONENTS"
             
-            If .locateGeometry(rsPoints!x, rsPoints!y, 4, 0.7) Then
+            If .locateGeometry(rsPoints!X, rsPoints!Y, 4, 0.7) Then
                If cgeo.GetLayerAttrib("CEL_PONTO_ATRIB", layer_id, Attr_Link) Then
                   rsRef.Open "SELECT * from CEL_PONTO_ATRIB where " & Attr_Link & "=" & .objectIds(0), Conn, adOpenKeyset, adLockOptimistic
                   If GetTypeObjectByReference(rsRef!NOME_CELUL, id_Type, Id_SubType, value) Then

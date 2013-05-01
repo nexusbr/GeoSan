@@ -1,0 +1,8 @@
+
+ValidaBase;*************************************************************************************************
+ValidaBase;Início do processamento do banco de dados GeoSan: 01/05/2013 - 09:46:22
+
+ApagaLinhasAtributosSemGeometriasWaterlines;SELECT OBJECT_ID_ FROM WATERLINES WHERE OBJECT_ID_ NOT IN (SELECT OBJECT_ID FROM LINES1)
+ApagaLinhasAtributosSemGeometriasWaterlines;Fim do SELECT. 0 linhas de atributos em WATERLINES encontradas sem geometrias associadas
+
+ApagaLinhasAtributosSemGeometriasWaterlines; SELECT OBJECT_ID FROM LINES1 WHERE OBJECT_ID NOT IN (SELECT OBJECT_ID_ FROM WATERLINES)

@@ -188,12 +188,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             AutoSize        =   2
-            TextSave        =   "27/03/2013"
+            TextSave        =   "01/05/2013"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             AutoSize        =   2
-            TextSave        =   "15:36"
+            TextSave        =   "16:36"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1839,12 +1839,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2422,13 +2422,14 @@ Trata_Erro:
     End If
 
 End Sub
-
+' Opção do menu de ícones que abre uma janela de desenho de mapa.
+' Entra nesta rotina quando o usuário seleciona a ícone de que deseja uma nova janela de desenho
+'
+'
+'
 Private Sub mnuOpen_Click()
-
-
-   Set TCanvas = New frmCanvas
-   TCanvas.init Conn, usuario.UseName
-   
+    Set TCanvas = New frmCanvas
+    TCanvas.init Conn, usuario.UseName
 End Sub
 
 Private Sub TabStrip1_Click()
@@ -2444,9 +2445,13 @@ Private Sub TabStrip1_Click()
    End If
    
 End Sub
-'Monitoramento dos eventos da barra de ícones. Evento de clique na barra de ferramentas
+' Monitoramento dos eventos da barra de ícones. Evento de clique na barra de ferramentas
+' Fica aguardando o usuário selecionar uma das ícones na barra de menu de ícones
+' Caso a janela de desenho (canvas) não estiver aberto, não faz nada ainda
+' Caso esteja aberta a seleção da ícone
+' Caso selecione que é para abrir uma nova janela de desenho (canvas), abre a mesma
 '
-'
+' Button - botão que foi selecionado pelo usuário
 '
 Public Sub tbToolBar_ButtonClick(ByVal Button As MSComctlLib.Button)
 'If blnMonitorar = True Then
@@ -2456,8 +2461,8 @@ Public Sub tbToolBar_ButtonClick(ByVal Button As MSComctlLib.Button)
            mnuOpen_Click
         Case Else
            If Not ActiveForm Is Nothing Then
-              If ActiveForm.Name = "frmCanvas" Then
-                  ActiveForm.Tb_SELECT Button.key
+              If ActiveForm.Name = "frmCanvas" Then         'se o canvas de mapas está na tela
+                  ActiveForm.Tb_SELECT Button.key           'indica a ativação do botão que foi selecionado
               End If
            End If
     End Select
@@ -2468,7 +2473,7 @@ Trata_Erro:
         Err.Clear
         Exit Sub
     Else
-        PrintErro CStr(Me.Name), "Public Sub tbToolBar_ButtonClick()", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "Não está encontrando o botão a ser selecionado em Public Sub tbToolBar_ButtonClick()", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Sub
 

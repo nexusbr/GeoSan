@@ -410,7 +410,9 @@ Private Function ApagaGeometriasSemAtributosWaterlines(numeroTabela As String, a
     Set rsLinha = Conn.Execute(strSql)
     If rsLinha.EOF = False Then
         Do While Not rsLinha.EOF
+            Open arquivoLog For Append As #1
             Print #1, "ApagaGeometriasSemAtributosWaterlines;" & "     DELETE FROM LINES1 WHERE OBJECT_ID ='" & rsLinha!object_id & "'"
+            Close #1
             Conn.Execute ("DELETE FROM LINES1 WHERE OBJECT_ID ='" & rsLinha!object_id & "'")
             rsLinha.MoveNext
             contador = contador + 1

@@ -4,6 +4,24 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+
+01-05-2013 - GeoSan 06.09.15
+Corrigido bug de abertura de arquivo log do ValidaBase que estava sem.
+
+Realizada documentação dos eventos de desenhar redes e salvar redes.
+
+Todas as rotinas de eventos de desenho de redes foram documentadas e foi feita
+uma revisão na tolerância de localização. Foi verificado que quando existem nós
+muito pertos um do outro, pode acontecer de ao desenhar uma rede perto deles ele
+desenhar iniciando no local onde o usuário selecionou, mas ele acabar pegando o
+no da outra rede. Algumas vezes desenhando o trecho de rede sem um nó, pois
+utilizou o nó da rede que está perto. Será verificada uma solução para esta 
+questão.
+
+O que foi verificado é que diminuindo as tolerâncias este erro é minimizado, mas
+fazendo isso, fica as vezes difícil de localizar um nó existente para desenhar
+uma rede sendo necessário afastar o zoom para poder selecioná-lo.
+
 28-04-2013 - GeoSan 06.09.14
 Modificado o diretório de onde são salvos os relatórios para salvar no diretório
 Meus Documentos do usuário.
@@ -19,7 +37,7 @@ GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS
 TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO)
 
 Foi realizada a alteração na tabela WaterComponentsTypes e alterado onde consta
-RESERVATÓRIO para a especificação de RNF. Ficando a tabela como apresentado
+RESERVATÓRIO para a especificação de RNF, na coluna Specification_. Ficando a tabela como apresentado
 abaixo. 
 
 É necessário verificar como ficarão os RNV e RNF.
@@ -53,7 +71,7 @@ id_Type	Description_	Specification_
 25	POÇO PROFUNDO		JUNCTION
 26	REDUÇÃO				JUNCTION
 27	REGISTRO			JUNCTION
-28	RESERVATÓRIO		JUNCTION
+28	RESERVATÓRIO		RNF
 29	TE					JUNCTION
 30	VALVULA RETENÇÃO	JUNCTION
 31	VENTOSA				JUNCTION
