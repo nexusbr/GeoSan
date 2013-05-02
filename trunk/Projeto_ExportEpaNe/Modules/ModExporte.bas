@@ -365,7 +365,7 @@ Public Sub ExportaEPANet(rsTrechos As ADODB.Recordset, mconn As ADODB.Connection
                         Case "RNF" 'No_Reservatorios
                             rsReservoirs.AddNew
                             rsReservoirs.Fields("ID").Value = NO
-                            rsReservoirs.Fields("Head").Value = ""
+                            rsReservoirs.Fields("Head").Value = Format(rsNosTmp("cota").Value, ".0")
                             rsReservoirs.Fields("Pattern").Value = ""
                         Case Else
                             rsJunctions.AddNew

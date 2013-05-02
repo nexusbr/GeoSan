@@ -198,7 +198,7 @@ Trata_Erro:
         Resume Next
     Else
         Screen.MousePointer = vbDefault
-        PrintErro CStr(Me.Name), "Private Sub AtualizaConsumo(), querie: " & strsql, CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "frmAtualizacaoConsumo - Private Sub AtualizaConsumo(), querie: " & strsql, CStr(Err.Number), CStr(Err.Description), True
         AtualizaConsumo = False
     End If
 End Function
