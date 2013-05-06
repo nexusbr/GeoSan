@@ -18,11 +18,13 @@ Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
 Option Explicit
 
 Private mCol As Collection
-
+'create a new object
+'
+'
+'
 Public Function Add(Enabled_ As Boolean, Type_ As Long, SubType As Long, Selection_ As Boolean, Max_ As Long, Min_ As Long, DataType As Integer, Name_ As String, ValueDisplay As String, ValueStore As String, Optional Specific_ As Boolean, Optional Changed_ As Boolean, Optional sKey As String) As ClsAttributes
-On Error GoTo Trata_Erro
-    
-    'create a new object
+    On Error GoTo Trata_Erro
+
     Dim objNewMember As ClsAttributes
     Set objNewMember = New ClsAttributes
     objNewMember.Enabled_ = Enabled_
@@ -54,13 +56,14 @@ Trata_Erro:
       Close #1
       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
    End If
-
 End Function
-
+'
+'
+'
 Public Property Get Item(vntIndexKey As Variant) As ClsAttributes
-On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
 
-Set Item = mCol(vntIndexKey)
+    Set Item = mCol(vntIndexKey)
 
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
@@ -71,13 +74,14 @@ Trata_Erro:
       Close #1
       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
    End If
-
 End Property
-
+'
+'
+'
 Public Property Get Count() As Long
-On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
 
-Count = mCol.Count
+    Count = mCol.Count
     
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
@@ -88,13 +92,14 @@ Trata_Erro:
       Close #1
       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
    End If
-   
 End Property
-
+'
+'
+'
 Public Sub Remove(vntIndexKey As Variant)
-On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
 
-   mCol.Remove vntIndexKey
+    mCol.Remove vntIndexKey
     
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
@@ -106,10 +111,11 @@ Trata_Erro:
       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
    End If
 End Sub
-
+'
+'
+'
 Public Property Get NewEnum() As IUnknown
 On Error GoTo Trata_Erro
-
    Set NewEnum = mCol.[_NewEnum]
    
 Trata_Erro:
@@ -121,9 +127,10 @@ Trata_Erro:
       Close #1
       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
    End If
-   
 End Property
-
+'
+'
+'
 Private Sub Class_Initialize()
 On Error GoTo Trata_Erro
     
@@ -140,7 +147,9 @@ Trata_Erro:
    End If
 
 End Sub
-
+'
+'
+'
 Private Sub Class_Terminate()
 On Error GoTo Trata_Erro
 

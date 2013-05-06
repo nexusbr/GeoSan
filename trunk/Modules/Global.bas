@@ -63,8 +63,11 @@ Public idPoligonSel As String
 Public ramal_Object_id_trecho As Long
 Public idAutoLote As String 'CODIGO DO LOTE QUE é UTILIZADO NO CADASTRO DO RAMAL
 'MEDIR DISTANCIA ENTRE DOIS PONTOS
+Public X1i As Double
+Public Y1i As Double
 Public X1 As Double
 Public Y1 As Double
+Public XYInicio As Boolean
 Public CanvasXmin_ As Double
 Public CanvasYmin_ As Double
 Public CanvasXmax_ As Double

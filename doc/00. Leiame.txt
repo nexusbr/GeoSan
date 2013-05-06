@@ -1,8 +1,31 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
-Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
-Verificar como fica isso na tabela WaterComponentsTypes
+Novos requisitos.
+
+1. Verificar no ValidaBase o por que existe um nó duplicado (12438) e ele não
+encontra.
+
+2. No ValidaBase, mudar para salvar o log no diretório de documentos e abrir
+o mesmo após rodar.
+
+3. No módulo ExportEpanet, salvar os logs de exportação no diretório Documentos.
+
+4. Implementar funcionalidade para ao mover uma rede mover os ramais junto.
+
+5. Implementar funcionalidade para mover vértices de um trecho de rede,
+movendo junto os ramais.
+
+6. Implementar funcionalidade de inserção automática de cotas ao desenhar uma
+rede.
+
+04-05-2013 - GeoSan 06.09.18
+
+Modificado o evento frmCanvas TCanvas_onMouseDown, para ficar mais legível e 
+facilitar o debug do mesmo no futuro. Foi inserido Select Case e retirados os
+ifs.
+
+
 
 02-05-2013 - GeoSan 06.09.17
 
@@ -63,6 +86,10 @@ Para desenhar uma bomba e a mesma ser exportada com o sentido correto, é
 necessário que os dois trechos de rede o anterior ao nó e o posterior ao mesmo
 sejam desenhados no sentido de operação da mesma. Alterada esta informação no
 manual do usuário do GeoSan.
+
+Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o 
+EPANET
+Verificar como fica isso na tabela WaterComponentsTypes. VERIFICADO.
 
 01-05-2013 - GeoSan 06.09.16
 

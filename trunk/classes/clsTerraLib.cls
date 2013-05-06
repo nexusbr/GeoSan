@@ -560,9 +560,8 @@ Public Function SaveInDatabase() As Boolean
     'verificar o motivo de por que existem dois comentos SaveInDatabase repetidos. Ver diagrama de sequência
     tcs.saveOnMemory
     tcs.SaveInDatabase
-    '.saveOnMemory
-    tcs.saveOnMemory
-    tcs.SaveInDatabase
+    'tcs.saveOnMemory       estava duplicado o que fazia piscar duas vezes (existe a opção de não dar plotview). Não necessita salvar duas vezes
+    'tcs.SaveInDatabase
     With tcs
         'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
         Select Case TerraEvent

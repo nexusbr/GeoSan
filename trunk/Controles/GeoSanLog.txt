@@ -627,3 +627,91 @@ DESCRIÇÃO      Incorrect syntax near '='.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           04/05/2013 13:55:10 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 13:57:32 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 14:01:57 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 14:24:26 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 14:51:53 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 14:54:50 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 15:06:09 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe Conexão com o Banco de Dados
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/05/2013 15:10:14 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         clsTerraLib
+EVENTO         Public Function Delete
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+

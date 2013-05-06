@@ -30,12 +30,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   8160
+      Height          =   7020
       Left            =   8775
-      ScaleHeight     =   8160
+      ScaleHeight     =   7020
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   630
+      Top             =   1770
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1335
@@ -178,37 +178,46 @@ Begin VB.MDIForm FrmMain
       _ExtentY        =   741
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
-         NumPanels       =   4
+         NumPanels       =   5
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-            Object.Width           =   8819
-            MinWidth        =   8819
+            Object.Width           =   10583
+            MinWidth        =   10583
             Text            =   "Status"
             TextSave        =   "Status"
          EndProperty
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   6
             AutoSize        =   2
-            TextSave        =   "01/05/2013"
+            Object.Width           =   5292
+            MinWidth        =   5292
+            TextSave        =   "04/05/2013"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             AutoSize        =   2
-            TextSave        =   "16:36"
+            Object.Width           =   5292
+            MinWidth        =   5292
+            TextSave        =   "15:20"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
+            Object.Width           =   5292
+            MinWidth        =   5292
+         EndProperty
+         BeginProperty Panel5 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.ToolTipText     =   "Distância"
          EndProperty
       EndProperty
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   630
+      Height          =   1770
       Left            =   0
       TabIndex        =   7
       Top             =   0
       Width           =   12720
       _ExtentX        =   22437
-      _ExtentY        =   1111
+      _ExtentY        =   3122
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       ImageList       =   "ImageList3"
@@ -1839,12 +1848,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2431,6 +2440,8 @@ Private Sub mnuOpen_Click()
     Set TCanvas = New frmCanvas
     TCanvas.init Conn, usuario.UseName
 End Sub
+
+
 
 Private Sub TabStrip1_Click()
 
