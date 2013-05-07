@@ -141,6 +141,19 @@ Enum TipoRelatorio
    RegistrosEstadoEstado = 1
    ComponentsRede = 2
 End Enum
+
+'The GetDC function retrieves a handle of a display device context (DC) for the client area of the specified window.
+'The display device context can be used in subsequent GDI functions to draw in the client area of the window.
+'Utilizada na função para converter Twits para Pixels
+Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
+
+Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
+  
+'Returns pixels per inch
+'Utilizada na função para converter Twits para Pixels
+Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
+
+
 'Subrotina principal de entrada do GeoSan'
 '
 '

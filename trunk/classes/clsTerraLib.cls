@@ -811,7 +811,7 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         'End If
     End If
     CreatNetWorkAttribute = True
-
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next

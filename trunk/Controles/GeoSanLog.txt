@@ -715,3 +715,25 @@ DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           07/05/2013 15:00:02 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           07/05/2013 15:02:41 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+

@@ -11,10 +11,10 @@ Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
    Caption         =   "NEXUS - GeoSan"
-   ClientHeight    =   9210
+   ClientHeight    =   9795
    ClientLeft      =   165
    ClientTop       =   735
-   ClientWidth     =   12720
+   ClientWidth     =   17520
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "FrmMain"
    StartUpPosition =   3  'Windows Default
@@ -30,12 +30,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   7020
-      Left            =   8775
-      ScaleHeight     =   7020
+      Height          =   8745
+      Left            =   13575
+      ScaleHeight     =   8745
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   1770
+      Top             =   630
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1335
@@ -172,9 +172,9 @@ Begin VB.MDIForm FrmMain
       Height          =   420
       Left            =   0
       TabIndex        =   0
-      Top             =   8790
-      Width           =   12720
-      _ExtentX        =   22437
+      Top             =   9375
+      Width           =   17520
+      _ExtentX        =   30903
       _ExtentY        =   741
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
@@ -190,14 +190,14 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   5292
             MinWidth        =   5292
-            TextSave        =   "04/05/2013"
+            TextSave        =   "07/05/2013"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             Style           =   5
             AutoSize        =   2
             Object.Width           =   5292
             MinWidth        =   5292
-            TextSave        =   "15:20"
+            TextSave        =   "15:21"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -211,13 +211,13 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   1770
+      Height          =   630
       Left            =   0
       TabIndex        =   7
       Top             =   0
-      Width           =   12720
-      _ExtentX        =   22437
-      _ExtentY        =   3122
+      Width           =   17520
+      _ExtentX        =   30903
+      _ExtentY        =   1111
       ButtonWidth     =   1032
       ButtonHeight    =   1005
       ImageList       =   "ImageList3"
@@ -415,7 +415,7 @@ Begin VB.MDIForm FrmMain
          Height          =   285
          Left            =   9120
          TabIndex        =   10
-         Top             =   60
+         Top             =   720
          Visible         =   0   'False
          Width           =   1890
          _ExtentX        =   3334
@@ -1848,12 +1848,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2467,6 +2467,7 @@ End Sub
 Public Sub tbToolBar_ButtonClick(ByVal Button As MSComctlLib.Button)
 'If blnMonitorar = True Then
     On Error GoTo Trata_Erro
+    
     Select Case Button.key
         Case "knew", ""
            mnuOpen_Click
