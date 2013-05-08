@@ -1228,3 +1228,6 @@ Update DrainComponents Set Id_Type=1, YearOfConstruction=55, State=3, Location=3
 24/2/2011 16:28:21 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada é inválida para integer: "24/02/11 16:26" at character 35
 
 07/05/2013 15:22:10 - PManager4.DLL - Manager - Private Sub Pic_Click - 380 - Invalid property value
+08/05/2013 01:54:30 - PManager4.DLL - Manager - Private Sub Pic_Click - 380 - Invalid property value
+08/05/2013 01:55:11 - PManager4.DLL - Manager - Private Sub Pic_Click - 380 - Invalid property value
+08/05/2013 01:57:18 - PManager4.DLL - Manager - Private Sub Pic_Click - 380 - Invalid property value
