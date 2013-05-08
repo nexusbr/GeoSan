@@ -159,7 +159,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Option Explicit
 
 Dim geo As Variant
@@ -201,10 +200,33 @@ Dim user As String
 Dim con As New ADODB.connection
 Dim strConn As String
 Dim count2 As Integer
- Dim conexao As New ADODB.connection
+Dim conexao As New ADODB.connection
 
- 
-
+'Constantes utilizadas na função ConvertTwipsToPixels para converter pixel para milímetro
+Const WU_LOGPIXELSX = 88
+Const WU_LOGPIXELSY = 90
+' Converte twips para pixels. No TeCanvas.width a medida é em twips e é necessário converter para pixels para que possa ser
+' configurada a tolerância do snap. A tolerância do snap é medida em pixels.
+' Esta função retorna o numero de pixels equivalentes.
+'
+' lngTwips - numero de twips
+' lngDirection - 0 = horizontal, outro valor = vertical, se as medidas estão sendo realizadas na horizontal ou vertical
+'
+Function ConvertTwipsToPixels(lngTwips As Long, lngDirection As Long) As Long
+   'Handle to device
+   Dim lngDC As Long
+   Dim lngPixelsPerInch As Long
+   
+   Const nTwipsPerInch = 1440
+   lngDC = GetDC(0)
+   If (lngDirection = 0) Then       'Horizontal
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSX)
+   Else                             'Vertical
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSY)
+   End If
+   lngDC = ReleaseDC(0, lngDC)
+   ConvertTwipsToPixels = (lngTwips / nTwipsPerInch) * lngPixelsPerInch
+End Function
 
 Public Static Function TipoConexao() As String
 
@@ -354,7 +376,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         rs.Close
         Me.Show
         TCanvas.plotView            'mostra o mapa na tela
-        TCanvas.snapOn = 1
+        TCanvas.snapOn = 1          'liga o snap
         mUserName = username
         'Para saber quantos canvas estão abertos...
         If FrmMain.Tag = "" Then
@@ -446,7 +468,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         rs.Close
         Me.Show
         TCanvas.plotView
-        TCanvas.snapOn = 1
+        TCanvas.snapOn = 1          'liga o snap
         mUserName = username
         'Para saber quantos canvas estão abertos...
         If FrmMain.Tag = "" Then
@@ -563,6 +585,8 @@ Private Sub LoadToolsBar()
          FrmMain.tbToolBar.Buttons("kpan").value = tbrPressed
       Case tg_DrawNetWorkline
          FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrPressed
+         TCanvas.clearEditItens (2)
+         TCanvas.clearEditItens (4)
       Case tg_DrawNetWorkNode
          FrmMain.tbToolBar.Buttons("kinsertnetworknode").value = tbrPressed
       Case tg_MoveNetWorkNode
@@ -1076,9 +1100,15 @@ End Sub
 Private Sub TCanvas_onEndPlotView()
     On Error GoTo Trata_Erro
     Dim MyScale As Double
+    Dim pixelsTela As Long                  'número de pixels totais na largura do canvas
+    Dim distHorizontal As Double            'distância horizontal em metros do canvas
+    Dim tamanhoPixel As Double              'tamanho em metros de um pixel
+    Dim tolerancia As Double                'tolerância de localização de extremidadde do drawnetworkline
+    Dim toleranciaSnap As Double            'tolerância do snap no canvas
     
+    tolerancia = 0.5                        'define a tolerância de localização de uma extremidade de uma rede, mais do que isso ele cria um novo nó
     MyScale = TCanvas.getScale
-    TCanvas.getWorld xmin, ymin, xmax, ymax
+    TCanvas.getWorld xmin, ymin, xmax, ymax 'obtem as coordenadas do box do canvas no formato mundo
     ViewName = TeViewDatabase1.getActiveView
     'carrega as variáveis globais para o módulo de impressão
     CanvasXmin_ = xmin
@@ -1093,13 +1123,23 @@ Private Sub TCanvas_onEndPlotView()
         strLayerAtivo = ""
     End If
     TCanvas.ToolTipText = ""
+
+    'aqui nas próximas 4 linhas ele irá converter as unidades de medida da janela do canvas (Twips) para pixels
+    'e depois irá determinar um valor de tolerância em pixels para o snap, que aceita somente pixels como unidade de medida
+    pixelsTela = ConvertTwipsToPixels(TCanvas.Width, 0)                 'obtem o número total de pixels do canvas na horizontal
+    distHorizontal = xmax - xmin                                        'obtem a distância em metros na horizontal do canvas
+    toleranciaSnap = tolerancia * pixelsTela / distHorizontal           'calcula o número de pixels para a tolerância em metros especificada
+    TCanvas.toleranceToSnap(0) = toleranciaSnap                         'seta no canvas a tolerância de snap - 0 = estremidades
+    FrmMain.sbStatusBar.Panels(2).Text = "Snap: " & Round(toleranciaSnap, 2)  'mostra a tolerância de snap na barra de status
     'para corrigir o DrawNetWorkLine - Luis
     'aqui é definida a tolerância de localização quando estiver desenhando uma rede (snap)
     'foram inseridas algumas tolerâncias a mais para ver se resolve quando não localiza o nó ou pega o do lado por engano
+    'não resolveu e ai colocamos o snap igual a .tolerance do canvas
     If Tr.TerraEvent = 1 Then 'tg_DrawNetWorkline - caso esteja desenhando uma rede muda a tolerância conforme a escala em que o usuário estiver
         With TCanvas
-        .tolerance = 0.8
-            MyScale = .getScale
+        FrmMain.sbStatusBar.Panels(3).Text = "Tolerância localização Rede: " & Round(tolerancia, 2) 'mostra a tolerância de drawNetworkLine na barra de status
+        .tolerance = tolerancia
+'           MyScale = .getScale
 '            'Select Case MyScale
 '            'Case Is < 10
 '             '   .tolerance = 1
@@ -1227,6 +1267,21 @@ Trata_Erro:
        PrintErro CStr(Me.Name), "Private Sub TCanvas_onEndSELECT", CStr(Err.Number), CStr(Err.Description), True
        
     End If
+End Sub
+' Desvia quando encontra um erro
+'
+' code - Código de identificação do erro
+' message - mesnsagem explicativa do erro
+'
+Private Sub TCanvas_onError(ByVal code As String, ByVal errorMessage As String)
+   Select Case code
+        Case "Err032"
+            'canvas não foi aberto ainda, desconsiderar
+        Case "Err068"
+            MsgBox "Você está desenhando uma rede muito perto de uma existente, por favor desenhe com um pouco mais de distância da mesma. Erro número: " & code & " - " & errorMessage
+        Case Else
+            MsgBox "Não conformidade em DrawNetworkLine. Erro número: " & code & " - " & errorMessage
+    End Select
 End Sub
 
 Private Sub TCanvas_onIntersectionPoint(ByVal X As Double, ByVal Y As Double)
