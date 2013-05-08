@@ -19,13 +19,21 @@ movendo junto os ramais.
 6. Implementar funcionalidade de inserção automática de cotas ao desenhar uma
 rede.
 
+
+07-05-2013 - GeoSan 06.09.20
+
+Melhorada a documentação do código que corrige a tolerância.
+
+07-05-2013 - GeoSan 06.09.19
+
+Corrigida a tolerancia de snap e drawNetworkLine para a devida localização
+das extremidades de rede.
+
 04-05-2013 - GeoSan 06.09.18
 
 Modificado o evento frmCanvas TCanvas_onMouseDown, para ficar mais legível e 
 facilitar o debug do mesmo no futuro. Foi inserido Select Case e retirados os
 ifs.
-
-
 
 02-05-2013 - GeoSan 06.09.17
 

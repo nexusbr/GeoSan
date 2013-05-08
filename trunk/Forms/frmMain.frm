@@ -186,18 +186,14 @@ Begin VB.MDIForm FrmMain
             TextSave        =   "Status"
          EndProperty
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-            Style           =   6
             AutoSize        =   2
             Object.Width           =   5292
             MinWidth        =   5292
-            TextSave        =   "04/05/2013"
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-            Style           =   5
             AutoSize        =   2
             Object.Width           =   5292
             MinWidth        =   5292
-            TextSave        =   "15:20"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -233,6 +229,11 @@ Begin VB.MDIForm FrmMain
             Key             =   "ksave"
             Object.ToolTipText     =   "Salvar"
             ImageIndex      =   19
+            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
+               NumButtonMenus  =   1
+               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
+               EndProperty
+            EndProperty
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -1848,12 +1849,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
            End If
         End With
     Else

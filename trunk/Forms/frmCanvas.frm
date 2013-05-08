@@ -585,8 +585,9 @@ Private Sub LoadToolsBar()
          FrmMain.tbToolBar.Buttons("kpan").value = tbrPressed
       Case tg_DrawNetWorkline
          FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrPressed
-         TCanvas.clearEditItens (2)
-         TCanvas.clearEditItens (4)
+         'limpa todos os itens editados em memória, as geometrias das listas temporárias e geometrias a serem removidas do banco de dados
+         TCanvas.clearEditItens (2)         'limpa linhas
+         TCanvas.clearEditItens (4)         'limpa pontos
       Case tg_DrawNetWorkNode
          FrmMain.tbToolBar.Buttons("kinsertnetworknode").value = tbrPressed
       Case tg_MoveNetWorkNode
@@ -759,7 +760,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
                             TCanvas.ToolTipText = "" ' se for igual em branco
                         Case "kdrawnetworkline" ' foi selecionada a ícone de desenhar rede de agua (esgoto ou drenagem)
                             TCanvas.clearSelectItens 0                     'desmarca se há item selecionado
-                            'Tr.TerraEvent = tg_DrawNetWorkline
+                            'é aqui com o comando Tr.DrawNetWorkLine onde é ativado o início do desenho da rede (veja esta rotina na classe clsTerralib em Public Function DrawNetWorkLine)
                             If Tr.DrawNetWorkLine = True Then              'chama a classe drawnetworkline para iniciar o desenho da linha. Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
                                 frmNetWorkLegth.init TCanvas, FrmMain
                                 FrmMain.ViewManager1.LoadImageSnap Tr.cgeo.GetReferenceLayer(.getCurrentLayer), mOnSnapLock
@@ -1558,17 +1559,23 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y
                         FrmMain.Manager1.GridEnabled False
             End Select
 
-        Case 1          'SELECIONADO o BOTÃO XX
+        Case 1          'SELECIONADO O BOTÃO DIREITO DO MOUSE
             Select Case tbrPressed
-                Case FrmMain.tbToolBar.Buttons("kdrawnetworkline").value        'usuário selecionou que deseja desenhar uma rede
-                    Select Case LastEvent
+                Case FrmMain.tbToolBar.Buttons("kdrawnetworkline").value        'usuário selecionou anteriormente que estava desenhando uma rede
+                    'então vamos reiniciar o desenho da rede a partir do início
+                    TCanvas.Normal                      'volta o canvas para o estado de visualização
+                    'limpa todos os itens editados em memória, as geometrias das listas temporárias e geometrias a serem removidas do banco de dados
+                    TCanvas.clearEditItens (2)          'limpa linhas
+                    TCanvas.clearEditItens (4)          'limpa pontos
+                    Tr.DrawNetWorkLine                  'ativa novamente o desenho de uma rede a partir do início
+                    Select Case LastEvent               'precisa verificar o que faz e se está passando realmente por este select case
                         Case tg_DrawNetWorkline
                             Tr.DrawNetWorkLine True
                         Case tg_MoveNetWorkNode
                             Tr.MoveNetWorkNode True
                     End Select
             End Select
-
+        
         Case Else       'nenhuma das anteriores
 
     End Select
