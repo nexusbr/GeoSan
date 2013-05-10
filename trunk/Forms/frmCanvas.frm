@@ -227,7 +227,19 @@ Function ConvertTwipsToPixels(lngTwips As Long, lngDirection As Long) As Long
    lngDC = ReleaseDC(0, lngDC)
    ConvertTwipsToPixels = (lngTwips / nTwipsPerInch) * lngPixelsPerInch
 End Function
-
+Private Sub Teste()
+    Dim a As New CGeometria                 'declaração do objeto como do tipo classe CGeometria e criação do mesmo (New) através de uma auto instância
+    Dim t As Integer
+    Dim qtdPontos As Integer
+    
+    t = a.x
+    a.coordX = t
+    a.coordY = t
+    a.conexao = TeDatabase1
+    qtdPontos = a.GetStartEndPoints
+    
+    
+End Sub
 Public Static Function TipoConexao() As String
 
 tipoDeConexao = typeconnection
@@ -477,7 +489,8 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
             FrmMain.Tag = Int(FrmMain.Tag) + 1
         End If
     End If
-
+    Teste
+        
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -729,11 +742,11 @@ Public Sub Tb_SELECT(ByVal Button As String)
             Case "KFindCoordenadas" 'final das coordenadas desmarca item 1, item2, item3, item4 e 128
                 .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
                 'Declaração das variáveis x,y
-                Dim X As Double, Y As Double
-                X = InputBox("Informe a Coordena X ") ' entrada da coordenada x
-                Y = InputBox("Informe a Coordena Y ") ' entrada da coordenada y
-                If X <> 0 And Y <> 0 Then ' se x e y for diferente de zero
-                    TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50 '  'configura as coordenadas mundo a serem utilizadas para desenho
+                Dim x As Double, y As Double
+                x = InputBox("Informe a Coordena X ") ' entrada da coordenada x
+                y = InputBox("Informe a Coordena Y ") ' entrada da coordenada y
+                If x <> 0 And y <> 0 Then ' se x e y for diferente de zero
+                    TCanvas.setWorld x - 50, y - 50, x + 50, y + 50 '  'configura as coordenadas mundo a serem utilizadas para desenho
                     TCanvas.plotView ' plota o layer
                 End If ' final do if
             Case "KEncontraConsumidor" ' localizar consumidores
@@ -963,7 +976,7 @@ End Sub
 'Rotina que ao selecionar duplo clique do mouse, vai identificar todas as redes que estão dentro do polígono finalizado.
 '
 '
-Private Sub TCanvas_onDblClick(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
+Private Sub TCanvas_onDblClick(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
 On Error GoTo Trata_Erro
 'XXX - para lembrar que é aqui que ele fecha o poligono de seleção de redes com duplo clique
 'A FUNÇÃO DUPLO CLIQUE É UTILIZADA PARA FECHAR UM POLÍGONO QUE ESTÁ SENDO DESENHADO E
@@ -1129,7 +1142,7 @@ Private Sub TCanvas_onEndPlotView()
     'e depois irá determinar um valor de tolerância em pixels para o snap, que aceita somente pixels como unidade de medida
     pixelsTela = ConvertTwipsToPixels(TCanvas.Width, 0)                 'obtem o número total de pixels do canvas na horizontal
     distHorizontal = xmax - xmin                                        'obtem a distância em metros na horizontal do canvas
-    toleranciaSnap = tolerancia * pixelsTela / distHorizontal           'calcula o número de pixels para a tolerância em metros especificada
+    toleranciaSnap = 1.5 * tolerancia * pixelsTela / distHorizontal           'calcula o número de pixels para a tolerância em metros especificada
     TCanvas.toleranceToSnap(0) = toleranciaSnap                         'seta no canvas a tolerância de snap - 0 = estremidades
     FrmMain.sbStatusBar.Panels(2).Text = "Snap: " & Round(toleranciaSnap, 2)  'mostra a tolerância de snap na barra de status
     'para corrigir o DrawNetWorkLine - Luis
@@ -1188,8 +1201,8 @@ On Error GoTo Trata_Erro
                'Verifica a seleção apenas das geometrias 2(linhas) e 4(Pontos)
                For j = 2 To 4 Step 2
                   
-                  Dim X As String
-                  X = TCanvas.getSelectObjectId(0, 2) ' LINHAS
+                  Dim x As String
+                  x = TCanvas.getSelectObjectId(0, 2) ' LINHAS
                   
                   If TCanvas.getSelectCount(j) = 1 Then
                      .LoadDefaultProperties TCanvas.getSelectObjectId(0, j), TCanvas.getCurrentLayer, False
@@ -1285,9 +1298,9 @@ Private Sub TCanvas_onError(ByVal code As String, ByVal errorMessage As String)
     End Select
 End Sub
 
-Private Sub TCanvas_onIntersectionPoint(ByVal X As Double, ByVal Y As Double)
+Private Sub TCanvas_onIntersectionPoint(ByVal x As Double, ByVal y As Double)
 On Error GoTo Trata_Erro
-   TeDatabase1.moveNetWorkNodeTo "watercomponents", "WATERLINES", "", , X, Y
+   TeDatabase1.moveNetWorkNodeTo "watercomponents", "WATERLINES", "", , x, y
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
@@ -1478,7 +1491,7 @@ End Function
 ' Button - botão do mouse selecionado
 ' x, y, z - coordenada em que o mouse foi selecionado
 '
-Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
+Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
     On Error GoTo Trata_Erro
     
     X1 = 0 'passa as coordenadas para calculo e exibição
@@ -1491,13 +1504,13 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y
             
                 Case tg_DrawNetWorkline     'DESENHANDO REDE
                         FrmMain.Manager1.GridEnabled True
-                        X1 = X 'passa as coordenadas para calculo e exibição
-                        Y1 = Y
+                        X1 = x 'passa as coordenadas para calculo e exibição
+                        Y1 = y
 
                 Case tg_MoveNetWorkNode     'MOVENDO REDE
                         FrmMain.Manager1.GridEnabled True
-                        X1 = X 'passa as coordenadas para calculo e exibição
-                        Y1 = Y
+                        X1 = x 'passa as coordenadas para calculo e exibição
+                        Y1 = y
 
                 Case tg_DrawNetWorkNode     'DESENHANDO UM NÓ
                     Tr.SaveInDatabase: FrmMain.Manager1.GridEnabled True
@@ -1522,7 +1535,7 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y
                                 TeDatabaseRamais.setCurrentLayer "SEWERLINES"
                             End If
                             'VERIFICA SE O USUÁRIO CLICOU SOBRE UMA REDE DE AGUA OU ESGOTO
-                            intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(X, Y, tpLINES, 1)
+                            intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(x, y, tpLINES, 1)
                             'intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometryXY(x, y, tpLINES)
                             'CASO NÃO, EXIBE MENSAGEM E REINICIA O PROCESSO
                             If intQtdLinhasNaCoordenada = 0 Then
@@ -1597,7 +1610,7 @@ End Sub
 ' x, y - coordenadas UTM da posição do mouse na tela
 ' lat, long - latitude e longitude da posição do mouse na tela
 '
-Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat As String, ByVal lon As String)
+Private Sub TCanvas_onMouseMove(ByVal x As Double, ByVal y As Double, ByVal lat As String, ByVal lon As String)
     On Error GoTo Trata_Erro
     Dim TBP As String
     Dim TBA As String
@@ -1605,12 +1618,12 @@ Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat 
     Dim dist As Integer
     Dim COMP As Double
     pesquisar = False
-    If (xOld - X) > 3 Or (X - xOld) > 3 Then
-        xOld = X
+    If (xOld - x) > 3 Or (x - xOld) > 3 Then
+        xOld = x
         pesquisar = True
         'TCanvas.ToolTipText = ""
-    ElseIf (yOld - Y) > 3 Or (Y - yOld) > 3 Then
-        yOld = Y
+    ElseIf (yOld - y) > 3 Or (y - yOld) > 3 Then
+        yOld = y
         pesquisar = True
         'TCanvas.ToolTipText = ""
     End If
@@ -1622,16 +1635,16 @@ Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat 
             If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
                 TBP = ReadINI("RAMAISFILTROLOTES", "TABELA_PLANO", App.path & "\CONTROLES\GEOSAN.INI")
                 TBA = ReadINI("RAMAISFILTROLOTES", "TABELA_ATRIB", App.path & "\CONTROLES\GEOSAN.INI")
-                Call Pesquisa_Dados_Lote(X, Y, lat, lon, TBA, TBP)
+                Call Pesquisa_Dados_Lote(x, y, lat, lon, TBA, TBP)
             End If
         End If
     End If
-    FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(X, 2) & " - y:" & Round(Y, 2)
+    FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(x, 2) & " - y:" & Round(y, 2)
     
     'If X1 <> 0 Then ' SE A VARIAVEL DE PRIMEIRO CLICK ESTIVER ZERADA...
-    X1i = X
-    Y1i = Y
-        COMP = Sqr((Abs(X - X1) ^ 2) + (Abs(Y - Y1) ^ 2))
+    X1i = x
+    Y1i = y
+        COMP = Sqr((Abs(x - X1) ^ 2) + (Abs(y - Y1) ^ 2))
 '        FrmMain.sbStatusBar.Panels(1).Text = "Comprimento da rede: " & Format(COMP, "0.00") & " m"
         FrmMain.sbStatusBar.Panels(5).Text = Format(COMP, "0.00") & " m"
         'TCanvas.ToolTipText = Format(COMP, "0.00") & " m"
@@ -1652,7 +1665,7 @@ Trata_Erro:
     End If
 End Sub
 
-Sub Pesquisa_Dados_Lote(ByVal X As Double, ByVal Y As Double, ByVal lat As String, ByVal lon As String, ByVal TBAtributo As String, ByVal TBPlano As String)
+Sub Pesquisa_Dados_Lote(ByVal x As Double, ByVal y As Double, ByVal lat As String, ByVal lon As String, ByVal TBAtributo As String, ByVal TBPlano As String)
 
 On Error GoTo Trata_Erro
       Dim rs As ADODB.Recordset
@@ -1686,7 +1699,7 @@ On Error GoTo Trata_Erro
       
          TeDatabase1.setCurrentLayer CStr(TBPlano)
          
-         If TeDatabase1.locateGeometryXY(X, Y, tpPOLYGONS) = 1 Then
+         If TeDatabase1.locateGeometryXY(x, y, tpPOLYGONS) = 1 Then
             
             'LOCALIZADA 1 GEOMETRIA DE POLIGONO DE LOTE
             'LOCALIZAR NA TABELA DE ATRIBUTO QUAL IPTU DO LOTE
@@ -1725,8 +1738,8 @@ On Error GoTo Trata_Erro
          End If
     
 End If
-      Position_X = X
-      Position_Y = Y
+      Position_X = x
+      Position_Y = y
       'FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(x, 2) & " - y:" & Round(y, 2)
       Set rs = Nothing
 Exit Sub
@@ -1746,7 +1759,7 @@ End Sub
 '    End If
 'End Sub
 
-Private Sub TCanvas_onMouseUp(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
+Private Sub TCanvas_onMouseUp(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
 On Error GoTo Trata_Erro
    If Button = 0 Then 'BOTÃO ESQUERDO DO MOUSE
       'PopupMenu
@@ -1765,7 +1778,7 @@ Trata_Erro:
     End If
 End Sub
 
-Private Sub TCanvas_onPoint(ByVal X As Double, ByVal Y As Double)
+Private Sub TCanvas_onPoint(ByVal x As Double, ByVal y As Double)
 On Error GoTo Trata_Erro
    Select Case Tr.TerraEvent
       Case tg_DrawNetWorkNode
@@ -1773,9 +1786,9 @@ On Error GoTo Trata_Erro
 '      Case tg_DrawPoint
 '         Tr.OnPoint x, y
       Case tg_DrawGeometrys
-         Tr.OnPoint X, Y
+         Tr.OnPoint x, y
       Case tg_DrawRamal
-         Tr.OnRamal X, Y, True
+         Tr.OnRamal x, y, True
    End Select
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
@@ -1824,7 +1837,7 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
     X1 = 0 ' ZERA A COORDENADA DE PRIMEIRO CLIQUE USADA PARA CALCULO DA DISTÂNCIA
     LayerName = TCanvas.getCurrentLayer
     RefLayer = TCanvas.GetReferenceLayer
-    If Node_id1 = 0 Or Node_id2 = 0 Then 'ESTA MOVENDO A REDE
+    If Node_id1 = 0 Or Node_id2 = 0 Then 'ESTA MOVENDO A REDE. Sempre quando move ele entra com os objects_ids dos nós com zero para indicar movendo, vindo apenas
         'CALCULAR O NOVO COMPRIMENTO DA LINHA E ATUALIZAR NA BASE
         TeDatabase1.setCurrentLayer RefLayer
         'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA LINHA

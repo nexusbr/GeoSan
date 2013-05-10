@@ -108,6 +108,7 @@ Form=Forms\frmRelAvanComando.frm
 Class=GeosanExport; classes\GeosanExport.cls
 Module=Header; Modules\header.bas
 Class=clsAbreArquivo; classes\clsAbreArquivo.cls
+Class=CGeometria; classes\clsGeometria.cls
 IconForm="FrmMain"
 Startup="Sub Main"
 HelpFile=""

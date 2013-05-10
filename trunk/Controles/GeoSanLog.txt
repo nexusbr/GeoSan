@@ -726,3 +726,36 @@ DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           08/05/2013 12:33:13 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         clsTerraLib
+EVENTO         Public Function Delete
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           09/05/2013 19:00:34 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Public Function Init
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           09/05/2013 19:05:28 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Public Function Init
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+

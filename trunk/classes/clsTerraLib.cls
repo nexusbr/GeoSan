@@ -41,22 +41,22 @@ Public Enum TypeGeometryEvent
    tg_DrawRamal = 9
    tg_InsertDoc = 10
 End Enum
-
 Private LayerReference As String, rs As ADODB.Recordset
 Private mvartcs As TeCanvas 'local copy
 Private mvarCtrlMgr As Manager 'local copy
 Private mvarCGeo As clsGeoReference 'local copy
 Private mvarTerraEvent As TypeGeometryEvent 'local copy
-
 Private mvartdb As TeDatabase 'local copy
 Private mvartdbcon As TeDatabase 'local copy
 Private mvartdbconref As TeDatabase 'local copy
-
+' Recebe o objeto da conexão TeDatabase
+'
 Public Property Set tdb(ByVal vData As TeDatabase)
     Set mvartdb = vData
     Set cgeo.tdb = vData
 End Property
-
+' Retorna o objeto da conexão TeDatabase
+'
 Public Property Get tdb() As TeDatabase
     Set tdb = mvartdb
 End Property

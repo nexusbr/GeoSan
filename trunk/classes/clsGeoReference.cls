@@ -869,96 +869,92 @@ Trata_Erro:
     End If
 
 End Function
-
+' Esta função é chamada quando movo um nó na rede. Ela irá apagar os textos associados a rede e recolocá-los na nova posição
+' Retorna
+'
+' LayerName - nome do layer em que a operação está sendo realizada (WATERLINES)
+' geom_id - geom_id da geometria
+' Object_id_ - object_id da geometria
+'
 Public Function DeleteTextObjectWithInsertText(LayerName As String, geom_id As Long, Object_id_ As String) As Boolean
-On Error GoTo Trata_Erro
-   Dim rs As ADODB.Recordset, IDLayer As Integer
-   Dim gus As String
-   Dim Diameter As String, Lenght As Double, Material As String
-a = "layer_id"
-b = "te_layer"
-c = "name"
-d = "OBJECT_ID"
-e = Object_id_
-f = "'e'"
-g = "X_MATERIAL"
-h = "MATERIALID"
-ii = "MATERIAL"
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute(convertQuery("SELECT layer_id from te_layer where name='" & LayerName & "'", CInt(typeconnection)))
-   Else
-   Set rs = Conn.execute(convertQuery("SELECT " + """" + "layer_id" + """" + " from " + """" + "te_layer" + """" + " where " + """" + "name" + """" + "='" & LayerName & "'", CInt(typeconnection)))
-   
-   End If
-   If Not rs.EOF Then
-      IDLayer = rs(0)
-      If frmCanvas.TipoConexao = 4 Then
-      gus = str(IDLayer)
-      gus = Trim(gus)
-      End If
-      
-      rs.Close
-      Set rs = Nothing
-      'problema
-      'A linha abaixo foi comentada para correção no dia 31/05/2007
-      'Conn.execute "DeleteTXTVisual " & IDLayer & "," & object_id_
-      DeleteTXTVisual IDLayer, Object_id_
-      'Conn.execute "Delete From texts" & IDLayer & "_txvisual where geom_id in(SELECT geom_id from texts" & IDLayer & " where object_id = '" & object_id_ & "')"
-      
-      
-      
-      
-a = "texts"
-b = IDLayer
-c = "b"
-d = "object_id"
-e = "OBJECT_ID_"
-f = "'e'"
-g = "X_MATERIAL"
-h = "MATERIALID"
-ii = "MATERIAL"
-Dim zz As String
-Dim za As String
-za = a + b
-zz = Trim(za)
-      If frmCanvas.TipoConexao <> 4 Then
-      Conn.execute "Delete From Texts" & IDLayer & " Where object_id = " & Object_id_
-      Else
-     ' MsgBox "Delete From " + """" + zz + """" + " Where " + """" + d + """" + " =  '" & Val(Object_id_) & "'"
-      Conn.execute "Delete From " + """" + "texts" + gus + """" + " Where " + """" + d + """" + " =  '" & Val(Object_id_) & "'"
-      End If
-      
-      If frmCanvas.TipoConexao <> 4 Then
-      Set rs = Conn.execute("SELECT * from " & LayerName & " Left Join X_Material on MaterialId=Material where object_id_='" & Object_id_ & "'")
-      Else
-          Set rs = Conn.execute("SELECT * from " + """" + LayerName + """" + " Left Join" + """" + g + """" + " on " + """" + h + """" + "=" + """" + ii + """" + " where " + """" + e + """" + "='" & Val(Object_id_) & "'")
-      End If
-      
-      
-  
-      If Not rs.EOF Then
-         Diameter = Chr$(216) & " " & rs.Fields("InternalDiameter")
-         Lenght = IIf(rs.Fields("length") = 0, rs.Fields("lengthcalculated"), rs.Fields("length"))
-         Material = IIf(IsNull(rs.Fields("MaterialName")), "0", rs.Fields("MaterialName"))
-         If UCase(LayerName) = "WATERLINES" Then
-            InsertTextInDatabase geom_id, Object_id_, Diameter, Material, Lenght
-         Else
-            InsertTextInDatabase geom_id, Object_id_, Diameter, Material, Lenght, True, rs!INITIALTUBEDEEPNESS, rs!FINALTUBEDEEPNESS
-         End If
-      End If
-   End If
-   rs.Close
-   Set rs = Nothing
-   
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset, IDLayer As Integer
+    Dim gus As String
+    Dim Diameter As String, Lenght As Double, Material As String
+    Dim zz As String
+    Dim za As String
+    
+    a = "layer_id"
+    b = "te_layer"
+    c = "name"
+    d = "OBJECT_ID"
+    e = Object_id_
+    f = "'e'"
+    g = "X_MATERIAL"
+    h = "MATERIALID"
+    ii = "MATERIAL"
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute(convertQuery("SELECT layer_id from te_layer where name='" & LayerName & "'", CInt(typeconnection)))
+    Else
+        Set rs = Conn.execute(convertQuery("SELECT " + """" + "layer_id" + """" + " from " + """" + "te_layer" + """" + " where " + """" + "name" + """" + "='" & LayerName & "'", CInt(typeconnection)))
+    End If
+    If Not rs.EOF Then
+        IDLayer = rs(0)
+        If frmCanvas.TipoConexao = 4 Then
+            gus = str(IDLayer)
+            gus = Trim(gus)
+        End If
+        rs.Close
+        Set rs = Nothing
+        'problema
+        'A linha abaixo foi comentada para correção no dia 31/05/2007
+        'Conn.execute "DeleteTXTVisual " & IDLayer & "," & object_id_
+        DeleteTXTVisual IDLayer, Object_id_
+        'Conn.execute "Delete From texts" & IDLayer & "_txvisual where geom_id in(SELECT geom_id from texts" & IDLayer & " where object_id = '" & object_id_ & "')"
+        a = "texts"
+        b = IDLayer
+        c = "b"
+        d = "object_id"
+        e = "OBJECT_ID_"
+        f = "'e'"
+        g = "X_MATERIAL"
+        h = "MATERIALID"
+        ii = "MATERIAL"
+        za = a + b
+        zz = Trim(za)
+        If frmCanvas.TipoConexao <> 4 Then
+            Conn.execute "Delete From Texts" & IDLayer & " Where object_id = " & Object_id_
+        Else
+            ' MsgBox "Delete From " + """" + zz + """" + " Where " + """" + d + """" + " =  '" & Val(Object_id_) & "'"
+            Conn.execute "Delete From " + """" + "texts" + gus + """" + " Where " + """" + d + """" + " =  '" & Val(Object_id_) & "'"
+        End If
+        If frmCanvas.TipoConexao <> 4 Then
+            Set rs = Conn.execute("SELECT * from " & LayerName & " Left Join X_Material on MaterialId=Material where object_id_='" & Object_id_ & "'")
+        Else
+            Set rs = Conn.execute("SELECT * from " + """" + LayerName + """" + " Left Join" + """" + g + """" + " on " + """" + h + """" + "=" + """" + ii + """" + " where " + """" + e + """" + "='" & Val(Object_id_) & "'")
+        End If
+        If Not rs.EOF Then
+            'obtem os atributos da linha que está sendo movida
+            Diameter = Chr$(216) & " " & rs.Fields("InternalDiameter")
+            Lenght = IIf(rs.Fields("length") = 0, rs.Fields("lengthcalculated"), rs.Fields("length"))
+            Material = IIf(IsNull(rs.Fields("MaterialName")), "0", rs.Fields("MaterialName"))
+            'insere estes atributos
+            If UCase(LayerName) = "WATERLINES" Then
+                InsertTextInDatabase geom_id, Object_id_, Diameter, Material, Lenght
+            Else
+                InsertTextInDatabase geom_id, Object_id_, Diameter, Material, Lenght, True, rs!INITIALTUBEDEEPNESS, rs!FINALTUBEDEEPNESS
+            End If
+        End If
+    End If
+    rs.Close
+    Set rs = Nothing
+
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   Else
-       
-      PrintErro "clsGeoReference", "Public Function DeleteTextObjectWithInsertText", CStr(Err.Number), CStr(Err.Description), True
-   
-   End If
-   
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro "clsGeoReference", "Public Function DeleteTextObjectWithInsertText", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Function
 
 Public Function DeleteRede(LayerName As String, object_id As String)
@@ -1685,12 +1681,15 @@ i = "iD_TYPE"
    Set RsTrechos = Nothing
    Set rsNodes = Nothing
 End Function
-
-
+' Apaga as características dos textos da linha que está sendo movida, tabela Texts1_txvisual (por exemplo)
+'
+' layer_id
+' Object_id_
+'
 Public Sub DeleteTXTVisual(layer_id As Integer, Object_id_ As String)
-   On Error GoTo DeleteTXTVisual_Error
+    On Error GoTo DeleteTXTVisual_Error
    Dim SQLComand As String
-a = "texts"
+    a = "texts"
 b = layer_id
 c = "b"
 d = "_txvisual"
