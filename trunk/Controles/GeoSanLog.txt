@@ -1,761 +1,88 @@
------------------------------------------------------------------------------------------------------
-
-DATA           10/2/2012 15:37:30 
-USUÁRIO        laboratorio
-VERSÃO         6.0.6
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         35601
-DESCRIÇÃO      Element not found
-
------------------------------------------------------------------------------------------------------
-
-DATA           10/2/2012 15:39:03 
-USUÁRIO        laboratorio
-VERSÃO         6.0.6
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         35601
-DESCRIÇÃO      Element not found
-
------------------------------------------------------------------------------------------------------
-
-DATA           10/2/2012 15:42:54 
-USUÁRIO        laboratorio
-VERSÃO         6.0.6
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         35601
-DESCRIÇÃO      Element not found
-
------------------------------------------------------------------------------------------------------
-
-DATA           10/2/2012 15:44:12 
-USUÁRIO        laboratorio
-VERSÃO         6.0.6
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         35601
-DESCRIÇÃO      Element not found
-
------------------------------------------------------------------------------------------------------
-
-DATA           10/2/2012 15:50:17 
-USUÁRIO        laboratorio
-VERSÃO         6.0.6
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         35601
-DESCRIÇÃO      Element not found
-
------------------------------------------------------------------------------------------------------
-
-DATA           16/7/2012 14:54:10 
-USUÁRIO        Administrador
-VERSÃO         6.0.7
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/09/2012 17:13:54 
-USUÁRIO        
-VERSÃO         
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         429
-DESCRIÇÃO      ActiveX component can't create object
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/09/2012 17:14:00 
-USUÁRIO        
-VERSÃO         
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         429
-DESCRIÇÃO      ActiveX component can't create object
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/09/2012 17:41:53 
-USUÁRIO        
-VERSÃO         
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         429
-DESCRIÇÃO      ActiveX component can't create object
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/09/2012 17:52:56 
-USUÁRIO        
-VERSÃO         
-MÓDULO         Global
-EVENTO         Public Sub Main
-LINHA          0
-MOTIVO         429
-DESCRIÇÃO      ActiveX component can't create object
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/10/2012 17:05:50 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.04
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/10/2012 17:07:31 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.04
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/10/2012 17:07:50 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.04
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/10/2012 17:17:33 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.04
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           03/10/2012 17:19:58 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.04
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/10/2012 10:20:36 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.04
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes()
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           26/11/2012 18:46:14 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.06
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:3
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           26/11/2012 18:51:10 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.06
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:3, 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           26/11/2012 19:02:09 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.06
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:3, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('325805')), 
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           26/11/2012 20:05:15 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.06
-MÓDULO         frmAtualizacaoConsumo
-EVENTO         Private Sub AtualizaConsumo(), querie: UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS.NRO_LIGACAO, 
-LINHA          0
-MOTIVO         -2147217871
-DESCRIÇÃO      Query timeout expired
-
------------------------------------------------------------------------------------------------------
-
-DATA           26/11/2012 20:08:56 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.06
-MÓDULO         frmAtualizacaoConsumo
-EVENTO         Private Sub AtualizaConsumo(), querie: UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO NXGS WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS.NRO_LIGACAO
-LINHA          0
-MOTIVO         -2147217871
-DESCRIÇÃO      Query timeout expired
-
------------------------------------------------------------------------------------------------------
-
-DATA           27/11/2012 13:11:45 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As END, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('261696')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Incorrect syntax near the keyword 'END'.
-
------------------------------------------------------------------------------------------------------
-
-DATA           27/11/2012 13:15:33 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As END, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('261696')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Incorrect syntax near the keyword 'END'.
-
------------------------------------------------------------------------------------------------------
-
-DATA           27/11/2012 14:28:52 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDE, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('261696')), 
-LINHA          0
-MOTIVO         3265
-DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
-
------------------------------------------------------------------------------------------------------
-
-DATA           27/11/2012 19:14:15 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.09
-MÓDULO         frmConsumidoresDesabastecidos
-EVENTO         Falha em Function init(Object_id_trecho As String), 
-LINHA          0
-MOTIVO         -2147217871
-DESCRIÇÃO      Query timeout expired
-
------------------------------------------------------------------------------------------------------
-
-DATA           27/11/2012 19:19:22 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.09
-MÓDULO         frmConsumidoresDesabastecidos
-EVENTO         Falha em Function init(Object_id_trecho As String), String conexão: SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO
-LINHA          0
-MOTIVO         -2147217871
-DESCRIÇÃO      Query timeout expired
-
------------------------------------------------------------------------------------------------------
-
-DATA           29/11/2012 11:48:52 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.12
-MÓDULO         frmConsumidoresDesabastecidos
-EVENTO         Falha em Function init(Object_id_trecho As String), Erro não identificado
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      [DBNETLIB][ConnectionWrite (send()).]General network error. Check your network documentation.
-
------------------------------------------------------------------------------------------------------
-
-DATA           29/11/2012 13:14:23 
-USUÁRIO        Administrador
-VERSÃO         06.00.07.12
+DATA           13/05/2013 22:12:54 
+USUÁRIO        nexus
+VERSÃO         06.09.17
 MÓDULO         clsTerraLib
-EVENTO         Public Function Delete
+EVENTO         Public Function MoveNetWorkNode()
 LINHA          0
 MOTIVO         13
 DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
-DATA           04/12/2012 11:46:50 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('25720','25739','25712')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:00:59 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('37796')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:01:43 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('25720','25739','25712')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:01:50 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('37796')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:01:55 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('41130')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:02:03 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('41130')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:13:53 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('25720','25739','25712')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/12/2012 15:43:16 
-USUÁRIO        Administrador
-VERSÃO         06.08.08
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDEREÇO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in ('39250','219991','299340')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Must declare the scalar variable "@CLASSIFICACAO_FISCAL".
-
------------------------------------------------------------------------------------------------------
-
-DATA           07/02/2013 14:38:53 
-USUÁRIO        Administrador
-VERSÃO         06.08.01
-MÓDULO         clsTerraConfig
-EVENTO         Public Function SetWorldByUser
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      [DBNETLIB][ConnectionWrite (send()).]General network error. Check your network documentation.
-
------------------------------------------------------------------------------------------------------
-
-DATA           16/04/2013 08:34:30 
-USUÁRIO        nexus
-VERSÃO         06.08.01
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseMove
-LINHA          0
-MOTIVO         6
-DESCRIÇÃO      Overflow
-
------------------------------------------------------------------------------------------------------
-
-DATA           16/04/2013 08:38:33 
-USUÁRIO        nexus
-VERSÃO         06.08.01
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseMove
-LINHA          0
-MOTIVO         6
-DESCRIÇÃO      Overflow
-
------------------------------------------------------------------------------------------------------
-
-DATA           16/04/2013 08:42:26 
-USUÁRIO        nexus
-VERSÃO         06.08.01
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseMove
-LINHA          0
-MOTIVO         6
-DESCRIÇÃO      Overflow
-
------------------------------------------------------------------------------------------------------
-
-DATA           16/04/2013 10:32:37 
-USUÁRIO        nexus
-VERSÃO         06.08.01
-MÓDULO         frmCanvas
-EVENTO         Private Sub Form_Unload
-LINHA          0
-MOTIVO         -2147418105
-DESCRIÇÃO      Method 'ResetView' of object '_ViewManager' failed
-
------------------------------------------------------------------------------------------------------
-
-DATA           16/04/2013 10:51:06 
-USUÁRIO        nexus
-VERSÃO         06.08.01
-MÓDULO         frmCanvas
-EVENTO         Private Sub Form_Unload
-LINHA          0
-MOTIVO         -2147418105
-DESCRIÇÃO      Method 'ResetView' of object '_ViewManager' failed
-
------------------------------------------------------------------------------------------------------
-
-DATA           17/04/2013 19:28:00 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onEndSELECT
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O Nome do Plano não pode ser Nulo!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 08:26:20 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onEndSELECT
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O Nome do Plano não pode ser Nulo!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 08:49:52 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onEndSELECT
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O Nome do Plano não pode ser Nulo!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 08:50:01 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         clsTerraLib
-EVENTO         Public Function OnRamal
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 08:50:09 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         clsTerraLib
-EVENTO         Public Function OnRamal
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 08:54:33 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         clsTerraLib
-EVENTO         Public Function OnRamal
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 10:21:16 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         clsTerraLib
-EVENTO         Public Function OnRamal
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 10:22:29 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('86452')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
-
------------------------------------------------------------------------------------------------------
-
-DATA           18/04/2013 10:27:58 
-USUÁRIO        nexus
-VERSÃO         06.09.05
-MÓDULO         FrmCadastroRamal
-EVENTO         Private Sub carregaLigacoes(), localização:33, querie: SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in ('86304')), 
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
-
------------------------------------------------------------------------------------------------------
-
-DATA           19/04/2013 06:26:30 
-USUÁRIO        nexus
-VERSÃO         06.09.07
-MÓDULO         clsTerraLib
-EVENTO         Public Function Delete
-LINHA          0
-MOTIVO         91
-DESCRIÇÃO      Object variable or With block variable not set
-
------------------------------------------------------------------------------------------------------
-
-DATA           30/04/2013 19:28:43 
-USUÁRIO        nexus
-VERSÃO         06.09.14
-MÓDULO         clsGeoReference
-EVENTO         Public Function DeleteRede
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Incorrect syntax near '='.
-
------------------------------------------------------------------------------------------------------
-
-DATA           30/04/2013 19:28:54 
-USUÁRIO        nexus
-VERSÃO         06.09.14
-MÓDULO         clsGeoReference
-EVENTO         Public Function DeleteRede
-LINHA          0
-MOTIVO         91
-DESCRIÇÃO      Object variable or With block variable not set
-
------------------------------------------------------------------------------------------------------
-
-DATA           30/04/2013 19:40:08 
-USUÁRIO        nexus
-VERSÃO         06.09.14
-MÓDULO         clsGeoReference
-EVENTO         Public Function DeleteRede
-LINHA          0
-MOTIVO         91
-DESCRIÇÃO      Object variable or With block variable not set
-
------------------------------------------------------------------------------------------------------
-
-DATA           30/04/2013 19:40:15 
-USUÁRIO        nexus
-VERSÃO         06.09.14
-MÓDULO         clsGeoReference
-EVENTO         Public Function DeleteRede
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Incorrect syntax near '='.
-
------------------------------------------------------------------------------------------------------
-
-DATA           30/04/2013 20:21:25 
-USUÁRIO        nexus
-VERSÃO         06.09.14
-MÓDULO         clsGeoReference
-EVENTO         Public Function DeleteRede
-LINHA          0
-MOTIVO         -2147217900
-DESCRIÇÃO      Incorrect syntax near '='.
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 13:55:10 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 13:57:32 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 14:01:57 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 14:24:26 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 14:51:53 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 14:54:50 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 15:06:09 
-USUÁRIO        nexus
-VERSÃO         06.09.17
-MÓDULO         frmCanvas
-EVENTO         Private Sub TCanvas_onMouseDown
-LINHA          0
-MOTIVO         -2147467259
-DESCRIÇÃO      Não existe Conexão com o Banco de Dados
-
------------------------------------------------------------------------------------------------------
-
-DATA           04/05/2013 15:10:14 
+DATA           13/05/2013 22:14:20 
 USUÁRIO        nexus
 VERSÃO         06.09.17
 MÓDULO         clsTerraLib
-EVENTO         Public Function Delete
+EVENTO         Public Function MoveNetWorkNode()
 LINHA          0
 MOTIVO         13
 DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
-DATA           08/05/2013 02:28:56 
+DATA           13/05/2013 22:14:41 
 USUÁRIO        nexus
 VERSÃO         06.09.17
 MÓDULO         clsTerraLib
-EVENTO         Public Function Delete
+EVENTO         Public Function MoveNetWorkNode()
 LINHA          0
 MOTIVO         13
 DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
-DATA           08/05/2013 12:33:13 
+DATA           13/05/2013 22:15:37 
 USUÁRIO        nexus
 VERSÃO         06.09.17
 MÓDULO         clsTerraLib
-EVENTO         Public Function Delete
+EVENTO         Public Function MoveNetWorkNode()
 LINHA          0
-MOTIVO         91
-DESCRIÇÃO      Object variable or With block variable not set
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
-DATA           09/05/2013 19:00:34 
+DATA           13/05/2013 22:38:25 
 USUÁRIO        nexus
 VERSÃO         06.09.17
 MÓDULO         frmCanvas
-EVENTO         Public Function Init
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
 LINHA          0
-MOTIVO         91
-DESCRIÇÃO      Object variable or With block variable not set
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe conexão com o banco de dados!
 
 -----------------------------------------------------------------------------------------------------
 
-DATA           09/05/2013 19:05:28 
+DATA           13/05/2013 22:39:36 
 USUÁRIO        nexus
 VERSÃO         06.09.17
 MÓDULO         frmCanvas
-EVENTO         Public Function Init
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
 LINHA          0
-MOTIVO         91
-DESCRIÇÃO      Object variable or With block variable not set
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           13/05/2013 22:39:55 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           13/05/2013 22:41:10 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
 
 -----------------------------------------------------------------------------------------------------
 

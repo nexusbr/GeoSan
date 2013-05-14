@@ -434,12 +434,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button19 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomin"
             Object.ToolTipText     =   "Menos Zoom"
-            ImageIndex      =   1
+            ImageIndex      =   2
          EndProperty
          BeginProperty Button20 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomout"
             Object.ToolTipText     =   "Mais Zoom"
-            ImageIndex      =   2
+            ImageIndex      =   1
          EndProperty
          BeginProperty Button21 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -1309,9 +1309,9 @@ End Sub
 
 
 
-Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 
-    msngStartX = X
+    msngStartX = x
     
     With imgSplitter
         picSplitter.Move .Left, .Top, .Width \ 2, .Height - 20
@@ -1323,12 +1323,12 @@ Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 
     Dim sglPos As Single
     
     If mbMoving Then
-        sglPos = X + imgSplitter.Left
+        sglPos = x + imgSplitter.Left
         If sglPos < sglSplitLimit Then
         
             picSplitter.Left = sglSplitLimit
@@ -1341,9 +1341,9 @@ Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 
-    pctSfondo.Width = pctSfondo.Width + msngStartX - X
+    pctSfondo.Width = pctSfondo.Width + msngStartX - x
     pctSfondo.Refresh
     picSplitter.Visible = False
     mbMoving = False
@@ -1441,13 +1441,13 @@ End Sub
 
 Private Sub mnuEncontraCoordenada_Click()
 On Error GoTo Trata_Erro
-    Dim X As Double, Y As Double
+    Dim x As Double, y As Double
    
-    X = InputBox("Informe a Coordena X ")
-    Y = InputBox("Informe a Coordena Y ")
+    x = InputBox("Informe a Coordena X ")
+    y = InputBox("Informe a Coordena Y ")
     
-    If X <> 0 And Y <> 0 Then
-        ActiveForm.TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50
+    If x <> 0 And y <> 0 Then
+        ActiveForm.TCanvas.setWorld x - 50, y - 50, x + 50, y + 50
         ActiveForm.TCanvas.plotView
     End If
 
@@ -1680,7 +1680,7 @@ g = "OBJECT_ID_"
    Open CAMINHO For Output As #1
       Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
       Do While Not rs.EOF = True
-         Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
+         Print #1, rs!object_id & ";" & rs!x & ";" & rs!y & ";" & rs!cota
          rs.MoveNext
       Loop
    Close #1
@@ -1972,12 +1972,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
            End If
         End With
     Else

@@ -118,39 +118,44 @@ Begin VB.Form frmCanvas
       Left            =   6180
       Top             =   5220
    End
+   Begin TECOMDATABASELibCtl.TeDatabase TeDatabase4 
+      Left            =   2640
+      OleObjectBlob   =   "frmCanvas.frx":08FE
+      Top             =   5040
+   End
    Begin TeComConnectionLibCtl.TeAcXConnection TeAcXConnection1 
       Left            =   6360
-      OleObjectBlob   =   "frmCanvas.frx":08FE
+      OleObjectBlob   =   "frmCanvas.frx":0922
       Top             =   3360
    End
    Begin TECOMDATABASELibCtl.TeDatabase TeDatabaseRamais 
       Left            =   720
-      OleObjectBlob   =   "frmCanvas.frx":0922
+      OleObjectBlob   =   "frmCanvas.frx":0946
       Top             =   5400
    End
    Begin TECOMDATABASELibCtl.TeDatabase TeDatabase3 
       Left            =   720
-      OleObjectBlob   =   "frmCanvas.frx":0946
+      OleObjectBlob   =   "frmCanvas.frx":096A
       Top             =   4680
    End
    Begin TECOMDATABASELibCtl.TeDatabase TeDatabase2 
       Left            =   480
-      OleObjectBlob   =   "frmCanvas.frx":096A
+      OleObjectBlob   =   "frmCanvas.frx":098E
       Top             =   3720
    End
    Begin TECOMDATABASELibCtl.TeDatabase TeDatabase1 
       Left            =   480
-      OleObjectBlob   =   "frmCanvas.frx":098E
+      OleObjectBlob   =   "frmCanvas.frx":09B2
       Top             =   2640
    End
    Begin TeComViewDatabaseLibCtl.TeViewDatabase TeViewDatabase2 
       Left            =   4200
-      OleObjectBlob   =   "frmCanvas.frx":09B2
+      OleObjectBlob   =   "frmCanvas.frx":09D6
       Top             =   4560
    End
    Begin TeComViewDatabaseLibCtl.TeViewDatabase TeViewDatabase1 
       Left            =   4080
-      OleObjectBlob   =   "frmCanvas.frx":09D6
+      OleObjectBlob   =   "frmCanvas.frx":09FA
       Top             =   3600
    End
 End
@@ -227,18 +232,36 @@ Function ConvertTwipsToPixels(lngTwips As Long, lngDirection As Long) As Long
    lngDC = ReleaseDC(0, lngDC)
    ConvertTwipsToPixels = (lngTwips / nTwipsPerInch) * lngPixelsPerInch
 End Function
-Private Sub Teste()
-    Dim a As New CGeometria                 'declaração do objeto como do tipo classe CGeometria e criação do mesmo (New) através de uma auto instância
-    Dim t As Integer
-    Dim qtdPontos As Integer
+Private Sub teste()
+    Dim moveRamal As New CMoveTrechoRedeComRamal    'objeto para obter a nova linha do ramal que foi movido
+    Dim linha As CLine2D                            'nova linha do novo ramal após a movimentação do trecho de rede
+    Dim objIdTrecho As String                       'objId do trecho inicial antes de ser movido
+    Dim objIdRamal As String                        'objId do ramal inicial antes de ser movido
+    Dim novoObjIdTrecho As String                   'objId do trecho final depois da movimentação pelo usuário
+    Dim objIDsRamais As New CObtemObjIDsRamais
+    Dim listObjIDsRamais() As String
+    Dim i As Integer
+    Dim distIniRamalAntes As Double                 'distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+    Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
+    Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
     
-    t = a.x
-    a.coordX = t
-    a.coordY = t
-    a.conexao = TeDatabase1
-    qtdPontos = a.GetStartEndPoints
+    'obtem o objId do trecho a ser movido
+    'obtem o objId do trecho movido
+    ' Call objIDsRamais.getObjIDs("14064", TeDatabase4, listObjIDsRamais)                             'obtem todos os objIDs dos ramais que estão ligados ao trecho de rede que está sendo movido
+    For i = 0 To UBound(listObjIDsRamais)           'enquanto existirem ramais
+        'distIniRamalAntes = moveRamal.distancia("14064", listObjIDsRamais(i), TeDatabase4)          'obtem a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+        distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(123.22, 134.44, distIniRamalAntes)
+        Set linha = moveRamal.coordsRamal(distIniRamalDepois, "14064", TeDatabase4)                 'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
+        'Set linha = moveRamal.linha(objIdTrecho, listObjIDsRamais(i), novoObjIdTrecho, TeDatabase4) 'obtem a nova linha do ramal movido
+        'apaga a geometria do ramal
+        'desenha a geometria do novo ramal
+        'atualiza o objId do novo ramal com o mesmo que o anterior para ligar aos atributos existentes
+        i = i + 1
+    Next
     
-    
+        
+
+    'fim
 End Sub
 Public Static Function TipoConexao() As String
 
@@ -357,6 +380,8 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         TeDatabase2.connection = Conn
         TeDatabase3.Provider = typeconnection
         TeDatabase3.connection = Conn
+        TeDatabase4.Provider = typeconnection                   'conexão para mover ramais
+        TeDatabase4.connection = Conn
         TeDatabaseRamais.Provider = typeconnection              'inicializa a conexão para pode inserir um ramal
         TeDatabaseRamais.connection = Conn
         TCanvas.Provider = typeconnection
@@ -426,6 +451,8 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         TeDatabase2.connection = TeAcXConnection1.objectConnection_
         TeDatabase3.Provider = typeconnection
         TeDatabase3.connection = TeAcXConnection1.objectConnection_
+        TeDatabase4.Provider = typeconnection
+        TeDatabase4.connection = TeAcXConnection1.objectConnection_
         TeDatabaseRamais.Provider = typeconnection                    'inicializa a conexão para pode inserir um ramal
         TeDatabaseRamais.connection = TeAcXConnection1.objectConnection_
         TCanvas.Provider = typeconnection 'Provider 4 = PostgreSQL
@@ -489,7 +516,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
             FrmMain.Tag = Int(FrmMain.Tag) + 1
         End If
     End If
-    Teste
+    'Teste
         
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -1778,6 +1805,10 @@ Trata_Erro:
     End If
 End Sub
 
+Private Sub TCanvas_onMoveGeometries(ByVal distance As Double, ByVal deltaX As Double, ByVal deltaY As Double)
+    MsgBox ("movendo geometria")
+End Sub
+
 Private Sub TCanvas_onPoint(ByVal x As Double, ByVal y As Double)
 On Error GoTo Trata_Erro
    Select Case Tr.TerraEvent
@@ -1825,7 +1856,7 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
     Dim CompCalc3 As Double
     Dim LayerName As String
     Dim RefLayer As String
-    
+      
     a = "LENGTHCALCULATED"
     b = "USUARIO_LOG"
     c = "INSCRICAO_LOTE"
@@ -1838,6 +1869,27 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
     LayerName = TCanvas.getCurrentLayer
     RefLayer = TCanvas.GetReferenceLayer
     If Node_id1 = 0 Or Node_id2 = 0 Then 'ESTA MOVENDO A REDE. Sempre quando move ele entra com os objects_ids dos nós com zero para indicar movendo, vindo apenas
+        'Call objIDsRamais.getObjIDs(LINE_ID, TeDatabase4, listObjIDsRamais)                             'obtem todos os objIDs dos ramais que estão ligados ao trecho de rede que está sendo movido
+
+        'aqui inicializa o redesenho dos ramais na nova posição
+            Dim contTrechos As Integer
+            
+            For contTrechos = 0 To varGlobais.totalTrechos
+                If ramalMovendo(contTrechos).objIdTrecho = LINE_ID And ramalMovendo(contTrechos).objIdRamal <> -1 Then
+                    Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
+                    Dim linha As CLine2D                            'nova linha do novo ramal após a movimentação do trecho de rede
+                    Dim moveRamal As New CMoveTrechoRedeComRamal    'objeto para obter a nova linha do ramal que foi movido
+                    Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
+                    Dim retorno As Boolean
+                    Dim novoComprTrecho As Double
+                    
+                    retorno = frmCanvas.TeDatabase4.getLengthOfLine("", LINE_ID, novoComprTrecho)
+                    distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contTrechos).comprTrecho, novoComprTrecho, ramalMovendo(contTrechos).distancia)
+                    Set linha = moveRamal.coordsRamal(distIniRamalDepois, CStr(LINE_ID), TeDatabase4)                 'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
+                End If
+            Next
+        'finaliza
+        
         'CALCULAR O NOVO COMPRIMENTO DA LINHA E ATUALIZAR NA BASE
         TeDatabase1.setCurrentLayer RefLayer
         'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA LINHA
