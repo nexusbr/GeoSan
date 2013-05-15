@@ -201,10 +201,33 @@ Dim user As String
 Dim con As New ADODB.connection
 Dim strConn As String
 Dim count2 As Integer
- Dim conexao As New ADODB.connection
+Dim conexao As New ADODB.connection
 
- 
-
+'Constantes utilizadas na função ConvertTwipsToPixels para converter pixel para milímetro
+Const WU_LOGPIXELSX = 88
+Const WU_LOGPIXELSY = 90
+' Converte twips para pixels. No TeCanvas.width a medida é em twips e é necessário converter para pixels para que possa ser
+' configurada a tolerância do snap. A tolerância do snap é medida em pixels.
+' Esta função retorna o numero de pixels equivalentes.
+'
+' lngTwips - numero de twips
+' lngDirection - 0 = horizontal, outro valor = vertical, se as medidas estão sendo realizadas na horizontal ou vertical
+'
+Function ConvertTwipsToPixels(lngTwips As Long, lngDirection As Long) As Long
+   'Handle to device
+   Dim lngDC As Long
+   Dim lngPixelsPerInch As Long
+   
+   Const nTwipsPerInch = 1440
+   lngDC = GetDC(0)
+   If (lngDirection = 0) Then       'Horizontal
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSX)
+   Else                             'Vertical
+      lngPixelsPerInch = GetDeviceCaps(lngDC, WU_LOGPIXELSY)
+   End If
+   lngDC = ReleaseDC(0, lngDC)
+   ConvertTwipsToPixels = (lngTwips / nTwipsPerInch) * lngPixelsPerInch
+End Function
 
 Public Static Function TipoConexao() As String
 
@@ -323,8 +346,9 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         TeDatabase2.connection = Conn
         TeDatabase3.Provider = typeconnection
         TeDatabase3.connection = Conn
-        TeDatabaseRamais.Provider = typeconnection
-        TCanvas.Provider = typeconnection '
+        TeDatabaseRamais.Provider = typeconnection              'inicializa a conexão para poder inserir um ramal
+        TeDatabaseRamais.connection = Conn
+        TCanvas.Provider = typeconnection
         TCanvas.user = username
         TCanvas.connection = Conn ' SE DER ERRO AQUI, VERIFICAR A VERSÃO DA TECOM INSTALADA NA MÁQUINA
         'ViewName = TeViewDatabase1.getActiveView
@@ -353,7 +377,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         rs.Close
         Me.Show
         TCanvas.plotView            'mostra o mapa na tela
-        TCanvas.snapOn = 1
+        TCanvas.snapOn = 1          'liga o snap
         mUserName = username
         'Para saber quantos canvas estão abertos...
         If FrmMain.Tag = "" Then
@@ -391,7 +415,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         TeDatabase2.connection = TeAcXConnection1.objectConnection_
         TeDatabase3.Provider = typeconnection
         TeDatabase3.connection = TeAcXConnection1.objectConnection_
-        TeDatabaseRamais.Provider = typeconnection
+        TeDatabaseRamais.Provider = typeconnection                    'inicializa a conexão para pode inserir um ramal
         TeDatabaseRamais.connection = TeAcXConnection1.objectConnection_
         TCanvas.Provider = typeconnection 'Provider 4 = PostgreSQL
         TCanvas.user = username
@@ -445,7 +469,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         rs.Close
         Me.Show
         TCanvas.plotView
-        TCanvas.snapOn = 1
+        TCanvas.snapOn = 1                  'liga o snap
         mUserName = username
         'Para saber quantos canvas estão abertos...
         If FrmMain.Tag = "" Then
@@ -562,6 +586,9 @@ Private Sub LoadToolsBar()
          FrmMain.tbToolBar.Buttons("kpan").value = tbrPressed
       Case tg_DrawNetWorkline
          FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrPressed
+         'limpa todos os itens editados em memória, as geometrias das listas temporárias e geometrias a serem removidas do banco de dados
+         TCanvas.clearEditItens (2)         'limpa linhas
+         TCanvas.clearEditItens (4)         'limpa pontos
       Case tg_DrawNetWorkNode
          FrmMain.tbToolBar.Buttons("kinsertnetworknode").value = tbrPressed
       Case tg_MoveNetWorkNode
@@ -734,7 +761,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
                             TCanvas.ToolTipText = "" ' se for igual em branco
                         Case "kdrawnetworkline" ' foi selecionada a ícone de desenhar rede de agua (esgoto ou drenagem)
                             TCanvas.clearSelectItens 0                     'desmarca se há item selecionado
-                            'Tr.TerraEvent = tg_DrawNetWorkline
+                            'é aqui com o comando Tr.DrawNetWorkLine onde é ativado o início do desenho da rede (veja esta rotina na classe clsTerralib em Public Function DrawNetWorkLine)
                             If Tr.DrawNetWorkLine = True Then              'chama a classe drawnetworkline para iniciar o desenho da linha. Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
                                 frmNetWorkLegth.init TCanvas, FrmMain
                                 FrmMain.ViewManager1.LoadImageSnap Tr.cgeo.GetReferenceLayer(.getCurrentLayer), mOnSnapLock
@@ -1075,9 +1102,15 @@ End Sub
 Private Sub TCanvas_onEndPlotView()
     On Error GoTo Trata_Erro
     Dim MyScale As Double
+    Dim pixelsTela As Long                  'número de pixels totais na largura do canvas
+    Dim distHorizontal As Double            'distância horizontal em metros do canvas
+    Dim tamanhoPixel As Double              'tamanho em metros de um pixel
+    Dim tolerancia As Double                'tolerância de localização de extremidadde do drawnetworkline
+    Dim toleranciaSnap As Double            'tolerância do snap no canvas
     
+    tolerancia = 0.5                        'define a tolerância de localização de uma extremidade de uma rede, mais do que isso ele cria um novo nó
     MyScale = TCanvas.getScale
-    TCanvas.getWorld xmin, ymin, xmax, ymax
+    TCanvas.getWorld xmin, ymin, xmax, ymax 'obtem as coordenadas do box do canvas no formato mundo
     ViewName = TeViewDatabase1.getActiveView
     'carrega as variáveis globais para o módulo de impressão
     CanvasXmin_ = xmin
@@ -1092,30 +1125,41 @@ Private Sub TCanvas_onEndPlotView()
         strLayerAtivo = ""
     End If
     TCanvas.ToolTipText = ""
+    
+    'aqui nas próximas 4 linhas ele irá converter as unidades de medida da janela do canvas (Twips) para pixels
+    'e depois irá determinar um valor de tolerância em pixels para o snap, que aceita somente pixels como unidade de medida
+    pixelsTela = ConvertTwipsToPixels(TCanvas.Width, 0)                 'obtem o número total de pixels do canvas na horizontal
+    distHorizontal = xmax - xmin                                        'obtem a distância em metros na horizontal do canvas
+    toleranciaSnap = tolerancia * pixelsTela / distHorizontal           'calcula o número de pixels para a tolerância em metros especificada
+    TCanvas.toleranceToSnap(0) = toleranciaSnap                         'seta no canvas a tolerância de snap - 0 = estremidades
+    FrmMain.sbStatusBar.Panels(2).Text = "Snap: " & Round(toleranciaSnap, 2)  'mostra a tolerância de snap na barra de status
     'para corrigir o DrawNetWorkLine - Luis
     'aqui é definida a tolerância de localização quando estiver desenhando uma rede (snap)
     'foram inseridas algumas tolerâncias a mais para ver se resolve quando não localiza o nó ou pega o do lado por engano
+    'não resolveu e ai colocamos o snap igual a .tolerance do canvas
     If Tr.TerraEvent = 1 Then 'tg_DrawNetWorkline - caso esteja desenhando uma rede muda a tolerância conforme a escala em que o usuário estiver
         With TCanvas
-            MyScale = .getScale
-            Select Case MyScale
-            Case Is < 10
-                .tolerance = 0.001
-            Case Is < 50
-                .tolerance = 0.005
-            Case Is < 100
-                .tolerance = 0.01
-            Case Is < 200
-                .tolerance = 0.05
-            Case Is < 300
-                .tolerance = 0.075
-            Case Is < 500
-                .tolerance = 0.1
-            Case Is < 1000
-                .tolerance = 0.5
-            Case Is >= 1000
-                .tolerance = 1
-            End Select
+        FrmMain.sbStatusBar.Panels(3).Text = "Tolerância localização Rede: " & Round(tolerancia, 2) 'mostra a tolerância de drawNetworkLine na barra de status
+        .tolerance = tolerancia
+'            MyScale = .getScale
+'            Select Case MyScale
+'            Case Is < 10
+'                .tolerance = 0.001
+'            Case Is < 50
+'                .tolerance = 0.005
+'            Case Is < 100
+'                .tolerance = 0.01
+'            Case Is < 200
+'                .tolerance = 0.05
+'            Case Is < 300
+'                .tolerance = 0.075
+'            Case Is < 500
+'                .tolerance = 0.1
+'            Case Is < 1000
+'                .tolerance = 0.5
+'            Case Is >= 1000
+'                .tolerance = 1
+'            End Select
         End With
     Else
         TCanvas.tolerance = 1
@@ -1226,6 +1270,21 @@ Trata_Erro:
        
     End If
 End Sub
+' Desvia quando encontra um erro
+'
+' code - Código de identificação do erro
+' message - mesnsagem explicativa do erro
+'
+Private Sub TCanvas_onError(ByVal code As String, ByVal errorMessage As String)
+   Select Case code
+        Case "Err032"
+            'canvas não foi aberto ainda, desconsiderar
+        Case "Err068"
+            MsgBox "Você está desenhando uma rede muito perto de uma existente, por favor desenhe com um pouco mais de distância da mesma. Erro número: " & code & " - " & errorMessage
+        Case Else
+            MsgBox "Não conformidade em DrawNetworkLine. Erro número: " & code & " - " & errorMessage
+    End Select
+End Sub
 
 Private Sub TCanvas_onIntersectionPoint(ByVal X As Double, ByVal Y As Double)
 On Error GoTo Trata_Erro
@@ -1288,6 +1347,10 @@ On Error GoTo Trata_Erro
       
       Case 46 'DEL
          Tr.Delete
+      Case 48 ' zero
+         FrmMain.sbStatusBar.Panels(5).Text = "0.00"
+         X1 = X1i
+         Y1 = Y1i
       Case 87
          TCanvas.verticalPan 50
       Case 90
@@ -1418,78 +1481,106 @@ End Function
 '
 Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
     On Error GoTo Trata_Erro
+    
     X1 = 0 'passa as coordenadas para calculo e exibição
     Y1 = 0
-    If Button = 1 And FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrPressed Then
-        Select Case LastEvent
-            Case tg_DrawNetWorkline
-                Tr.DrawNetWorkLine True
-            Case tg_MoveNetWorkNode
-                Tr.MoveNetWorkNode True
-        End Select
-    ElseIf Button = 0 Then
-        If Tr.TerraEvent = tg_DrawNetWorkNode Then
-            Tr.SaveInDatabase: FrmMain.Manager1.GridEnabled True
-            With TCanvas
-                .Normal
-                .Select: Tr.TerraEvent = tg_SelectObject
-                .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-            End With
-            LoadToolsBar
-        ElseIf Tr.TerraEvent = tg_DrawRamal Then
-            If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Or UCase(TCanvas.getCurrentLayer) = "RAMAIS_ESGOTO" Then
-                'ESTA DESENHANDO RAMAL, CAPTURA O PRIMEIRO CLIQUE DO MOUSE E TESTA SE ESTE CLIQUE
-                'FOI FEITO SOBRE UMA REDE
-                If CLIQUE_RAMAL = 0 Then
-                    'VERIFICA SE O LAYER CORRENTE É O DE RAMAIS DE AGUA OU ESGOTO
-                    'SE FOR O DE AGUA, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_AGUA
-                    'SE FOR O DE ESGOTO, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_ESGOTO
-                    If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Then
-                        TeDatabaseRamais.setCurrentLayer "WATERLINES"
-                    Else
-                        TeDatabaseRamais.setCurrentLayer "SEWERLINES"
+    
+    Select Case Button  'VERIFICA O BOTÃO DO MOUSE QUE FOI SELECIONADO
+        
+        Case 0          'SELECIONADO O BOTÃO DA ESQUERDA
+            Select Case Tr.TerraEvent       'verifica o comando que está sendo executado
+            
+                Case tg_DrawNetWorkline     'DESENHANDO REDE
+                        FrmMain.Manager1.GridEnabled True
+                        X1 = X 'passa as coordenadas para calculo e exibição
+                        Y1 = Y
+
+                Case tg_MoveNetWorkNode     'MOVENDO REDE
+                        FrmMain.Manager1.GridEnabled True
+                        X1 = X 'passa as coordenadas para calculo e exibição
+                        Y1 = Y
+
+                Case tg_DrawNetWorkNode     'DESENHANDO UM NÓ
+                    Tr.SaveInDatabase: FrmMain.Manager1.GridEnabled True
+                    With TCanvas
+                        .Normal
+                        .Select: Tr.TerraEvent = tg_SelectObject
+                        .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+                    End With
+                    LoadToolsBar
+
+                Case tg_DrawRamal           'DESENHANDO UM RAMAL
+                    If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Or UCase(TCanvas.getCurrentLayer) = "RAMAIS_ESGOTO" Then
+                        'ESTA DESENHANDO RAMAL, CAPTURA O PRIMEIRO CLIQUE DO MOUSE E TESTA SE ESTE CLIQUE
+                        'FOI FEITO SOBRE UMA REDE
+                        If CLIQUE_RAMAL = 0 Then
+                            'VERIFICA SE O LAYER CORRENTE É O DE RAMAIS DE AGUA OU ESGOTO
+                            'SE FOR O DE AGUA, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_AGUA
+                            'SE FOR O DE ESGOTO, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_ESGOTO
+                            If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Then
+                                TeDatabaseRamais.setCurrentLayer "WATERLINES"
+                            Else
+                                TeDatabaseRamais.setCurrentLayer "SEWERLINES"
+                            End If
+                            'VERIFICA SE O USUÁRIO CLICOU SOBRE UMA REDE DE AGUA OU ESGOTO
+                            intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(X, Y, tpLINES, 1)
+                            'intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometryXY(x, y, tpLINES)
+                            'CASO NÃO, EXIBE MENSAGEM E REINICIA O PROCESSO
+                            If intQtdLinhasNaCoordenada = 0 Then
+                                MsgBox "Inicie o desenho do ramal partindo do trecho de rede.", vbInformation, ""
+                                TCanvas.Normal
+                                TCanvas.Select
+                                CLIQUE_RAMAL = 0
+                                TCanvas.clearSelectItens 0 'desmarca se há item selecionado
+                                Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
+                                Tr.TerraEvent = tg_DrawRamal
+                            'CASO HÁ MAIS DE UMA REDE SOB O CLIQUE, EXIBE MENSAGEM E REINICIA O PROCESSO
+                            ElseIf intQtdLinhasNaCoordenada > 1 Then
+                                MsgBox "Foi identificado mais de um trecho de rede no local selecionado." & Chr(13) & Chr(13) & "tente novamente.", vbInformation, ""
+                                TCanvas.Normal
+                                TCanvas.Select
+                                CLIQUE_RAMAL = 0
+                                TCanvas.clearSelectItens 0 'desmarca se há item selecionado
+                                Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
+                                Tr.TerraEvent = tg_DrawRamal
+                                'CASO SIM, CAPTURA O OBJECT_ID_ DA REDE QUE FOI SELECIONADA E PASSA
+                                'PARA A VARIÁVEL QUE VAI SALVAR O RAMAL
+                            Else
+                                ramal_Object_id_trecho = TeDatabaseRamais.objectIds(0)
+                                'TCanvas.ToolTipText = "Rede: " & ramal_Object_id_trecho
+                                'GUARDA A INFORMAÇÃO DE QUE O PRIMEIRO CLIQUE JA FOI DADO PARA DESENHAR O RAMAL
+                                CLIQUE_RAMAL = 1
+                            End If
+                        Else
+                            CLIQUE_RAMAL = 0
+                        End If
                     End If
-                    'VERIFICA SE O USUÁRIO CLICOU SOBRE UMA REDE DE AGUA OU ESGOTO
-                    intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(X, Y, tpLINES, 1)
-                    'intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometryXY(x, y, tpLINES)
-                    'CASO NÃO, EXIBE MENSAGEM E REINICIA O PROCESSO
-                    If intQtdLinhasNaCoordenada = 0 Then
-                        MsgBox "Inicie o desenho do ramal partindo do trecho de rede.", vbInformation, ""
-                        TCanvas.Normal
-                        TCanvas.Select
-                        CLIQUE_RAMAL = 0
-                        TCanvas.clearSelectItens 0 'desmarca se há item selecionado
-                        Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
-                        Tr.TerraEvent = tg_DrawRamal
-                    'CASO HÁ MAIS DE UMA REDE SOB O CLIQUE, EXIBE MENSAGEM E REINICIA O PROCESSO
-                    ElseIf intQtdLinhasNaCoordenada > 1 Then
-                        MsgBox "Foi identificado mais de um trecho de rede no local selecionado." & Chr(13) & Chr(13) & "tente novamente.", vbInformation, ""
-                        TCanvas.Normal
-                        TCanvas.Select
-                        CLIQUE_RAMAL = 0
-                        TCanvas.clearSelectItens 0 'desmarca se há item selecionado
-                        Tr.DrawRamal 'reinicia o processo de cadastramento de ramal
-                        Tr.TerraEvent = tg_DrawRamal
-                        'CASO SIM, CAPTURA O OBJECT_ID_ DA REDE QUE FOI SELECIONADA E PASSA
-                        'PARA A VARIÁVEL QUE VAI SALVAR O RAMAL
-                    Else
-                        ramal_Object_id_trecho = TeDatabaseRamais.objectIds(0)
-                        'TCanvas.ToolTipText = "Rede: " & ramal_Object_id_trecho
-                        'GUARDA A INFORMAÇÃO DE QUE O PRIMEIRO CLIQUE JA FOI DADO PARA DESENHAR O RAMAL
-                        CLIQUE_RAMAL = 1
-                    End If
-                Else
-                    CLIQUE_RAMAL = 0
-                End If
-            ElseIf Tr.TerraEvent = tg_DrawNetWorkline Or Tr.TerraEvent = tg_MoveNetWorkNode Then
-                FrmMain.Manager1.GridEnabled True
-                X1 = X 'passa as coordenadas para calculo e exibição
-                Y1 = Y
-            Else
-                FrmMain.Manager1.GridEnabled False
-            End If
-        End If
-    End If
+
+                Case Else                   'nenhuma das anteriores
+                        FrmMain.Manager1.GridEnabled False
+            End Select
+
+        Case 1          'SELECIONADO O BOTÃO DIREITO DO MOUSE
+            Select Case tbrPressed
+                Case FrmMain.tbToolBar.Buttons("kdrawnetworkline").value        'usuário selecionou anteriormente que estava desenhando uma rede
+                    'então vamos reiniciar o desenho da rede a partir do início
+                    TCanvas.Normal                      'volta o canvas para o estado de visualização
+                    'limpa todos os itens editados em memória, as geometrias das listas temporárias e geometrias a serem removidas do banco de dados
+                    TCanvas.clearEditItens (2)          'limpa linhas
+                    TCanvas.clearEditItens (4)          'limpa pontos
+                    Tr.DrawNetWorkLine                  'ativa novamente o desenho de uma rede a partir do início
+                    Select Case LastEvent               'precisa verificar o que faz e se está passando realmente por este select case
+                        Case tg_DrawNetWorkline
+                            Tr.DrawNetWorkLine True
+                        Case tg_MoveNetWorkNode
+                            Tr.MoveNetWorkNode True
+                    End Select
+            End Select
+        
+        Case Else       'nenhuma das anteriores
+
+    End Select
+
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -1537,13 +1628,16 @@ Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat 
         End If
     End If
     FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(X, 2) & " - y:" & Round(Y, 2)
-    If X1 <> 0 Then ' SE A VARIAVEL DE PRIMEIRO CLICK ESTIVER ZERADA...
+    'If X1 <> 0 Then ' SE A VARIAVEL DE PRIMEIRO CLICK ESTIVER ZERADA...
+    X1i = X
+    Y1i = Y
         COMP = Sqr((Abs(X - X1) ^ 2) + (Abs(Y - Y1) ^ 2))
-        FrmMain.sbStatusBar.Panels(1).Text = "Comprimento da rede: " & Format(COMP, "0.00") & " m"
+'        FrmMain.sbStatusBar.Panels(1).Text = "Comprimento da rede: " & Format(COMP, "0.00") & " m"
+        FrmMain.sbStatusBar.Panels(5).Text = Format(COMP, "0.00") & " m"
         'TCanvas.ToolTipText = Format(COMP, "0.00") & " m"
     'Else
         'FrmMain.sbStatusBar.Panels(1).Text = ""
-    End If
+    'End If
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then

@@ -63,8 +63,11 @@ Public idPoligonSel As String
 Public ramal_Object_id_trecho As Long
 Public idAutoLote As String 'CODIGO DO LOTE QUE é UTILIZADO NO CADASTRO DO RAMAL
 'MEDIR DISTANCIA ENTRE DOIS PONTOS
+Public X1i As Double
+Public Y1i As Double
 Public X1 As Double
 Public Y1 As Double
+Public XYInicio As Boolean
 Public CanvasXmin_ As Double
 Public CanvasYmin_ As Double
 Public CanvasXmax_ As Double
@@ -138,6 +141,20 @@ Enum TipoRelatorio
    RegistrosEstadoEstado = 1
    ComponentsRede = 2
 End Enum
+
+'The GetDC function retrieves a handle of a display device context (DC) for the client area of the specified window.
+'The display device context can be used in subsequent GDI functions to draw in the client area of the window.
+'Utilizada na função para converter Twits para Pixels
+Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
+
+Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
+  
+'Returns pixels per inch
+'Utilizada na função para converter Twits para Pixels
+Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
+
+
+
 'Subrotina principal de entrada do GeoSan'
 '
 '

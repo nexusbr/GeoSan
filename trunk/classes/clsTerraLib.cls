@@ -111,8 +111,8 @@ End Property
 Public Property Get tcs() As TeCanvas
     Set tcs = mvartcs
 End Property
-'Classe responsável pelo desenho da rede
-'
+' Classe responsável pelo desenho da rede. Aquí é onde é ativado o início do desenho de uma rede
+' Retorna verdadeiro se foi ativada corretamente
 '
 '
 Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
@@ -131,9 +131,9 @@ Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
             Case LayerTypeRefence.Trecho_Rede_Agua, LayerTypeRefence.Trecho_Rede_Drenagem, LayerTypeRefence.Trecho_Rede_esgoto
                 If Not mback Then
                     .object_id = ""
-                    .addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)          'obtem o layer de referência e coloca-o como de snap
-                    .setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)       'seta o nome do layer de referência
-                    CtrlMgr.LoadDefaultProperties 0, tcs.getCurrentLayer, True
+                    .addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)             'obtem o layer de referência e coloca-o como de snap
+                    .setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)          'seta o nome do layer de referência
+                    CtrlMgr.LoadDefaultProperties 0, tcs.getCurrentLayer, True              'carrega os valores padrão do gerenciador de propriedades
                     CtrlMgr.GridEnabled True: CtrlMgr.GridVisibled True
                 End If
                 .DrawNetWorkLine
@@ -561,8 +561,8 @@ Public Function SaveInDatabase() As Boolean
     tcs.saveOnMemory
     tcs.SaveInDatabase
     '.saveOnMemory
-    tcs.saveOnMemory
-    tcs.SaveInDatabase
+'    tcs.saveOnMemory           estava duplicado o que fazia piscar duas vezes (existe a opção de não dar plotview). Não necessita salvar duas vezes
+'    tcs.SaveInDatabase
     With tcs
         'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
         Select Case TerraEvent
