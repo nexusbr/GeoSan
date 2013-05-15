@@ -11,15 +11,117 @@ Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
    Caption         =   "NEXUS - GeoSan"
-   ClientHeight    =   9210
+   ClientHeight    =   8940
    ClientLeft      =   165
    ClientTop       =   735
-   ClientWidth     =   12720
+   ClientWidth     =   10980
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "FrmMain"
    StartUpPosition =   3  'Windows Default
    Tag             =   "0"
    WindowState     =   2  'Maximized
+   Begin MSComctlLib.ImageList ImageList4 
+      Left            =   3720
+      Top             =   3960
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   24
+      ImageHeight     =   24
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   22
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":08CA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":0FC4
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":173E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":1E38
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":2532
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":2C2C
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":3326
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":3A20
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":411A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":4814
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":4F0E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5608
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":5D02
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":63FC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":6AF6
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":71F0
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":78EA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":7FE4
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":86DE
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":8DD8
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":94D2
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmMain.frx":9C4C
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
    Begin MSComDlg.CommonDialog Cdl 
       Left            =   4305
       Top             =   2430
@@ -30,12 +132,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   7020
-      Left            =   8775
-      ScaleHeight     =   7020
+      Height          =   7110
+      Left            =   7035
+      ScaleHeight     =   7110
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   1770
+      Top             =   1410
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1335
@@ -48,7 +150,7 @@ Begin VB.MDIForm FrmMain
       End
       Begin TECOMIMPORTLibCtl.TeImport TeImport1 
          Left            =   720
-         OleObjectBlob   =   "frmMain.frx":08CA
+         OleObjectBlob   =   "frmMain.frx":A346
          Top             =   5640
       End
       Begin MSComDlg.CommonDialog cmmSalvaImg 
@@ -79,7 +181,7 @@ Begin VB.MDIForm FrmMain
          EndProperty
          Height          =   255
          Left            =   3660
-         Picture         =   "frmMain.frx":08EE
+         Picture         =   "frmMain.frx":A36A
          Style           =   1  'Graphical
          TabIndex        =   8
          Top             =   0
@@ -146,17 +248,17 @@ Begin VB.MDIForm FrmMain
       End
       Begin TECOMDATABASELibCtl.TeDatabase TeDatabase1 
          Left            =   2880
-         OleObjectBlob   =   "frmMain.frx":0C60
+         OleObjectBlob   =   "frmMain.frx":A6DC
          Top             =   3720
       End
       Begin TeComConnectionLibCtl.TeAcXConnection TeAcXConnection1 
          Left            =   2400
-         OleObjectBlob   =   "frmMain.frx":0C84
+         OleObjectBlob   =   "frmMain.frx":A700
          Top             =   1680
       End
       Begin TeComViewDatabaseLibCtl.TeViewDatabase TeViewDatabase1 
          Left            =   3120
-         OleObjectBlob   =   "frmMain.frx":0CA8
+         OleObjectBlob   =   "frmMain.frx":A724
          Top             =   4920
       End
       Begin VB.Image imgSplitter 
@@ -172,68 +274,65 @@ Begin VB.MDIForm FrmMain
       Height          =   420
       Left            =   0
       TabIndex        =   0
-      Top             =   8790
-      Width           =   12720
-      _ExtentX        =   22437
+      Top             =   8520
+      Width           =   10980
+      _ExtentX        =   19368
       _ExtentY        =   741
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
          NumPanels       =   5
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-            Object.Width           =   10583
-            MinWidth        =   10583
+            Object.Width           =   8819
+            MinWidth        =   8819
             Text            =   "Status"
             TextSave        =   "Status"
          EndProperty
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
-            Object.Width           =   5292
-            MinWidth        =   5292
+            Object.Width           =   3519
+            MinWidth        =   3528
          EndProperty
          BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Style           =   5
             AutoSize        =   2
-            Object.Width           =   5292
-            MinWidth        =   5292
+            Object.Width           =   3519
+            MinWidth        =   3528
+            TextSave        =   "21:49"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
-            Object.Width           =   5292
-            MinWidth        =   5292
+            Object.Width           =   3519
+            MinWidth        =   3528
          EndProperty
          BeginProperty Panel5 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Object.Width           =   3528
+            MinWidth        =   3528
             Object.ToolTipText     =   "Distância"
          EndProperty
       EndProperty
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   1770
+      Height          =   1410
       Left            =   0
       TabIndex        =   7
       Top             =   0
-      Width           =   12720
-      _ExtentX        =   22437
-      _ExtentY        =   3122
-      ButtonWidth     =   1032
-      ButtonHeight    =   1005
-      ImageList       =   "ImageList3"
+      Width           =   10980
+      _ExtentX        =   19368
+      _ExtentY        =   2487
+      ButtonWidth     =   820
+      ButtonHeight    =   794
+      ImageList       =   "ImageList4"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
          NumButtons      =   38
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "knew"
             Object.ToolTipText     =   "Novo"
-            ImageIndex      =   11
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "ksave"
             Object.ToolTipText     =   "Salvar"
-            ImageIndex      =   19
-            BeginProperty ButtonMenus {66833FEC-8583-11D1-B16A-00C0F0283628} 
-               NumButtonMenus  =   1
-               BeginProperty ButtonMenu1 {66833FEE-8583-11D1-B16A-00C0F0283628} 
-               EndProperty
-            EndProperty
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -241,18 +340,15 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kselection"
             Object.ToolTipText     =   "Selecionar"
-            ImageIndex      =   25
             Style           =   1
          EndProperty
          BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kplotview"
             Object.ToolTipText     =   "Atualizar"
-            ImageIndex      =   14
          EndProperty
          BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "krecompose"
             Object.ToolTipText     =   "Recompor"
-            ImageIndex      =   7
          EndProperty
          BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -260,7 +356,6 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "mnuPoligono"
             Object.ToolTipText     =   "Poligono de Seleção"
-            ImageIndex      =   2
          EndProperty
          BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -268,17 +363,14 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "KFindCoordenadas"
             Object.ToolTipText     =   "Localizar Coordenada"
-            ImageIndex      =   13
          EndProperty
          BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "KEncontraTexto"
             Object.ToolTipText     =   "Encontrar Textos"
-            ImageIndex      =   4
          EndProperty
          BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "KEncontraConsumidor"
             Object.ToolTipText     =   "Encontrar Consumidores"
-            ImageIndex      =   3
          EndProperty
          BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -286,24 +378,20 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button14 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomarea"
             Object.ToolTipText     =   "Zoom Área"
-            ImageIndex      =   24
             Style           =   1
          EndProperty
          BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kpan"
             Object.ToolTipText     =   "Mover Visualização"
-            ImageIndex      =   15
             Style           =   1
          EndProperty
          BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kundoview"
             Object.ToolTipText     =   "Voltar Visualização"
-            ImageIndex      =   5
          EndProperty
          BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kredoview"
             Object.ToolTipText     =   "Avançar Visualização"
-            ImageIndex      =   6
          EndProperty
          BeginProperty Button18 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -311,12 +399,10 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button19 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomin"
             Object.ToolTipText     =   "Menos Zoom"
-            ImageIndex      =   23
          EndProperty
          BeginProperty Button20 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomout"
             Object.ToolTipText     =   "Mais Zoom"
-            ImageIndex      =   22
          EndProperty
          BeginProperty Button21 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -324,19 +410,16 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button22 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kdrawnetworkline"
             Object.ToolTipText     =   "Desenhar Rede"
-            ImageIndex      =   12
             Style           =   1
          EndProperty
          BeginProperty Button23 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kmovenetworknode"
             Object.ToolTipText     =   "Mover Componente com Rede"
-            ImageIndex      =   18
             Style           =   1
          EndProperty
          BeginProperty Button24 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kinsertnetworknode"
             Object.ToolTipText     =   "Desenhar Componente na Rede"
-            ImageIndex      =   17
             Style           =   1
          EndProperty
          BeginProperty Button25 {66833FEA-8583-11D1-B16A-00C0F0283628} 
@@ -371,23 +454,19 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button31 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kinsertdoc"
             Object.ToolTipText     =   "Inserir Documento(s)"
-            ImageIndex      =   9
             Style           =   1
          EndProperty
          BeginProperty Button32 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kdrawramal"
             Object.ToolTipText     =   "Inserir Ramal"
-            ImageIndex      =   10
          EndProperty
          BeginProperty Button33 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kdelete"
             Object.ToolTipText     =   "Excluir"
-            ImageIndex      =   1
          EndProperty
          BeginProperty Button34 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "ksearchinnetwork"
             Object.ToolTipText     =   "Encontrar válvulas a partir da rede selecionada"
-            ImageIndex      =   8
          EndProperty
          BeginProperty Button35 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
@@ -409,7 +488,7 @@ Begin VB.MDIForm FrmMain
       EndProperty
       Begin TECOMEXPORTLibCtl.TeExport TeExport2 
          Left            =   4320
-         OleObjectBlob   =   "frmMain.frx":0CCC
+         OleObjectBlob   =   "frmMain.frx":A748
          Top             =   840
       End
       Begin MSComctlLib.ProgressBar ProgressBar1 
@@ -440,127 +519,127 @@ Begin VB.MDIForm FrmMain
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   31
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":0CF0
+            Picture         =   "frmMain.frx":A76C
             Key             =   "new_window"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1042
+            Picture         =   "frmMain.frx":AABE
             Key             =   "zoom_area"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1394
+            Picture         =   "frmMain.frx":AE10
             Key             =   "zoom_in"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":16E6
+            Picture         =   "frmMain.frx":B162
             Key             =   "zoon_out"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1A38
+            Picture         =   "frmMain.frx":B4B4
             Key             =   "undo_view"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1D8A
+            Picture         =   "frmMain.frx":B806
             Key             =   "redo_view"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":20DC
+            Picture         =   "frmMain.frx":BB58
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":262E
+            Picture         =   "frmMain.frx":C0AA
             Key             =   "delete"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":2980
+            Picture         =   "frmMain.frx":C3FC
             Key             =   "save"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":2CD2
+            Picture         =   "frmMain.frx":C74E
             Key             =   "fit"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":3024
+            Picture         =   "frmMain.frx":CAA0
             Key             =   "insertramal"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":3376
+            Picture         =   "frmMain.frx":CDF2
             Key             =   "foto"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":36C8
+            Picture         =   "frmMain.frx":D144
             Key             =   "fonte"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":3A1A
+            Picture         =   "frmMain.frx":D496
             Key             =   "fiti"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":3D6C
+            Picture         =   "frmMain.frx":D7E8
             Key             =   "sair"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":40BE
+            Picture         =   "frmMain.frx":DB3A
             Key             =   "seta"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":4410
+            Picture         =   "frmMain.frx":DE8C
             Key             =   "world"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":4762
+            Picture         =   "frmMain.frx":E1DE
             Key             =   "find_user"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":4AB4
+            Picture         =   "frmMain.frx":E530
             Key             =   "insert_point"
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":4E06
+            Picture         =   "frmMain.frx":E882
             Key             =   "attach"
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":5158
+            Picture         =   "frmMain.frx":EBD4
             Key             =   "draw_network"
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":54AA
+            Picture         =   "frmMain.frx":EF26
             Key             =   "find_valvula"
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":57FC
+            Picture         =   "frmMain.frx":F278
             Key             =   "declivity"
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":5B4E
+            Picture         =   "frmMain.frx":F5CA
             Key             =   "reflesh"
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":5EA0
+            Picture         =   "frmMain.frx":F91C
             Key             =   "move_point"
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":61F2
+            Picture         =   "frmMain.frx":FC6E
             Key             =   "pan"
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":6544
+            Picture         =   "frmMain.frx":FFC0
             Key             =   "registro"
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":6896
+            Picture         =   "frmMain.frx":10312
             Key             =   "point"
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":6BE8
+            Picture         =   "frmMain.frx":10664
             Key             =   "point2"
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":6FB3
+            Picture         =   "frmMain.frx":10A2F
             Key             =   "line"
          EndProperty
          BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":7305
+            Picture         =   "frmMain.frx":10D81
             Key             =   ""
          EndProperty
       EndProperty
@@ -578,131 +657,131 @@ Begin VB.MDIForm FrmMain
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   32
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":7757
+            Picture         =   "frmMain.frx":111D3
             Key             =   "new_window"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":7AA9
+            Picture         =   "frmMain.frx":11525
             Key             =   "zoom_area"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":7DFB
+            Picture         =   "frmMain.frx":11877
             Key             =   "zoom_in"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":814D
+            Picture         =   "frmMain.frx":11BC9
             Key             =   "zoon_out"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":849F
+            Picture         =   "frmMain.frx":11F1B
             Key             =   "undo_view"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":87F1
+            Picture         =   "frmMain.frx":1226D
             Key             =   "redo_view"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":8B43
+            Picture         =   "frmMain.frx":125BF
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":9095
+            Picture         =   "frmMain.frx":12B11
             Key             =   "delete"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":93E7
+            Picture         =   "frmMain.frx":12E63
             Key             =   "save"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":9739
+            Picture         =   "frmMain.frx":131B5
             Key             =   "fit"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":9A8B
+            Picture         =   "frmMain.frx":13507
             Key             =   "insertramal"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":9DDD
+            Picture         =   "frmMain.frx":13859
             Key             =   "foto"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":A12F
+            Picture         =   "frmMain.frx":13BAB
             Key             =   "fonte"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":A481
+            Picture         =   "frmMain.frx":13EFD
             Key             =   "fiti"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":A7D3
+            Picture         =   "frmMain.frx":1424F
             Key             =   "sair"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":AB25
+            Picture         =   "frmMain.frx":145A1
             Key             =   "seta"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":AE77
+            Picture         =   "frmMain.frx":148F3
             Key             =   "world"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":B1C9
+            Picture         =   "frmMain.frx":14C45
             Key             =   "find_user"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":B51B
+            Picture         =   "frmMain.frx":14F97
             Key             =   "insert_point"
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":B86D
+            Picture         =   "frmMain.frx":152E9
             Key             =   "attach"
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":BBBF
+            Picture         =   "frmMain.frx":1563B
             Key             =   "draw_network"
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":BF11
+            Picture         =   "frmMain.frx":1598D
             Key             =   "find_valvula"
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":C263
+            Picture         =   "frmMain.frx":15CDF
             Key             =   "declivity"
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":C5B5
+            Picture         =   "frmMain.frx":16031
             Key             =   "reflesh"
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":C907
+            Picture         =   "frmMain.frx":16383
             Key             =   "move_point"
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":CC59
+            Picture         =   "frmMain.frx":166D5
             Key             =   "pan"
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":CFAB
+            Picture         =   "frmMain.frx":16A27
             Key             =   "registro"
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":D2FD
+            Picture         =   "frmMain.frx":16D79
             Key             =   "point"
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":D64F
+            Picture         =   "frmMain.frx":170CB
             Key             =   "point2"
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":DA1A
+            Picture         =   "frmMain.frx":17496
             Key             =   "line"
          EndProperty
          BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":DD6C
+            Picture         =   "frmMain.frx":177E8
             Key             =   ""
          EndProperty
          BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":E1BE
+            Picture         =   "frmMain.frx":17C3A
             Key             =   ""
          EndProperty
       EndProperty
@@ -720,103 +799,103 @@ Begin VB.MDIForm FrmMain
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   25
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":E7E8
+            Picture         =   "frmMain.frx":18264
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":EC4B
+            Picture         =   "frmMain.frx":186C7
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1379D
+            Picture         =   "frmMain.frx":1D219
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":167EF
+            Picture         =   "frmMain.frx":2026B
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":19841
+            Picture         =   "frmMain.frx":232BD
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1C893
+            Picture         =   "frmMain.frx":2630F
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":1F8E5
+            Picture         =   "frmMain.frx":29361
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":21767
+            Picture         =   "frmMain.frx":2B1E3
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":21B85
+            Picture         =   "frmMain.frx":2B601
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":2DBD7
+            Picture         =   "frmMain.frx":37653
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":39C29
+            Picture         =   "frmMain.frx":436A5
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":45C7B
+            Picture         =   "frmMain.frx":4F6F7
             Key             =   ""
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":51CCD
+            Picture         =   "frmMain.frx":5B749
             Key             =   ""
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":5DD1F
+            Picture         =   "frmMain.frx":6779B
             Key             =   ""
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":69D71
+            Picture         =   "frmMain.frx":737ED
             Key             =   ""
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":6A9C3
+            Picture         =   "frmMain.frx":7443F
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":76A15
+            Picture         =   "frmMain.frx":80491
             Key             =   ""
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":82A67
+            Picture         =   "frmMain.frx":8C4E3
             Key             =   ""
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":8EAB9
+            Picture         =   "frmMain.frx":98535
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":9AB0B
+            Picture         =   "frmMain.frx":A4587
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":A6B5D
+            Picture         =   "frmMain.frx":B05D9
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":A9BAF
+            Picture         =   "frmMain.frx":B362B
             Key             =   ""
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":A9FF3
+            Picture         =   "frmMain.frx":B3A6F
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":AA427
+            Picture         =   "frmMain.frx":B3EA3
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmMain.frx":AA860
+            Picture         =   "frmMain.frx":B42DC
             Key             =   ""
          EndProperty
       EndProperty
@@ -1849,12 +1928,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2363,31 +2442,31 @@ End Sub
 
 Public Sub SizeControls()
 On Error GoTo Trata_Erro
-   
-   With TabStrip1
+   'pctSfondo lado esquerdo do gerenciador de propriedades
+   With TabStrip1   'tab superior com as opções de tree e propriedades
       .Height = IIf(pctSfondo.Height < .Top, 100, pctSfondo.Height - .Top)
       .Width = IIf(pctSfondo.Width < .Left, 100, pctSfondo.Width - .Left)
    End With
-   With Manager1
+   With Manager1    'gerenciador de propriedades
       .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
       .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
       .Resize pctSfondo.Width - 400, pctSfondo.Height - 1400
       .Top = 1340
       .Left = 300
    End With
-   With ViewManager1
+   With ViewManager1    'gerenciador de tree
       .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
       .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
       .Top = 1350
       .Left = 300
    End With
-   picSplitter.Height = pctSfondo.Height
-   imgSplitter.Height = pctSfondo.Height
+   picSplitter.Height = pctSfondo.Height   'separador das duas colunas do gerenciador de propriedades
+   imgSplitter.Height = pctSfondo.Height    'outro separador
    
-   cmdClose.Left = pctSfondo.Width - 300
+   cmdClose.Left = pctSfondo.Width - 300    'ícone X de fechar
    cmdClose.Top = pctSfondo.Top - 350
-   FrameEscala.Width = pctSfondo.Width - 300
-   txtEscala.Width = pctSfondo.Width - 2350
+   FrameEscala.Width = pctSfondo.Width - 300 'label da escala de visualização
+   txtEscala.Width = pctSfondo.Width - 2350     'texto da escala de visualização
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -2441,8 +2520,6 @@ Private Sub mnuOpen_Click()
     Set TCanvas = New frmCanvas
     TCanvas.init Conn, usuario.UseName
 End Sub
-
-
 
 Private Sub TabStrip1_Click()
 
