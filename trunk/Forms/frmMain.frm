@@ -11,10 +11,10 @@ Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
    Caption         =   "NEXUS - GeoSan"
-   ClientHeight    =   8940
+   ClientHeight    =   8445
    ClientLeft      =   165
    ClientTop       =   735
-   ClientWidth     =   10980
+   ClientWidth     =   10035
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "FrmMain"
    StartUpPosition =   3  'Windows Default
@@ -132,12 +132,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   7110
-      Left            =   7035
-      ScaleHeight     =   7110
+      Height          =   7515
+      Left            =   6090
+      ScaleHeight     =   7515
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   1410
+      Top             =   510
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1335
@@ -274,9 +274,9 @@ Begin VB.MDIForm FrmMain
       Height          =   420
       Left            =   0
       TabIndex        =   0
-      Top             =   8520
-      Width           =   10980
-      _ExtentX        =   19368
+      Top             =   8025
+      Width           =   10035
+      _ExtentX        =   17701
       _ExtentY        =   741
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "21:49"
+            TextSave        =   "21:57"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -313,13 +313,13 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   1410
+      Height          =   510
       Left            =   0
       TabIndex        =   7
       Top             =   0
-      Width           =   10980
-      _ExtentX        =   19368
-      _ExtentY        =   2487
+      Width           =   10035
+      _ExtentX        =   17701
+      _ExtentY        =   900
       ButtonWidth     =   820
       ButtonHeight    =   794
       ImageList       =   "ImageList4"
@@ -329,10 +329,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "knew"
             Object.ToolTipText     =   "Novo"
+            ImageIndex      =   1
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "ksave"
             Object.ToolTipText     =   "Salvar"
+            ImageIndex      =   2
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -340,15 +342,18 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kselection"
             Object.ToolTipText     =   "Selecionar"
+            ImageIndex      =   3
             Style           =   1
          EndProperty
          BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kplotview"
             Object.ToolTipText     =   "Atualizar"
+            ImageIndex      =   4
          EndProperty
          BeginProperty Button6 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "krecompose"
             Object.ToolTipText     =   "Recompor"
+            ImageIndex      =   5
          EndProperty
          BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -356,6 +361,7 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "mnuPoligono"
             Object.ToolTipText     =   "Poligono de Seleção"
+            ImageIndex      =   6
          EndProperty
          BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -363,14 +369,17 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "KFindCoordenadas"
             Object.ToolTipText     =   "Localizar Coordenada"
+            ImageIndex      =   7
          EndProperty
          BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "KEncontraTexto"
             Object.ToolTipText     =   "Encontrar Textos"
+            ImageIndex      =   8
          EndProperty
          BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "KEncontraConsumidor"
             Object.ToolTipText     =   "Encontrar Consumidores"
+            ImageIndex      =   9
          EndProperty
          BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -378,20 +387,24 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button14 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomarea"
             Object.ToolTipText     =   "Zoom Área"
+            ImageIndex      =   10
             Style           =   1
          EndProperty
          BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kpan"
             Object.ToolTipText     =   "Mover Visualização"
+            ImageIndex      =   11
             Style           =   1
          EndProperty
          BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kundoview"
             Object.ToolTipText     =   "Voltar Visualização"
+            ImageIndex      =   12
          EndProperty
          BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kredoview"
             Object.ToolTipText     =   "Avançar Visualização"
+            ImageIndex      =   13
          EndProperty
          BeginProperty Button18 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -399,10 +412,12 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button19 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomin"
             Object.ToolTipText     =   "Menos Zoom"
+            ImageIndex      =   14
          EndProperty
          BeginProperty Button20 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kzoomout"
             Object.ToolTipText     =   "Mais Zoom"
+            ImageIndex      =   15
          EndProperty
          BeginProperty Button21 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -410,16 +425,19 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button22 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kdrawnetworkline"
             Object.ToolTipText     =   "Desenhar Rede"
+            ImageIndex      =   16
             Style           =   1
          EndProperty
          BeginProperty Button23 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kmovenetworknode"
             Object.ToolTipText     =   "Mover Componente com Rede"
+            ImageIndex      =   17
             Style           =   1
          EndProperty
          BeginProperty Button24 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kinsertnetworknode"
             Object.ToolTipText     =   "Desenhar Componente na Rede"
+            ImageIndex      =   18
             Style           =   1
          EndProperty
          BeginProperty Button25 {66833FEA-8583-11D1-B16A-00C0F0283628} 
@@ -430,17 +448,20 @@ Begin VB.MDIForm FrmMain
             Object.Visible         =   0   'False
             Key             =   "kdrawtext"
             Object.ToolTipText     =   "Desenhar Texto - Amarração"
+            ImageIndex      =   19
             Style           =   1
          EndProperty
          BeginProperty Button27 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
             Key             =   "kdrawline"
             Object.ToolTipText     =   "Desenhar Linha - Amarração"
+            ImageIndex      =   20
          EndProperty
          BeginProperty Button28 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
             Key             =   "kdrawpoint"
             Object.ToolTipText     =   "Desenhar Ponto - Amarração"
+            ImageIndex      =   21
          EndProperty
          BeginProperty Button29 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
@@ -454,19 +475,23 @@ Begin VB.MDIForm FrmMain
          BeginProperty Button31 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kinsertdoc"
             Object.ToolTipText     =   "Inserir Documento(s)"
+            ImageIndex      =   19
             Style           =   1
          EndProperty
          BeginProperty Button32 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kdrawramal"
             Object.ToolTipText     =   "Inserir Ramal"
+            ImageIndex      =   20
          EndProperty
          BeginProperty Button33 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "kdelete"
             Object.ToolTipText     =   "Excluir"
+            ImageIndex      =   21
          EndProperty
          BeginProperty Button34 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "ksearchinnetwork"
             Object.ToolTipText     =   "Encontrar válvulas a partir da rede selecionada"
+            ImageIndex      =   22
          EndProperty
          BeginProperty Button35 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.Visible         =   0   'False
@@ -1928,12 +1953,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2438,16 +2463,18 @@ Private Sub MDIForm_Resize()
    SizeControls
    
 End Sub
-
-
+' Esta rotina controla a correta visualização do tamanho do gerenciador de propriedades, tree e itens perto dos mesmos
+'
+'
+'
 Public Sub SizeControls()
 On Error GoTo Trata_Erro
    'pctSfondo lado esquerdo do gerenciador de propriedades
-   With TabStrip1   'tab superior com as opções de tree e propriedades
+   With TabStrip1       'tab superior com as opções de tree e propriedades
       .Height = IIf(pctSfondo.Height < .Top, 100, pctSfondo.Height - .Top)
       .Width = IIf(pctSfondo.Width < .Left, 100, pctSfondo.Width - .Left)
    End With
-   With Manager1    'gerenciador de propriedades
+   With Manager1        'gerenciador de propriedades
       .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
       .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
       .Resize pctSfondo.Width - 400, pctSfondo.Height - 1400
@@ -2460,12 +2487,12 @@ On Error GoTo Trata_Erro
       .Top = 1350
       .Left = 300
    End With
-   picSplitter.Height = pctSfondo.Height   'separador das duas colunas do gerenciador de propriedades
-   imgSplitter.Height = pctSfondo.Height    'outro separador
+   picSplitter.Height = pctSfondo.Height        'separador das duas colunas do gerenciador de propriedades
+   imgSplitter.Height = pctSfondo.Height        'outro separador
    
-   cmdClose.Left = pctSfondo.Width - 300    'ícone X de fechar
+   cmdClose.Left = pctSfondo.Width - 300        'ícone X de fechar
    cmdClose.Top = pctSfondo.Top - 350
-   FrameEscala.Width = pctSfondo.Width - 300 'label da escala de visualização
+   FrameEscala.Width = pctSfondo.Width - 300    'label da escala de visualização
    txtEscala.Width = pctSfondo.Width - 2350     'texto da escala de visualização
 
 Trata_Erro:
