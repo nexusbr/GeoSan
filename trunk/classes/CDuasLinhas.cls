@@ -51,6 +51,6 @@ Public Sub Intersecao2Linhas(linha1 As CLine2D, linha2 As CLine2D)
         MsgBox "Linhas paralelas"
     Else
         xInt = (b2 * c1 - b1 * c2) / det
-        yInt = (a1 * c2 - a1 * c1) / det
+        yInt = (a1 * c2 - a2 * c1) / det
     End If
 End Sub

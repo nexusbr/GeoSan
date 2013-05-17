@@ -627,3 +627,278 @@ DESCRIÇÃO      Incorrect syntax near '='.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           17/05/2013 13:34:30 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe conexão com o banco de dados!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 13:47:16 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Não existe conexão com o banco de dados!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:07 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:16 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:19 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:28 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:39 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:41 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:34:50 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:38:13 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:38:37 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:39:29 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:40:35 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:40:37 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:40:40 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      The incoming tabular data stream (TDS) remote procedure call (RPC) protocol stream is incorrect. Parameter 6 ("@tec_xmin"): The supplied value is not a valid instance of data type float. Check the source data for invalid values. An example of an invalid value is data of numeric type with scale greater than precision.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:40:56 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:04 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:07 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:10 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onMouseDown
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:14 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:15 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:19 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:21 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:41:33 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      The incoming tabular data stream (TDS) remote procedure call (RPC) protocol stream is incorrect. Parameter 6 ("@tec_xmin"): The supplied value is not a valid instance of data type float. Check the source data for invalid values. An example of an invalid value is data of numeric type with scale greater than precision.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/05/2013 17:43:00 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView
+LINHA          0
+MOTIVO         6
+DESCRIÇÃO      Overflow
+
+-----------------------------------------------------------------------------------------------------
+

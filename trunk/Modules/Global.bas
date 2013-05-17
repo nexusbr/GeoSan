@@ -1,6 +1,24 @@
 Attribute VB_Name = "Global"
 Option Explicit
 
+Public varGlobais As New CVariaveis             'variáveis globais que todas as rotinas podem acessar
+
+Public cGeoDatabase As New cGeoDatabase         'conexão do TeDatabase única para toda a aplicação
+
+Public cGeoViewDatabase As New CViewDatabase    'conexão com o TeViewManager para toda a aplicação
+
+Public Erro As New CPrintErro                   'classe responsável por apresentar caixa de diálogo de erro e registrar o erro no arquivo de log
+
+Public Type Ramais                              'utilizado para mover os ramais quando um nó de um trecho de rede é movido
+    objIdTrecho As String
+    objIdRamal As String
+    geomIdRamal As String
+    Distancia As Double
+    comprTrecho As Double
+End Type
+
+Public ramalMovendo() As Ramais
+
 Private AbrirArquivo As New clsAbreArquivo      'Classe que abre um arquivo conforme a extensão do mesmo
 
 Public Versao_Geo As String             'Número da versão do software no formato XX.YY.ZZ.WW
@@ -77,8 +95,8 @@ Public blnGeraRel As Boolean
 Type TListaNo
     indice As Integer
     object_id As String
-    X As Double
-    Y As Double
+    x As Double
+    y As Double
 End Type
 Public Enum nxSqlOperations
    nxSELECT = 1
@@ -836,7 +854,7 @@ On Error GoTo Trata_Erro
     Dim arrSQL(100) As String
     Dim i As Integer
     Dim ctErro As Integer
-    Dim erro As Integer
+    Dim Erro As Integer
 Dim g13 As String
 g13 = "NX_BASE"
 Inicio:
@@ -1017,7 +1035,7 @@ End If
 
 
  
-  If erro = 0 Then
+  If Erro = 0 Then
       'SQL = "UPDATE NX_BASE SET VERSAO = '6.0.0'"
      ' Conn.execute (SQL)
       MsgBox "Base de dados atualizada com sucesso!", vbInformation, ""
@@ -1066,7 +1084,7 @@ On Error GoTo Trata_Erro_oracle
     Dim SQL As String
     Dim arrSQL(100) As String
     Dim i As Integer
-    Dim erro As Byte
+    Dim Erro As Byte
     Dim ctErro As Integer
    
 Inicio:
@@ -1298,7 +1316,7 @@ End If
     
         
 
- If erro = 0 Then
+ If Erro = 0 Then
     '  SQL = "UPDATE NX_BASE SET VERSAO = '5.8.0'"
      ' Conn.execute (SQL)
       MsgBox "Base de dados atualizada com sucesso!", vbInformation, ""
@@ -1346,7 +1364,7 @@ Trata_Erro_oracle:
       PrintErro "Global", arrSQL(i), CStr(Err.Number), CStr(Err.Description), False
       Err.Clear
         
-      erro = 1 'MARCA QUE HOUVE 1 ERRO DESCONHECIDO, ENTÃO NÃO ATUALIZA O VALOR DE VERSÃO DO BANCO
+      Erro = 1 'MARCA QUE HOUVE 1 ERRO DESCONHECIDO, ENTÃO NÃO ATUALIZA O VALOR DE VERSÃO DO BANCO
     
     End If
 
@@ -1537,7 +1555,7 @@ Public Sub ExporteCrede(MyObject As String, nomeArq As String, LayName As String
    Dim SubType As Long
    Dim cgeo As New clsGeoReference
     'On Error GoTo gtErro
-    Dim Xi As Double, Yi As Double, xf As Double, Yf As Double
+    Dim xi As Double, yi As Double, xf As Double, yf As Double
     arqrede = FreeFile
     Open nomeArq For Output As arqrede
     '- x - x - x - x - x - x - x - x - x - x - x - x - x - x - x - x - x - x - x - x - x -
@@ -1748,8 +1766,8 @@ Public Sub ExporteCrede(MyObject As String, nomeArq As String, LayName As String
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -1788,10 +1806,10 @@ Public Sub ExporteCrede(MyObject As String, nomeArq As String, LayName As String
         Print #arqrede, Left(objRecordset.Fields("OBJECT_ID_"), 40)
         'Compr. de cálculo (m)
         'Print #arqrede, CStr(IIf(objRecordset.Fields("LENGTH") = 0, objRecordset.Fields("LengthCalculated"), objRecordset.Fields("LENGTH")))
-        QualCoordernada objRecordset.Fields("INITIALCOMPONENT"), Xi, Yi
-        QualCoordernada objRecordset.Fields("FINALCOMPONENT"), xf, Yf
+        QualCoordernada objRecordset.Fields("INITIALCOMPONENT"), xi, yi
+        QualCoordernada objRecordset.Fields("FINALCOMPONENT"), xf, yf
         
-        Print #arqrede, Round(Sqr(((xf - Xi) * (xf - Xi)) + ((xf - Xi) * (xf - Xi))), 2)
+        Print #arqrede, Round(Sqr(((xf - xi) * (xf - xi)) + ((xf - xi) * (xf - xi))), 2)
         'Diâmetro nominal (mm)
         Print #arqrede, CStr(objRecordset.Fields("INTERNALDIAMETER"))
         'Diâmetro externo real (m)
@@ -1910,20 +1928,20 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
          Dim v As String
          Dim sq As String
          Dim sa As String
-          Dim r, X, z, xz, Y As String
+          Dim r, x, z, xz, y As String
          p = "y"
          q = "ID_TYPE"
         r = "OBJECT_ID_"
          t = "GROUNDHEIGHT"
          u = "Demand"
          v = "x"
-         X = "points2"
+         x = "points2"
          z = "WATERCOMPONENTS"
          xz = "object_id"
         sa = cgeo.GetLayerID(LayName)
         sq = "sa"
         
-          sQry = convertQuery("SELECT " + """" + X + """" + "." + """" + Y + """" + "," + """" + X + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + X + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + X + """" + "." + """" + u + """" + " From " + """" + X + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
+          sQry = convertQuery("SELECT " + """" + x + """" + "." + """" + y + """" + "," + """" + x + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + x + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + x + """" + "." + """" + u + """" + " From " + """" + x + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
     'pode está errado ********
         
         
@@ -2033,8 +2051,8 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -2093,10 +2111,10 @@ k = "lin"
         Print #arqrede, Left(objRecordset.Fields("OBJECT_ID_"), 40)
         'Compr. de cálculo (m)
         'Print #arqrede, CStr(IIf(objRecordset.Fields("LENGTH") = 0, objRecordset.Fields("LengthCalculated"), objRecordset.Fields("LENGTH")))
-        QualCoordernada objRecordset.Fields("INITIALCOMPONENT"), Xi, Yi
-        QualCoordernada objRecordset.Fields("FINALCOMPONENT"), xf, Yf
+        QualCoordernada objRecordset.Fields("INITIALCOMPONENT"), xi, yi
+        QualCoordernada objRecordset.Fields("FINALCOMPONENT"), xf, yf
         
-        Print #arqrede, Round(Sqr(((xf - Xi) * (xf - Xi)) + ((xf - Xi) * (xf - Xi))), 2)
+        Print #arqrede, Round(Sqr(((xf - xi) * (xf - xi)) + ((xf - xi) * (xf - xi))), 2)
         'Diâmetro nominal (mm)
         Print #arqrede, CStr(objRecordset.Fields("INTERNALDIAMETER"))
         'Diâmetro externo real (m)
@@ -2138,8 +2156,8 @@ gtErro:
 End Sub
 'até aqui dia 19/10/2010
 
-Function Log10(X)
-    Log10 = Log(X) / Log(10)
+Function Log10(x)
+    Log10 = Log(x) / Log(10)
 End Function
 
 
@@ -2213,12 +2231,12 @@ Dim i As Long
     MsgBox " NÃO ENCONTROU"
 End Function
 
-Private Function QualCoordernada(object_id, ByRef X As Double, ByRef Y As Double) As Long
+Private Function QualCoordernada(object_id, ByRef x As Double, ByRef y As Double) As Long
 Dim i As Long
     For i = LBound(aListaNo) To UBound(aListaNo)
         If aListaNo(i).object_id = object_id Then
-            X = aListaNo(i).X
-            Y = aListaNo(i).Y
+            x = aListaNo(i).x
+            y = aListaNo(i).y
             Exit Function
         End If
     Next i

@@ -37,10 +37,9 @@ End Property
 Public Function GetStartEndPointsTrecho(objId As String) As Integer
     Dim retorno As Boolean
     
-    frmCanvas.TeDatabase4.connection = Conn
-    If frmCanvas.TeDatabase4.setCurrentLayer("WaterLines") Then
-        retorno = frmCanvas.TeDatabase4.getPointOfLine(0, objId, 0, xi, yi)
-        retorno = frmCanvas.TeDatabase4.getPointOfLine(0, objId, frmCanvas.TeDatabase4.getQuantityPointsLine(0, objId) - 1, xf, yf)
+    If cGeoDatabase.geoDatabase.setCurrentLayer("WaterLines") Then
+        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, 0, xi, yi)
+        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, cGeoDatabase.geoDatabase.getQuantityPointsLine(0, objId) - 1, xf, yf)
         lin.xi = xi
         lin.yi = yi
         lin.xf = xf
@@ -52,10 +51,9 @@ End Function
 Public Function GetStartEndPointsRamal(objId As String) As Integer
     Dim retorno As Boolean
     
-    frmCanvas.TeDatabase4.connection = Conn
-    If frmCanvas.TeDatabase4.setCurrentLayer("RAMAIS_AGUA") Then
-        retorno = frmCanvas.TeDatabase4.getPointOfLine(0, objId, 0, xi, yi)
-        retorno = frmCanvas.TeDatabase4.getPointOfLine(0, objId, frmCanvas.TeDatabase4.getQuantityPointsLine(0, objId) - 1, xf, yf)
+    If cGeoDatabase.geoDatabase.setCurrentLayer("RAMAIS_AGUA") Then
+        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, 0, xi, yi)
+        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, cGeoDatabase.geoDatabase.getQuantityPointsLine(0, objId) - 1, xf, yf)
         lin.xi = xi
         lin.yi = yi
         lin.xf = xf

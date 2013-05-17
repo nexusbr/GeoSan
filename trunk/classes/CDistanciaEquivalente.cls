@@ -21,5 +21,5 @@ Attribute VB_Exposed = False
 ' distanciaRamalAntes - distância do ramal para o início da linha
 '
 Public Function distanciaRamalDepoisMovido(compLinhaAntes As Double, compLinhaDepois As Double, distanciaRamalAntes As Double) As Double
-    NovaDistancia = compLinhaAntes * distanciaRamalAntes / compLinhaDepois
+    distanciaRamalDepoisMovido = compLinhaAntes * distanciaRamalAntes / compLinhaDepois
 End Function

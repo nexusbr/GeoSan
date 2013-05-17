@@ -14,6 +14,12 @@ Attribute VB_Exposed = False
 ' Funç~oes para obter as coordenadas do ramal em sua nova posição, após movida a rede
 '
 Private dist As Double                              'distância do início do ramal antes de mover até o início do trecho antes de mover
+Private coordsR As New CLine2D
+'Retorna coordenadas do primeiro e último vértices da linha
+'
+Property Get CoordRamal() As CLine2D
+    Set CoordRamal = coordsR
+End Property
 ' Calcula a distância entre o ponto inicial do trecho antes de ser movido e o ponto inicial da linha do ramal
 '
 ' distancia - retorna a distância do início do ramal antes de mover até o iníco do trecho de rede antes de mover
@@ -21,7 +27,7 @@ Private dist As Double                              'distância do início do rama
 ' objIdRamal - do ramal ates de mover
 ' teDatabaseConn - conexão com o banco de dados geográfico
 '
-Public Function distancia(objIdTrecho As String, objIdRamal As String) As Double
+Public Function Distancia(objIdTrecho As String, objIdRamal As String) As Double
     ', ByVal teDatabaseConn As TeDatabase
     'Dim a As New CGeometria                             'declaração do objeto como do tipo classe CGeometria e criação do mesmo (New) através de uma auto instância
     Dim t As Integer
@@ -42,8 +48,8 @@ Public Function distancia(objIdTrecho As String, objIdRamal As String) As Double
     'coordenadasLinha2.conexao = teDatabaseConn
     coordenadasLinha2.GetStartEndPointsRamal (objIdRamal)
     Set linha2 = coordenadasLinha2.linha
-    Call coordInt2Linhas.Intersecao2Linhas(linha1, linha2)      'calcula a coordenada de interseção entre as linhas do ramal e do trecho de rede
-    distancia = distInicial.Distancia2Pontos(linha1.xi, linha1.xf, coordInt2Linhas.x, coordInt2Linhas.y)  'calcula a distância entre o ponto de interseção do ramal com o trecho de rede e o ponto inicial do trecho de rede
+    coordInt2Linhas.Intersecao2Linhas linha1, linha2       'calcula a coordenada de interseção entre as linhas do ramal e do trecho de rede
+    Distancia = distInicial.Distancia2Pontos(linha1.xi, linha1.yi, coordInt2Linhas.x, coordInt2Linhas.y)  'calcula a distância entre o ponto de interseção do ramal com o trecho de rede e o ponto inicial do trecho de rede
 End Function
 ' Obtem as coordenadas iniciais e finais do ramal após a movimentação do trecho de rede
 '
@@ -51,7 +57,7 @@ End Function
 ' newObjIdTrecho - do trecho depois que moveu o mesmo
 ' teDatabaseConn - conexão com o banco de dados geográfico
 '
-Public Function coordsRamal(distancia As Double, newObjIdTrecho As String, ByVal teDatabaseConn As TeDatabase) As CLine2D
+Public Function coordsRamal(Distancia As Double, newObjIdTrecho As String, ByVal teDatabaseConn As TeDatabase)
     Dim linha3 As New CLine2D                       'linha final movida do trecho de rede
     Dim linha4 As New CLine2D                       'linha final do ramal, movido, ligado ao trecho de rede
     Dim coordenadasLinha3 As New CCoordIniFinLinha  'coordenadas ao trecho de rede depois de mover
@@ -59,11 +65,14 @@ Public Function coordsRamal(distancia As Double, newObjIdTrecho As String, ByVal
     
     'obtem as coordenadas inicial e final do trecho de rede na nova posição ao qual foi movido
     coordenadasLinha3.conexao = teDatabaseConn
-    coordenadasLinha3.GetStartEndPointsTrecho (newObjIdTrecho)               'calcula as coordenadas inicial e final do novo trecho de rede
-    Set linha3 = coordenadasLinha3.linha                                'obtem as coordenadas
-    Call coordXYdist.calculaCoord(linha3, distancia)
-    coordsRamal.xi = coordXYdist.x                                      'nova coordenada x inicial do ramal movido
-    coordsRamal.yi = coordXYdist.y                                      'nova coordenada y inicial do ramal movido
-    coordsRamal.xf = linha3.xf                                          'coordenada x final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
-    coordsRamal.yf = linha3.yf                                          'coordenada y final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
+    coordenadasLinha3.GetStartEndPointsTrecho (newObjIdTrecho)      'calcula as coordenadas inicial e final do novo trecho de rede
+    linha3.xi = coordenadasLinha3.linha.xi                          'obtem as coordenadas
+    linha3.yi = coordenadasLinha3.linha.yi
+    linha3.xf = coordenadasLinha3.linha.xf
+    linha3.yf = coordenadasLinha3.linha.yf
+    coordXYdist.calculaCoord linha3, Distancia
+    coordsR.xi = coordXYdist.x                                      'nova coordenada x inicial do ramal movido
+    coordsR.yi = coordXYdist.y                                      'nova coordenada y inicial do ramal movido
+    coordsR.xf = linha3.xi                                          'coordenada x final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
+    coordsR.yf = linha3.yi                                          'coordenada y final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
 End Function

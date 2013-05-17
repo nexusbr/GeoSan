@@ -51,12 +51,14 @@ Private mvarTerraEvent As TypeGeometryEvent 'local copy
 Private mvartdb As TeDatabase 'local copy
 Private mvartdbcon As TeDatabase 'local copy
 Private mvartdbconref As TeDatabase 'local copy
-
+' Recebe o objeto da conexão TeDatabase
+'
 Public Property Set tdb(ByVal vData As TeDatabase)
     Set mvartdb = vData
     Set cgeo.tdb = vData
 End Property
-
+' Retorna o objeto da conexão TeDatabase
+'
 Public Property Get tdb() As TeDatabase
     Set tdb = mvartdb
 End Property
@@ -153,21 +155,76 @@ Trata_Erro:
         PrintErro "clsTerraLib", "Public Function DrawNetWorkLine", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Function
-
+' Entra neste evento logo após selecionado um nó da rede para ser movido para uma nova posição.
+' Ele checa se foi selecionado mais de um nó pois é permitido mover somente um nó por vez
+' Se estiver tudo OK então adiciona o layer de snap, referência e ativa o comendo de mover nó de uma rede
+' Entra neste evento antes de salvar no banco, com os dados originais
+'
+'
 Public Function MoveNetWorkNode()
 On Error GoTo Trata_Erro
    
    If cgeo.GetReferenceLayer(tcs.getCurrentLayer) <> "" Then
       If tcs.getSelectCount(points) - 1 = 0 Then 'VERIFICA SE SOMENTE 1 PONTO FOI SELECIONADO PARA MOVER
-         tcs.addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)
-         tcs.setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)
-         tcs.MoveNetWorkNode: TerraEvent = tg_MoveNetWorkNode
-      Else
-         MsgBox "Selecione um ponto para esta operação", vbExclamation
-      End If
-   Else
-      MsgBox "Selecione um plano válido e um ponto, para esta operação", vbExclamation
-   End If
+                     Dim objIdNoMovendo As Long             'object_id do nó que foi selecionado para mover
+            Dim trechos As New CLocalizaTrechos             'instancia objeto que irá localizar os trechos conectados ao nó selecionado
+            Dim objIDsTrechosMovendo() As String            'lista com todos os object_ids dos trechos que serão movidos com o nó (presos no nó)
+            Dim contTrecho As Integer                       'contador de trechos de rede sendo movidos
+            Dim listObjIDsRamais() As String                'lista de todos objIDs dos ramais de um determinado trecho
+            Dim listGeomIDsRamais() As String               'lista de todos os geomIDs dos ramais de um determinado trecho
+            Dim contRamal As Integer                        'contador de ramais conectados em um determinado trecho de rede
+            Dim distIniRamalAntes As Double                 'distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+            Dim objIDsRamais As New CObtemObjIDsRamais
+            Dim moveRamal As New CMoveTrechoRedeComRamal    'objeto para obter a nova linha do ramal que foi movido
+            Dim objIdTrecho As String
+            Dim objIdRamal As String
+            Dim geomIdRamal As String
+            Dim contador As Integer                         'número de ramais processados
+            Dim comprTrecho As Double                       'comprimento total do trecho de rede antes de mover
+            Dim retorno As Boolean
+            
+            'nesta etapa ele vai localizar todos os trechos que serão movidos e os respectivos ramais se houverem e armazenar tudo na memória
+                contador = 0
+                objIdNoMovendo = tcs.getSelectObjectId(0, 4)                        'obtem o object_id da primeira (0) (e única) geometria do tipo 4=ponto (ver tipos em setActiveGeometry)
+                trechos.obtemTrechos objIdNoMovendo, objIDsTrechosMovendo           'obtem todos os object_ids dos trechos de rede que estão conectados ao nó que está movendo
+                varGlobais.objIdTre = Null                                          'zera a variável global, caso contenha algum valor lá
+                varGlobais.objIdTre = objIDsTrechosMovendo                          'armazena na variável global todos os object_ids dos trechos de rede que estão conectados ao nó que está movendo
+                varGlobais.totalTrechos = UBound(objIDsTrechosMovendo)              'armazena o número total de trechos de rede que estão sendo movidos
+                For contTrecho = 0 To UBound(objIDsTrechosMovendo)                  'para cada trecho de rede que estiver sendo movido, começando em zero
+                    objIdTrecho = objIDsTrechosMovendo(contTrecho)
+                    objIDsRamais.getObjIDs objIdTrecho, listObjIDsRamais, listGeomIDsRamais     'obtem todos os objIDs dos ramais que estão ligados ao trecho de rede que está sendo movido
+                    If listObjIDsRamais(0) <> "" Then                               'existem ramais conectados ao trecho
+                        For contRamal = 0 To UBound(listObjIDsRamais)               'enquanto existirem ramais
+                            contador = contador + 1
+                            ReDim Preserve ramalMovendo(contador - 1)
+                            objIdRamal = listObjIDsRamais(contRamal)
+                            geomIdRamal = listGeomIDsRamais(contRamal)
+                            distIniRamalAntes = moveRamal.Distancia(objIdTrecho, objIdRamal)  'obtem a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+                            ramalMovendo(contador - 1).objIdTrecho = objIdTrecho
+                            ramalMovendo(contador - 1).objIdRamal = objIdRamal
+                            ramalMovendo(contador - 1).geomIdRamal = geomIdRamal
+                            ramalMovendo(contador - 1).Distancia = distIniRamalAntes
+                            retorno = cGeoDatabase.geoDatabase.setCurrentLayer("WaterLines")
+                            retorno = cGeoDatabase.geoDatabase.getLengthOfLine(objIdTrecho, "", comprTrecho) 'está como geom_id deveria ser na segunda
+                            ramalMovendo(contador - 1).comprTrecho = comprTrecho
+                        Next                                                        'próximo ramal
+                    Else                                                            'não existem ramais
+                        contador = contador + 1
+                        ReDim Preserve ramalMovendo(contador - 1)
+                        ramalMovendo(contador - 1).objIdTrecho = objIdTrecho
+                        ramalMovendo(contador - 1).objIdRamal = -1
+                    End If
+                Next                                                                'próximo trecho
+            'final da etapa
+            tcs.addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)
+            tcs.setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)
+            tcs.MoveNetWorkNode: TerraEvent = tg_MoveNetWorkNode
+        Else
+            MsgBox "Selecione um ponto para esta operação", vbExclamation
+       End If
+    Else
+        MsgBox "Selecione um plano válido e um ponto, para esta operação", vbExclamation
+    End If
 
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
@@ -178,7 +235,6 @@ Trata_Erro:
    End If
    
 End Function
-
 Public Function DrawNetWorkNode()
 On Error GoTo Trata_Erro
    
@@ -459,11 +515,11 @@ Trata_Erro:
     
 End Function
 
-Public Function OnPoint(X As Double, Y As Double)
+Public Function OnPoint(x As Double, y As Double)
 On Error GoTo Trata_Erro
    Dim object_id As String, frm As New FrmAssociation
    tdb.setCurrentLayer tcs.getCurrentLayer
-   If tdb.locateGeometry(X, Y, tpPOINTS, 1) = 1 Then
+   If tdb.locateGeometry(x, y, tpPOINTS, 1) = 1 Then
       TerraEvent = tg_SelectObject
       tcs.Normal
       tcs.Select
@@ -472,7 +528,7 @@ On Error GoTo Trata_Erro
       
    Else
       TerraEvent = tg_DrawGeometrys
-      frm.init "", tcs, tdb, X, Y
+      frm.init "", tcs, tdb, x, y
       tcs.Normal
       tcs.Select
       TerraEvent = tg_SelectObject
@@ -491,7 +547,7 @@ Trata_Erro:
    
 End Function
 
-Public Function OnRamal(X As Double, Y As Double, object_id_ramal As String) As Boolean
+Public Function OnRamal(x As Double, y As Double, object_id_ramal As String) As Boolean
 On Error GoTo Trata_Erro
     
     Dim frm As New FrmCadastroRamal, Qtde As Long, a As Long
@@ -513,7 +569,7 @@ On Error GoTo Trata_Erro
     
     
     With tcs
-       Qtde = tdbconref.locateGeometryXY(X, Y, 1)
+       Qtde = tdbconref.locateGeometryXY(x, y, 1)
        For a = 0 To Qtde - 1
           If object_id_lote = "" Then
              object_id_lote = "'" & tdbconref.objectIds(a) & "'"
@@ -557,12 +613,8 @@ End Function
 '
 Public Function SaveInDatabase() As Boolean
     On Error GoTo Trata_Erro
-    'verificar o motivo de por que existem dois comentos SaveInDatabase repetidos. Ver diagrama de sequência
     tcs.saveOnMemory
     tcs.SaveInDatabase
-    '.saveOnMemory
-'    tcs.saveOnMemory           estava duplicado o que fazia piscar duas vezes (existe a opção de não dar plotview). Não necessita salvar duas vezes
-'    tcs.SaveInDatabase
     With tcs
         'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
         Select Case TerraEvent
@@ -1399,7 +1451,7 @@ Private Sub LoadAttributeByReference(geom_id As Long)
             
             .setCurrentLayer "WATERCOMPONENTS"
             
-            If .locateGeometry(rsPoints!X, rsPoints!Y, 4, 0.7) Then
+            If .locateGeometry(rsPoints!x, rsPoints!y, 4, 0.7) Then
                If cgeo.GetLayerAttrib("CEL_PONTO_ATRIB", layer_id, Attr_Link) Then
                   rsRef.Open "SELECT * from CEL_PONTO_ATRIB where " & Attr_Link & "=" & .objectIds(0), Conn, adOpenKeyset, adLockOptimistic
                   If GetTypeObjectByReference(rsRef!NOME_CELUL, id_Type, Id_SubType, value) Then
