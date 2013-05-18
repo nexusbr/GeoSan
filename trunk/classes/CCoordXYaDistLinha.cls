@@ -52,10 +52,10 @@ Public Sub calculaCoord(linha As CLine2D, Distancia As Double)
     Dim xf As Double
     Dim yf As Double
     
-    xi = linha.xi       'inverte pois a fórmula é para distância entre a partir do ponto final (nao inverteu ainda)
-    yi = linha.yi
-    xf = linha.xf
-    yf = linha.yf
+    xi = linha.xf       'inverte pois a fórmula é para distância entre a partir do ponto final (nao inverteu ainda)
+    yi = linha.yf
+    xf = linha.xi
+    yf = linha.yi
     
     X = xf - xi
     Y = yf - yi

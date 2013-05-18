@@ -1881,11 +1881,11 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
                     cGeoDatabase.geoDatabase.setCurrentLayer ("Waterlines")
                     retorno = cGeoDatabase.geoDatabase.getLengthOfLine(LINE_ID, "", novoComprTrecho)
                     distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contTrechos).comprTrecho, novoComprTrecho, ramalMovendo(contTrechos).Distancia)
-                    moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase                  'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
+                    moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase       'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
                     Dim xRamal(1) As Double, yRamal(1) As Double
                     xRamal(0) = moveRamal.coordIniRamal.X
                     yRamal(0) = moveRamal.coordIniRamal.Y
-                    xRamal(1) = ramalMovendo(contTrechos).xHidrom
+                    xRamal(1) = ramalMovendo(contTrechos).xHidrom                                           'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
                     yRamal(1) = ramalMovendo(contTrechos).yHidrom
                     cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")
                     If cGeoDatabase.geoDatabase.deleteGeometry(ramalMovendo(contTrechos).geomIdRamal, ramalMovendo(contTrechos).objIdRamal, 2) Then MsgBox "ramal removido com sucesso"
