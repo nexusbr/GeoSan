@@ -1869,28 +1869,33 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
 
         'aqui inicializa o redesenho dos ramais na nova posição
             Dim contTrechos As Integer
+            Dim contRamais As Integer
+            Dim totalRamais As Integer
             
+            totalRamais = UBound(ramalMovendo)
             For contTrechos = 0 To varGlobais.totalTrechos
-                If ramalMovendo(contTrechos).objIdTrecho = LINE_ID And ramalMovendo(contTrechos).objIdRamal <> -1 Then
-                    Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
-                    Dim moveRamal As New CCoordIniRamalDistTrecho   'classe para obter a coordenada inicial do ramal a uma determinada distância do início do trecho de rede
-                    Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
-                    Dim retorno As Boolean
-                    Dim novoComprTrecho As Double
-                    
-                    cGeoDatabase.geoDatabase.setCurrentLayer ("Waterlines")
-                    retorno = cGeoDatabase.geoDatabase.getLengthOfLine(LINE_ID, "", novoComprTrecho)
-                    distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contTrechos).comprTrecho, novoComprTrecho, ramalMovendo(contTrechos).Distancia)
-                    moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase       'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
-                    Dim xRamal(1) As Double, yRamal(1) As Double
-                    xRamal(0) = moveRamal.coordIniRamal.X
-                    yRamal(0) = moveRamal.coordIniRamal.Y
-                    xRamal(1) = ramalMovendo(contTrechos).xHidrom                                           'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
-                    yRamal(1) = ramalMovendo(contTrechos).yHidrom
-                    cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")
-                    cGeoDatabase.geoDatabase.deleteGeometry ramalMovendo(contTrechos).geomIdRamal, ramalMovendo(contTrechos).objIdRamal, 2
-                    cGeoDatabase.geoDatabase.addLine ramalMovendo(contTrechos).objIdRamal, xRamal(0), yRamal(0), 2
-                End If
+                For contRamais = 0 To totalRamais
+                    If ramalMovendo(contTrechos).objIdTrecho = LINE_ID And ramalMovendo(contRamais).objIdRamal <> -1 And ramalMovendo(contRamais).objIdTrecho = LINE_ID Then
+                        Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
+                        Dim moveRamal As New CCoordIniRamalDistTrecho   'classe para obter a coordenada inicial do ramal a uma determinada distância do início do trecho de rede
+                        Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
+                        Dim retorno As Boolean
+                        Dim novoComprTrecho As Double
+                        
+                        cGeoDatabase.geoDatabase.setCurrentLayer ("Waterlines")
+                        retorno = cGeoDatabase.geoDatabase.getLengthOfLine(LINE_ID, "", novoComprTrecho)
+                        distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contRamais).comprTrecho, novoComprTrecho, ramalMovendo(contRamais).Distancia)
+                        moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase       'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
+                        Dim xRamal(1) As Double, yRamal(1) As Double
+                        xRamal(0) = moveRamal.coordIniRamal.X
+                        yRamal(0) = moveRamal.coordIniRamal.Y
+                        xRamal(1) = ramalMovendo(contRamais).xHidrom                                           'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
+                        yRamal(1) = ramalMovendo(contRamais).yHidrom
+                        cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")                                'seta o layer em que serão apagadas e adicionadas as geometrias
+                        cGeoDatabase.geoDatabase.deleteGeometry ramalMovendo(contRamais).geomIdRamal, ramalMovendo(contRamais).objIdRamal, 2
+                        cGeoDatabase.geoDatabase.addLine ramalMovendo(contRamais).objIdRamal, xRamal(0), yRamal(0), 2
+                    End If
+                Next
             Next
         'finaliza
 
