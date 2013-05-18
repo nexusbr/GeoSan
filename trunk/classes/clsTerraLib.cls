@@ -319,204 +319,174 @@ Trata_Erro:
        
     End If
 End Function
-
+' Apaga um elemento do banco de dados geográfico
+'
+'
+'
 Public Function Delete() As Boolean
-   On Error GoTo Trata_Erro
-   Dim i As Integer, rs As ADODB.Recordset
-   Dim strsql As String
-   With tcs
-      Select Case TerraEvent
-        Case tg_SelectObject
-           
-           Select Case cgeo.GetLayerTypeReference(tcs.getCurrentLayer)  ' cgeo.GetTypeReference(tcs.getCurrentLayer)
-              
-              Case LayerTypeRefence.Trecho_Rede_Agua, LayerTypeRefence.Trecho_Rede_Drenagem, LayerTypeRefence.Trecho_Rede_esgoto 'Deleta Rede
-                 
-                 If MsgBox("Deseja realmente excluir as rede(s) selecionada(s)", vbQuestion + vbYesNo + vbDefaultButton2) = vbYes Then
-                    For i = 0 To .getSelectCount(lines) - 1
-                       
-                       'strsql = "SELECT * From " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
-                       '       " r inner join " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
-                       '       "_ligacao l on r.object_id_=l.object_id_ Where Object_id_trecho='" & _
-                       '       .getSELECTObjectId(i, lines) & "' and auto=0"
-                       
-                       'SELECT * FROM RAMAIS_AGUA WHERE OBJECT_ID_TRECHO = '39153'
-                       
-                       'strsql = ""
-                       
-                       'Set rs = Conn.execute("SELECT * From " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
-                       '       " r inner join " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
-                       '       "_ligacao l on r.object_id_=l.object_id_ Where Object_id_trecho='" & _
-                       '       .getSELECTObjectId(i, lines) & "' and auto=0")
-                       
-                       
-                       '*****************************************************************************************************
-                       'ZERA O OBJECT_ID_TRECHO DO RAMAL QUE ESTÁ CONECTADO A REDE QUE ESTA SENDO EXCLUÍDA
-                       
-                       Dim RetornaLayer As String
-                       RetornaLayer = UCase(cgeo.GetLayerOperation(.getCurrentLayer, 1))
-                       
-                       If RetornaLayer = "RAMAIS_AGUA" Or RetornaLayer = "RAMAIS_ESGOTO" Then
-                        a = RetornaLayer
-                        b = "+a+"
-                        c = "OBJECT_ID_TRECHO"
-                       
-                          
-                          If frmCanvas.TipoConexao <> 4 Then
-                          strsql = "UPDATE " & RetornaLayer & " SET OBJECT_ID_TRECHO = '0' WHERE OBJECT_ID_TRECHO = '" & .getSelectObjectId(i, lines) & "'"
-                          Else
-                          strsql = "UPDATE " + """" + a + """" + " SET " + """" + c + """" + " = '0' WHERE " + """" + c + """" + "  = '" & .getSelectObjectId(i, lines) & "'"
-                          End If
-                          Conn.execute (strsql)
-                       
-                       End If
-                       '*****************************************************************************************************
-                       
-                       'CHAMA O PROCEDIMENTO DE DELETE DE REDES
-                       cgeo.DeleteRede .getCurrentLayer, .getSelectObjectId(i, lines)
-
-                    Next
-                 End If
-              Case LayerTypeRefence.AMARRACAO  ' 2 'Deleta Amarração
-                 .deleteSelectGeometry
-              Case LayerTypeRefence.DOCUMENTOS ' 3 'Deleta Documentos
-                 If MsgBox("Deseja realmente excluir o(s) ponto(s) de documentação", 36) = vbYes Then
-                    For i = 0 To tcs.getSelectCount(points) - 1
-                    If frmCanvas.TipoConexao <> 4 Then
-                       Conn.execute "Delete From X_Files Where Object_id_='" & tcs.getSelectObjectId(i, points) & "'"
-                       Else
-                       c = "X_FILES"
-                       d = "OBJECT_ID_"
-                        Conn.execute "Delete From " + """" + c + """" + " Where " + """" + d + """" + "='" & tcs.getSelectObjectId(i, points) & "'"
-                    
-                       
-                       End If
-                       
-                    Next
-                    .deleteSelectGeometry
-                 End If
-              Case LayerTypeRefence.RAMAIS_AGUA, LayerTypeRefence.RAMAIS_ESGOTO  '5   'Deleta Geometria com attributo
-                 If .getSelectCount(points) > 0 Or .getSelectCount(lines) > 0 Then
-                     If .getSelectCount(points) > 1 Or .getSelectCount(lines) > 1 Then
-                        MsgBox "Somente é possivel excluir um ramal por vez", vbExclamation
-                        Exit Function
-                     End If
-                     If frmCanvas.TipoConexao <> 4 Then
-                     Set rs = Conn.execute("SELECT * from " & tcs.getCurrentLayer & "_LIGACAO WHERE OBJECT_ID_='" & IIf(.getSelectCount(points) = 1, .getSelectObjectId(0, points), .getSelectObjectId(0, lines)) & "'")
-                     Else
-                  '   b = .getCurrentLayer
-'c = "lines"
-'d = "OBJECT_ID_"
-'e = .getSelectObjectId(i, points)
-'f = "'e'"
-'g = cgeo.GetLayerID(.getCurrentLayer)
-'h = "g"
-'i = "_LIGACAO"
-'j = "points"
-'k = "CONSUMO_LPS"
-'l = "TB_LIGACOES"
-'m = tcs.getCurrentLayer
-                    ' Set rs = Conn.execute("SELECT * from " + """" + m + i + """" + " WHERE " + """" + d + """" + "='" & IIf(.getSelectCount(points) = 1, .getSelectObjectId(0, points), .getSelectObjectId(0, lines)) & "'")
-                     
-                     Set rs = Conn.execute("SELECT * from " & """" + tcs.getCurrentLayer & "_LIGACAO" + """" + " WHERE " + """" + "OBJECT_ID_" + """" + "='" & IIf(.getSelectCount(points) = 1, .getSelectObjectId(0, points), .getSelectObjectId(0, lines)) & "'")
-                     
-                     
-                     
-                     End If
-                     If Not rs.EOF Then
-                         MsgBox "Para excluir o ramal é necessário que ele não tenha nenhum hidrômentro associado.", vbInformation, ""
-                         Exit Function
-                     End If
-                     If MsgBox("Deseja realmente excluir o ramal selecionado", 36) = vbYes Then
-                        If .getSelectCount(points) = 1 Then
-                           For i = 0 To tcs.getSelectCount(points) - 1
-                           
-                           a = "OBJECT_ID_"
-
- If frmCanvas.TipoConexao <> 4 Then
-                              Conn.execute "Delete From " & tcs.getCurrentLayer & "  Where Object_id_='" & .getSelectObjectId(i, points) & "'"
-                              Conn.execute "Delete From lines" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & .getSelectObjectId(i, points) & "'"
-                              Conn.execute "Delete From points" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & .getSelectObjectId(i, points) & "'"
-                              Else
-                            '  b = .getCurrentLayer
-'c = "+b+"
-'d = "object_id"
-'e = .getSelectObjectId(i, points)
-'f = "'" + e + "'"
-'g = cgeo.GetLayerID(.getCurrentLayer)
-'h = g
-'i = "lines"
-'j = "points"
-'k = "CONSUMO_LPS"
-'l = "TB_LIGACOES"
-                             ' Conn.execute "Delete From " + """" + .getCurrentLayer + """" + "  Where " + """" + d + """" + "= '" & .getSelectObjectId(i, points) & "'"
-                             ' Conn.execute "Delete From " + """" + i + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, points) & "'"
-                             ' Conn.execute "Delete From " + """" + j + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, points) & "'"
-                             Conn.execute "Delete From " & """" + tcs.getCurrentLayer + """" & "  Where " + """" + "OBJECT_ID_" + """" + "='" & .getSelectObjectId(i, points) & "'"
-                              Conn.execute "Delete From " + """" + "lines" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & .getSelectObjectId(i, points) & "'"
-                              Conn.execute "Delete From " + """" + "points" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & .getSelectObjectId(i, points) & "'"
-                               
-                              End If
-                           Next
-                        Else
-                           For i = 0 To tcs.getSelectCount(lines) - 1
-b = .getCurrentLayer
-c = "b"
-d = "object_id"
-e = .getSelectObjectId(i, points)
-f = e
-g = cgeo.GetLayerID(.getCurrentLayer)
-h = "g"
-i = "lines"
-j = "points"
-k = "CONSUMO_LPS"
-l = "TB_LIGACOES"
- If frmCanvas.TipoConexao <> 4 Then
-                              Conn.execute "Delete From " & tcs.getCurrentLayer & "  Where Object_id_='" & tcs.getSelectObjectId(i, lines) & "'"
-                              Conn.execute "Delete From lines" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & tcs.getSelectObjectId(i, lines) & "'"
-                              Conn.execute "Delete From points" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & tcs.getSelectObjectId(i, lines) & "'"
-                              
-                              Else
-                              'Conn.execute "Delete From " + """" + b + """" + "  Where " + """" + d + """" + "='" & .getSelectObjectId(i, lines) & "'"
-                             ' Conn.execute "Delete From " + """" + i + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, lines) & "'"
-                              'Conn.execute "Delete From " + """" + j + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, lines) & "'"
-                              
-                              Conn.execute "Delete From " & """" + tcs.getCurrentLayer & """" + "  Where " + """" + "OBJECT_ID_" + """" + "='" & tcs.getSelectObjectId(i, lines) & "'"
-                              Conn.execute "Delete From " + """" + "lines" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & tcs.getSelectObjectId(i, lines) & "'"
-                              Conn.execute "Delete From " + """" + "points" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & tcs.getSelectObjectId(i, lines) & "'"
-                             
-                              
-                              
-                              
-                              
-                              
-                              
-                              
-                              
-                              End If
-                           Next
+    On Error GoTo Trata_Erro
+    Dim i As Integer, rs As ADODB.Recordset
+    Dim strsql As String
+    Dim linhasSelecionadasMemoria As Integer                            'número total de linhas selecionadas pelo usuário que estão na memória
+    Dim pontosSelecionadosMemoria As Integer                            'número total de pontos selecionados pelo usuário que estão na memória
+    
+    With tcs                            'com o objeto do TeCanvas
+        Select Case TerraEvent
+            Case tg_SelectObject                                                                                                                                'caso tenha selecionado um objeto para apagar faça, se não selecionou, vai para o final e sai
+                Select Case cgeo.GetLayerTypeReference(tcs.getCurrentLayer)  ' cgeo.GetTypeReference(tcs.getCurrentLayer)                                       'conforme o número do layer que foi selecionado
+                    Case LayerTypeRefence.Trecho_Rede_Agua, LayerTypeRefence.Trecho_Rede_Drenagem, LayerTypeRefence.Trecho_Rede_esgoto                          'selecionou o layer de redes, vai apagar um trecho de rede
+                        If MsgBox("Deseja realmente excluir as rede(s) selecionada(s)", vbQuestion + vbYesNo + vbDefaultButton2) = vbYes Then
+                            linhasSelecionadasMemoria = .getSelectCount(lines)
+                            For i = 0 To linhasSelecionadasMemoria - 1
+                                'strsql = "SELECT * From " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
+                                '       " r inner join " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
+                                '       "_ligacao l on r.object_id_=l.object_id_ Where Object_id_trecho='" & _
+                                '       .getSELECTObjectId(i, lines) & "' and auto=0"
+                                'SELECT * FROM RAMAIS_AGUA WHERE OBJECT_ID_TRECHO = '39153'
+                                'strsql = ""
+                                'Set rs = Conn.execute("SELECT * From " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
+                                '       " r inner join " & cgeo.GetLayerOperation(.getCurrentLayer, 1) & _
+                                '       "_ligacao l on r.object_id_=l.object_id_ Where Object_id_trecho='" & _
+                                '       .getSELECTObjectId(i, lines) & "' and auto=0")
+                                '*****************************************************************************************************
+                                'ZERA O OBJECT_ID_TRECHO DO RAMAL QUE ESTÁ CONECTADO A REDE QUE ESTA SENDO EXCLUÍDA
+                                Dim RetornaLayer As String
+                                RetornaLayer = UCase(cgeo.GetLayerOperation(.getCurrentLayer, 1))
+                                If RetornaLayer = "RAMAIS_AGUA" Or RetornaLayer = "RAMAIS_ESGOTO" Then
+                                    a = RetornaLayer
+                                    b = "+a+"
+                                    c = "OBJECT_ID_TRECHO"
+                                    If frmCanvas.TipoConexao <> 4 Then
+                                        strsql = "UPDATE " & RetornaLayer & " SET OBJECT_ID_TRECHO = '0' WHERE OBJECT_ID_TRECHO = '" & .getSelectObjectId(i, lines) & "'"
+                                    Else
+                                        strsql = "UPDATE " + """" + a + """" + " SET " + """" + c + """" + " = '0' WHERE " + """" + c + """" + "  = '" & .getSelectObjectId(i, lines) & "'"
+                                    End If
+                                    Conn.execute (strsql)
+                                End If
+                                '*****************************************************************************************************
+                                'CHAMA O PROCEDIMENTO DE DELETE DE REDES
+                                cgeo.DeleteRede .getCurrentLayer, .getSelectObjectId(i, lines)
+                            Next
                         End If
-                     End If
-                  Else
-                     MsgBox "Nenhum ramal selecionado para exclusão", vbExclamation
-                  End If
-           End Select
-           tcs.Normal
-           tcs.Select
-           tcs.plotView
-      End Select
+                    Case LayerTypeRefence.AMARRACAO                                                                                                             'layer número 10 - caso deseje apagar uma amarração de rede
+                        .deleteSelectGeometry
+                    Case LayerTypeRefence.DOCUMENTOS                                                                                                            'layer número 9 - caso deseje apagar um documento associado
+                        If MsgBox("Deseja realmente excluir o(s) ponto(s) de documentação", 36) = vbYes Then
+                            For i = 0 To tcs.getSelectCount(points) - 1
+                                If frmCanvas.TipoConexao <> 4 Then
+                                    Conn.execute "Delete From X_Files Where Object_id_='" & tcs.getSelectObjectId(i, points) & "'"
+                                Else
+                                    c = "X_FILES"
+                                    d = "OBJECT_ID_"
+                                    Conn.execute "Delete From " + """" + c + """" + " Where " + """" + d + """" + "='" & tcs.getSelectObjectId(i, points) & "'"
+                                End If
+                            Next
+                            .deleteSelectGeometry
+                        End If
+                    Case LayerTypeRefence.RAMAIS_AGUA, LayerTypeRefence.RAMAIS_ESGOTO                                                                           'layer número 7 - caso deseje apagar um ramal de água ou esgoto. Apaga a Geometria com attributo
+                        pontosSelecionadosMemoria = .getSelectCount(points)                                                                                     'número total de pontos selecionados pelo usuário que estão na memória
+                        linhasSelecionadasMemoria = .getSelectCount(lines)                                                                                      'número total de linhas selecionadas pelo usuário que estão na memória
+                        If pontosSelecionadosMemoria > 0 Or linhasSelecionadasMemoria > 0 Then                                                                  'verifica se o usuário selecionou mais de um ramal, pois só pode apagar um ramal por vez
+                            If pontosSelecionadosMemoria > 1 Or linhasSelecionadasMemoria > 1 Then
+                                MsgBox "Somente é possivel excluir um ramal por vez", vbExclamation
+                                Exit Function
+                            End If
+                            If frmCanvas.TipoConexao <> 4 Then                                                                                                  'caso seja SQLServer ou Oracle
+                                Set rs = Conn.execute("SELECT * from " & tcs.getCurrentLayer & "_LIGACAO WHERE OBJECT_ID_='" & IIf(pontosSelecionadosMemoria = 1, .getSelectObjectId(0, points), .getSelectObjectId(0, lines)) & "'")     'para verificar se existem ligações de água ainda associadas ao ramal, pois não posso apagar um ramal se existem hidrômetros associados ao mesmo
+                            Else                                                                                                                                'caso seja Postgres
+                                '   b = .getCurrentLayer
+                                'c = "lines"
+                                'd = "OBJECT_ID_"
+                                'e = .getSelectObjectId(i, points)
+                                'f = "'e'"
+                                'g = cgeo.GetLayerID(.getCurrentLayer)
+                                'h = "g"
+                                'i = "_LIGACAO"
+                                'j = "points"
+                                'k = "CONSUMO_LPS"
+                                'l = "TB_LIGACOES"
+                                'm = tcs.getCurrentLayer
+                                ' Set rs = Conn.execute("SELECT * from " + """" + m + i + """" + " WHERE " + """" + d + """" + "='" & IIf(.getSelectCount(points) = 1, .getSelectObjectId(0, points), .getSelectObjectId(0, lines)) & "'")
+                                Set rs = Conn.execute("SELECT * from " & """" + tcs.getCurrentLayer & "_LIGACAO" + """" + " WHERE " + """" + "OBJECT_ID_" + """" + "='" & IIf(pontosSelecionadosMemoria = 1, .getSelectObjectId(0, points), .getSelectObjectId(0, lines)) & "'")
+                            End If
+                            If Not rs.EOF Then                                                                                                                  'existem hidrômetros associados/ativos junto ao ramal, não pode apagar
+                                MsgBox "Para excluir o ramal é necessário que ele não tenha nenhum hidrômentro associado.", vbInformation, ""
+                                Exit Function
+                            End If
+                            If MsgBox("Deseja realmente excluir o ramal selecionado", 36) = vbYes Then
+                                If pontosSelecionadosMemoria = 1 Then                                                                                             'verifica quantas geometrias foram selecionadas, deveria ser apenas uma geometria, a do ramal
+                                    For i = 0 To pontosSelecionadosMemoria - 1
+                                        a = "OBJECT_ID_"
+                                        If frmCanvas.TipoConexao <> 4 Then                                                                                      'se for SQLServer ou Oracle
+                                            Conn.execute "Delete From " & tcs.getCurrentLayer & "  Where Object_id_='" & .getSelectObjectId(i, points) & "'"
+                                            Conn.execute "Delete From lines" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & .getSelectObjectId(i, points) & "'"
+                                            Conn.execute "Delete From points" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & .getSelectObjectId(i, points) & "'"
+                                        Else                                                                                                                    'se for Postgres
+                                            '  b = .getCurrentLayer
+                                            'c = "+b+"
+                                            'd = "object_id"
+                                            'e = .getSelectObjectId(i, points)
+                                            'f = "'" + e + "'"
+                                            'g = cgeo.GetLayerID(.getCurrentLayer)
+                                            'h = g
+                                            'i = "lines"
+                                            'j = "points"
+                                            'k = "CONSUMO_LPS"
+                                            'l = "TB_LIGACOES"
+                                            ' Conn.execute "Delete From " + """" + .getCurrentLayer + """" + "  Where " + """" + d + """" + "= '" & .getSelectObjectId(i, points) & "'"
+                                            ' Conn.execute "Delete From " + """" + i + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, points) & "'"
+                                            ' Conn.execute "Delete From " + """" + j + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, points) & "'"
+                                            Conn.execute "Delete From " & """" + tcs.getCurrentLayer + """" & "  Where " + """" + "OBJECT_ID_" + """" + "='" & .getSelectObjectId(i, points) & "'"
+                                            Conn.execute "Delete From " + """" + "lines" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & .getSelectObjectId(i, points) & "'"
+                                            Conn.execute "Delete From " + """" + "points" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & .getSelectObjectId(i, points) & "'"
+                                        End If
+                                    Next
+                                Else                                                                                                                            'só pode existir um ponto na extremidade do ramal, o qual é a ligação do hidrômetro, portanto se entrar neste else é por que este ponto não foi selecionado, pois já foi testado antes se existia mais de um ponto
+                                    MsgBox "Você não selecionou o hidrômetro, somente o ramal. Selecione ambos para apagar."
+'                                    For i = 0 To tcs.getSelectCount(lines) - 1
+'                                        b = .getCurrentLayer
+'                                        c = "b"
+'                                        d = "object_id"
+'                                        e = .getSelectObjectId(i, points)
+'                                        f = e
+'                                        g = cgeo.GetLayerID(.getCurrentLayer)
+'                                        h = "g"
+'                                        i = "lines"
+'                                        j = "points"
+'                                        k = "CONSUMO_LPS"
+'                                        l = "TB_LIGACOES"
+'                                        If frmCanvas.TipoConexao <> 4 Then
+'                                            Conn.execute "Delete From " & tcs.getCurrentLayer & "  Where Object_id_='" & tcs.getSelectObjectId(i, lines) & "'"
+'                                            Conn.execute "Delete From lines" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & tcs.getSelectObjectId(i, lines) & "'"
+'                                            Conn.execute "Delete From points" & cgeo.GetLayerID(.getCurrentLayer) & " Where Object_id='" & tcs.getSelectObjectId(i, lines) & "'"
+'                                        Else
+'                                            'Conn.execute "Delete From " + """" + b + """" + "  Where " + """" + d + """" + "='" & .getSelectObjectId(i, lines) & "'"
+'                                            ' Conn.execute "Delete From " + """" + i + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, lines) & "'"
+'                                            'Conn.execute "Delete From " + """" + j + g + """" + " Where " + """" + d + """" + "='" & .getSelectObjectId(i, lines) & "'"
+'                                            Conn.execute "Delete From " & """" + tcs.getCurrentLayer & """" + "  Where " + """" + "OBJECT_ID_" + """" + "='" & tcs.getSelectObjectId(i, lines) & "'"
+'                                            Conn.execute "Delete From " + """" + "lines" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & tcs.getSelectObjectId(i, lines) & "'"
+'                                            Conn.execute "Delete From " + """" + "points" & cgeo.GetLayerID(.getCurrentLayer) & """" + " Where " + """" + "object_id" + """" + "='" & tcs.getSelectObjectId(i, lines) & "'"
+'                                        End If
+'                                    Next
+                                End If
+                            End If
+                        Else
+                            MsgBox "Nenhum ramal selecionado para exclusão", vbExclamation
+                        End If
+                End Select
+                tcs.Normal
+                tcs.Select
+                tcs.plotView
+        End Select
     End With
     Exit Function
-
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-      
-       PrintErro "clsTerraLib", "Public Function Delete", CStr(Err.Number), CStr(Err.Description), True
-    
+        PrintErro "clsTerraLib", "Public Function Delete", CStr(Err.Number), CStr(Err.Description), True
     End If
-    
 End Function
 
 Public Function OnPoint(X As Double, Y As Double)

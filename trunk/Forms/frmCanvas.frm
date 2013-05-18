@@ -1888,8 +1888,8 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
                     xRamal(1) = ramalMovendo(contTrechos).xHidrom                                           'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
                     yRamal(1) = ramalMovendo(contTrechos).yHidrom
                     cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")
-                    If cGeoDatabase.geoDatabase.deleteGeometry(ramalMovendo(contTrechos).geomIdRamal, ramalMovendo(contTrechos).objIdRamal, 2) Then MsgBox "ramal removido com sucesso"
-                    If cGeoDatabase.geoDatabase.addLine(ramalMovendo(contTrechos).objIdRamal, xRamal(0), yRamal(0), 2) Then MsgBox "ramal adicionado com sucesso"       'adiciona o novo ramal com as novas coordenadas e dois vértices, o inicial e final
+                    cGeoDatabase.geoDatabase.deleteGeometry ramalMovendo(contTrechos).geomIdRamal, ramalMovendo(contTrechos).objIdRamal, 2
+                    cGeoDatabase.geoDatabase.addLine ramalMovendo(contTrechos).objIdRamal, xRamal(0), yRamal(0), 2
                 End If
             Next
         'finaliza
