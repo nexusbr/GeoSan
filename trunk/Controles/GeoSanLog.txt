@@ -913,3 +913,14 @@ DESCRIÇÃO      Type mismatch
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           18/05/2013 10:03:39 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmCanvas
+EVENTO         Private Sub TCanvas_onSaveNetWorkLine
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+

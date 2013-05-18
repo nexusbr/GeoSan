@@ -14,17 +14,17 @@ Attribute VB_Exposed = False
 ' Funç~oes para obter as coordenadas do ramal em sua nova posição, após movida a rede
 '
 Private dist As Double                              'distância do início do ramal antes de mover até o início do trecho antes de mover
-Private coordsR As New CLine2D
-Private coordInicialRamal As New CPoint2D           'nova coordenada inicial do ramal
+Private coordsFinalRamal As New CPoint2D
+Private coordsInicialRamal As New CPoint2D           'nova coordenada inicial do ramal
 'Retorna coordenadas do primeiro e último vértices da linha
 '
-Property Get CoordIniFimRamal() As CLine2D
-    Set CoordIniFimRamal = coordsR
+Property Get CoordFimRamal() As CPoint2D
+    Set CoordFimRamal = coordsFinalRamal
 End Property
 'Retorna a nova coordenada inicial do ramal
 '
-Property Get coordRamal() As CPoint2D
-    Set coordRamal = coordInicialRamal
+Property Get coordIniRamal() As CPoint2D
+    Set coordIniRamal = coordsInicialRamal
 End Property
 
 ' Obtem as coordenadas iniciais e finais do ramal após a movimentação do trecho de rede
@@ -46,9 +46,9 @@ Public Function coordsRamal(Distancia As Double, newObjIdTrecho As String, ByVal
     linha3.xf = coordenadasLinha3.linha.xf
     linha3.yf = coordenadasLinha3.linha.yf
     coordXYdist.calculaCoord linha3, Distancia
-    coordInicialRamal.X = coordXYdist.X                                      'nova coordenada x inicial do ramal movido
-    coordInicialRamal.Y = coordXYdist.Y                                      'nova coordenada y inicial do ramal movido
-    coordsR.xf = linha3.xf                                          'coordenada x final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
-    coordsR.yf = linha3.yf                                          'coordenada y final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
+    coordsInicialRamal.X = coordXYdist.X                             'nova coordenada x inicial do ramal movido
+    coordsInicialRamal.Y = coordXYdist.Y                             'nova coordenada y inicial do ramal movido
+    coordsFinalRamal.X = linha3.xf                                   'coordenada x final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
+    coordsFinalRamal.Y = linha3.yf                                   'coordenada y final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
 End Function
 

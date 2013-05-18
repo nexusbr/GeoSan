@@ -1873,7 +1873,6 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
             For contTrechos = 0 To varGlobais.totalTrechos
                 If ramalMovendo(contTrechos).objIdTrecho = LINE_ID And ramalMovendo(contTrechos).objIdRamal <> -1 Then
                     Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
-                    Dim linha As CLine2D                            'nova linha do novo ramal após a movimentação do trecho de rede
                     Dim moveRamal As New CCoordIniRamalDistTrecho   'classe para obter a coordenada inicial do ramal a uma determinada distância do início do trecho de rede
                     Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
                     Dim retorno As Boolean
@@ -1883,10 +1882,9 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
                     retorno = cGeoDatabase.geoDatabase.getLengthOfLine(LINE_ID, "", novoComprTrecho)
                     distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contTrechos).comprTrecho, novoComprTrecho, ramalMovendo(contTrechos).Distancia)
                     moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase                  'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
-                    Set linha = moveRamal.CoordRamal
                     Dim xRamal(1) As Double, yRamal(1) As Double
-                    xRamal(0) = linha.xi
-                    yRamal(0) = linha.yi
+                    xRamal(0) = moveRamal.coordIniRamal.X
+                    yRamal(0) = moveRamal.coordIniRamal.Y
                     xRamal(1) = ramalMovendo(contTrechos).xHidrom
                     yRamal(1) = ramalMovendo(contTrechos).yHidrom
                     cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")
