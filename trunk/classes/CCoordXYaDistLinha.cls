@@ -19,13 +19,13 @@ Private xd As Double        'coordenada x a partir de uma distância do ponto ini
 Private yd As Double        'coordenada y a partir de uma distância do ponto inicial da linha
 'Retorna valor de x a uma distância do ponto inicial
 '
-Property Get x() As Double
-    x = xd
+Property Get X() As Double
+    X = xd
 End Property
 'Retorna valor de x a uma distância do ponto inicial
 '
-Property Get y() As Double
-    y = yd
+Property Get Y() As Double
+    Y = yd
 End Property
 ' Dada uma linha definida pelas coordenadas finais e iniciais, qual a coordenada x, y sobre a linha a uma dada distância
 ' The function above takes a startPoint (x,y) and an endPoint (x,y) and a distance (from the endpoint.
@@ -41,8 +41,8 @@ End Property
 ' distancia - distância do ponto inicial da linha onde serão obtidas as coordenadas xd e yd
 '
 Public Sub calculaCoord(linha As CLine2D, Distancia As Double)
-    Dim x As Double
-    Dim y As Double
+    Dim X As Double
+    Dim Y As Double
     Dim z As Double
     Dim ratio As Double
     Dim deltaX As Double
@@ -52,17 +52,17 @@ Public Sub calculaCoord(linha As CLine2D, Distancia As Double)
     Dim xf As Double
     Dim yf As Double
     
-    xi = linha.xi       'inverte pois a fórmula é para distância entre a partir do ponto final
+    xi = linha.xi       'inverte pois a fórmula é para distância entre a partir do ponto final (nao inverteu ainda)
     yi = linha.yi
     xf = linha.xf
     yf = linha.yf
     
-    x = xf - xi
-    y = yf - yi
-    z = Sqr(x * x + y * y)
+    X = xf - xi
+    Y = yf - yi
+    z = Sqr(X * X + Y * Y)
     ratio = Distancia / z
-    deltaX = x * ratio
-    deltaY = y * ratio
+    deltaX = X * ratio
+    deltaY = Y * ratio
     
     xd = xf - deltaX
     yd = yf - deltaY

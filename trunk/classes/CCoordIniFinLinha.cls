@@ -16,17 +16,11 @@ Attribute VB_Exposed = False
 '
 '
 '
-Private conexaoTdb As TeDatabase     'cria uma variável privada e interna a classe
 Private xi As Double
 Private yi As Double
 Private xf As Double
 Private yf As Double
 Private lin As New CLine2D
-' Recebe o objeto da conexão TeDatabase
-'
-Public Property Let conexao(ByVal vData As TeDatabase)
-    Set conexaoTdb = vData
-End Property
 'Retorna coordenadas do primeiro e último vértices da linha
 '
 Property Get linha() As CLine2D
@@ -34,7 +28,7 @@ Property Get linha() As CLine2D
 End Property
 ' Obtem as coordenadas x e y dos nós inicial e final da linha do trecho de rede
 '
-Public Function GetStartEndPointsTrecho(objId As String) As Integer
+Public Function GetStartEndPointsTrecho(objId As String) As CLine2D
     Dim retorno As Boolean
     
     If cGeoDatabase.geoDatabase.setCurrentLayer("WaterLines") Then
@@ -48,7 +42,7 @@ Public Function GetStartEndPointsTrecho(objId As String) As Integer
 End Function
 ' Obtem as coordenadas x e y dos nós inicial e final da linha do ramal
 '
-Public Function GetStartEndPointsRamal(objId As String) As Integer
+Public Function GetStartEndPointsRamal(objId As String) As CLine2D
     Dim retorno As Boolean
     
     If cGeoDatabase.geoDatabase.setCurrentLayer("RAMAIS_AGUA") Then

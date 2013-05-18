@@ -15,6 +15,8 @@ Public Type Ramais                              'utilizado para mover os ramais 
     geomIdRamal As String
     Distancia As Double
     comprTrecho As Double
+    xHidrom As Double
+    yHidrom As Double
 End Type
 
 Public ramalMovendo() As Ramais
@@ -95,8 +97,8 @@ Public blnGeraRel As Boolean
 Type TListaNo
     indice As Integer
     object_id As String
-    x As Double
-    y As Double
+    X As Double
+    Y As Double
 End Type
 Public Enum nxSqlOperations
    nxSELECT = 1
@@ -1766,8 +1768,8 @@ Public Sub ExporteCrede(MyObject As String, nomeArq As String, LayName As String
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -1928,20 +1930,20 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
          Dim v As String
          Dim sq As String
          Dim sa As String
-          Dim r, x, z, xz, y As String
+          Dim r, X, z, xz, Y As String
          p = "y"
          q = "ID_TYPE"
         r = "OBJECT_ID_"
          t = "GROUNDHEIGHT"
          u = "Demand"
          v = "x"
-         x = "points2"
+         X = "points2"
          z = "WATERCOMPONENTS"
          xz = "object_id"
         sa = cgeo.GetLayerID(LayName)
         sq = "sa"
         
-          sQry = convertQuery("SELECT " + """" + x + """" + "." + """" + y + """" + "," + """" + x + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + x + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + x + """" + "." + """" + u + """" + " From " + """" + x + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
+          sQry = convertQuery("SELECT " + """" + X + """" + "." + """" + Y + """" + "," + """" + X + """" + "." + """" + v + """" + "," + """" + z + """" + "." + """" + q + """" + "," + """" + X + """" + "." + """" + r + """" + "," + """" + z + """" + "." + """" + t + """" + "," + """" + X + """" + "." + """" + u + """" + " From " + """" + X + sq + """" + " LEFT JOIN " + """" + z + """" + " ON " + """" + xz + """" + "." + """" + p + """" + " = " + """" + z + """" + "." + """" + r + """" + " Where " + """" + xz + """" + " in(" & MyObject & ")", CInt(typeconnection))
     'pode está errado ********
         
         
@@ -2051,8 +2053,8 @@ sQry = convertQuery("SELECT " + """" + h + """" + " FROM " + """" + i & cgeo.Get
         Print #arqrede, "Rede existente"
         aListaNo(iNo).indice = iNo
         aListaNo(iNo).object_id = objRecordset.Fields("OBJECT_ID")
-        aListaNo(iNo).x = CStr(objRecordset.Fields("X") * 100)
-        aListaNo(iNo).y = CStr(objRecordset.Fields("Y") * 100)
+        aListaNo(iNo).X = CStr(objRecordset.Fields("X") * 100)
+        aListaNo(iNo).Y = CStr(objRecordset.Fields("Y") * 100)
         iNo = iNo + 1
         objRecordset.MoveNext
     Wend
@@ -2156,8 +2158,8 @@ gtErro:
 End Sub
 'até aqui dia 19/10/2010
 
-Function Log10(x)
-    Log10 = Log(x) / Log(10)
+Function Log10(X)
+    Log10 = Log(X) / Log(10)
 End Function
 
 
@@ -2231,12 +2233,12 @@ Dim i As Long
     MsgBox " NÃO ENCONTROU"
 End Function
 
-Private Function QualCoordernada(object_id, ByRef x As Double, ByRef y As Double) As Long
+Private Function QualCoordernada(object_id, ByRef X As Double, ByRef Y As Double) As Long
 Dim i As Long
     For i = LBound(aListaNo) To UBound(aListaNo)
         If aListaNo(i).object_id = object_id Then
-            x = aListaNo(i).x
-            y = aListaNo(i).y
+            X = aListaNo(i).X
+            Y = aListaNo(i).Y
             Exit Function
         End If
     Next i

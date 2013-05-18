@@ -165,17 +165,18 @@ Public Function MoveNetWorkNode()
 On Error GoTo Trata_Erro
    
    If cgeo.GetReferenceLayer(tcs.getCurrentLayer) <> "" Then
-      If tcs.getSelectCount(points) - 1 = 0 Then 'VERIFICA SE SOMENTE 1 PONTO FOI SELECIONADO PARA MOVER
-                     Dim objIdNoMovendo As Long             'object_id do nó que foi selecionado para mover
-            Dim trechos As New CLocalizaTrechos             'instancia objeto que irá localizar os trechos conectados ao nó selecionado
-            Dim objIDsTrechosMovendo() As String            'lista com todos os object_ids dos trechos que serão movidos com o nó (presos no nó)
-            Dim contTrecho As Integer                       'contador de trechos de rede sendo movidos
-            Dim listObjIDsRamais() As String                'lista de todos objIDs dos ramais de um determinado trecho
-            Dim listGeomIDsRamais() As String               'lista de todos os geomIDs dos ramais de um determinado trecho
-            Dim contRamal As Integer                        'contador de ramais conectados em um determinado trecho de rede
-            Dim distIniRamalAntes As Double                 'distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+      If tcs.getSelectCount(points) - 1 = 0 Then                        'VERIFICA SE SOMENTE 1 PONTO FOI SELECIONADO PARA MOVER
+                     Dim objIdNoMovendo As Long                         'object_id do nó que foi selecionado para mover
+            Dim trechos As New CLocalizaTrechos                         'instancia objeto que irá localizar os trechos conectados ao nó selecionado
+            Dim objIDsTrechosMovendo() As String                        'lista com todos os object_ids dos trechos que serão movidos com o nó (presos no nó)
+            Dim contTrecho As Integer                                   'contador de trechos de rede sendo movidos
+            Dim listObjIDsRamais() As String                            'lista de todos objIDs dos ramais de um determinado trecho
+            Dim listGeomIDsRamais() As String                           'lista de todos os geomIDs dos ramais de um determinado trecho
+            Dim contRamal As Integer                                    'contador de ramais conectados em um determinado trecho de rede
+            Dim distIniRamalAntes As Double                             'distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+            Dim distRamalDoInicioTrecho As New CDistRamalInicioTrecho   'clases para calcular a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
             Dim objIDsRamais As New CObtemObjIDsRamais
-            Dim moveRamal As New CMoveTrechoRedeComRamal    'objeto para obter a nova linha do ramal que foi movido
+            Dim coordRamal As New CCoordIniFinLinha                     'classe para obter as coordenadas inicial e final do ramal que foi movido
             Dim objIdTrecho As String
             Dim objIdRamal As String
             Dim geomIdRamal As String
@@ -199,11 +200,14 @@ On Error GoTo Trata_Erro
                             ReDim Preserve ramalMovendo(contador - 1)
                             objIdRamal = listObjIDsRamais(contRamal)
                             geomIdRamal = listGeomIDsRamais(contRamal)
-                            distIniRamalAntes = moveRamal.Distancia(objIdTrecho, objIdRamal)  'obtem a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+                            distIniRamalAntes = distRamalDoInicioTrecho.Distancia(objIdTrecho, objIdRamal)  'obtem a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
                             ramalMovendo(contador - 1).objIdTrecho = objIdTrecho
                             ramalMovendo(contador - 1).objIdRamal = objIdRamal
                             ramalMovendo(contador - 1).geomIdRamal = geomIdRamal
                             ramalMovendo(contador - 1).Distancia = distIniRamalAntes
+                            coordRamal.GetStartEndPointsRamal objIdRamal                                'obtem as coordenadas inicial e final do ramal
+                            ramalMovendo(contador - 1).xHidrom = coordRamal.linha.xf                    'pega as coordenadas de onde está o hidrômetro
+                            ramalMovendo(contador - 1).yHidrom = coordRamal.linha.yf
                             retorno = cGeoDatabase.geoDatabase.setCurrentLayer("WaterLines")
                             retorno = cGeoDatabase.geoDatabase.getLengthOfLine(objIdTrecho, "", comprTrecho) 'está como geom_id deveria ser na segunda
                             ramalMovendo(contador - 1).comprTrecho = comprTrecho
@@ -515,11 +519,11 @@ Trata_Erro:
     
 End Function
 
-Public Function OnPoint(x As Double, y As Double)
+Public Function OnPoint(X As Double, Y As Double)
 On Error GoTo Trata_Erro
    Dim object_id As String, frm As New FrmAssociation
    tdb.setCurrentLayer tcs.getCurrentLayer
-   If tdb.locateGeometry(x, y, tpPOINTS, 1) = 1 Then
+   If tdb.locateGeometry(X, Y, tpPOINTS, 1) = 1 Then
       TerraEvent = tg_SelectObject
       tcs.Normal
       tcs.Select
@@ -528,7 +532,7 @@ On Error GoTo Trata_Erro
       
    Else
       TerraEvent = tg_DrawGeometrys
-      frm.init "", tcs, tdb, x, y
+      frm.init "", tcs, tdb, X, Y
       tcs.Normal
       tcs.Select
       TerraEvent = tg_SelectObject
@@ -547,7 +551,7 @@ Trata_Erro:
    
 End Function
 
-Public Function OnRamal(x As Double, y As Double, object_id_ramal As String) As Boolean
+Public Function OnRamal(X As Double, Y As Double, object_id_ramal As String) As Boolean
 On Error GoTo Trata_Erro
     
     Dim frm As New FrmCadastroRamal, Qtde As Long, a As Long
@@ -569,7 +573,7 @@ On Error GoTo Trata_Erro
     
     
     With tcs
-       Qtde = tdbconref.locateGeometryXY(x, y, 1)
+       Qtde = tdbconref.locateGeometryXY(X, Y, 1)
        For a = 0 To Qtde - 1
           If object_id_lote = "" Then
              object_id_lote = "'" & tdbconref.objectIds(a) & "'"
@@ -1451,7 +1455,7 @@ Private Sub LoadAttributeByReference(geom_id As Long)
             
             .setCurrentLayer "WATERCOMPONENTS"
             
-            If .locateGeometry(rsPoints!x, rsPoints!y, 4, 0.7) Then
+            If .locateGeometry(rsPoints!X, rsPoints!Y, 4, 0.7) Then
                If cgeo.GetLayerAttrib("CEL_PONTO_ATRIB", layer_id, Attr_Link) Then
                   rsRef.Open "SELECT * from CEL_PONTO_ATRIB where " & Attr_Link & "=" & .objectIds(0), Conn, adOpenKeyset, adLockOptimistic
                   If GetTypeObjectByReference(rsRef!NOME_CELUL, id_Type, Id_SubType, value) Then
