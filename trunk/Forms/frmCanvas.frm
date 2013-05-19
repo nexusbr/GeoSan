@@ -1871,22 +1871,30 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
             Dim contTrechos As Integer
             Dim contRamais As Integer
             Dim totalRamais As Integer
+            Dim xIniRa As Double
+            Dim yIniRa As Double
             
             totalRamais = UBound(ramalMovendo)
-            For contTrechos = 0 To varGlobais.totalTrechos
+            'For contTrechos = 0 To varGlobais.totalTrechos
                 For contRamais = 0 To totalRamais
-                    If ramalMovendo(contTrechos).objIdTrecho = LINE_ID And ramalMovendo(contRamais).objIdRamal <> -1 And ramalMovendo(contRamais).objIdTrecho = LINE_ID Then
+                    If ramalMovendo(contRamais).objIdTrecho = LINE_ID And ramalMovendo(contRamais).objIdRamal <> -1 And ramalMovendo(contRamais).objIdTrecho = LINE_ID Then
                         Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
                         Dim moveRamal As New CCoordIniRamalDistTrecho   'classe para obter a coordenada inicial do ramal a uma determinada distância do início do trecho de rede
                         Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
                         Dim retorno As Boolean
                         Dim novoComprTrecho As Double
+                        Dim xRamal(1) As Double, yRamal(1) As Double
+                        Dim comprimentoRamal As Double                  'comprimento calculado da extensão do ramal
+                        Dim pontoSobreLinha As Boolean                  'indica se o ponto de início do ramal ficou ou não sobre a linha
+                        
+                        pontoSobreLinha = True
                         
                         cGeoDatabase.geoDatabase.setCurrentLayer ("Waterlines")
                         retorno = cGeoDatabase.geoDatabase.getLengthOfLine(LINE_ID, "", novoComprTrecho)
                         distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contRamais).comprTrecho, novoComprTrecho, ramalMovendo(contRamais).Distancia)
                         moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase       'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede
-                        Dim xRamal(1) As Double, yRamal(1) As Double
+                        'retorno = cGeoDatabase.geoDatabase.getMinimumDistance("", ramalMovendo(contRamais).objIdTrecho, 2, ramalMovendo(contRamais).xHidrom, ramalMovendo(contRamais).yHidrom, comprimentoRamal, pontoSobreLinha, xIniRa, yIniRa)
+                        
                         xRamal(0) = moveRamal.coordIniRamal.X
                         yRamal(0) = moveRamal.coordIniRamal.Y
                         xRamal(1) = ramalMovendo(contRamais).xHidrom                                           'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
@@ -1896,7 +1904,7 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
                         cGeoDatabase.geoDatabase.addLine ramalMovendo(contRamais).objIdRamal, xRamal(0), yRamal(0), 2
                     End If
                 Next
-            Next
+            'Next
         'finaliza
 
         'CALCULAR O NOVO COMPRIMENTO DA LINHA E ATUALIZAR NA BASE
