@@ -21,6 +21,7 @@ Attribute VB_Exposed = False
 '
 Public Sub getObjIDs(objIdTrecho As String, ByRef objIDs() As String, ByRef geomIDs() As String)
 'ByVal teDatabaseConn As TeDatabase,
+    On Error GoTo Trata_Erro:
     Dim rsRamais As ADODB.Recordset
     Dim rsGeomRamais As ADODB.Recordset
     Dim i As Integer
@@ -49,4 +50,12 @@ Public Sub getObjIDs(objIdTrecho As String, ByRef objIDs() As String, ByRef geom
         objIDs(0) = ""
     End If
     rsRamais.Close
+    Exit Sub
+    
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CObtemObjIDsRamais", "getObjIDs", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Sub

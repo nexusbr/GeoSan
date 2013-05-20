@@ -30,13 +30,13 @@ Public Function configura(conexao As ADODB.connection, provedor As cAppType, usu
     Else
         'implementar
     End If
+    Exit Function
 
 Trata_Erro:
-    If Err.Number = 0 Or Err.Number = 20 Then
-        Resume Next
-    Else
-        Erro.Registra "CViewDatabase", "Falhou ao conectar com a vista do banco de dados", CStr(Err.Number), CStr(Err.Description), True, Erl
-        End
-    End If
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CViewDatabase", "configura", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Function
 

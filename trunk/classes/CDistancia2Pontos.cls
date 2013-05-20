@@ -23,5 +23,14 @@ Private yf As Double
 '
 '
 Public Function Distancia2Pontos(xi As Double, yi As Double, xf As Double, yf As Double) As Double
+    On Error GoTo Trata_Erro:
     Distancia2Pontos = Sqr((xf - xi) * (xf - xi) + (yf - yi) * (yf - yi))
+    Exit Function
+    
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CDistancia2Pontos", "Distancia2Pontos", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Function

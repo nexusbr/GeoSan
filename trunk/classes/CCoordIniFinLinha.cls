@@ -33,8 +33,8 @@ Public Function GetStartEndPointsTrecho(objId As String) As CLine2D
     Dim retorno As Boolean
     
     If cGeoDatabase.geoDatabase.setCurrentLayer("WaterLines") Then
-        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, 99999999999999#, xi, yi)
-        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, cGeoDatabase.geoDatabase.getQuantityPointsLine(0, objId) - 1, xf, yf)
+        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, 0, xi, yi)                                                              'pega o ponto inicial da linha (zero)
+        retorno = cGeoDatabase.geoDatabase.getPointOfLine(0, objId, cGeoDatabase.geoDatabase.getQuantityPointsLine(0, objId) - 1, xf, yf)   'pega o ponto final
         lin.xi = xi
         lin.yi = yi
         lin.xf = xf
@@ -46,7 +46,7 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True
+      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True, True
    End If
 End Function
 ' Obtem as coordenadas x e y dos nós inicial e final da linha do ramal
@@ -62,4 +62,12 @@ Public Function GetStartEndPointsRamal(objId As String) As CLine2D
         lin.xf = xf
         lin.yf = yf
     End If
+    Exit Function
+
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsRamal", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Function

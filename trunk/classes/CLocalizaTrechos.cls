@@ -19,6 +19,7 @@ Attribute VB_Exposed = False
 ' objIDs - retorno da lista de objIDs dos trechos de rede que estão ligados ao nó de rede fornecido
 '
 Public Sub obtemTrechos(objIdNoSelecionado, ByRef objIDs() As String)
+    On Error GoTo Trata_Erro:
     Dim rsTrechosConectadosAoNo As ADODB.Recordset
     Dim i As Integer
     
@@ -32,4 +33,12 @@ Public Sub obtemTrechos(objIdNoSelecionado, ByRef objIDs() As String)
         rsTrechosConectadosAoNo.MoveNext
     Loop
     rsTrechosConectadosAoNo.Close
+    Exit Sub
+    
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CLocalizaTrechos", "obtemTrechos", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Sub

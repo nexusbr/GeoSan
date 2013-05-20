@@ -9,6 +9,8 @@ Public cGeoViewDatabase As New CViewDatabase    'conexão com o TeViewManager par
 
 Public ErroUsuario As New CPrintErro                   'classe responsável por apresentar caixa de diálogo de erro e registrar o erro no arquivo de log
 
+Public Email As New CEmail                          'Classe responsável pelo envio de emails
+
 Public Type Ramais                              'utilizado para mover os ramais quando um nó de um trecho de rede é movido
     objIdTrecho As String
     objIdRamal As String
@@ -218,9 +220,9 @@ Public Sub Main()
     Dim rs As ADODB.Recordset
     Set rs = New ADODB.Recordset
     '%%%% AUTO LOGIN %%%%
-    Dim retval As String
-    retval = Dir(App.path & "\Controles\AutoLogin.txt")
-    If retval <> "" Then 'verifica se o arquivo existe na pasta
+    Dim retVal As String
+    retVal = Dir(App.path & "\Controles\AutoLogin.txt")
+    If retVal <> "" Then 'verifica se o arquivo existe na pasta
         blnAutoLogin = True
         Open App.path & "\Controles\AutoLogin.txt" For Input As #3
         Input #3, strUser

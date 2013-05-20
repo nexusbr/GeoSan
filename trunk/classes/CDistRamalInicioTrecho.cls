@@ -21,6 +21,7 @@ Attribute VB_Exposed = False
 Public Function Distancia(objIdTrecho As String, objIdRamal As String) As Double
     ', ByVal teDatabaseConn As TeDatabase
     'Dim a As New CGeometria                             'declaração do objeto como do tipo classe CGeometria e criação do mesmo (New) através de uma auto instância
+    On Error GoTo Trata_Erro:
     Dim t As Integer
     Dim qtdPontos As Integer
     Dim ponto1 As New CPoint2D
@@ -42,4 +43,12 @@ Public Function Distancia(objIdTrecho As String, objIdRamal As String) As Double
     Set coordInicialRamal = coordenadasLinha2.linha
     coordInt2Linhas.Intersecao2Linhas linha1, linha2       'calcula a coordenada de interseção entre as linhas do ramal e do trecho de rede
     Distancia = distInicial.Distancia2Pontos(linha1.xi, linha1.yi, coordInt2Linhas.X, coordInt2Linhas.Y)  'calcula a distância entre o ponto de interseção do ramal com o trecho de rede e o ponto inicial do trecho de rede
+    Exit Function
+    
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CDistRamalInicioTrecho", "Distancia", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Function

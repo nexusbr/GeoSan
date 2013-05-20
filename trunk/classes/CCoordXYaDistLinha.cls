@@ -41,6 +41,7 @@ End Property
 ' distancia - distância do ponto inicial da linha onde serão obtidas as coordenadas xd e yd
 '
 Public Sub calculaCoord(linha As CLine2D, Distancia As Double)
+    On Error GoTo Trata_Erro:
     Dim X As Double
     Dim Y As Double
     Dim z As Double
@@ -66,4 +67,12 @@ Public Sub calculaCoord(linha As CLine2D, Distancia As Double)
     
     xd = xf - deltaX
     yd = yf - deltaY
+    Exit Sub
+
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CCoordXYaDistLinha", "calculaCoord", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Sub

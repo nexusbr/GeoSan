@@ -21,5 +21,14 @@ Attribute VB_Exposed = False
 ' distanciaRamalAntes - distância do ramal para o início da linha
 '
 Public Function distanciaRamalDepoisMovido(compLinhaAntes As Double, compLinhaDepois As Double, distanciaRamalAntes As Double) As Double
+    On Error GoTo Trata_Erro:
     distanciaRamalDepoisMovido = compLinhaAntes * distanciaRamalAntes / compLinhaDepois
+    Exit Function
+
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CDistanciaEquivalente", "distanciaRamalDepoisMovido", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Function

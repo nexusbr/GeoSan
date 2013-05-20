@@ -17,19 +17,20 @@ Private xInt As Double
 Private yInt As Double
 'Retorna valor de x da insterseção das duas linhas
 '
-Property Get x() As Double
-    x = xInt
+Property Get X() As Double
+    X = xInt
 End Property
 'Retorna valor de y da insterseção das duas linhas
 '
-Property Get y() As Double
-    y = yInt
+Property Get Y() As Double
+    Y = yInt
 End Property
 ' Calcula a coordenada x, y da interseção de duas linhas
 '
 '
 '
 Public Sub Intersecao2Linhas(linha1 As CLine2D, linha2 As CLine2D)
+    On Error GoTo Trata_Erro:
     Dim a1 As Double
     Dim b1 As Double
     Dim c1 As Double
@@ -53,4 +54,12 @@ Public Sub Intersecao2Linhas(linha1 As CLine2D, linha2 As CLine2D)
         xInt = (b2 * c1 - b1 * c2) / det
         yInt = (a1 * c2 - a2 * c1) / det
     End If
+    Exit Sub
+    
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CDuasLinhas", "Intersecao2Linhas", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Sub

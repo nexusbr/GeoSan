@@ -34,6 +34,7 @@ End Property
 ' teDatabaseConn - conexão com o banco de dados geográfico
 '
 Public Function coordsRamal(Distancia As Double, newObjIdTrecho As String, ByVal teDatabaseConn As TeDatabase)
+    On Error GoTo Trata_Erro:
     Dim linha3 As New CLine2D                       'linha final movida do trecho de rede
     Dim linha4 As New CLine2D                       'linha final do ramal, movido, ligado ao trecho de rede
     Dim coordenadasLinha3 As New CCoordIniFinLinha  'coordenadas ao trecho de rede depois de mover
@@ -50,5 +51,13 @@ Public Function coordsRamal(Distancia As Double, newObjIdTrecho As String, ByVal
     coordsInicialRamal.Y = coordXYdist.Y                             'nova coordenada y inicial do ramal movido
     coordsFinalRamal.X = linha3.xf                                   'coordenada x final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
     coordsFinalRamal.Y = linha3.yf                                   'coordenada y final do ramal, onde está o hidrômetro, que não foi movido, mesma que a anterior
+    Exit Function
+
+Trata_Erro:
+   If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+   Else
+      ErroUsuario.Registra "CCoordIniRamalDistTrecho", "coordsRamal", CStr(Err.Number), CStr(Err.Description), True, True
+   End If
 End Function
 
