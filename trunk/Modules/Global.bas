@@ -7,7 +7,7 @@ Public cGeoDatabase As New cGeoDatabase         'conexão do TeDatabase única par
 
 Public cGeoViewDatabase As New CViewDatabase    'conexão com o TeViewManager para toda a aplicação
 
-Public Erro As New CPrintErro                   'classe responsável por apresentar caixa de diálogo de erro e registrar o erro no arquivo de log
+Public ErroUsuario As New CPrintErro                   'classe responsável por apresentar caixa de diálogo de erro e registrar o erro no arquivo de log
 
 Public Type Ramais                              'utilizado para mover os ramais quando um nó de um trecho de rede é movido
     objIdTrecho As String
