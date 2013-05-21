@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "18:56"
+            TextSave        =   "14:47"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1290,9 +1290,9 @@ End Sub
 
 
 
-Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    msngStartX = x
+    msngStartX = X
     
     With imgSplitter
         picSplitter.Move .Left, .Top, .Width \ 2, .Height - 20
@@ -1304,12 +1304,12 @@ Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
     Dim sglPos As Single
     
     If mbMoving Then
-        sglPos = x + imgSplitter.Left
+        sglPos = X + imgSplitter.Left
         If sglPos < sglSplitLimit Then
         
             picSplitter.Left = sglSplitLimit
@@ -1322,9 +1322,9 @@ Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    pctSfondo.Width = pctSfondo.Width + msngStartX - x
+    pctSfondo.Width = pctSfondo.Width + msngStartX - X
     pctSfondo.Refresh
     picSplitter.Visible = False
     mbMoving = False
@@ -1422,13 +1422,13 @@ End Sub
 
 Private Sub mnuEncontraCoordenada_Click()
 On Error GoTo Trata_Erro
-    Dim x As Double, y As Double
+    Dim X As Double, Y As Double
    
-    x = InputBox("Informe a Coordena X ")
-    y = InputBox("Informe a Coordena Y ")
+    X = InputBox("Informe a Coordena X ")
+    Y = InputBox("Informe a Coordena Y ")
     
-    If x <> 0 And y <> 0 Then
-        ActiveForm.TCanvas.setWorld x - 50, y - 50, x + 50, y + 50
+    If X <> 0 And Y <> 0 Then
+        ActiveForm.TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50
         ActiveForm.TCanvas.plotView
     End If
 
@@ -1661,7 +1661,7 @@ g = "OBJECT_ID_"
    Open CAMINHO For Output As #1
       Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
       Do While Not rs.EOF = True
-         Print #1, rs!object_id & ";" & rs!x & ";" & rs!y & ";" & rs!cota
+         Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
          rs.MoveNext
       Loop
    Close #1
@@ -2286,10 +2286,21 @@ End Sub
 '
 '
 Private Sub mnuExporta_GeoSan_Click()
-    Dim exp As New GeosanExport
+    On Error GoTo Trata_Erro
     Dim retorno As Boolean
     Dim conexao As New ADODB.connection
+    Dim diretorio As String                                                                                 'diretório para onde serão exportados os arquivos shape
+    Dim prefixoArquivo As String                                                                            'prefixo com as datas, dos arquivos shp que serão exportados
+    Dim nomeCompleto As String
+    Dim nomeExportar As String
     
+    diretorio = arquivo.SelecionaDiretorio
+    If diretorio = "falhou" Then
+        'MsgBox "Cancelada a seleção do diretório."
+        Exit Sub
+    End If
+    prefixoArquivo = arquivo.prefixo
+    nomeCompleto = diretorio + "\" + prefixoArquivo
     Screen.MousePointer = vbHourglass
     
     'exporta consumidores
@@ -2300,12 +2311,14 @@ Private Sub mnuExporta_GeoSan_Click()
     conexao.Open Conn
     TeExport2.Provider = 1
     TeExport2.connection = conexao
-    retorno = TeExport2.exportSHP("d:\gsConsumidores.shp", "RAMAIS_AGUA", "GS_CONSUMIDORES")
+    FrmMain.sbStatusBar.Panels(2).Text = "Criando shape de consumidores. Favor aguardar ..."            'mostra na barra de status o andamento da exportação
+    nomeExportar = nomeCompleto & "gsConsumidores.shp"
+    retorno = TeExport2.exportSHP(nomeExportar, "RAMAIS_AGUA", "GS_CONSUMIDORES")
     Screen.MousePointer = vbNormal
     If retorno Then
-        MsgBox "Exportação shape de ramais realizada com sucesso"
+        'MsgBox "Exportação shape de ramais realizada com sucesso"
     Else
-        MsgBox "Falha na exportação"
+        MsgBox "Falha na exportação dos consumidores"
     End If
     conexao.Close
     
@@ -2317,30 +2330,32 @@ Private Sub mnuExporta_GeoSan_Click()
     conexao.Open Conn
     TeExport2.Provider = 1
     TeExport2.connection = conexao
-    retorno = TeExport2.exportSHP("d:\gsRamais.shp", "RAMAIS_AGUA", "GS_RAMAIS")
+    FrmMain.sbStatusBar.Panels(2).Text = "Criando shape de ramais. Favor aguardar ..."                      'mostra na barra de status o andamento da exportação
+    nomeExportar = nomeCompleto + "gsRamais.shp"
+    retorno = TeExport2.exportSHP(nomeExportar, "RAMAIS_AGUA", "GS_RAMAIS")
     Screen.MousePointer = vbNormal
     If retorno Then
-        MsgBox "Exportação shape de ramais realizada com sucesso"
+        'MsgBox "Exportação shape de ramais realizada com sucesso"
     Else
-        MsgBox "Falha na exportação"
+        MsgBox "Falha na exportação dos ramais."
     End If
     conexao.Close
-    
-    
+        
     'prepara tabelas e atributos para exportar as redes
     exp.InsereTabAtributoRedes
     exp.CriaTabelaRedes
     exp.InsereRedes
       
-    'exp.ExportaRedesAguaShp
-    'exporta para o formato shape
+    'exporta redes para o formato shape
     conexao.Open Conn
     TeExport2.Provider = 1
     TeExport2.connection = conexao
-    retorno = TeExport2.exportSHP("d:\gsRedes.shp", "WATERLINES", "GS_REDES")
+    FrmMain.sbStatusBar.Panels(2).Text = "Criando shape de redes. Favor aguardar ..."                       'mostra na barra de status o andamento da exportação
+    nomeExportar = nomeCompleto + "gsRedes.shp"
+    retorno = TeExport2.exportSHP(nomeExportar, "WATERLINES", "GS_REDES")
     Screen.MousePointer = vbNormal
     If retorno Then
-        MsgBox "Exportação shape de redes realizada com sucesso"
+        'MsgBox "Exportação shape de redes realizada com sucesso"
     Else
         MsgBox "Falha na exportação"
     End If
@@ -2351,23 +2366,33 @@ Private Sub mnuExporta_GeoSan_Click()
     exp.CriaTabelaNos
     exp.InsereNos
     
+    'exporta nós
     conexao.Open Conn
     TeExport2.Provider = 1
     TeExport2.connection = conexao
-    'exporta para o formato shape os nós
-    'conexao.Open Conn
-    'TeExport2.Provider = 1
-    'TeExport2.connection = conexao
     exp.AtivaExportacaoNos
-    retorno = TeExport2.exportSHP("d:\gsNos.shp", "WATERCOMPONENTS", "GS_NOS")
+    FrmMain.sbStatusBar.Panels(2).Text = "Criando shape de nós. Favor aguardar ..."                         'mostra na barra de status o andamento da exportação
+    nomeExportar = nomeCompleto + "gsNos.shp"
+    retorno = TeExport2.exportSHP(nomeExportar, "WATERCOMPONENTS", "GS_NOS")
     exp.DesativaExportacaoNos
     Screen.MousePointer = vbNormal
     If retorno Then
-        MsgBox "Exportação dos nósrealizada com sucesso"
+        'MsgBox "Exportação dos nós realizada com sucesso"
     Else
         MsgBox "Falha na exportação"
     End If
+    exp.AtivaRamaisGeoSan                           'reativa te_representation, senão os ramais com os nós (ligações) não voltam a aparecer no GeoSan
     conexao.Close
+    FrmMain.sbStatusBar.Panels(2).Text = "Exportação finalizada."
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        exp.AtivaRamaisGeoSan                           'reativa te_representation, senão os ramais com os nós (ligações) não voltam a aparecer no GeoSan
+        ErroUsuario.Registra "FrmMain", "mnuExporta_GeoSan_Click", CStr(Err.Number), CStr(Err.Description), True, True
+    End If
 End Sub
 
 Private Sub mnuUpdate_Demand_Click()

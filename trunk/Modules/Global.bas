@@ -2,15 +2,11 @@ Attribute VB_Name = "Global"
 Option Explicit
 
 Public varGlobais As New CVariaveis             'variáveis globais que todas as rotinas podem acessar
-
 Public cGeoDatabase As New cGeoDatabase         'conexão do TeDatabase única para toda a aplicação
-
 Public cGeoViewDatabase As New CViewDatabase    'conexão com o TeViewManager para toda a aplicação
-
-Public ErroUsuario As New CPrintErro                   'classe responsável por apresentar caixa de diálogo de erro e registrar o erro no arquivo de log
-
-Public Email As New CEmail                          'Classe responsável pelo envio de emails
-
+Public ErroUsuario As New CPrintErro            'classe responsável por apresentar caixa de diálogo de erro e registrar o erro no arquivo de log
+Public Email As New CEmail                      'Classe responsável pelo envio de emails
+Public arquivo As New CArquivo                  'Classe de operação de arquivos e diretórios
 Public Type Ramais                              'utilizado para mover os ramais quando um nó de um trecho de rede é movido
     objIdTrecho As String
     objIdRamal As String
@@ -20,13 +16,10 @@ Public Type Ramais                              'utilizado para mover os ramais 
     xHidrom As Double
     yHidrom As Double
 End Type
-
 Public ramalMovendo() As Ramais
-
 Private AbrirArquivo As New clsAbreArquivo      'Classe que abre um arquivo conforme a extensão do mesmo
-
-Public Versao_Geo As String             'Número da versão do software no formato XX.YY.ZZ.WW
-
+Public Versao_Geo As String                     'Número da versão do software no formato XX.YY.ZZ.WWDim exp As New GeosanExport
+Public exp As New GeosanExport                  'médotos de exportação para o formato shape
 'FUNÇÕES PARA LER E GRAVAR NO ARQUIVO .INI-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nsize As Long, ByVal lpFileName As String) As Long
 Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
@@ -189,6 +182,7 @@ Public Sub Main()
     Dim contador As String * 100
     Dim tipo As String
     Dim connn As String
+    
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
     Versao_Geo = "06.09.17"
@@ -220,9 +214,9 @@ Public Sub Main()
     Dim rs As ADODB.Recordset
     Set rs = New ADODB.Recordset
     '%%%% AUTO LOGIN %%%%
-    Dim retVal As String
-    retVal = Dir(App.path & "\Controles\AutoLogin.txt")
-    If retVal <> "" Then 'verifica se o arquivo existe na pasta
+    Dim retval As String
+    retval = Dir(App.path & "\Controles\AutoLogin.txt")
+    If retval <> "" Then 'verifica se o arquivo existe na pasta
         blnAutoLogin = True
         Open App.path & "\Controles\AutoLogin.txt" For Input As #3
         Input #3, strUser
@@ -507,7 +501,8 @@ If frmCanvas.TipoConexao <> 4 Then
       End If
    End If
    
-
+    exp.AtivaRamaisGeoSan                               'precisa ativar o te_representation, uma vez que na exportação que pode ter ocorrido ou ter sido cancelada, pode ter sido apagado
+    
 pulaConexaoComercial:
    
    momento = ""
@@ -2686,32 +2681,32 @@ Public Function convertQuery(SQL As String, tipo As Integer) As String
    convertQuery = SQL
 End Function
 
-Public Function RetornaNomeMes(Mes As Integer, Optional NomeCompleto As Boolean = False) As String
+Public Function RetornaNomeMes(Mes As Integer, Optional nomeCompleto As Boolean = False) As String
    Select Case Mes
       Case 1
-         RetornaNomeMes = IIf(NomeCompleto, "janeiro", "jan")
+         RetornaNomeMes = IIf(nomeCompleto, "janeiro", "jan")
       Case 2
-         RetornaNomeMes = IIf(NomeCompleto, "fevereiro", "fev")
+         RetornaNomeMes = IIf(nomeCompleto, "fevereiro", "fev")
       Case 3
-         RetornaNomeMes = IIf(NomeCompleto, "março", "mar")
+         RetornaNomeMes = IIf(nomeCompleto, "março", "mar")
       Case 4
-         RetornaNomeMes = IIf(NomeCompleto, "abril", "abr")
+         RetornaNomeMes = IIf(nomeCompleto, "abril", "abr")
       Case 5
-         RetornaNomeMes = IIf(NomeCompleto, "maio", "mai")
+         RetornaNomeMes = IIf(nomeCompleto, "maio", "mai")
       Case 6
-         RetornaNomeMes = IIf(NomeCompleto, "junho", "jun")
+         RetornaNomeMes = IIf(nomeCompleto, "junho", "jun")
       Case 7
-         RetornaNomeMes = IIf(NomeCompleto, "julho", "jul")
+         RetornaNomeMes = IIf(nomeCompleto, "julho", "jul")
       Case 8
-         RetornaNomeMes = IIf(NomeCompleto, "agosto", "ago")
+         RetornaNomeMes = IIf(nomeCompleto, "agosto", "ago")
       Case 9
-         RetornaNomeMes = IIf(NomeCompleto, "setembro", "set")
+         RetornaNomeMes = IIf(nomeCompleto, "setembro", "set")
       Case 10
-         RetornaNomeMes = IIf(NomeCompleto, "outubro", "out")
+         RetornaNomeMes = IIf(nomeCompleto, "outubro", "out")
       Case 11
-         RetornaNomeMes = IIf(NomeCompleto, "novembro", "nov")
+         RetornaNomeMes = IIf(nomeCompleto, "novembro", "nov")
       Case 12
-         RetornaNomeMes = IIf(NomeCompleto, "dezembro", "dez")
+         RetornaNomeMes = IIf(nomeCompleto, "dezembro", "dez")
    End Select
 End Function
 'Procura no banco de dados a querie correspondente ao ID fornecido
