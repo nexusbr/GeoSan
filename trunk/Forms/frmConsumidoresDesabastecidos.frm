@@ -297,15 +297,12 @@ Public Function init(Object_id_trecho As String) As Boolean
     Exit Function
     
 Trata_Erro:
-    If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 94 Then
+    If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        PrintErro CStr(Me.Name), "Falha em Function init(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True
+        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "init -(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True, True
         init = False
-        'LoozeXP1.EndWinXPCSubClassing
-        'PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True
     End If
-    
 End Function
 'Subrotina para gerar um arquivo texto, com os dados já gerados pela Função init, contendo todos os consumidores que serão afetados por uma manobra na rede
 '
@@ -330,12 +327,13 @@ On Error GoTo Trata_Erro
         MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.filename, vbInformation
         Shell "notepad.exe " & cdl1.filename, vbNormalFocus
     End If
+
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
-   Else
-       PrintErro CStr(Me.Name), "Private Sub cmdGerartxt_Click", CStr(Err.Number), CStr(Err.Description), True
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "cmdGerartxt_Click", CStr(Err.Number), CStr(Err.Description), True, True
+    End If
 End Sub
 
 Private Sub cmdOK_Click()

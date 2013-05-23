@@ -4,6 +4,76 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+23-05-2013 - GeoSan 06.10.01
+Atualizada a base de dados padrão geosan_curso
+Atualizado o número da versão do GeoSan na tabela NX_BASE
+Atualizada a ícone de entrada do GeoSan, criando um arquivo novo com o
+Resource file editor.
+
+
+23-05-2013 - GeoSan 06.10.00
+Gerado a versão de instalação de testes
+
+23-05-2013 - GeoSan 06.09.17
+
+Em resumo, foi finalizada a função de mover nó de rede junto com os ramais.
+Implementada a rotina de envio de erros por email.
+Modificadas as ícones.
+
+Em detalhes foram realizados os seguintes commits:
+
+Realizada formatação no código do PManager4.
+Inserida funcionalidade de desenho de cálculo de distâncias.
+Feitas modificações nas tolerâncias
+Acerto do código do NexusPM4 para ficar mais legível (necessita finalizar)
+Corrigida a tolerancia de snap e drawNetworkLine para a devida localização
+das extremidades de rede.
+Melhorado a documentação do código que corrige a tolerância.
+Testes de modificação das ícones
+Atualizadas as ícones.
+Feitas rotinas inicias de movimentação geométrica.
+Realizado diagrama de sequencia de mover um nó da rede.
+Inserido texto da licenca de uso das ícones.
+Criada classe para tratar movimentação de geometrias.
+Commit das alterações feitas, está com bug no TeDatabase1 e 4
+Mudadas as ícones do menu em 32x32 antes de mudar para
+24x24 o tamanho das mesmas.
+Corrigido bug na função delete que ocorria quando ia apagar uma ramal e
+selecionava apenas o ramal, sem selecionar o hidrômetro (ponto).
+Realizadas as modificações para mover mais de um ramal, só que move somente
+de um único trecho. Não move do(s) outro(s) trecho(s).
+Realizadas modificações para mover todos os ramais de várias redes ao mesmo
+tempo.
+Finalizada função de mover ramais está funcionando. Iniciada mofificação no tratamento
+de erros.
+Finalizada rotina que apresenta erros e envia automativamente e-mail para a
+NEXUS informando o erro ocorrido.
+Inserida em todas as classes novas e em dois eventos do frmCanvas este novo
+controle de mensagens de erro.
+Realizados alguns testes bem básicos e aparentemente funcionou a movimentação
+de ramais junto com os trechos de redes.
+Realizada rotina de envio de erros por email automaticamente.
+Revisada a exportação para shape.
+Implementada funcionalidade no arquivo geosan.ini para enviar erros por email
+
+[EMAIL]
+EMAILDESTINATARIO=tec@nexusbr.com
+EMAILREMETENTE=NEXUS <tec@nexusbr.com>
+ENDERECOSMTP=smtp.gmail.com
+PORTASMTP=465
+USUARIOSMTP=tec@nexusbr.com
+SENHASMTP=xxxxxxxx
+SSLSMTP=TRUE
+
+Assim agora é possível ao ocorrer um erro no GeoSan, ser enviado um email para
+a NEXUS com a informação do mesmo.
+
+Para solucionar bloqueios da porta SMTP pelo Firewall da empresa, o cliente
+poderá configurar no arquivo GEOSAN.INI suas opções de email e este será
+enviado para um email interno da empresa, o qual fará um redirecionamento
+para o email tec@nexusbr.com, da NEXUS.
+
+
 02-05-2013 - GeoSan 06.09.17
 
 Foram alterados na tabela WaterComponentsTypes os valores na coluna 

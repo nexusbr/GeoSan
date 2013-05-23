@@ -107,7 +107,6 @@ Public ConnPostgresPorta As String ' informa ao a conexão TeConnectio a porta de
 Public blnAutoLogin As Boolean
 Public dblFatorZoomMais As Double
 Public dblFatorZoomMenos As Double
-'Public Conn As ADODB.Connection
 Public Conn As New ADODB.connection
 
 Public stopProcess As Boolean
@@ -167,9 +166,6 @@ Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) 
 'Returns pixels per inch
 'Utilizada na função para converter Twits para Pixels
 Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
-
-
-
 'Subrotina principal de entrada do GeoSan'
 '
 '
@@ -185,7 +181,7 @@ Public Sub Main()
     
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.09.17"
+    Versao_Geo = "06.10.00"
     glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
     Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
