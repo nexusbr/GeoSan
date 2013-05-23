@@ -526,22 +526,20 @@ Trata_Erro:
 
 
 End Sub
-
-
+' Lê o arquivo de inicialização do GeoSan e retorna o parâmetro solicitado do mesmo
+'
+' Secao - o nome da seção presente no arquivo .ini entre colchetes []
+' Entrada - nome do parâmetro ao qual se deseja obter a informação de entrada, o qual está dentro da seção apontada. Fica antes do sinal de igual
+' arquivo - nome do arquivo .ini que será lido
+'
 Public Function ReadINI(Secao As String, Entrada As String, arquivo As String)
-  
-  'Arquivo=nome do arquivo ini
-  'Secao=O que esta entre []
-  'Entrada=nome do que se encontra antes do sinal de igual
- 
- Dim retlen As String
- Dim Ret As String
- 
- Ret = String$(255, 0)
- retlen = GetPrivateProfileString(Secao, Entrada, "", Ret, Len(Ret), arquivo)
- Ret = Left$(Ret, retlen)
- ReadINI = Ret
-
+    Dim retlen As String
+    Dim Ret As String
+    
+    Ret = String$(255, 0)                                                           'string que conterá o parâmetro de retorno. Preenche com o caractere ASCII 0 255 vezes
+    retlen = GetPrivateProfileString(Secao, Entrada, "", Ret, Len(Ret), arquivo)
+    Ret = Left$(Ret, retlen)
+    ReadINI = Ret
 End Function
 
 Public Sub WriteINI(Secao As String, Entrada As String, Texto As String, arquivo As String)

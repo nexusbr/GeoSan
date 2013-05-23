@@ -362,6 +362,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
     On Error GoTo Trata_Erro
     Dim rs As ADODB.Recordset
     Dim linha As Integer
+    
     tipoDeConexao = typeconnection
     If typeconnection <> postgreSQL Then
         'se não for Postgresss
@@ -767,11 +768,11 @@ Public Sub Tb_SELECT(ByVal Button As String)
             Case "KFindCoordenadas" 'final das coordenadas desmarca item 1, item2, item3, item4 e 128
                 .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
                 'Declaração das variáveis x,y (verificar se este x e y não estão sendo utilizados em outro lugar, pois mudou para maiúsculas na revisão 75)
-                Dim x As Double, y As Double
-                x = InputBox("Informe a Coordena X ") ' entrada da coordenada x
-                y = InputBox("Informe a Coordena Y ") ' entrada da coordenada y
-                If x <> 0 And y <> 0 Then ' se x e y for diferente de zero
-                    TCanvas.setWorld x - 50, y - 50, x + 50, y + 50 '  'configura as coordenadas mundo a serem utilizadas para desenho
+                Dim X As Double, Y As Double
+                X = InputBox("Informe a Coordena X ") ' entrada da coordenada x
+                Y = InputBox("Informe a Coordena Y ") ' entrada da coordenada y
+                If X <> 0 And Y <> 0 Then ' se x e y for diferente de zero
+                    TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50 '  'configura as coordenadas mundo a serem utilizadas para desenho
                     TCanvas.plotView ' plota o layer
                 End If ' final do if
             Case "KEncontraConsumidor" ' localizar consumidores
@@ -1001,7 +1002,7 @@ End Sub
 'Rotina que ao selecionar duplo clique do mouse, vai identificar todas as redes que estão dentro do polígono finalizado.
 '
 '
-Private Sub TCanvas_onDblClick(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
+Private Sub TCanvas_onDblClick(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
 On Error GoTo Trata_Erro
 'XXX - para lembrar que é aqui que ele fecha o poligono de seleção de redes com duplo clique
 'A FUNÇÃO DUPLO CLIQUE É UTILIZADA PARA FECHAR UM POLÍGONO QUE ESTÁ SENDO DESENHADO E
@@ -1226,8 +1227,8 @@ On Error GoTo Trata_Erro
                'Verifica a seleção apenas das geometrias 2(linhas) e 4(Pontos)
                For j = 2 To 4 Step 2
                   
-                  Dim x As String
-                  x = TCanvas.getSelectObjectId(0, 2) ' LINHAS
+                  Dim X As String
+                  X = TCanvas.getSelectObjectId(0, 2) ' LINHAS
                   
                   If TCanvas.getSelectCount(j) = 1 Then
                      .LoadDefaultProperties TCanvas.getSelectObjectId(0, j), TCanvas.getCurrentLayer, False
@@ -1324,9 +1325,9 @@ Private Sub TCanvas_onError(ByVal code As String, ByVal errorMessage As String)
     End Select
 End Sub
 
-Private Sub TCanvas_onIntersectionPoint(ByVal x As Double, ByVal y As Double)
+Private Sub TCanvas_onIntersectionPoint(ByVal X As Double, ByVal Y As Double)
 On Error GoTo Trata_Erro
-   TeDatabase1.moveNetWorkNodeTo "watercomponents", "WATERLINES", "", , x, y
+   TeDatabase1.moveNetWorkNodeTo "watercomponents", "WATERLINES", "", , X, Y
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
@@ -1517,9 +1518,11 @@ End Function
 ' Button - botão do mouse selecionado
 ' x, y, z - coordenada em que o mouse foi selecionado
 '
-Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
+Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
     On Error GoTo Trata_Erro
+    Dim controlaErro As String              'para indicar onde ocorreu o erro, caso ocorra
     
+    controlaErro = "sem erro"
     X1 = 0 'passa as coordenadas para calculo e exibição
     Y1 = 0
     
@@ -1529,22 +1532,27 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y
             Select Case Tr.TerraEvent       'verifica o comando que está sendo executado
             
                 Case tg_DrawNetWorkline     'DESENHANDO REDE
+                        controlaErro = "tg_DrawNetWorkline"
                         FrmMain.Manager1.GridEnabled True
-                        X1 = x 'passa as coordenadas para calculo e exibição
-                        Y1 = y
+                        X1 = X 'passa as coordenadas para calculo e exibição
+                        Y1 = Y
 
                 Case tg_MoveNetWorkNode     'MOVENDO REDE
+                        controlaErro = "tg_MoveNetWorkNode"
                         FrmMain.Manager1.GridEnabled True
-                        X1 = x 'passa as coordenadas para calculo e exibição
-                        Y1 = y
+                        X1 = X 'passa as coordenadas para calculo e exibição
+                        Y1 = Y
 
                 Case tg_DrawNetWorkNode     'DESENHANDO UM NÓ
+                    controlaErro = "tg_DrawNetWorkNode-1"
                     Tr.SaveInDatabase: FrmMain.Manager1.GridEnabled True
+                    controlaErro = "tg_DrawNetWorkNode-2"
                     With TCanvas
                         .Normal
                         .Select: Tr.TerraEvent = tg_SelectObject
                         .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
                     End With
+                    controlaErro = "tg_DrawNetWorkNode-3"
                     LoadToolsBar
 
                 Case tg_DrawRamal           'DESENHANDO UM RAMAL
@@ -1555,16 +1563,22 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y
                             'VERIFICA SE O LAYER CORRENTE É O DE RAMAIS DE AGUA OU ESGOTO
                             'SE FOR O DE AGUA, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_AGUA
                             'SE FOR O DE ESGOTO, SETA O CURRENT LAYER DO TEDATABASE PARA RAMAIS_ESGOTO
+                            controlaErro = "tg_DrawRamal-RAMAIS_AGUA-1"
                             If UCase(TCanvas.getCurrentLayer) = "RAMAIS_AGUA" Then
+                                controlaErro = "tg_DrawRamal-RAMAIS_AGUA-2"
                                 TeDatabaseRamais.setCurrentLayer "WATERLINES"
                             Else
+                                controlaErro = "tg_DrawRamal-RAMAIS_AGUA-3"
                                 TeDatabaseRamais.setCurrentLayer "SEWERLINES"
                             End If
                             'VERIFICA SE O USUÁRIO CLICOU SOBRE UMA REDE DE AGUA OU ESGOTO
-                            intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(x, y, tpLINES, 1)
+                            controlaErro = "tg_DrawRamal-RAMAIS_AGUA-4"
+                            intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometry(X, Y, tpLINES, 1)
                             'intQtdLinhasNaCoordenada = TeDatabaseRamais.locateGeometryXY(x, y, tpLINES)
                             'CASO NÃO, EXIBE MENSAGEM E REINICIA O PROCESSO
+                            controlaErro = "tg_DrawRamal-RAMAIS_AGUA-5"
                             If intQtdLinhasNaCoordenada = 0 Then
+                                controlaErro = "tg_DrawRamal-RAMAIS_AGUA-6"
                                 MsgBox "Inicie o desenho do ramal partindo do trecho de rede.", vbInformation, ""
                                 TCanvas.Normal
                                 TCanvas.Select
@@ -1574,6 +1588,7 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y
                                 Tr.TerraEvent = tg_DrawRamal
                             'CASO HÁ MAIS DE UMA REDE SOB O CLIQUE, EXIBE MENSAGEM E REINICIA O PROCESSO
                             ElseIf intQtdLinhasNaCoordenada > 1 Then
+                                controlaErro = "tg_DrawRamal-RAMAIS_AGUA-7"
                                 MsgBox "Foi identificado mais de um trecho de rede no local selecionado." & Chr(13) & Chr(13) & "tente novamente.", vbInformation, ""
                                 TCanvas.Normal
                                 TCanvas.Select
@@ -1584,6 +1599,7 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y
                                 'CASO SIM, CAPTURA O OBJECT_ID_ DA REDE QUE FOI SELECIONADA E PASSA
                                 'PARA A VARIÁVEL QUE VAI SALVAR O RAMAL
                             Else
+                                controlaErro = "tg_DrawRamal-RAMAIS_AGUA-8"
                                 ramal_Object_id_trecho = TeDatabaseRamais.objectIds(0)
                                 'TCanvas.ToolTipText = "Rede: " & ramal_Object_id_trecho
                                 'GUARDA A INFORMAÇÃO DE QUE O PRIMEIRO CLIQUE JA FOI DADO PARA DESENHAR O RAMAL
@@ -1595,22 +1611,28 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y
                     End If
 
                 Case Else                   'nenhuma das anteriores
+                        controlaErro = "tg_DrawRamal-RAMAIS_AGUA-9"
                         FrmMain.Manager1.GridEnabled False
             End Select
 
         Case 1          'SELECIONADO O BOTÃO DIREITO DO MOUSE
             Select Case tbrPressed
                 Case FrmMain.tbToolBar.Buttons("kdrawnetworkline").value        'usuário selecionou anteriormente que estava desenhando uma rede
+                    controlaErro = "tbrPressed-1"
                     'então vamos reiniciar o desenho da rede a partir do início
                     TCanvas.Normal                      'volta o canvas para o estado de visualização
                     'limpa todos os itens editados em memória, as geometrias das listas temporárias e geometrias a serem removidas do banco de dados
                     TCanvas.clearEditItens (2)          'limpa linhas
                     TCanvas.clearEditItens (4)          'limpa pontos
+                    controlaErro = "tbrPressed-2"
                     Tr.DrawNetWorkLine                  'ativa novamente o desenho de uma rede a partir do início
+                    controlaErro = "tbrPressed-3"
                     Select Case LastEvent               'precisa verificar o que faz e se está passando realmente por este select case
                         Case tg_DrawNetWorkline
+                            controlaErro = "tbrPressed-4"
                             Tr.DrawNetWorkLine True
                         Case tg_MoveNetWorkNode
+                            controlaErro = "tbrPressed-5"
                             Tr.MoveNetWorkNode True
                     End Select
             End Select
@@ -1622,11 +1644,10 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal x As Double, ByVal y
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
-    ElseIf Err.Number = -2147467259 Then
-        PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseDown", CStr(Err.Number), CStr(Err.Description), True
-        End
+    ElseIf Err.Number = -2147467259 Then            ' indica que não existe conexão com o banco de dados.
+        ErroUsuario.Registra "frmCanvas", "onMouseDown (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, True, controlaErro
     Else
-        PrintErro CStr(Me.Name), "Private Sub TCanvas_onMouseDown", CStr(Err.Number), CStr(Err.Description), True
+        ErroUsuario.Registra "frmCanvas", "onMouseDown", CStr(Err.Number), CStr(Err.Description), True, True, controlaErro
     End If
 End Sub
 ' Entra nesta rotina quando o usuário move o mouse, independente de qualquer coisa ou botão ter sido selecionado
@@ -1636,7 +1657,7 @@ End Sub
 ' x, y - coordenadas UTM da posição do mouse na tela
 ' lat, long - latitude e longitude da posição do mouse na tela
 '
-Private Sub TCanvas_onMouseMove(ByVal x As Double, ByVal y As Double, ByVal lat As String, ByVal lon As String)
+Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat As String, ByVal lon As String)
     On Error GoTo Trata_Erro
     Dim TBP As String
     Dim TBA As String
@@ -1644,12 +1665,12 @@ Private Sub TCanvas_onMouseMove(ByVal x As Double, ByVal y As Double, ByVal lat 
     Dim dist As Integer
     Dim COMP As Double
     pesquisar = False
-    If (xOld - x) > 3 Or (x - xOld) > 3 Then
-        xOld = x
+    If (xOld - X) > 3 Or (X - xOld) > 3 Then
+        xOld = X
         pesquisar = True
         'TCanvas.ToolTipText = ""
-    ElseIf (yOld - y) > 3 Or (y - yOld) > 3 Then
-        yOld = y
+    ElseIf (yOld - Y) > 3 Or (Y - yOld) > 3 Then
+        yOld = Y
         pesquisar = True
         'TCanvas.ToolTipText = ""
     End If
@@ -1661,15 +1682,15 @@ Private Sub TCanvas_onMouseMove(ByVal x As Double, ByVal y As Double, ByVal lat 
             If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
                 TBP = ReadINI("RAMAISFILTROLOTES", "TABELA_PLANO", App.path & "\CONTROLES\GEOSAN.INI")
                 TBA = ReadINI("RAMAISFILTROLOTES", "TABELA_ATRIB", App.path & "\CONTROLES\GEOSAN.INI")
-                Call Pesquisa_Dados_Lote(x, y, lat, lon, TBA, TBP)
+                Call Pesquisa_Dados_Lote(X, Y, lat, lon, TBA, TBP)
             End If
         End If
     End If
-    FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(x, 2) & " - y:" & Round(y, 2)
+    FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(X, 2) & " - y:" & Round(Y, 2)
     'If X1 <> 0 Then ' SE A VARIAVEL DE PRIMEIRO CLICK ESTIVER ZERADA...
-    X1i = x
-    Y1i = y
-        COMP = Sqr((Abs(x - X1) ^ 2) + (Abs(y - Y1) ^ 2))
+    X1i = X
+    Y1i = Y
+        COMP = Sqr((Abs(X - X1) ^ 2) + (Abs(Y - Y1) ^ 2))
 '        FrmMain.sbStatusBar.Panels(1).Text = "Comprimento da rede: " & Format(COMP, "0.00") & " m"
         FrmMain.sbStatusBar.Panels(5).Text = Format(COMP, "0.00") & " m"
         'TCanvas.ToolTipText = Format(COMP, "0.00") & " m"
@@ -1690,7 +1711,7 @@ Trata_Erro:
     End If
 End Sub
 
-Sub Pesquisa_Dados_Lote(ByVal x As Double, ByVal y As Double, ByVal lat As String, ByVal lon As String, ByVal TBAtributo As String, ByVal TBPlano As String)
+Sub Pesquisa_Dados_Lote(ByVal X As Double, ByVal Y As Double, ByVal lat As String, ByVal lon As String, ByVal TBAtributo As String, ByVal TBPlano As String)
 
 On Error GoTo Trata_Erro
       Dim rs As ADODB.Recordset
@@ -1724,7 +1745,7 @@ On Error GoTo Trata_Erro
       
          TeDatabase1.setCurrentLayer CStr(TBPlano)
          
-         If TeDatabase1.locateGeometryXY(x, y, tpPOLYGONS) = 1 Then
+         If TeDatabase1.locateGeometryXY(X, Y, tpPOLYGONS) = 1 Then
             
             'LOCALIZADA 1 GEOMETRIA DE POLIGONO DE LOTE
             'LOCALIZAR NA TABELA DE ATRIBUTO QUAL IPTU DO LOTE
@@ -1763,8 +1784,8 @@ On Error GoTo Trata_Erro
          End If
     
 End If
-      Position_X = x
-      Position_Y = y
+      Position_X = X
+      Position_Y = Y
       'FrmMain.sbStatusBar.Panels(4).Text = "x: " & Round(x, 2) & " - y:" & Round(y, 2)
       Set rs = Nothing
 Exit Sub
@@ -1784,7 +1805,7 @@ End Sub
 '    End If
 'End Sub
 
-Private Sub TCanvas_onMouseUp(ByVal Button As Long, ByVal x As Double, ByVal y As Double)
+Private Sub TCanvas_onMouseUp(ByVal Button As Long, ByVal X As Double, ByVal Y As Double)
 On Error GoTo Trata_Erro
    If Button = 0 Then 'BOTÃO ESQUERDO DO MOUSE
       'PopupMenu
@@ -1806,7 +1827,7 @@ Private Sub TCanvas_onMoveGeometries(ByVal distance As Double, ByVal deltaX As D
     MsgBox ("movendo geometria")        'para teste de movimentação de geometria e verificar quando entra aqui
 End Sub
 
-Private Sub TCanvas_onPoint(ByVal x As Double, ByVal y As Double)
+Private Sub TCanvas_onPoint(ByVal X As Double, ByVal Y As Double)
 On Error GoTo Trata_Erro
    Select Case Tr.TerraEvent
       Case tg_DrawNetWorkNode
@@ -1814,9 +1835,9 @@ On Error GoTo Trata_Erro
 '      Case tg_DrawPoint
 '         Tr.OnPoint x, y
       Case tg_DrawGeometrys
-         Tr.OnPoint x, y
+         Tr.OnPoint X, Y
       Case tg_DrawRamal
-         Tr.OnRamal x, y, True
+         Tr.OnRamal X, Y, True
    End Select
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then

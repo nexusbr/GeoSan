@@ -14,6 +14,14 @@ Attribute VB_Exposed = False
 ' Classe responsável pelo envio de emails
 '
 '
+Private emailDestinatario As String             'email de quem vai receber. p.ex. tec@nexusbr.com
+Private emailRemetente As String                'nome de quem está enviando. p.ex. NEXUS <tec@nexusbr.com>
+Private enderecoSMTP As String                  'endereço smtp de envio. p.ex. para o GMail: smtp.gmail.com
+Private portaSMTP As Integer                    'porta de envio do email. p. ex. para o GMail: 465
+Private usuarioSMTP As String                   'usuário de login do smtp. p. ex. para o GMail: tec@nexusbr.com
+Private senhaSMTP As String                     'senha do sSmtpUser para acessar
+Private SslSmtp As Boolean                      'se é para enviar com segurança ou não. p. ex. para o GMail: True
+
 ' Envia um email genério
 '
 ' sTo - email de quem vai receber. p.ex. tec@nexusbr.com
@@ -70,8 +78,32 @@ Public Function enviaEmail(arquivoParaAnexar As String) 'As String
     Dim textoErro As String
     
     textoErro = "Segue em anexo o arquivo de log do erro ocorrido no GeoSan."
-    retval = SendMail("tec@nexusbr.com", "GeoSan - Aviso de erro", "NEXUS <tec@nexusbr.com>", textoErro, "smtp.gmail.com", 465, "tec@nexusbr.com", "nexus243", arquivoParaAnexar, True)
+    retval = SendMail(emailDestinatario, "GeoSan - Aviso de erro", emailRemetente, textoErro, enderecoSMTP, portaSMTP, usuarioSMTP, senhaSMTP, arquivoParaAnexar, SslSmtp)
     enviaEmail = retval
 End Function
-
-
+' Método para ler as configurações de envio de email
+'
+'
+Public Function leConfiguracoesEmail()
+    Dim caminhoGeoSanIni As String
+    
+    caminhoGeoSanIni = App.path & "\CONTROLES\GEOSAN.INI"
+    emailDestinatario = ReadINI("EMAIL", "EMAILDESTINATARIO", caminhoGeoSanIni)
+    emailRemetente = ReadINI("EMAIL", "EMAILREMETENTE", caminhoGeoSanIni)
+    enderecoSMTP = ReadINI("EMAIL", "ENDERECOSMTP", caminhoGeoSanIni)
+    portaSMTP = CInt(IIf(ReadINI("EMAIL", "PORTASMTP", caminhoGeoSanIni) = "", 0, ReadINI("EMAIL", "PORTASMTP", caminhoGeoSanIni)))     'caso não encontre retorna a porta zero
+    usuarioSMTP = ReadINI("EMAIL", "USUARIOSMTP", caminhoGeoSanIni)
+    senhaSMTP = ReadINI("EMAIL", "SENHASMTP", caminhoGeoSanIni)
+    SslSmtp = CBool(IIf(ReadINI("EMAIL", "SSLSMTP", caminhoGeoSanIni) = "", "TRUE", ReadINI("EMAIL", "SSLSMTP", caminhoGeoSanIni)))     'caso exista erro na leitura da segurança ssl, define como padrão TRUE, senão o que foi entrado no arquivo .ini
+    If emailDestinatario = "" Or emailRemetente = "" Or enderecoSMTP = "" Or portaSMTP = 0 Or usuarioSMTP = "" Or senhaSMTP = "" Then   'define como padrão o email da NEXUS, pois não consegui ler corretamente no arquivo .ini
+        emailDestinatario = "tec@nexusbr.com"
+        emailRemetente = "NEXUS <tec@nexusbr.com>"
+        enderecoSMTP = "smtp.gmail.com"
+        portaSMTP = 465
+        usuarioSMTP = "tec@nexusbr.com"
+        senhaSMTP = "nexus243"
+        SslSmtp = True
+    Else
+        'conseguiu ler com sucesso todas informações e está pronto para enviar emails caso ocorra um erro na aplicação
+    End If
+End Function

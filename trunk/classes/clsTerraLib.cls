@@ -442,7 +442,7 @@ Public Function Delete() As Boolean
                                         End If
                                     Next
                                 Else                                                                                                                            'só pode existir um ponto na extremidade do ramal, o qual é a ligação do hidrômetro, portanto se entrar neste else é por que este ponto não foi selecionado, pois já foi testado antes se existia mais de um ponto
-                                    MsgBox "Você não selecionou o hidrômetro, somente o ramal. Selecione ambos para apagar."
+                                    MsgBox "Você não selecionou o hidrômetro, somente o ramal. Selecione ambos ou somente o hidrômetro para apagar."
 '                                    For i = 0 To tcs.getSelectCount(lines) - 1
 '                                        b = .getCurrentLayer
 '                                        c = "b"
@@ -847,7 +847,7 @@ Trata_Erro:
     End If
 End Function
 
-Private Function NewObject(LayerName As String, id As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
+Private Function NewObject(LayerName As String, ID As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
 On Error GoTo Trata_Erro
    Dim LenghtCalc As Double
    Dim rsNew As ADODB.Recordset
@@ -861,7 +861,7 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
+    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
      Else
      a = "OBJECT_ID_"
       b = "LINE_ID"
@@ -870,7 +870,7 @@ On Error GoTo Trata_Erro
       e = "HIDROMETRADO"
       f = "LENGTHCALCULATED"
      
-      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
+      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
      End If
 
 
@@ -892,7 +892,7 @@ On Error GoTo Trata_Erro
          Conn.execute "Update " + """" + LayerName + """" + " set " + """" + f + """" + " = '" & Replace(Round(compr, 2), ",", ".") & "' where " + """" + a + """" + " = '" & object_id & "'"
          End If
       'CHAMA O MÉTODO DE CRIAR TEXTOS
-      InsertTextAttributesLine LayerName, id, object_id
+      InsertTextAttributesLine LayerName, ID, object_id
 
    
    ElseIf Geometry = points Then
@@ -902,14 +902,14 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
+    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
      Else
       a = "OBJECT_ID_"
       b = "COMPONENT_ID"
       c = "INSCRICAO_LOTE"
      
      
-     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
+     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
      End If
       
       
@@ -917,7 +917,7 @@ On Error GoTo Trata_Erro
      
       Conn.execute (strsql)
       If cgeo.GetTypeText(LayerName) = 2 Then
-         cgeo.InsertTextInPoint id, object_id, LayerName, 0, 0
+         cgeo.InsertTextInPoint ID, object_id, LayerName, 0, 0
       End If
     
    End If

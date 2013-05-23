@@ -561,7 +561,10 @@ Dim vd As String
 Dim vm As String
 Dim vf As String
 Dim count2, count3 As Integer
-
+' Subrotina de inicialização da caixa de diálogo
+'
+'
+'
 Public Sub init(TipoRamal As String, m_object_id_ramal As String, m_tcs As TeCanvas, m_tdbramais As TeDatabase, m_tdbtrecho As TeDatabase, m_object_id_lote As String, m_object_id_trecho As String)
 
 On Error GoTo Trata_Erro
@@ -805,8 +808,10 @@ reinicia:
     
 
 End Function
+' Carrega na caixa de diálogo de cadastro de ramais as ligações de água que ainda não estão associadas ao ramal
+' e conforme o filtro definido pelo usuário
 '
-'
+' ComLotes - se é para considerar a inscrição do lote ou não (polígono). Isto não mais está sendo utilizado
 '
 Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
     On Error GoTo Trata_Erro
@@ -1059,17 +1064,17 @@ saida:
     End If
 End If
 cmdFechar.Caption = "Cancelar"
+Exit Function
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
-        ElseIf Err.Number = -2147467259 Then
-        PrintErro CStr(Me.Name), "Private Function Carrega_PreFiltro()", CStr(Err.Number), CStr(Err.Description), True
+    ElseIf Err.Number = -2147467259 Then
+        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, True
     Else
-        
+        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro", CStr(Err.Number), CStr(Err.Description), True, True
     End If
-    'MsgBox "ARQUIVO DEBUG SALVO"
-    'WritePrivateProfileString "A", "A", Err.Description, App.path & "\DEBUG.INI"
+
 End Function
 
 'Private Sub CARREGA_GRID(ByVal rs As Recordset)
@@ -1376,8 +1381,8 @@ Private Sub cmdConfirmar_Click()
    Dim rsCria As ADODB.Recordset
    Dim a As Integer
    Dim cgeo As New clsGeoReference
-   Dim x As Double
-   Dim y As Double
+   Dim X As Double
+   Dim Y As Double
    Dim str As String
    
    Dim strNroL As String 'NÚMERO DA LIGACAO
@@ -1486,13 +1491,13 @@ Set rsCria = New ADODB.Recordset
         
         tdbramais.setCurrentLayer TB_Ramais '"RAMAIS_AGUA"
         'RETORNA EM X E Y A COORDENADA DO FINAL DA LINHA
-        tdbramais.getPointOfLine 0, object_id_ramal, 1, x, y
+        tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y
         
         'INSERE PONTO NO FINAL DA LINHA
-        tdbramais.addPoint object_id_ramal, x, y
+        tdbramais.addPoint object_id_ramal, X, Y
 
         
-        tdbramais.getPointOfLine 0, object_id_ramal, 0, x, y
+        tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y
         'tdb.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
         
         Object_id_trecho = ramal_Object_id_trecho 'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK
@@ -1924,6 +1929,9 @@ Private Sub SubInsereFicticios()
 
 End Sub
 'Carrega os dados das ligações para apresentar na caixa de diálogo para o usuário
+'
+'
+'
 Private Sub CarregaLigacoes()
     Dim intlocalerro As Integer
     On Error GoTo Trata_Erro
@@ -2069,13 +2077,17 @@ Private Sub CarregaLigacoes()
     '   msg = "object_id_lote: '" & object_id_lote & "'"
     '   msg = msg & vbCrLf & "INSCRICOES_LOTES: " & INSCRICOES_LOTES
     '   MsgBox Err.Description & vbCrLf & msg & vbCrLf & str
-
+    Screen.MousePointer = vbDefault
+    Exit Sub
+    
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-    Resume Next
-Else
-    PrintErro CStr(Me.Name), "Private Sub carregaLigacoes(), localização:" & intlocalerro & ", querie: " & str & ", ", CStr(Err.Number), CStr(Err.Description), True
-End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Dim localizacaoErro As String
+        localizacaoErro = "carregaLigacoes, querie SQL: " & str
+        ErroUsuario.Registra "FrmCadastroRamal", localizacaoErro, CStr(Err.Number), CStr(Err.Description), True, True, CStr(intlocalerro)
+    End If
 Screen.MousePointer = vbDefault
 End Sub
 
@@ -2198,16 +2210,16 @@ Private Sub lvLigacoes_ItemCheck(ByVal Item As MSComctlLib.ListItem)
 End Sub
 
 
-Private Sub optCentro_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub optCentro_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 
 
-Private Sub optDireito_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub optDireito_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 
-Private Sub optEsquerdo_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub optEsquerdo_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     cmdFechar.Caption = "Cancelar"
 End Sub
 

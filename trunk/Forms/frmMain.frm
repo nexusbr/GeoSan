@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "14:47"
+            TextSave        =   "12:24"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1340,12 +1340,14 @@ Private Sub MDIForm_Activate()
    'MDIForm_Resize
    
 End Sub
-
+' Carrega o formulário principal. Rotina de entrada
+'
+'
 Private Sub MDIForm_Load()
-
-   '''LoozeXP1.InitSubClassing
-   Manager1.InitConn Conn, CInt(typeconnection)
-   Manager1.GridVisibled False
+    Email.leConfiguracoesEmail                                  'lê as configurações de email para ele poder enviar mensagem de email para NEXUS caso ocorra um erro
+    '''LoozeXP1.InitSubClassing
+    Manager1.InitConn Conn, CInt(typeconnection)
+    Manager1.GridVisibled False
    
 End Sub
 

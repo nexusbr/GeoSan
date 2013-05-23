@@ -272,3 +272,25 @@ MÓDULO         modulo com problema
 EVENTO         Favor entrar em contato com o suporte técnico.
 LINHA          0
 MOTIVO         6
+DATA           23/05/2013 10:19:08 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmConsumidoresDesabastecidos
+EVENTO         Falha em Function init(Object_id_trecho As String), String conexão: SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO /10 = NRO_LIGACAO_SEM_DV
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           23/05/2013 10:19:27 
+USUÁRIO        nexus
+VERSÃO         06.09.17
+MÓDULO         frmConsumidoresDesabastecidos
+EVENTO         Falha em Function init(Object_id_trecho As String), String conexão: SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO /10 = NRO_LIGACAO_SEM_DV
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
+
+-----------------------------------------------------------------------------------------------------
+
