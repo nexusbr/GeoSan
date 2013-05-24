@@ -10,7 +10,7 @@ Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager2.ocx"
 Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
-   Caption         =   "NEXUS - GeoSan"
+   Caption         =   "  NEXUS - GeoSan"
    ClientHeight    =   8445
    ClientLeft      =   165
    ClientTop       =   735
@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "17:43"
+            TextSave        =   "19:26"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -992,6 +992,9 @@ Begin VB.MDIForm FrmMain
       Begin VB.Menu mnuFileBar2 
          Caption         =   "-"
       End
+      Begin VB.Menu testeMaisPerto 
+         Caption         =   "teste ponto mais perto"
+      End
       Begin VB.Menu mnuFileExit 
          Caption         =   "Sair"
       End
@@ -1290,9 +1293,9 @@ End Sub
 
 
 
-Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 
-    msngStartX = X
+    msngStartX = x
     
     With imgSplitter
         picSplitter.Move .Left, .Top, .Width \ 2, .Height - 20
@@ -1304,12 +1307,12 @@ Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 
     Dim sglPos As Single
     
     If mbMoving Then
-        sglPos = X + imgSplitter.Left
+        sglPos = x + imgSplitter.Left
         If sglPos < sglSplitLimit Then
         
             picSplitter.Left = sglSplitLimit
@@ -1322,9 +1325,9 @@ Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 
-    pctSfondo.Width = pctSfondo.Width + msngStartX - X
+    pctSfondo.Width = pctSfondo.Width + msngStartX - x
     pctSfondo.Refresh
     picSplitter.Visible = False
     mbMoving = False
@@ -1424,13 +1427,13 @@ End Sub
 
 Private Sub mnuEncontraCoordenada_Click()
 On Error GoTo Trata_Erro
-    Dim X As Double, Y As Double
+    Dim x As Double, y As Double
    
-    X = InputBox("Informe a Coordena X ")
-    Y = InputBox("Informe a Coordena Y ")
+    x = InputBox("Informe a Coordena X ")
+    y = InputBox("Informe a Coordena Y ")
     
-    If X <> 0 And Y <> 0 Then
-        ActiveForm.TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50
+    If x <> 0 And y <> 0 Then
+        ActiveForm.TCanvas.setWorld x - 50, y - 50, x + 50, y + 50
         ActiveForm.TCanvas.plotView
     End If
 
@@ -1663,7 +1666,7 @@ g = "OBJECT_ID_"
    Open CAMINHO For Output As #1
       Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
       Do While Not rs.EOF = True
-         Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
+         Print #1, rs!object_id & ";" & rs!x & ";" & rs!y & ";" & rs!cota
          rs.MoveNext
       Loop
    Close #1
@@ -1955,12 +1958,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2295,7 +2298,7 @@ Private Sub mnuExporta_GeoSan_Click()
     Dim prefixoArquivo As String                                                                            'prefixo com as datas, dos arquivos shp que serão exportados
     Dim nomeCompleto As String
     Dim nomeExportar As String
-    
+  
     diretorio = arquivo.SelecionaDiretorio
     If diretorio = "falhou" Then
         'MsgBox "Cancelada a seleção do diretório."
@@ -2628,6 +2631,76 @@ Private Sub TePrinter_Click()
    frmTePrinter.Show 1
    
 
+End Sub
+
+Private Sub testeMaisPerto_Click()
+    Dim idGeomPonto As Long
+    Dim idObjPonto(4) As String
+    Dim cota(4) As Double
+    Dim retorno As Boolean
+    Dim rs As New ADODB.Recordset
+    Dim z1, z2, z3, z4 As Double
+    Dim a, b, c As Double
+    Dim z As Double
+    Dim x1 As Double
+    Dim y1 As Double
+    Dim x2 As Double
+    Dim y2 As Double
+    Dim x3 As Double
+    Dim y3 As Double
+    Dim x4 As Double
+    Dim y4 As Double
+    Dim i1, i2, i3 As Double
+    Dim x, y As Double
+    
+    
+    
+    x = 297018.128257941
+    y = 7457160.79598725
+    retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")
+    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941, 7457160.79598725, 5, idGeomPonto, idObjPonto(0))
+    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x1, y1
+    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941 + 10#, 7457160.79598725, 5, idGeomPonto, idObjPonto(1))
+    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x2, y2
+    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941, 7457160.79598725 + 10#, 5, idGeomPonto, idObjPonto(2))
+     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x3, y3
+    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941 + 10#, 7457160.79598725 + 10#, 5, idGeomPonto, idObjPonto(3))
+     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x4, y4
+    
+    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(0), Conn, adOpenKeyset, adLockOptimistic
+    If Not rs.EOF Then
+        z1 = rs(0).value
+    End If
+    rs.Close
+    
+    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(1), Conn, adOpenKeyset, adLockOptimistic
+    If Not rs.EOF Then
+        z2 = rs(0).value
+    End If
+    rs.Close
+    
+    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(2), Conn, adOpenKeyset, adLockOptimistic
+    If Not rs.EOF Then
+        z3 = rs(0).value
+    End If
+    rs.Close
+    
+    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(3), Conn, adOpenKeyset, adLockOptimistic
+    If Not rs.EOF Then
+        z4 = rs(0).value
+    End If
+    rs.Close
+    
+    i1 = ((x2 - x) / (x2 - x1)) * z1 + ((x - x1) / (x2 - x1)) * z2
+    i2 = ((x2 - x) / (x2 - x1)) * z3 + ((x - x1) / (x2 - x1)) * z4
+    i3 = ((y3 - y) / (y3 - y1)) * i1 + ((y - y1) / (y3 - y1)) * i2
+    
+    
+    a = (z1 + z2 + z3 + z4) / 4
+    b = (-z1 + z2 - z3 + z4) / 4
+    c = (-z1 - z2 + z3 + z4) / 4
+    z = a + b * 297018.128257941 + c * 7457160.79598725
+    
 End Sub
 
 Private Sub txtEscala_KeyPress(KeyAscii As Integer)
