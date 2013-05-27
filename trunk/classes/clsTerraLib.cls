@@ -811,8 +811,31 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                 rs.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
             End If
             If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
+
+                        'preenche a cota neste novo nó
+                        Dim RSNos As ADODB.Recordset
+                        Dim xNo As Double
+                        Dim yNo As Double
+                        Dim zNo As Double
+                        Dim getZNo As New CObtemZdoNo
+                        Dim retorno As Boolean
+                        
+                        Set RSNos = New ADODB.Recordset
+                        RSNos.Open "Select x, y from Points2 where object_id = " & No, Conn, adOpenKeyset, adLockOptimistic
+                        If RSNos.EOF = False Then
+                            xNo = RSNos.Fields("x").value
+                            yNo = RSNos.Fields("y").value
+                        End If
+                        RSNos.Close
+                        'localiza na tabela geográfica as coordenadas x e y do nó (No) que acabou de inserir
+                        retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")                                                       'ativa o layer do MDT
+                        zNo = getZNo.ObtemZ(xNo, yNo)  'localiza o z desta nó
+                        'stringSQL = "UPDATE " & LayerName & " SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " WHERE object_id_ = " & No 'atualiza o z do nó na tabela de atributos
+                        'Conn.execute (stringSQL)
+                
                 If frmCanvas.TipoConexao <> 4 Then
-                    Conn.execute ("INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & No & ",'" & No & "')")
+                    stringSQL = "INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"
+                    Conn.execute (stringSQL)
                 Else
                     az = "OBJECT_ID_"
                     b = "COMPONENT_ID"
@@ -847,7 +870,7 @@ Trata_Erro:
     End If
 End Function
 
-Private Function NewObject(LayerName As String, ID As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
+Private Function NewObject(LayerName As String, id As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
 On Error GoTo Trata_Erro
    Dim LenghtCalc As Double
    Dim rsNew As ADODB.Recordset
@@ -861,7 +884,7 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
+    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
      Else
      a = "OBJECT_ID_"
       b = "LINE_ID"
@@ -870,7 +893,7 @@ On Error GoTo Trata_Erro
       e = "HIDROMETRADO"
       f = "LENGTHCALCULATED"
      
-      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
+      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
      End If
 
 
@@ -892,7 +915,7 @@ On Error GoTo Trata_Erro
          Conn.execute "Update " + """" + LayerName + """" + " set " + """" + f + """" + " = '" & Replace(Round(compr, 2), ",", ".") & "' where " + """" + a + """" + " = '" & object_id & "'"
          End If
       'CHAMA O MÉTODO DE CRIAR TEXTOS
-      InsertTextAttributesLine LayerName, ID, object_id
+      InsertTextAttributesLine LayerName, id, object_id
 
    
    ElseIf Geometry = points Then
@@ -902,14 +925,14 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
+    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
      Else
       a = "OBJECT_ID_"
       b = "COMPONENT_ID"
       c = "INSCRICAO_LOTE"
      
      
-     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
+     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
      End If
       
       
@@ -917,7 +940,7 @@ On Error GoTo Trata_Erro
      
       Conn.execute (strsql)
       If cgeo.GetTypeText(LayerName) = 2 Then
-         cgeo.InsertTextInPoint ID, object_id, LayerName, 0, 0
+         cgeo.InsertTextInPoint id, object_id, LayerName, 0, 0
       End If
     
    End If
