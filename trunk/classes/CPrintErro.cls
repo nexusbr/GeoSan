@@ -21,7 +21,7 @@ Attribute VB_Exposed = False
 ' enviaEmail - verdadeiro ou falso, indicando se irá enviar ou não um email para NEXUS com o erro que ocorreu
 ' linha - número da linha ou descrição da localização em que o erro ocorreu
 '
-' Exemplo de uso desta classe: ErroUsuario CStr(Me.Name), "nome do evento que o mesmo ocorreu, através de mensagem digitada pelo programador", CStr(Err.Number), CStr(Err.Description), True
+' Exemplo de uso desta classe: ErroUsuario CStr(Me.Name), "nome do evento que o mesmo ocorreu, através de mensagem digitada pelo programador", CStr(Err.Number), CStr(Err.Description), True, True
 ' Códigos de erros a serem tratados:
 ' 0  - The operation completed successfully
 ' 20 - The system cannot find the device specified

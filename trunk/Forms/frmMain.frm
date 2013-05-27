@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "19:26"
+            TextSave        =   "14:44"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1293,9 +1293,9 @@ End Sub
 
 
 
-Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    msngStartX = x
+    msngStartX = X
     
     With imgSplitter
         picSplitter.Move .Left, .Top, .Width \ 2, .Height - 20
@@ -1307,12 +1307,12 @@ Private Sub imgSplitter_MouseDown(Button As Integer, Shift As Integer, x As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
     Dim sglPos As Single
     
     If mbMoving Then
-        sglPos = x + imgSplitter.Left
+        sglPos = X + imgSplitter.Left
         If sglPos < sglSplitLimit Then
         
             picSplitter.Left = sglSplitLimit
@@ -1325,9 +1325,9 @@ Private Sub imgSplitter_MouseMove(Button As Integer, Shift As Integer, x As Sing
     
 End Sub
 
-Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub imgSplitter_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    pctSfondo.Width = pctSfondo.Width + msngStartX - x
+    pctSfondo.Width = pctSfondo.Width + msngStartX - X
     pctSfondo.Refresh
     picSplitter.Visible = False
     mbMoving = False
@@ -1427,13 +1427,13 @@ End Sub
 
 Private Sub mnuEncontraCoordenada_Click()
 On Error GoTo Trata_Erro
-    Dim x As Double, y As Double
+    Dim X As Double, Y As Double
    
-    x = InputBox("Informe a Coordena X ")
-    y = InputBox("Informe a Coordena Y ")
+    X = InputBox("Informe a Coordena X ")
+    Y = InputBox("Informe a Coordena Y ")
     
-    If x <> 0 And y <> 0 Then
-        ActiveForm.TCanvas.setWorld x - 50, y - 50, x + 50, y + 50
+    If X <> 0 And Y <> 0 Then
+        ActiveForm.TCanvas.setWorld X - 50, Y - 50, X + 50, Y + 50
         ActiveForm.TCanvas.plotView
     End If
 
@@ -1666,7 +1666,7 @@ g = "OBJECT_ID_"
    Open CAMINHO For Output As #1
       Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
       Do While Not rs.EOF = True
-         Print #1, rs!object_id & ";" & rs!x & ";" & rs!y & ";" & rs!cota
+         Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
          rs.MoveNext
       Loop
    Close #1
@@ -2634,72 +2634,67 @@ Private Sub TePrinter_Click()
 End Sub
 
 Private Sub testeMaisPerto_Click()
-    Dim idGeomPonto As Long
-    Dim idObjPonto(4) As String
-    Dim cota(4) As Double
-    Dim retorno As Boolean
-    Dim rs As New ADODB.Recordset
-    Dim z1, z2, z3, z4 As Double
-    Dim a, b, c As Double
-    Dim z As Double
-    Dim x1 As Double
-    Dim y1 As Double
-    Dim x2 As Double
-    Dim y2 As Double
-    Dim x3 As Double
-    Dim y3 As Double
-    Dim x4 As Double
-    Dim y4 As Double
-    Dim i1, i2, i3 As Double
-    Dim x, y As Double
+'    Dim idGeomPonto As Long
+'    Dim idObjPonto(4) As String
+'    Dim cota(4) As Double
+'    Dim retorno As Boolean
+'    Dim rs As New ADODB.Recordset
+'    Dim z1, z2, z3, z4 As Double
+'    Dim X1 As Double
+'    Dim Y1 As Double
+'    Dim X2 As Double
+'    Dim Y2 As Double
+'    Dim x3 As Double
+'    Dim y3 As Double
+'    Dim x4 As Double
+'    Dim y4 As Double
+'    Dim i1, i2, i3 As Double
+'    Dim X, Y As Double
+     Dim setaZs As New CAcertaZsDosNos
+     
+     setaZs.AtribuiZs
+'    X = 297018.128257941
+'    Y = 7457160.79598725
+'    retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")
+'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X, Y, 5, idGeomPonto, idObjPonto(0))
+'    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, X1, Y1
+'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X + 10#, Y, 5, idGeomPonto, idObjPonto(1))
+'    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, X2, Y2
+'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X, Y + 10#, 5, idGeomPonto, idObjPonto(2))
+'     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x3, y3
+'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X + 10#, Y + 10#, 5, idGeomPonto, idObjPonto(3))
+'     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x4, y4
+'
+'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(0), Conn, adOpenKeyset, adLockOptimistic
+'    If Not rs.EOF Then
+'        z1 = rs(0).value
+'    End If
+'    rs.Close
+'
+'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(1), Conn, adOpenKeyset, adLockOptimistic
+'    If Not rs.EOF Then
+'        z2 = rs(0).value
+'    End If
+'    rs.Close
+'
+'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(2), Conn, adOpenKeyset, adLockOptimistic
+'    If Not rs.EOF Then
+'        z3 = rs(0).value
+'    End If
+'    rs.Close
+'
+'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(3), Conn, adOpenKeyset, adLockOptimistic
+'    If Not rs.EOF Then
+'        z4 = rs(0).value
+'    End If
+'    rs.Close
+'
+'    i1 = ((X2 - X) / (X2 - X1)) * z1 + ((X - X1) / (X2 - X1)) * z2
+'    i2 = ((X2 - X) / (X2 - X1)) * z3 + ((X - X1) / (X2 - X1)) * z4
+'    i3 = ((Y - y3) / (Y1 - y3)) * i1 + ((Y1 - Y) / (Y1 - y3)) * i2
     
     
-    
-    x = 297018.128257941
-    y = 7457160.79598725
-    retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")
-    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941, 7457160.79598725, 5, idGeomPonto, idObjPonto(0))
-    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x1, y1
-    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941 + 10#, 7457160.79598725, 5, idGeomPonto, idObjPonto(1))
-    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x2, y2
-    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941, 7457160.79598725 + 10#, 5, idGeomPonto, idObjPonto(2))
-     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x3, y3
-    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, 297018.128257941 + 10#, 7457160.79598725 + 10#, 5, idGeomPonto, idObjPonto(3))
-     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x4, y4
-    
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(0), Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z1 = rs(0).value
-    End If
-    rs.Close
-    
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(1), Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z2 = rs(0).value
-    End If
-    rs.Close
-    
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(2), Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z3 = rs(0).value
-    End If
-    rs.Close
-    
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(3), Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z4 = rs(0).value
-    End If
-    rs.Close
-    
-    i1 = ((x2 - x) / (x2 - x1)) * z1 + ((x - x1) / (x2 - x1)) * z2
-    i2 = ((x2 - x) / (x2 - x1)) * z3 + ((x - x1) / (x2 - x1)) * z4
-    i3 = ((y3 - y) / (y3 - y1)) * i1 + ((y - y1) / (y3 - y1)) * i2
-    
-    
-    a = (z1 + z2 + z3 + z4) / 4
-    b = (-z1 + z2 - z3 + z4) / 4
-    c = (-z1 - z2 + z3 + z4) / 4
-    z = a + b * 297018.128257941 + c * 7457160.79598725
+
     
 End Sub
 
