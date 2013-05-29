@@ -45,11 +45,15 @@ Public Function ObtemZ(xNo As Double, yNo As Double) As Double
     Dim idGeomPonto As Long
     Dim rs As New ADODB.Recordset
     Dim distanciaMinima                                             'metade da diagonal da grade. Se temos uma grade de 10 x 10 a diagonal é SQRT (10*10 + 10*10) = 14.1421. Metade é 7.0710
+    Dim mensagemDeErro As String                                    'para informar o motivo de ter encontrado o erro ao atualizar a cota
+    Dim nomeColunaObjIdMdt As String                                'nome da coluna no layer MDT, que possui os objcts_ids
+    Dim teNexusDatabase As New CDatabaseNexus                       'classe que acessa as tabelas Terralib
     
+    nomeColunaObjIdMdt = teNexusDatabase.GetNomeColunaObjectId("MDT")
     distanciaMinima = 7.071
-    
-    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo, distanciaMinima, idGeomPonto, idObjPonto)     'obtem o ponto do mdt que está mais perto do nó da rede a uma distância de até 5 metros
-    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xMdt, yMdt                                        'obtem as coordenadas x e y do elemento tipo ponto (4) do geometry_id fornecido
+    mensagemDeErro = ""
+    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo, distanciaMinima, idGeomPonto, idObjPonto)                  'obtem o ponto do mdt que está mais perto do nó da rede a uma distância de até 5 metros
+    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xMdt, yMdt                                                                'obtem as coordenadas x e y do elemento tipo ponto (4) do geometry_id fornecido
     If xNo >= xMdt And yNo <= yMdt Then     'está no Quadrante 4
         quad = 4
         xInt1 = xMdt
@@ -97,38 +101,76 @@ Public Function ObtemZ(xNo As Double, yNo As Double) As Double
     End If
     
     'obtem agora as cotas dos 4 pontos do MDT
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto1, Conn, adOpenKeyset, adLockOptimistic
+    mensagemDeErro = mensagemDeErro + "ObjId1 = " & idObjPonto1 & ", ObjId2 = " & idObjPonto2 & ", ObjId3 = " & idObjPonto3 & ", ObjId4 = " & idObjPonto4
+    rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto1, Conn, adOpenKeyset, adLockOptimistic
     If Not rs.EOF Then
         z1 = rs(0).value
     End If
     rs.Close
     
-    rs.Open "SELECT * from mdt where object_id_106 = " & idObjPonto2, Conn, adOpenKeyset, adLockOptimistic
+    rs.Open "SELECT * from mdt where " & nomeColunaObjIdMdt & " = " & idObjPonto2, Conn, adOpenKeyset, adLockOptimistic
     If Not rs.EOF Then
         z2 = rs(0).value
     End If
     rs.Close
     
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto3, Conn, adOpenKeyset, adLockOptimistic
+    rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto3, Conn, adOpenKeyset, adLockOptimistic
     If Not rs.EOF Then
         z3 = rs(0).value
     End If
     rs.Close
     
-    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto4, Conn, adOpenKeyset, adLockOptimistic
+    rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto4, Conn, adOpenKeyset, adLockOptimistic
     If Not rs.EOF Then
         z4 = rs(0).value
     End If
     rs.Close
     
     z = obtemZdoNo.CalcInterpolacao(xNo, yNo, xInt1, yInt1, xInt2, yInt2, xInt3, yInt3, xInt4, yInt4, z1, z2, z3, z4)
-    ObtemZ = z
+    ObtemZ = Round(z, 2)                                    'arredonda com apenas duas casas decimais
     Exit Function
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
     Resume Next
     Else
-    ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), True, False
+    ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, mensagemDeErro
+    End If
+End Function
+' Obtem o z de um nó a partir do Object_id do nó
+'
+'
+'
+Public Function CObtemZFromObjIdNo(objId As String) As Double
+    On Error GoTo Trata_Erro
+    Dim RSNos As ADODB.Recordset                            'para localizar as coordenadas x e y do nó que está sendo inserido
+    Dim xNo As Double                                       'coordenada x do nó que está sendo inserido
+    Dim yNo As Double                                       'coordenada y do nó que está sendo inserido
+    Dim zNo As Double                                       'cota z do nó inserido que será calculada
+    Dim getZNo As New CObtemZdoNo                           'método para o cálculo da cota z do nó inserido
+    Dim retorno As Boolean
+    
+    Set RSNos = New ADODB.Recordset
+    RSNos.Open "Select x, y from Points2 where object_id = " & objId, Conn, adOpenKeyset, adLockOptimistic         'Localiza na tabela de geometria as coordenadas do nó a partir do object_id
+    If RSNos.EOF = False Then
+        xNo = RSNos.Fields("x").value
+        yNo = RSNos.Fields("y").value
+    End If
+    RSNos.Close
+    retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")                                                   'ativa o layer do MDT
+    If retorno = False Then
+        MsgBox ("É necessário que o layer MDT esteja adicionado na vista e ligado para processar a cota.")
+        CObtemZFromObjIdNo = 0
+    Else
+        zNo = getZNo.ObtemZ(xNo, yNo)                                                                               'localiza o z desta nó
+        CObtemZFromObjIdNo = zNo
+    End If
+    Exit Function
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "CObtemZdoNo", "CObtemZFromObjIdNo", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function

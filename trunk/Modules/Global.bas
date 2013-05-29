@@ -166,24 +166,38 @@ Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) 
 'Returns pixels per inch
 'Utilizada na função para converter Twits para Pixels
 Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
-'Subrotina principal de entrada do GeoSan'
+' Subrotina principal de entrada do GeoSan
 '
+' Sempre ao gerar um novo executável atualizar o número da versão do GeoSan a seguir
 '
 '
 Public Sub Main()
     On Error GoTo Trata_Erro
     Dim momento As String
-    'ConectaBanco
-    Dim nC As New NexusConnection.App
+    Dim nC As New NexusConnection.App               'ConectaBanco
     Dim contador As String * 100
     Dim tipo As String
     Dim connn As String
-    
+    Dim rs As ADODB.Recordset
+    Dim retval As String
+    Dim frmauto As New frmAutoLogin
+    Dim stringconexao As String
+    Dim strBanco As String
+    Dim s As String
+    Dim strMais As String
+    Dim strMenos As String
+    Dim gsParameters As New clsGS_Parameters
+
+    If UCase(ReadINI("EMAIL", "ENVIARMENSAGENS", App.path & "\CONTROLES\GEOSAN.INI")) = "SIM" Then  'informa todo o sistema de é ou não para enviar por email as mensagens de erro que ocorrem
+        glo.enviaEmails = True                                                                      'sempre enviar emails de erros. Salva globalmente
+    Else
+        glo.enviaEmails = False                                                                     'nunca enviar emails de erros
+    End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.10.00"
-    glo.diretorioGeoSan = App.path                      'salva globalmente o caminho onde encontra-se o GeoSan.exe
-    Call SaveLoadGlobalData(glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True)    'Salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
+    Versao_Geo = "06.10.05"
+    glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
+    SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
     If Not nC.appGetRegistry(App.EXEName, Conn, typeconnection) Then
         If Not nC.appNewRegistry(App.EXEName, Conn, typeconnection) Then
@@ -192,25 +206,9 @@ Public Sub Main()
         typeconnection = nC.typeconnection
     End If
     Set nC = Nothing
-    'Dim strCon As String
-    'strCon = "DRIVER={PostgreSQL Unicode}; DATABASE=geosanovo; SERVER=localhost; PORT=5432; UID=postgres; PWD=gustavo; ByteaAsLongVarBinary=1;"
-    'Conn2.Open strCon
-    'Dim aq As String
-    'aq = Conn.ConnectionString
-    'MsgBox "ARQUIVO DEBUG SALVO"
-    'WritePrivateProfileString "A", "A", Conn.ConnectionString, App.path & "\DEBUG.INI"
-    'MsgBox Conn
-    'contador = Conn.ConnectionString
-    'Conn.Close
-    'Conn.Open
-    'tipo = typeconnection
-    'Conn.ConnectionString = contador
-    'MsgBox Conn
     FrmMain.Show
-    Dim rs As ADODB.Recordset
     Set rs = New ADODB.Recordset
     '%%%% AUTO LOGIN %%%%
-    Dim retval As String
     retval = Dir(App.path & "\Controles\AutoLogin.txt")
     If retval <> "" Then 'verifica se o arquivo existe na pasta
         blnAutoLogin = True
@@ -241,12 +239,11 @@ Public Sub Main()
                 End If
             End If
         End If
-        Dim frmauto As New frmAutoLogin
         frmauto.Show 1
     Else 'O arquivo não existe na pasta
         blnAutoLogin = False
         nxUser.TipoConexao (frmCanvas.TipoConexao)
-        usuario.UsrId = Sec.OpenLogin(Conn) 'Abre a tela de Usuário e Senha para preenchimento
+        usuario.UsrId = Sec.OpenLogin(Conn)                                 'Abre a tela de Usuário e Senha para preenchimento
         If Sec.MyUsers.SelectData(Conn, usuario.UsrId) Then
             usuario.UseName = Sec.MyUsers.UsrLog
             strUser = Sec.MyUsers.UsrLog
@@ -257,7 +254,6 @@ Public Sub Main()
     End If
     'Valida o perfil do usuário -
     Set rs = New ADODB.Recordset
-    Dim stringconexao As String
     a = "USRLOG"
     c = "SYSTEMUSERS"
     b = "USRFUN"
@@ -275,252 +271,196 @@ Public Sub Main()
                 End
             End If
         End If
-       
-      If rs!UsrFun = 1 Then 'ADMINISTRADOR
-         FrmMain.mnuChangePassword.Visible = False 'desabilita a troca de senha pelo menu arquivo
-                                                     'pois o admin. pode fazer isso por outro menu.
-         FrmMain.mnuAutoLogin.Visible = False
-       
-      ElseIf rs!UsrFun = 2 Then 'USUÁRIO
-         FrmMain.mnuUsers.Enabled = False 'NÃO PERMITE QUE SEJAM EDITADOS USUÁRIOS
-         FrmMain.mnuProdutividade.Enabled = False 'NÃO PERMITE GERAR RELATORIO DE PRODUTIVIDADE
-         FrmMain.mnuUpdate_Demand.Enabled = False 'NÃO PERMITE ATALIZAÇÃO DE DEMANDA
-         FrmMain.mnuAutoLogin.Visible = False
-      
-      ElseIf rs!UsrFun = 3 Then 'VISITANTE - BLOQUEIA A MAIORIA DAS FUNÇÕES
-         
-         blnAutoLogin = True
-         
-'          If blnAutoLogin = True Then              'CASO LOGIN AUTOMÁTICO, NÃO PERMITE ALTERAR VISTAS
-'               FrmMain.pctSfondo.Visible = False   'PARA ALTERAR VISTAS DEVE SE ENTRAR COM O USUÁRIO
-'               FrmMain.mnuLayers.Visible = False   'E SENHA NO MODO CONVENCIONAL
-'          End If
-          
-           FrmMain.mnuDrawLineWater.Visible = False
-           FrmMain.mnuDrawPointInLineWater.Visible = False
-           FrmMain.mnuMovePointWithLines.Visible = False
-           'FrmMain.mnuInsertDocs.Visible = False
-           FrmMain.mnuDeleteLineWater.Visible = False
-           FrmMain.mnuDrawRamal.Visible = False
-           'FrmMain.mnuInsertLabel.Visible = False
-           FrmMain.mnuCadastros.Visible = False
-           FrmMain.mnuAdmin.Visible = False
-           FrmMain.mnuProdutividade.Visible = False
-           FrmMain.mnuCarregaPoligono.Visible = False
-           FrmMain.mnuUpdate_Demand.Visible = False
-           FrmMain.mnuImport.Visible = False
-           
-           FrmMain.mnuEditBar30.Visible = False
-           FrmMain.mnuEditBar80.Visible = False
-           FrmMain.mnusep1234.Visible = False
-           FrmMain.mnusep9999.Visible = False
-           
-           FrmMain.tbToolBar.Buttons("ksave").Visible = False
-           
-           FrmMain.tbToolBar.Buttons("kdrawnetworkline").Visible = False
-           FrmMain.tbToolBar.Buttons("kmovenetworknode").Visible = False
-           FrmMain.tbToolBar.Buttons("kinsertnetworknode").Visible = False
-           'FrmMain.tbToolBar.Buttons("kinsertdoc").Visible = False
-           FrmMain.tbToolBar.Buttons("kdelete").Visible = False
-           FrmMain.tbToolBar.Buttons("kdrawramal").Visible = False
-           FrmMain.tbToolBar.Buttons("mnuPoligono").Visible = False
-           FrmMain.tbToolBar.Buttons("kdelete").Visible = False
-           FrmMain.tbToolBar.Buttons("ksearchinnetwork").Visible = False
-           'FrmMain.tbToolBar.Buttons("kdeclivity").Visible = False
-      
-      ElseIf rs!UsrFun = 4 Then 'VISUALIZADOR - BLOQUEIA A MAIORIA DAS FUNÇÕES
-         
-           blnAutoLogin = True
-
-           FrmMain.pctSfondo.Visible = False
-           FrmMain.mnuLayers.Checked = False
-
-           FrmMain.mnuExpAutoCad.Visible = False
-
-           FrmMain.mnuExportLocalNos.Visible = False
-           FrmMain.mnusep01001.Visible = False
-           FrmMain.mnusep011101.Visible = False
-           FrmMain.mnuChangePassword.Visible = False
-           FrmMain.mnuFixaIcone.Visible = False
-           FrmMain.mnuRel.Visible = False
-           FrmMain.mnuFileBar2.Visible = False
-           'FrmMain.mnuFilePrint.Visible = False
-           FrmMain.mnu_Find_Object.Visible = False
-          
-          
-           FrmMain.mnuDrawLineWater.Visible = False
-           FrmMain.mnuDrawPointInLineWater.Visible = False
-           FrmMain.mnuMovePointWithLines.Visible = False
-           'FrmMain.mnuInsertDocs.Visible = False
-           FrmMain.mnuDeleteLineWater.Visible = False
-           FrmMain.mnuDrawRamal.Visible = False
-          ' FrmMain.mnuInsertLabel.Visible = False
-           FrmMain.mnuCadastros.Visible = False
-           FrmMain.mnuAdmin.Visible = False
-           FrmMain.mnuProdutividade.Visible = False
-           FrmMain.mnuCarregaPoligono.Visible = False
-           FrmMain.mnuUpdate_Demand.Visible = False
-           FrmMain.mnuImport.Visible = False
-           
-           FrmMain.mnuEditBar30.Visible = False
-           FrmMain.mnuEditBar80.Visible = False
-           FrmMain.mnusep1234.Visible = False
-           FrmMain.mnusep9999.Visible = False
-           
-           FrmMain.tbToolBar.Buttons("ksave").Visible = False
-           
-           FrmMain.tbToolBar.Buttons("kdrawnetworkline").Visible = False
-           FrmMain.tbToolBar.Buttons("kmovenetworknode").Visible = False
-           FrmMain.tbToolBar.Buttons("kinsertnetworknode").Visible = False
-           'FrmMain.tbToolBar.Buttons("kinsertdoc").Visible = False
-           FrmMain.tbToolBar.Buttons("kdelete").Visible = False
-           FrmMain.tbToolBar.Buttons("kdrawramal").Visible = False
-           FrmMain.tbToolBar.Buttons("mnuPoligono").Visible = False
-           FrmMain.tbToolBar.Buttons("kdelete").Visible = False
-           FrmMain.tbToolBar.Buttons("ksearchinnetwork").Visible = False
-           'FrmMain.tbToolBar.Buttons("kdeclivity").Visible = False
-           
-       Else
-           MsgBox "Não foi encontrada a permissão para este usuário.", vbExclamation, ""
-           rs.Close
-           End
-       End If
-       rs.Close
-   Else
-       MsgBox "Usuário não cadastrado.", vbExclamation, ""
-       rs.Close
-       End
-   End If
-    
+        If rs!UsrFun = 1 Then 'ADMINISTRADOR
+            FrmMain.mnuChangePassword.Visible = False 'desabilita a troca de senha pelo menu arquivo, pois o admin. pode fazer isso por outro menu
+            FrmMain.mnuAutoLogin.Visible = False
+        ElseIf rs!UsrFun = 2 Then                                               'USUÁRIO
+            FrmMain.mnuUsers.Enabled = False                                    'NÃO PERMITE QUE SEJAM EDITADOS USUÁRIOS
+            FrmMain.mnuProdutividade.Enabled = False                            'NÃO PERMITE GERAR RELATORIO DE PRODUTIVIDADE
+            FrmMain.mnuUpdate_Demand.Visible = False                            'NÃO PERMITE ATALIZAÇÃO DE DEMANDA
+            FrmMain.mnuAutoLogin.Visible = False                                'Não permite o login automático
+            FrmMain.mnuExporta_GeoSan.Visible = False                           'Não permite exportar para o formato shape
+            FrmMain.mnuAtualizaCotas.Visible = False                                    'não permite atualizar todas as cotas de todos os nós das redes da cidade toda
+        ElseIf rs!UsrFun = 3 Then 'VISITANTE - BLOQUEIA A MAIORIA DAS FUNÇÕES
+            blnAutoLogin = True
+            '          If blnAutoLogin = True Then              'CASO LOGIN AUTOMÁTICO, NÃO PERMITE ALTERAR VISTAS
+            '               FrmMain.pctSfondo.Visible = False   'PARA ALTERAR VISTAS DEVE SE ENTRAR COM O USUÁRIO
+            '               FrmMain.mnuLayers.Visible = False   'E SENHA NO MODO CONVENCIONAL
+            '          End If
+            FrmMain.mnuDrawLineWater.Visible = False
+            FrmMain.mnuDrawPointInLineWater.Visible = False
+            FrmMain.mnuMovePointWithLines.Visible = False
+            'FrmMain.mnuInsertDocs.Visible = False
+            FrmMain.mnuDeleteLineWater.Visible = False
+            FrmMain.mnuDrawRamal.Visible = False
+            'FrmMain.mnuInsertLabel.Visible = False
+            FrmMain.mnuCadastros.Visible = False
+            FrmMain.mnuAdmin.Visible = False
+            FrmMain.mnuProdutividade.Visible = False
+            FrmMain.mnuCarregaPoligono.Visible = False
+            FrmMain.mnuUpdate_Demand.Visible = False
+            FrmMain.mnuImport.Visible = False
+            FrmMain.mnuEditBar30.Visible = False
+            FrmMain.mnuEditBar80.Visible = False
+            FrmMain.mnusep1234.Visible = False
+            FrmMain.mnusep9999.Visible = False
+            FrmMain.tbToolBar.Buttons("ksave").Visible = False
+            FrmMain.tbToolBar.Buttons("kdrawnetworkline").Visible = False
+            FrmMain.tbToolBar.Buttons("kmovenetworknode").Visible = False
+            FrmMain.tbToolBar.Buttons("kinsertnetworknode").Visible = False
+            'FrmMain.tbToolBar.Buttons("kinsertdoc").Visible = False
+            FrmMain.tbToolBar.Buttons("kdelete").Visible = False
+            FrmMain.tbToolBar.Buttons("kdrawramal").Visible = False
+            FrmMain.tbToolBar.Buttons("mnuPoligono").Visible = False
+            FrmMain.tbToolBar.Buttons("kdelete").Visible = False
+            FrmMain.tbToolBar.Buttons("ksearchinnetwork").Visible = False
+            'FrmMain.tbToolBar.Buttons("kdeclivity").Visible = False
+            FrmMain.mnuExporta_GeoSan.Visible = False                           'Não permite exportar para o formato shape
+            FrmMain.mnuAtualizaCotas.Visible = False                                    'não permite atualizar todas as cotas de todos os nós das redes da cidade toda
+        ElseIf rs!UsrFun = 4 Then                                               'VISUALIZADOR - BLOQUEIA A MAIORIA DAS FUNÇÕES
+            blnAutoLogin = True
+            FrmMain.pctSfondo.Visible = False
+            FrmMain.mnuLayers.Checked = False
+            FrmMain.mnuExpAutoCad.Visible = False
+            FrmMain.mnuExportLocalNos.Visible = False
+            FrmMain.mnusep01001.Visible = False
+            FrmMain.mnusep011101.Visible = False
+            FrmMain.mnuChangePassword.Visible = False
+            FrmMain.mnuFixaIcone.Visible = False
+            FrmMain.mnuRel.Visible = False
+            FrmMain.mnuFileBar2.Visible = False
+            'FrmMain.mnuFilePrint.Visible = False
+            FrmMain.mnu_Find_Object.Visible = False
+            FrmMain.mnuDrawLineWater.Visible = False
+            FrmMain.mnuDrawPointInLineWater.Visible = False
+            FrmMain.mnuMovePointWithLines.Visible = False
+            'FrmMain.mnuInsertDocs.Visible = False
+            FrmMain.mnuDeleteLineWater.Visible = False
+            FrmMain.mnuDrawRamal.Visible = False
+            ' FrmMain.mnuInsertLabel.Visible = False
+            FrmMain.mnuCadastros.Visible = False
+            FrmMain.mnuAdmin.Visible = False
+            FrmMain.mnuProdutividade.Visible = False
+            FrmMain.mnuCarregaPoligono.Visible = False
+            FrmMain.mnuUpdate_Demand.Visible = False
+            FrmMain.mnuImport.Visible = False
+            FrmMain.mnuEditBar30.Visible = False
+            FrmMain.mnuEditBar80.Visible = False
+            FrmMain.mnusep1234.Visible = False
+            FrmMain.mnusep9999.Visible = False
+            FrmMain.tbToolBar.Buttons("ksave").Visible = False
+            FrmMain.tbToolBar.Buttons("kdrawnetworkline").Visible = False
+            FrmMain.tbToolBar.Buttons("kmovenetworknode").Visible = False
+            FrmMain.tbToolBar.Buttons("kinsertnetworknode").Visible = False
+            'FrmMain.tbToolBar.Buttons("kinsertdoc").Visible = False
+            FrmMain.tbToolBar.Buttons("kdelete").Visible = False
+            FrmMain.tbToolBar.Buttons("kdrawramal").Visible = False
+            FrmMain.tbToolBar.Buttons("mnuPoligono").Visible = False
+            FrmMain.tbToolBar.Buttons("kdelete").Visible = False
+            FrmMain.tbToolBar.Buttons("ksearchinnetwork").Visible = False
+            'FrmMain.tbToolBar.Buttons("kdeclivity").Visible = False
+            FrmMain.mnuExporta_GeoSan.Visible = False                           'Não permite exportar para o formato shape
+            FrmMain.mnuAtualizaCotas.Visible = False                                    'não permite atualizar todas as cotas de todos os nós das redes da cidade toda
+        Else
+            MsgBox "Não foi encontrada a permissão para este usuário.", vbExclamation, ""
+            rs.Close
+            End
+        End If
+        rs.Close
+    Else
+        MsgBox "Usuário não cadastrado.", vbExclamation, ""
+        rs.Close
+        End
+    End If
     If frmCanvas.TipoConexao <> 4 Then
-    
-    
-   If UCase(ReadINI("MAPA", "CORRIGIR_QUADRANTE", App.path & "\CONTROLES\GEOSAN.INI")) = "SIM" Then
-      CorrigeQuadrante
-   End If
-   
-   
-   Else
-    If UCase(ReadINI("MAPA", "CORRIGIR_QUADRANTE", App.path & "\CONTROLES\GEOSAN.INI")) = "SIM" Then
-      CorrigeQuadrante
-   End If
-   
-   End If
-   
-   
-    
-   Dim strBanco As String
-   Dim s As String
-   
-   s = mid(ReadINI("CONEXAO", "PROVEDOR", App.path & "\CONTROLES\GEOSAN.ini"), 1, 1)
-
-   If Trim(s) = "" Or IsNumeric(s) = False Then
-      MsgBox "Informação de tipo de conexão inválida. (Geosan.ini)", vbCritical, ""
-      End
-   Else
-      'frmCanvas.TipoConexao = s
-   
-      ' VERIFICA QUAL É O TIPO DO BANCO E FAZ A VERIFICAÇÃO DE VERSÃO DO BANCO DE DADOS
-      ' CASO POSTGRES, IDENTIFICA A PORTA DE CONEXÃO
-     ' Select Case frmCanvas.TipoConexao
+        If UCase(ReadINI("MAPA", "CORRIGIR_QUADRANTE", App.path & "\CONTROLES\GEOSAN.INI")) = "SIM" Then
+            CorrigeQuadrante
+        End If
+    Else
+        If UCase(ReadINI("MAPA", "CORRIGIR_QUADRANTE", App.path & "\CONTROLES\GEOSAN.INI")) = "SIM" Then
+            CorrigeQuadrante
+        End If
+    End If
+    s = mid(ReadINI("CONEXAO", "PROVEDOR", App.path & "\CONTROLES\GEOSAN.ini"), 1, 1)
+    If Trim(s) = "" Or IsNumeric(s) = False Then
+        MsgBox "Informação de tipo de conexão inválida. (Geosan.ini)", vbCritical, ""
+        End
+    Else
+        'frmCanvas.TipoConexao = s
+        ' VERIFICA QUAL É O TIPO DO BANCO E FAZ A VERIFICAÇÃO DE VERSÃO DO BANCO DE DADOS
+        ' CASO POSTGRES, IDENTIFICA A PORTA DE CONEXÃO
+        ' Select Case frmCanvas.TipoConexao
         ' Case 1 ' SqlServer
-            'VerificaBaseSQL
+        'VerificaBaseSQL
         ' Case 2 ' Oracle
-            'VerificaBaseORACLE
+        'VerificaBaseORACLE
         ' Case 4 ' PostgreSQL
         ' VerificaBasePOSTGRES
-            'ConnPostgresPorta = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-            'If ConnPostgresPorta = "" Or IsNumeric(ConnPostgresPorta) = False Then
-              ' MsgBox "Informação de porta de conexão inválida. (Geosan.ini)", vbCritical, ""
-             '  End
-            'End If
-      
-      'End Select
-   
-   End If
-   
-   
-   strBanco = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-   
-   FrmMain.Caption = "NEXUS - GeoSan " & Versao_Geo & " [Banco: " & strBanco & "]"
-    
+        'ConnPostgresPorta = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
+        'If ConnPostgresPorta = "" Or IsNumeric(ConnPostgresPorta) = False Then
+        ' MsgBox "Informação de porta de conexão inválida. (Geosan.ini)", vbCritical, ""
+        '  End
+        'End If
+        'End Select
+    End If
+    strBanco = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
+    FrmMain.Caption = "NEXUS - GeoSan " & Versao_Geo & " [Banco: " & strBanco & "]"
     'CARREGA AS CONFIGURAÇÕES DO GEOSAN.INI NO ZOOM DO USUÁRIO NA MÁQUINA
-    
-   Dim strMais As String
-   Dim strMenos As String
-   
-   strMais = Replace(ReadINI("MAPA", "ZOOM_MAIS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
-   strMenos = Replace(ReadINI("MAPA", "ZOOM_MENOS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
-   
-   If IsNumeric(strMais) = True And IsNumeric(strMenos) = True Then
-      dblFatorZoomMais = strMais
-      dblFatorZoomMenos = strMenos
-   Else
-      dblFatorZoomMais = 2
-      dblFatorZoomMenos = 2
-   End If
+    strMais = Replace(ReadINI("MAPA", "ZOOM_MAIS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
+    strMenos = Replace(ReadINI("MAPA", "ZOOM_MENOS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
+    If IsNumeric(strMais) = True And IsNumeric(strMenos) = True Then
+        dblFatorZoomMais = strMais
+        dblFatorZoomMenos = strMenos
+    Else
+        dblFatorZoomMais = 2
+        dblFatorZoomMenos = 2
+    End If
+    momento = "ConnComercial"
+    'Estabelece objeto de conexão para o Comercial
+    If gsParameters.getData(Conn, tipo) Then
+        If UCase(gsParameters.String_Connection_Secundary) = UCase(Conn.ConnectionString) Then
+            'Seta conexão comercial sendo a mesma do GeoSan
+            Set ConnSec = Conn
+        Else
+            'Seta conexão comercial outro banco
+            Set rs = New ADODB.Recordset
+            a = """STRING_CONNECTION_SECUNDARY"""
+            c = """GS_PARAMETERS"""
+            If frmCanvas.TipoConexao <> 4 Then
+                stringconexao = "SELECT STRING_CONNECTION_SECUNDARY FROM GS_PARAMETERS"
+            Else
+                stringconexao = "Select " + a + "  from  " + c + ""
+            End If
+            rs.Open (stringconexao), Conn, adOpenDynamic, adLockReadOnly
+            If rs.EOF = False Then
+                strBanco = rs!String_Connection_Secundary
+                ConnSec.Open gsParameters.String_Connection_Secundary
+            Else
+                MsgBox "Não há string de conexão para o banco de dados comercial", vbInformation, ""
+            End If
+            rs.Close
+            'MsgBox "Conexão com banco comercial apontando para outro banco", vbInformation, "Conexão comercial"
+        End If
+    End If
+    exp.AtivaRamaisGeoSan                                           'precisa ativar o te_representation, uma vez que na exportação que pode ter ocorrido ou ter sido cancelada, pode ter sido apagado
+    cGeoDatabase.configura Conn, typeconnection, usuario.UseName    'aqui ele inicializa a conexão com o banco de dados, com TeDatabase, para fazer todas as operações necessárias ao longo de toda a aplicação
 
-    
-   momento = "ConnComercial"
-     'Estabelece objeto de conexão para o Comercial
-   Dim gsParameters As New clsGS_Parameters
-   If gsParameters.getData(Conn, tipo) Then
-      If UCase(gsParameters.String_Connection_Secundary) = UCase(Conn.ConnectionString) Then
-         'Seta conexão comercial sendo a mesma do GeoSan
-         Set ConnSec = Conn
-      Else
-         'Seta conexão comercial outro banco
-         Set rs = New ADODB.Recordset
-        
-         
-         a = """STRING_CONNECTION_SECUNDARY"""
-      c = """GS_PARAMETERS"""
-      
-If frmCanvas.TipoConexao <> 4 Then
-      stringconexao = "SELECT STRING_CONNECTION_SECUNDARY FROM GS_PARAMETERS"
-   Else
-   stringconexao = "Select " + a + "  from  " + c + ""
-  
-   End If
-   
- 
-         rs.Open (stringconexao), Conn, adOpenDynamic, adLockReadOnly
-         
-         If rs.EOF = False Then
-            strBanco = rs!String_Connection_Secundary
-            ConnSec.Open gsParameters.String_Connection_Secundary
-         Else
-            MsgBox "Não há string de conexão para o banco de dados comercial", vbInformation, ""
-         End If
-         rs.Close
-         'MsgBox "Conexão com banco comercial apontando para outro banco", vbInformation, "Conexão comercial"
-      End If
-   End If
-   
-    exp.AtivaRamaisGeoSan                               'precisa ativar o te_representation, uma vez que na exportação que pode ter ocorrido ou ter sido cancelada, pode ter sido apagado
-    
 pulaConexaoComercial:
-   
-   momento = ""
-   Set gsParameters = Nothing
-   Set Sec = Nothing
-   Set nxUser = Nothing
-   
-Exit Sub
-   
+    momento = ""
+    Set gsParameters = Nothing
+    Set Sec = Nothing
+    Set nxUser = Nothing
+    Exit Sub
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 374 Then
         Resume Next
     ElseIf momento = "ConnComercial" Then
-        'Err.Clear
-        MsgBox "A conexão com o banco de dados comercial não pode ser estabelecida pelo seguinte motivo:    " & Chr(13) & Chr(13) & Err.Description, vbInformation, "Conexão comercial"
+        MsgBox "A conexão com o banco de dados comercial não pode ser estabelecida pelo seguinte motivo: " & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Verifique a tabela GS_PARAMETERS, pois ela não está apontando corretamente para a vista do banco comercial.", vbInformation, "Conexão comercial"
         GoTo pulaConexaoComercial
     Else
-        
-      PrintErro "Global", "Public Sub Main", CStr(Err.Number), CStr(Err.Description), True
-      End If
-
-
+        ErroUsuario.Registra "Global", "Main", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 ' Lê o arquivo de inicialização do GeoSan e retorna o parâmetro solicitado do mesmo
 '

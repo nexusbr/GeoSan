@@ -2,7 +2,8 @@ Attribute VB_Name = "Header"
 'variáveis púbicas para vários módulos
 
 Public Type GlobalVariables
-    diretorioGeoSan As String                            'diretório onde encontra-se o GeoSan.exe que está rodando
+    diretorioGeoSan As String                           'diretório onde encontra-se o GeoSan.exe que está rodando
+    enviaEmails As Boolean                              'se é ou não para enviar mensagens de email quando ocorrer um erro
 End Type
 
 Public glo As GlobalVariables

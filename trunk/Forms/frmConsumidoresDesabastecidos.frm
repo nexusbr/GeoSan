@@ -265,9 +265,9 @@ Public Function init(Object_id_trecho As String) As Boolean
     'prepara a lista para ser apresentada na caixa de diálogo para o usuário
     If frmCanvas.TipoConexao <> 4 Then
         'caso SQLServer ou Oracle
-        lv.ListItems.Clear
+        Lv.ListItems.Clear
         While Not rs.EOF
-            Set itmx = lv.ListItems.Add(, , rs.Fields(0).value)
+            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
             itmx.SubItems(1) = rs.Fields(1).value
             itmx.SubItems(2) = rs.Fields(2).value
             itmx.SubItems(3) = rs.Fields(3).value
@@ -278,9 +278,9 @@ Public Function init(Object_id_trecho As String) As Boolean
         rs.Close
     Else
         'caso Postgres
-        lv.ListItems.Clear
+        Lv.ListItems.Clear
         While Not rs.EOF
-            Set itmx = lv.ListItems.Add(, , rs.Fields(0).value)
+            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
             itmx.SubItems(1) = rs.Fields(1).value
             itmx.SubItems(2) = rs.Fields(5).value
             itmx.SubItems(3) = rs.Fields(6).value
@@ -300,7 +300,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "init -(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True, True
+        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "init -(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
         init = False
     End If
 End Function
@@ -316,12 +316,12 @@ On Error GoTo Trata_Erro
     cdl1.ShowSave
     If cdl1.filename <> "" Then
         Open cdl1.filename For Output As #1
-        For a = 1 To lv.ListItems.count
-            Print #1, lv.ListItems.Item(a).Text & ";" & _
-                        lv.ListItems.Item(a).SubItems(1) & ";" & _
-                        lv.ListItems.Item(a).SubItems(2) & ";" & _
-                        lv.ListItems.Item(a).SubItems(3) & ";" & _
-                        lv.ListItems.Item(a).SubItems(4)
+        For a = 1 To Lv.ListItems.count
+            Print #1, Lv.ListItems.Item(a).Text & ";" & _
+                        Lv.ListItems.Item(a).SubItems(1) & ";" & _
+                        Lv.ListItems.Item(a).SubItems(2) & ";" & _
+                        Lv.ListItems.Item(a).SubItems(3) & ";" & _
+                        Lv.ListItems.Item(a).SubItems(4)
         Next
         Close #1
         MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.filename, vbInformation
@@ -332,7 +332,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "cmdGerartxt_Click", CStr(Err.Number), CStr(Err.Description), True, True
+        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "cmdGerartxt_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 

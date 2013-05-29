@@ -379,7 +379,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
         TeDatabase2.connection = Conn
         TeDatabase3.Provider = typeconnection
         TeDatabase3.connection = Conn
-        cGeoDatabase.configura Conn, typeconnection, username
+        'cGeoDatabase.configura Conn, typeconnection, username  'retirada esta inicialização e movida para a rotina main do arquivo Global.bas para poder realizar consultas com TeDatabase em antes mesmo de ter aberto a vista
         TeDatabaseRamais.Provider = typeconnection              'inicializa a conexão para poder inserir um ramal
         TeDatabaseRamais.connection = Conn
         TCanvas.Provider = typeconnection
@@ -1305,7 +1305,7 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "frmCanvas", "onEndSELECT", CStr(Err.Number), CStr(Err.Description), True, True
+      ErroUsuario.Registra "frmCanvas", "onEndSELECT", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Sub
 
@@ -1645,9 +1645,9 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     ElseIf Err.Number = -2147467259 Then            ' indica que não existe conexão com o banco de dados.
-        ErroUsuario.Registra "frmCanvas", "onMouseDown (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, True, controlaErro
+        ErroUsuario.Registra "frmCanvas", "onMouseDown (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, controlaErro
     Else
-        ErroUsuario.Registra "frmCanvas", "onMouseDown", CStr(Err.Number), CStr(Err.Description), True, True, controlaErro
+        ErroUsuario.Registra "frmCanvas", "onMouseDown", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, controlaErro
     End If
 End Sub
 ' Entra nesta rotina quando o usuário move o mouse, independente de qualquer coisa ou botão ter sido selecionado
@@ -2017,7 +2017,7 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "frmCanvas", "onSaveNetWorkLine", CStr(Err.Number), CStr(Err.Description), True, True
+      ErroUsuario.Registra "frmCanvas", "onSaveNetWorkLine", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Sub
 

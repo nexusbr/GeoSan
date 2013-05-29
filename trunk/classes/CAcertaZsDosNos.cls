@@ -15,6 +15,7 @@ Attribute VB_Exposed = False
 '
 '
 '
+
 Private getZNo As New CObtemZdoNo
 ' Subrotina que atribui a cota Z a todos os nós das redes
 '
@@ -28,14 +29,34 @@ Public Sub AtribuiZs()
     Dim yNo As Double
     Dim objIdNo As String
     Dim zNo As Double
-    
+    Dim diretorio As String                                                 'Diretório onde será salva a exportação das cotas calculadas para conferir a anterior com a nova
+    Dim retorno As Boolean
+    Dim arquivoExportacao As String                                         'nome do arquivo junto com o diretório onde serão exportadas as cotas para conferência
 
+    diretorio = arquivo.SelecionaDiretorio
+    If diretorio = "falhou" Then
+        Screen.MousePointer = vbNormal
+        Exit Sub
+    End If
+    Screen.MousePointer = vbHourglass
     Set RSNos = New ADODB.Recordset
     RSNos.Open "Select x, y, object_id from Points2", Conn, adOpenKeyset, adLockOptimistic
-    Open "d:\temp.txt" For Output As #10                                                                            'Abre o arquivo novo
+    arquivoExportacao = diretorio & "\GeoSan_atualização_cotas.txt"
+    Open arquivoExportacao For Output As #10                                                                            'Abre o arquivo novo
     Close #10
     retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")                                                       'ativa o layer do MDT
+    If retorno = False Then
+        Screen.MousePointer = vbNormal
+        MsgBox ("É necesário antes de iniciar esta operação abrir uma vista do mapa.")
+        Exit Sub
+    End If
     Do While RSNos.EOF = False
+        DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            varGlobais.pararExecucao = False
+            Screen.MousePointer = vbNormal
+            Exit Sub
+        End If
         xNo = RSNos("x").value
         yNo = RSNos("y").value
         objIdNo = RSNos("object_id").value
@@ -43,21 +64,24 @@ Public Sub AtribuiZs()
         RSNos.MoveNext
         Set rsAtributoNos = New ADODB.Recordset
         rsAtributoNos.Open "SELECT GROUNDHEIGHT FROM WATERCOMPONENTS WHERE OBJECT_ID_ = " & objIdNo, Conn, adOpenKeyset, adLockOptimistic
-        Open "d:\temp.txt" For Append As #10
+        Open arquivoExportacao For Append As #10
         Print #10, objIdNo & " , " & xNo & " , " & yNo & " , " & rsAtributoNos.Fields("GROUNDHEIGHT").value & " , " & CStr(zNo)
         Close #10
+        FrmMain.sbStatusBar.Panels(2).Text = "Z nó " & objIdNo & " calculado = " & zNo
         rsAtributoNos.Close
         'Conn.execute "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & CStr(zNo) & " WHERE OBJECT_ID_ = " & objIdNo
     Loop
     Close #10
+    Screen.MousePointer = vbNormal
     Exit Sub
     
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
-   Else
-      ErroUsuario.Registra "CAcertaZsDosNos", "AtribuiZs", CStr(Err.Number), CStr(Err.Description), True, False
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Screen.MousePointer = vbNormal
+        ErroUsuario.Registra "CAcertaZsDosNos", "AtribuiZs", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 
 

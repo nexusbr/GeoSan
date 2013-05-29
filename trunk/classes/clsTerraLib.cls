@@ -811,27 +811,10 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                 rs.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
             End If
             If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
-
-                        'preenche a cota neste novo nó
-                        Dim RSNos As ADODB.Recordset
-                        Dim xNo As Double
-                        Dim yNo As Double
-                        Dim zNo As Double
-                        Dim getZNo As New CObtemZdoNo
-                        Dim retorno As Boolean
-                        
-                        Set RSNos = New ADODB.Recordset
-                        RSNos.Open "Select x, y from Points2 where object_id = " & No, Conn, adOpenKeyset, adLockOptimistic
-                        If RSNos.EOF = False Then
-                            xNo = RSNos.Fields("x").value
-                            yNo = RSNos.Fields("y").value
-                        End If
-                        RSNos.Close
-                        'localiza na tabela geográfica as coordenadas x e y do nó (No) que acabou de inserir
-                        retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")                                                       'ativa o layer do MDT
-                        zNo = getZNo.ObtemZ(xNo, yNo)  'localiza o z desta nó
-                        'stringSQL = "UPDATE " & LayerName & " SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " WHERE object_id_ = " & No 'atualiza o z do nó na tabela de atributos
-                        'Conn.execute (stringSQL)
+                Dim getZNo As New CObtemZdoNo                           'método para o cálculo da cota z do nó inserido
+                Dim zNo As Double                                       'cota z do nó inserido que será calculada
+                
+                zNo = getZNo.CObtemZFromObjIdNo(No)                     'obtem a cota z do nó a partir do object_id do mesmo
                 
                 If frmCanvas.TipoConexao <> 4 Then
                     stringSQL = "INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"

@@ -1070,9 +1070,9 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     ElseIf Err.Number = -2147467259 Then
-        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, True
+        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     Else
-        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro", CStr(Err.Number), CStr(Err.Description), True, True
+        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 
 End Function
@@ -2086,7 +2086,7 @@ Trata_Erro:
     Else
         Dim localizacaoErro As String
         localizacaoErro = "carregaLigacoes, querie SQL: " & str
-        ErroUsuario.Registra "FrmCadastroRamal", localizacaoErro, CStr(Err.Number), CStr(Err.Description), True, True, CStr(intlocalerro)
+        ErroUsuario.Registra "FrmCadastroRamal", localizacaoErro, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, CStr(intlocalerro)
     End If
 Screen.MousePointer = vbDefault
 End Sub

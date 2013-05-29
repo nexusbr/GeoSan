@@ -294,3 +294,69 @@ DESCRIÇÃO      Invalid object name 'acqdaev.dbo.NXGS_V_LIG_COMERCIAL'.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           27/05/2013 20:14:44 
+USUÁRIO        nexus
+VERSÃO         06.10.00
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/05/2013 20:14:51 
+USUÁRIO        nexus
+VERSÃO         06.10.00
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/05/2013 20:16:38 
+USUÁRIO        nexus
+VERSÃO         06.10.00
+MÓDULO         clsTerraLib
+EVENTO         Public Function CreatNetWorkAttribute
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      There are more columns in the INSERT statement than values specified in the VALUES clause. The number of values in the VALUES clause must match the number of columns specified in the INSERT statement.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/05/2013 20:17:24 
+USUÁRIO        nexus
+VERSÃO         06.10.00
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/05/2013 20:17:31 
+USUÁRIO        nexus
+VERSÃO         06.10.00
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/05/2013 20:29:58 
+USUÁRIO        nexus
+VERSÃO         06.10.00
+MÓDULO         clsGeoReference
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+

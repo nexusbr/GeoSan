@@ -15,6 +15,8 @@ Attribute VB_Exposed = False
 '
 Private objIDsTrechos As Variant
 Private totalTrechosMovendo As Integer
+Private retornaEmailErro As Boolean
+Private paraExe As Boolean
 'Retorna valor de do object_id do trecho
 '
 Property Get objIdTre() As Variant
@@ -34,6 +36,26 @@ End Property
 '
 Property Let totalTrechos(ByVal trechos As Variant)
     totalTrechosMovendo = trechos
+End Property
+'Retorna valor se é para enviar emails de erros
+'
+Property Get enviarEmails() As Variant
+    enviarEmails = retornaEmailErro
+End Property
+'  Recebe valor se é para enviar emails de erros
+'
+Property Let seEnviaEmailErro(ByVal enviaEmails As Variant)
+    retornaEmailErro = enviaEmails
+End Property
+'Retorna valor se é para enviar emails de erros
+'
+Property Get pararExecucao() As Variant
+    pararExecucao = paraExe
+End Property
+'  Recebe valor se é para enviar emails de erros
+'
+Property Let pararExecucao(ByVal para As Variant)
+    paraExe = para
 End Property
 Private Function variaveis()
 

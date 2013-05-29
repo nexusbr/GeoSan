@@ -56,6 +56,6 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "CObtemObjIDsRamais", "getObjIDs", CStr(Err.Number), CStr(Err.Description), True, True
+      ErroUsuario.Registra "CObtemObjIDsRamais", "getObjIDs", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Sub

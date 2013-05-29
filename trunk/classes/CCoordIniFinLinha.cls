@@ -46,7 +46,7 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True, True
+      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Function
 ' Obtem as coordenadas x e y dos nós inicial e final da linha do ramal
@@ -68,6 +68,6 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsRamal", CStr(Err.Number), CStr(Err.Description), True, True
+      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsRamal", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Function

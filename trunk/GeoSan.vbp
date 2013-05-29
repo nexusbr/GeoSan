@@ -130,6 +130,7 @@ Class=CArquivo; classes\CArquivo.cls
 Class=CIntBilinear; classes\CIntBilinear.cls
 Class=CObtemZdoNo; classes\CObtemZdoNo.cls
 Class=CAcertaZsDosNos; classes\CAcertaZsDosNos.cls
+Class=CDatabaseNexus; classes\CDatabaseNexus.cls
 ResFile32="GeoSan.RES"
 IconForm="FrmMain"
 Startup="Sub Main"

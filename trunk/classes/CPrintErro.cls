@@ -31,11 +31,11 @@ Attribute VB_Exposed = False
 '   Exit Function
 '   Exit Sub
 'Trata_Erro:
-'   If Err.Number = 0 Or Err.Number = 20 Then
-'       Resume Next
-'   Else
-'      ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True, True
-'   End If
+'    If Err.Number = 0 Or Err.Number = 20 Then
+'        Resume Next
+'    Else
+'       ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+'    End If
 '
 Public Function Registra(ByVal Modulo As String, ByVal EVENTO As String, ByVal ErrNum As String, ByVal ErrDescr As String, ByVal ExibeMensagem As Boolean, ByVal enviaEmail As Boolean, Optional ByVal linha As String = "Não registrada")
     Dim nomeArquivoErro As String

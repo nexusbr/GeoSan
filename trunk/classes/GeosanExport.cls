@@ -79,7 +79,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "CriaTabelaRedes-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "CriaTabelaRedes-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Cria a tabela GS_CONSUMIDORES a qual contem os dados das ligações de água
@@ -176,7 +176,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "CriaTabelaConsumidores-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "CriaTabelaConsumidores-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Cria a tabela GS_RAMAIS a qual contem as linhas dos ramais de ligação de água
@@ -234,7 +234,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "CriaTabelaRamais-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "CriaTabelaRamais-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Cria a tabela GS_NOS a qual contem de forma desnormalizada todos os atributos de um nó de rede de água
@@ -293,7 +293,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "CriaTabelaNos-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "CriaTabelaNos-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Insere todos dos dados de todas as redes na tabela de atributos de redes GS_REDES
@@ -323,6 +323,13 @@ Public Sub InsereConsumidores()
     'str = str + "inner join NXGS_V_LIG_COM_CONSUMO_MEDIO on NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV = RAMAIS_AGUA_LIGACAO.NRO_LIGACAO /10"
     rs.Open str, Conn, adOpenDynamic, adLockOptimistic      'abre a conexão
     Do While Not rs.EOF
+        DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            Screen.MousePointer = vbNormal
+            rs.Close
+            Unload frm
+            Exit Sub
+        End If
         'prepara textos já concatenados para redes longas e curtas
         obj_id = rs.Fields("Object_id_").value
         FrmMain.sbStatusBar.Panels(2).Text = "Insere consumidor: " & obj_id                             'apresenta na barra de status o andamento da inserção
@@ -386,7 +393,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereConsumidores", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Insere todos dos dados de todas as redes na tabela de atributos de redes GS_REDES
@@ -418,6 +425,13 @@ Public Sub InsereRedes()
     str = str + "INNER JOIN X_MANUFACTURERS ON WATERLINES.MANUFACTURER = X_MANUFACTURERS.MANUFACTURERID "
     rs.Open str, Conn, adOpenDynamic, adLockOptimistic      'abre a conexão
     Do While Not rs.EOF
+        DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            Screen.MousePointer = vbNormal
+            rs.Close
+            Unload frm
+            Exit Sub
+        End If
         FrmMain.sbStatusBar.Panels(2).Text = "Insere rede: " & rs.Fields("Object_id_").value                             'apresenta na barra de status o andamento da inserção
         'prepara textos já concatenados para redes longas e curtas
         textoAcima = Replace(CStr(rs.Fields("LengthCalculated").value), ",", ".") + " m"
@@ -468,7 +482,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereRedes", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereRedes", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Insere todos dos dados de todas os nós na tabela de atributos de redes GS_NOS
@@ -502,6 +516,13 @@ Public Sub InsereNos()
     str = str + "order by convert (numeric(50),watercomponents.object_id_)"
     rs.Open str, Conn, adOpenDynamic, adLockOptimistic      'abre a conexão
     Do While Not rs.EOF
+        DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            Screen.MousePointer = vbNormal
+            rs.Close
+            Unload frm
+            Exit Sub
+        End If
         FrmMain.sbStatusBar.Panels(2).Text = "Insere nó: " & rs.Fields("Object_id_").value                             'apresenta na barra de status o andamento da inserção
         'prepara a coluna Data de Instalação
         If IsNull(rs.Fields("dateinstallation").value) Then
@@ -538,7 +559,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereNos", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereNos", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 Public Sub InsereRamais()
@@ -560,6 +581,13 @@ Public Sub InsereRamais()
     str = "SELECT * FROM RAMAIS_AGUA"
     rs.Open str, Conn, adOpenDynamic, adLockOptimistic      'abre a conexão
     Do While Not rs.EOF
+        DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            Screen.MousePointer = vbNormal
+            rs.Close
+            Unload frm
+            Exit Sub
+        End If
         'prepara textos já concatenados para redes longas e curtas
         distanciaTestada = Replace(CStr(IIf(IsNull(rs.Fields("DISTANCIA_TESTADA").value), "0", rs.Fields("DISTANCIA_TESTADA").value)), ",", ".")
         distanciaLado = Replace(CStr(IIf(IsNull(rs.Fields("DISTANCIA_LADO").value), "0", rs.Fields("DISTANCIA_LADO").value)), ",", ".")
@@ -589,7 +617,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereRamais", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereRamais", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Exporta o arquivo no formato shape de redes de água
@@ -626,7 +654,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoConsumidores", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Insere a indicação de existência de uma nova tabela de atributos GS_RAMAIS (layer_id=7), de atributos de ramais de ligação de água
@@ -654,7 +682,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoRamais", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoRamais", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 
@@ -683,7 +711,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoRedes", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoRedes", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Insere a indicação de existência de uma nova tabela desnormalizada GS_NOS, de atributos de redes
@@ -711,7 +739,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoNos", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "InsereTabAtributoNos", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)
@@ -743,7 +771,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)
@@ -768,7 +796,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)
@@ -793,7 +821,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoRamais", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoRamais", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)
@@ -820,7 +848,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoNos", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoNos", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)
@@ -847,6 +875,6 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "DesativaExportacaoNos", CStr(Err.Number), CStr(Err.Description), True, True
+       ErroUsuario.Registra "GeosanExport", "DesativaExportacaoNos", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub

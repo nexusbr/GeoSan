@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "14:44"
+            TextSave        =   "21:30"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -511,6 +511,10 @@ Begin VB.MDIForm FrmMain
             Object.ToolTipText     =   "Apresenta Consumo"
          EndProperty
       EndProperty
+      Begin VB.Timer Timer1 
+         Left            =   3240
+         Top             =   840
+      End
       Begin TECOMEXPORTLibCtl.TeExport TeExport2 
          Left            =   4320
          OleObjectBlob   =   "frmMain.frx":9FBC
@@ -969,7 +973,10 @@ Begin VB.MDIForm FrmMain
          Caption         =   "Atualizar Consumos e Distribuir Demandas"
       End
       Begin VB.Menu mnuExporta_GeoSan 
-         Caption         =   "Exporta GeoSan"
+         Caption         =   "Exporta consumidores, redes, ramais e nós no formato .shp"
+      End
+      Begin VB.Menu mnuAtualizaCotas 
+         Caption         =   "Atualiza todas as cotas de todos os nós"
       End
       Begin VB.Menu mnuAutoLogin 
          Caption         =   "Logar Automaticamente"
@@ -991,9 +998,6 @@ Begin VB.MDIForm FrmMain
       End
       Begin VB.Menu mnuFileBar2 
          Caption         =   "-"
-      End
-      Begin VB.Menu testeMaisPerto 
-         Caption         =   "teste ponto mais perto"
       End
       Begin VB.Menu mnuFileExit 
          Caption         =   "Sair"
@@ -1270,17 +1274,22 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Const VK_ESCAPE = &H1B                                                              'definie a tecla ESC para eventos de interrupção do programa
+Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vKey As Long) As Integer      'para habilitar o timer e poder interromper tarefas que demoram muito
+
 Private TCanvas As frmCanvas
 Const sglSplitLimit = 0
 
 Private mbMoving        As Boolean
 Private mstrprevfunc    As String
 Private msngStartX      As Single
+
 Dim conee As TeAcXConnection
 Dim Abertura As Integer
 Dim teac As TeAcXConnection
 Dim a1 As TeImport
 Dim a2 As TeDatabase
+
 
 
 
@@ -1339,9 +1348,7 @@ End Sub
 
 
 Private Sub MDIForm_Activate()
-
    'MDIForm_Resize
-   
 End Sub
 ' Carrega o formulário principal. Rotina de entrada
 '
@@ -1351,7 +1358,8 @@ Private Sub MDIForm_Load()
     '''LoozeXP1.InitSubClassing
     Manager1.InitConn Conn, CInt(typeconnection)
     Manager1.GridVisibled False
-   
+    FrmMain.Timer1.Interval = 100                               'define o intervalo em que ele vai verificar se alguma tecla foi pressionada
+    FrmMain.Timer1.Enabled = False                              'inicia com o timer desligado, só liga quando tiver cálculo intensivo
 End Sub
 
 Private Sub mnu_Find_Object_Click()
@@ -1395,6 +1403,18 @@ End If
    
 End Sub
 
+' Atualiza todas as cotas existentes com os valores da interpolação do MDT
+'
+'
+'
+Private Sub mnuAtualizaCotas_Click()
+     Dim setaZs As New CAcertaZsDosNos
+     
+     varGlobais.pararExecucao = False               'indica que iniciará sem sem informar que deverá parar a execução
+     FrmMain.Timer1.Enabled = True                  'habilita o timer
+     setaZs.AtribuiZs                               'chama método para atualizar todas as cotas da cidade toda
+     FrmMain.Timer1.Enabled = False                 'deshabilita o timer
+End Sub
 
 Private Sub mnuAutoLogin_Click()
    
@@ -2237,35 +2257,32 @@ Private Sub mnuSELECT_Click()
    tbToolBar_ButtonClick tbToolBar.Buttons("kselection")
    
 End Sub
-
+' Redireciona para outro banco de dados geográfico, modificando a configuração do GEOSAN.INI
+'
+'
+'
 Private Sub mnuSELECTDatabase_Click()
-
-On Error GoTo Trata_Erro
-
+    On Error GoTo Trata_Erro
+    Dim cn As ADODB.connection, nC As Object
+    
     'FrmConnection.Show (1)
-
-   Dim cn As ADODB.connection, nC As Object
-   
-   Set nC = CreateObject("NexusConnection.App")
-   If nC.appNewRegistry(App.EXEName, cn) Then
-      Conn.Close
-      'Set Conn = cn
-      'Shell App.path & "\" & App.EXEName & ".exe"
-      MsgBox "Banco de dados redirecionado com sucesso." & Chr(13) & Chr(13) & "Reinicie o sistema para ativar.", vbInformation
-      'Set cn = Nothing
-      End
-   End If
-   
+    Set nC = CreateObject("NexusConnection.App")
+    If nC.appNewRegistry(App.EXEName, cn) Then
+        Conn.Close
+        'Set Conn = cn
+        'Shell App.path & "\" & App.EXEName & ".exe"
+        MsgBox "Banco de dados redirecionado com sucesso." & Chr(13) & Chr(13) & "Reinicie o sistema para ativar.", vbInformation
+        'Set cn = Nothing
+        End
+    End If
+    Exit Sub
+      
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-
-   PrintErro CStr(Me.Name), "Private Sub mnuSELECTDatabase_Click()", CStr(Err.Number), CStr(Err.Description), True
-   
-
-End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "FrmMain", "mnuSELECTDatabase_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 
 Private Sub mnuSuppliers_Click()
@@ -2299,6 +2316,7 @@ Private Sub mnuExporta_GeoSan_Click()
     Dim nomeCompleto As String
     Dim nomeExportar As String
   
+    varGlobais.pararExecucao = False                            'indica que iniciará sem sem informar que deverá parar a execução
     diretorio = arquivo.SelecionaDiretorio
     If diretorio = "falhou" Then
         'MsgBox "Cancelada a seleção do diretório."
@@ -2306,12 +2324,16 @@ Private Sub mnuExporta_GeoSan_Click()
     End If
     prefixoArquivo = arquivo.prefixo
     nomeCompleto = diretorio + "\" + prefixoArquivo
+    FrmMain.Timer1.Enabled = True                               'habilita o timer para permitir o usuário cancelar esta operação
     Screen.MousePointer = vbHourglass
     
     'exporta consumidores
     exp.InsereTabAtributoConsumidores
     exp.CriaTabelaConsumidores
     exp.InsereConsumidores
+    If varGlobais.pararExecucao = True Then                     'usuário selecionou para parar tudo
+        Exit Sub
+    End If
     exp.AtivaExportacaoConsumidores
     conexao.Open Conn
     TeExport2.Provider = 1
@@ -2331,6 +2353,9 @@ Private Sub mnuExporta_GeoSan_Click()
     exp.InsereTabAtributoRamais
     exp.CriaTabelaRamais
     exp.InsereRamais
+    If varGlobais.pararExecucao = True Then                     'usuário selecionou para parar tudo
+        Exit Sub
+    End If
     exp.AtivaExportacaoRamais
     conexao.Open Conn
     TeExport2.Provider = 1
@@ -2350,7 +2375,9 @@ Private Sub mnuExporta_GeoSan_Click()
     exp.InsereTabAtributoRedes
     exp.CriaTabelaRedes
     exp.InsereRedes
-      
+    If varGlobais.pararExecucao = True Then                                                                 'usuário selecionou para parar tudo
+        Exit Sub
+    End If
     'exporta redes para o formato shape
     conexao.Open Conn
     TeExport2.Provider = 1
@@ -2370,7 +2397,9 @@ Private Sub mnuExporta_GeoSan_Click()
     exp.InsereTabAtributoNos
     exp.CriaTabelaNos
     exp.InsereNos
-    
+    If varGlobais.pararExecucao = True Then                                                                 'usuário selecionou para parar tudo
+        Exit Sub
+    End If
     'exporta nós
     conexao.Open Conn
     TeExport2.Provider = 1
@@ -2386,17 +2415,19 @@ Private Sub mnuExporta_GeoSan_Click()
     Else
         MsgBox "Falha na exportação"
     End If
-    exp.AtivaRamaisGeoSan                           'reativa te_representation, senão os ramais com os nós (ligações) não voltam a aparecer no GeoSan
+    exp.AtivaRamaisGeoSan                                   'reativa te_representation, senão os ramais com os nós (ligações) não voltam a aparecer no GeoSan
     conexao.Close
     FrmMain.sbStatusBar.Panels(2).Text = "Exportação finalizada."
+    FrmMain.Timer1.Enabled = False                          'deshabilita o timer
     Exit Sub
     
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        exp.AtivaRamaisGeoSan                           'reativa te_representation, senão os ramais com os nós (ligações) não voltam a aparecer no GeoSan
-        ErroUsuario.Registra "FrmMain", "mnuExporta_GeoSan_Click", CStr(Err.Number), CStr(Err.Description), True, True
+        FrmMain.Timer1.Enabled = False                      'deshabilita o timer
+        exp.AtivaRamaisGeoSan                               'reativa te_representation, senão os ramais com os nós (ligações) não voltam a aparecer no GeoSan
+        ErroUsuario.Registra "FrmMain", "mnuExporta_GeoSan_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 
@@ -2437,6 +2468,8 @@ Private Sub mnuUsers_Click()
    'FrmUser.Show 1
    
 End Sub
+
+
 
 Private Sub mnuViewStatusBar_Click()
 
@@ -2578,6 +2611,10 @@ Private Sub mnuOpen_Click()
     TCanvas.init Conn, usuario.UseName
 End Sub
 
+
+
+
+
 Private Sub TabStrip1_Click()
 
    If TabStrip1.SelectedItem.index = 2 Then
@@ -2632,70 +2669,26 @@ Private Sub TePrinter_Click()
    
 
 End Sub
-
-Private Sub testeMaisPerto_Click()
-'    Dim idGeomPonto As Long
-'    Dim idObjPonto(4) As String
-'    Dim cota(4) As Double
-'    Dim retorno As Boolean
-'    Dim rs As New ADODB.Recordset
-'    Dim z1, z2, z3, z4 As Double
-'    Dim X1 As Double
-'    Dim Y1 As Double
-'    Dim X2 As Double
-'    Dim Y2 As Double
-'    Dim x3 As Double
-'    Dim y3 As Double
-'    Dim x4 As Double
-'    Dim y4 As Double
-'    Dim i1, i2, i3 As Double
-'    Dim X, Y As Double
-     Dim setaZs As New CAcertaZsDosNos
-     
-     setaZs.AtribuiZs
-'    X = 297018.128257941
-'    Y = 7457160.79598725
-'    retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")
-'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X, Y, 5, idGeomPonto, idObjPonto(0))
-'    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, X1, Y1
-'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X + 10#, Y, 5, idGeomPonto, idObjPonto(1))
-'    cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, X2, Y2
-'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X, Y + 10#, 5, idGeomPonto, idObjPonto(2))
-'     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x3, y3
-'    retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, X + 10#, Y + 10#, 5, idGeomPonto, idObjPonto(3))
-'     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, x4, y4
+' Configura um timer para caso o usuário selecione a tecla ESC ele pare a execução
 '
-'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(0), Conn, adOpenKeyset, adLockOptimistic
-'    If Not rs.EOF Then
-'        z1 = rs(0).value
-'    End If
-'    rs.Close
+' varGlobais.pararExecucao - contem a informação que deve ser configurada na rotina que deseja-se cancelar a execução. Lembrando-se de colocar um Doevents antes. Veja o exemplo abaixo
+' o intervalo do timer está definido no MDIForm_Load
 '
-'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(1), Conn, adOpenKeyset, adLockOptimistic
-'    If Not rs.EOF Then
-'        z2 = rs(0).value
-'    End If
-'    rs.Close
+'DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+'If varGlobais.pararExecucao = True Then
+'    varGlobais.pararExecucao = False
+'    Screen.MousePointer = vbNormal
+'    Exit Sub
+'End If
 '
-'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(2), Conn, adOpenKeyset, adLockOptimistic
-'    If Not rs.EOF Then
-'        z3 = rs(0).value
-'    End If
-'    rs.Close
+' O timer deve ser habilitado antes de entrar na rotina que requer cálculo intensivo. Veja o exemplo abaixo:
+'FrmMain.Timer1.Enabled = True                               'habilita o timer
 '
-'    rs.Open "SELECT * from MDT where object_id_106 = " & idObjPonto(3), Conn, adOpenKeyset, adLockOptimistic
-'    If Not rs.EOF Then
-'        z4 = rs(0).value
-'    End If
-'    rs.Close
-'
-'    i1 = ((X2 - X) / (X2 - X1)) * z1 + ((X - X1) / (X2 - X1)) * z2
-'    i2 = ((X2 - X) / (X2 - X1)) * z3 + ((X - X1) / (X2 - X1)) * z4
-'    i3 = ((Y - y3) / (Y1 - y3)) * i1 + ((Y1 - Y) / (Y1 - y3)) * i2
-    
-    
-
-    
+Private Sub Timer1_Timer()
+    If GetAsyncKeyState(VK_ESCAPE) Then
+        MsgBox ("Comando cancelado.")
+        varGlobais.pararExecucao = True
+    End If
 End Sub
 
 Private Sub txtEscala_KeyPress(KeyAscii As Integer)
