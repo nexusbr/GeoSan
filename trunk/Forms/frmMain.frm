@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "21:30"
+            TextSave        =   "19:56"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -943,7 +943,7 @@ Begin VB.MDIForm FrmMain
             Caption         =   "DXF"
          End
          Begin VB.Menu mnuExpCon 
-            Caption         =   "Localização de Consumidores e Consumo"
+            Caption         =   "Consumidores e Consumo"
          End
          Begin VB.Menu OdImport 
             Caption         =   "Novo DXF com OdImport"
@@ -1274,9 +1274,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Const VK_ESCAPE = &H1B                                                              'definie a tecla ESC para eventos de interrupção do programa
-Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vKey As Long) As Integer      'para habilitar o timer e poder interromper tarefas que demoram muito
-
 Private TCanvas As frmCanvas
 Const sglSplitLimit = 0
 
@@ -1488,225 +1485,114 @@ Private Sub mnu_Reflesh_Click()
    tbToolBar_ButtonClick tbToolBar.Buttons("kplotview")
    
 End Sub
-
+' Exportação de consumidores
+'
+'
+'
 Private Sub mnuExpCon_Click()
-Dim CAMINHO, SQL As String
- Dim rs As New ADODB.Recordset
-  Dim rs2 As New ADODB.Recordset
-    Dim rs3 As New ADODB.Recordset
-CAMINHO = App.path & "\EXPCONSUMO.txt"
-Dim TB_GEOMETRIA As String
-    Dim mPROVEDOR As String
-Dim mSERVIDOR As String
-Dim mPORTA As String
-Dim mBANCO As String
-Dim mUSUARIO As String
-Dim Senha As String
-Dim decriptada As String
-Dim conexao As New ADODB.connection
-Dim strConn As String
-Dim nStr As String
-Dim count2 As Integer
-
-If frmCanvas.TipoConexao = 4 Then
-If count2 <> 10 Then
-
-mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
-mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
-Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
-nStr = frmCanvas.FunDecripta(Senha)
-decriptada = frmCanvas.Senha
-strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + nStr + "; ByteaAsLongVarBinary=1;"
-
-conexao.Open strConn
-count2 = 10
-    
-End If
-End If
-
-
-
-
-If frmCanvas.TipoConexao <> 4 Then
-SQL = "SELECT * FROM NXGS_V_LIG_COMERCIAL_CONSUMO N INNER JOIN RAMAIS_AGUA_LIGACAO R on R.NRO_LIGACAO=N.NRO_LIGACAO inner join NXGS_V_LIG_COMERCIAL F on  R.NRO_LIGACAO = F.NRO_LIGACAO ORDER BY R.NRO_LIGACAO ASC"
- rs.Open SQL, Conn, adOpenDynamic, adLockReadOnly
-  
-
-Else
-
-SQL = "SELECT * FROM " + """" + "NXGS_V_LIG_COMERCIAL_CONSUMO" + """" + " N INNER JOIN " + """" + "RAMAIS_AGUA_LIGACAO" + """" + " R on CAST(R." + """" + "NRO_LIGACAO" + """" + " AS INTEGER)=N." + """" + "NRO_LIGACAO" + """" + "inner join " + """" + "NXGS_V_LIG_COMERCIAL" + """" + "F ON R." + """" + "NRO_LIGACAO" + """" + "=F." + """" + "NRO_LIGACAO" + """" + " ORDER BY R." + """" + "NRO_LIGACAO" + """" + " ASC"
- rs.Open SQL, conexao, adOpenDynamic, adLockReadOnly
-
-End If
-
-If frmCanvas.TipoConexao <> 4 Then
- rs3.Open "SELECT * FROM lines1 T INNER JOIN RAMAIS_AGUA R ON R.OBJECT_ID_TRECHO = T.OBJECT_ID ORDER BY R.OBJECT_ID_TRECHO ASC", Conn, adOpenDynamic, adLockReadOnly
-  
-
-  
-
-Else
-
-rs3.Open "SELECT * FROM " + """" + "lines1" + """" + " T INNER JOIN " + """" + "RAMAIS_AGUA" + """" + " R ON R." + """" + "OBJECT_ID_TRECHO" + """" + " = T." + """" + "object_id" + """" + " ORDER BY R." + """" + "OBJECT_ID_TRECHO" + """" + " ASC", conexao, adOpenDynamic, adLockReadOnly
-
-End If
-
-
-'MsgBox "ARQUIVO DEBUG SALVO"
-' WritePrivateProfileString "A", "A", SQL, App.path & "\DEBUG.INI"
-
-
-  'sql = "SELECT * FROM NXGS_V_LIG_COMERCIAL_CONSUMO N UNION RAMAIS_AGUA INNER JOIN RAMAIS_AGUA_LIGACAO R on R.NRO_LIGACAO=N.NRO_LIGACAO UNION SELECT * FROM " & TB_GEOMETRIA & " P JOIN WATERLINES W ON P.OBJECT_ID = W.OBJECT_ID_"
- 
-
-
-If frmCanvas.TipoConexao <> 4 Then
-
-Open CAMINHO For Output As #1
-      Print #1, "CONSUMIDOR;NRO_LIGACAO;CONSUMO;LOWER_X;UPPER_X;LOWER_Y;UPPER_Y;MES,ANO"
-      Do While Not rs.EOF = True
-         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!consumo_medido & ";" & rs3!lower_x & ";" & rs3!upper_x & ";" & rs3!lower_y & ";" & rs3!upper_y & ";" & rs!Mes & ";" & rs!ANO
-         rs.MoveNext
-      Loop
-   Close #1
-   rs.Close
-   
-   'MousePointer = vbDefault
-   Else
-   
-   
-Open CAMINHO For Output As #1
-      Print #1, "CONSUMIDOR;NRO_LIGACAO;CONSUMO;COORDENADAS ESPACIAIS;MES,ANO"
-      Do While Not rs.EOF = True
-         Print #1, rs!CONSUMIDOR & ";"; rs!NRO_LIGACAO & ";" & rs!consumo_medido & ";" & rs3!spatial_data & ";" & rs!Mes & ";" & rs!ANO
-         rs.MoveNext
-      Loop
-   Close #1
-   rs.Close
-   
-   
-   
-   End If
-   
-   
-   
-   MsgBox "Arquivo exportado em " & CAMINHO & ".", vbInformation, "Exportação Concluída!"
-
-
-
-
+    frmExportaConsumos.Show
 End Sub
-
+' Exporta a localização dos nós com as suas respectivas cotas
+'
+'
+'
 Private Sub mnuExportLocalNos_Click()
-On Error GoTo Trata_Erro
-
-   Dim CAMINHO As String
-   Dim rs As New ADODB.Recordset
-   Dim TB_GEOMETRIA As String
-   Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
-a = "geom_table"
-b = "te_representation"
-c = "geom_type"
-d = "layer_id"
-e = "te_layer"
-f = "name"
-g = "WATERCOMPONENTS"
-
-   
-   If frmCanvas.TipoConexao <> 4 Then
-   
-   'retornar a tabela de geometria de pontos
-   rs.Open "SELECT GEOM_TABLE FROM TE_REPRESENTATION WHERE GEOM_TYPE = 4 AND LAYER_ID IN (SELECT LAYER_ID FROM TE_LAYER WHERE NAME = 'WATERCOMPONENTS')", Conn, adOpenDynamic, adLockReadOnly
-   If rs.EOF = False Then
-      TB_GEOMETRIA = rs!GEOM_TABLE
-   Else
-      MsgBox "Não foi encontrada a tabela de Geometrias.", vbInformation, ""
-      Exit Sub
-   End If
-   Else
-   'SELECT "geom_table" FROM "te_representation" WHERE "geom_type" = '4' AND "layer_id" IN (SELECT "layer_id" FROM "te_layer" WHERE "name" = 'WATERCOMPONENTS')
-   rs.Open "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '4' AND " + """" + d + """" + " IN (SELECT " + """" + d + """" + " FROM " + """" + e + """" + " WHERE " + """" + f + """" + " = 'WATERCOMPONENTS')", Conn, adOpenDynamic, adLockOptimistic
-   If rs.EOF = False Then
-      TB_GEOMETRIA = rs!GEOM_TABLE
-   Else
-      MsgBox "Não foi encontrada a tabela de Geometrias.", vbInformation, ""
-      Exit Sub
-      End If
-   End If
-   
-   
-   rs.Close
-   
+    On Error GoTo Trata_Erro
+    Dim CAMINHO As String
+    Dim rs As New ADODB.Recordset
+    Dim TB_GEOMETRIA As String
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+    Dim nomeArquivo As New CArquivo                                                             'para o usuário selecionar onde será salvo o arquivo
+        
+    varGlobais.pararExecucao = False               'indica que iniciará sem sem informar que deverá parar a execução
+    FrmMain.Timer1.Enabled = True                  'habilita o timer
+    CAMINHO = nomeArquivo.SelecionaDiretorio                                                    'solicita ao usuário a seleção de um diretório
+    CAMINHO = CAMINHO + "\" + nomeArquivo.prefixo + "LOCALIZAÇÃO_NOS_REDE_AGUA.txt"  'coloca um prefixo de data e hora em que o arquivo será gerado
+    a = "geom_table"
+    b = "te_representation"
+    c = "geom_type"
+    d = "layer_id"
+    e = "te_layer"
+    f = "name"
+    g = "WATERCOMPONENTS"
+    If frmCanvas.TipoConexao <> 4 Then
+        'retornar a tabela de geometria de pontos
+        rs.Open "SELECT GEOM_TABLE FROM TE_REPRESENTATION WHERE GEOM_TYPE = 4 AND LAYER_ID IN (SELECT LAYER_ID FROM TE_LAYER WHERE NAME = 'WATERCOMPONENTS')", Conn, adOpenDynamic, adLockReadOnly
+        If rs.EOF = False Then
+            TB_GEOMETRIA = rs!GEOM_TABLE
+        Else
+            MsgBox "Não foi encontrada a tabela de Geometrias.", vbInformation, ""
+        Exit Sub
+        End If
+    Else
+        'SELECT "geom_table" FROM "te_representation" WHERE "geom_type" = '4' AND "layer_id" IN (SELECT "layer_id" FROM "te_layer" WHERE "name" = 'WATERCOMPONENTS')
+        rs.Open "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '4' AND " + """" + d + """" + " IN (SELECT " + """" + d + """" + " FROM " + """" + e + """" + " WHERE " + """" + f + """" + " = 'WATERCOMPONENTS')", Conn, adOpenDynamic, adLockOptimistic
+        If rs.EOF = False Then
+            TB_GEOMETRIA = rs!GEOM_TABLE
+        Else
+            MsgBox "Não foi encontrada a tabela de Geometrias.", vbInformation, ""
+            Exit Sub
+        End If
+    End If
+    rs.Close
     If frmCanvas.TipoConexao = 1 Then
-   'SELECIONA DO BANCO DE DADOS O CÓDIGO DO NÓ, COORDENADAS E COTA ATUAL
-   
-   
- 
-   
-   rs.Open "SELECT W.GROUNDHEIGHT AS " + """" + "COTA" + """" + ", LEN(P.OBJECT_ID) AS " + """" + "TAM" + """" + ", P.OBJECT_ID ,P.X,P.Y FROM " & TB_GEOMETRIA & " P JOIN WATERCOMPONENTS W ON P.OBJECT_ID = W.OBJECT_ID_ ORDER BY TAM, OBJECT_ID"
-   
-   ElseIf frmCanvas.TipoConexao = 2 Then
-   
-    rs.Open "SELECT W.GROUNDHEIGHT AS " + """" + "COTA" + """" + ", P.OBJECT_ID AS " + """" + "TAM" + """" + ", P.OBJECT_ID ,P.X,P.Y FROM " & TB_GEOMETRIA & " P JOIN WATERCOMPONENTS W ON P.OBJECT_ID = W.OBJECT_ID_ ORDER BY TAM, OBJECT_ID"
-   
-   
-   
-   Else
-   a = "INITIALGROUNDHEIGHT"
-b = "object_id"
-c = "x"
-d = "y"
-e = "WATERCOMPONENTS"
-f = LCase(TB_GEOMETRIA)
-g = "OBJECT_ID_"
-
-
-
-    rs.Open "SELECT " + """" + e + """" + "." + """" + a + """" + " AS " + """" + "COTA" + """" + ", " + """" + f + """" + "." + """" + b + """" + " AS " + """" + "TAM" + """" + ", " + """" + f + """" + "." + """" + b + """" + " ," + """" + f + """" + "." + """" + c + """" + ", " + """" + f + """" + "." + """" + d + """" + " FROM  " + """" + f + """" + " JOIN " + """" + e + """" + "ON" + """" + f + """" + "." + """" + b + """" + " = " + """" + e + """" + "." + """" + g + """" + " ORDER BY " + """" + "TAM" + """" + ", " + """" + b + """" + "", Conn, adOpenDynamic, adLockOptimistic
-   End If
-   
-   
-   MousePointer = vbHourglass
-   
-   CAMINHO = App.path & "\LOCALIZAÇÃO_NOS_REDE_AGUA.txt"
-  
-   Open CAMINHO For Output As #1
-      Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
-      Do While Not rs.EOF = True
-         Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
-         rs.MoveNext
-      Loop
-   Close #1
-   rs.Close
-   
-   MousePointer = vbDefault
-   
-   MsgBox "Arquivo exportado em " & CAMINHO & ".", vbInformation, "Exportação Concluída!"
-   
+        'SELECIONA DO BANCO DE DADOS O CÓDIGO DO NÓ, COORDENADAS E COTA ATUAL
+        rs.Open "SELECT W.GROUNDHEIGHT AS " + """" + "COTA" + """" + ", LEN(P.OBJECT_ID) AS " + """" + "TAM" + """" + ", P.OBJECT_ID ,P.X,P.Y FROM " & TB_GEOMETRIA & " P JOIN WATERCOMPONENTS W ON P.OBJECT_ID = W.OBJECT_ID_ ORDER BY TAM, OBJECT_ID"
+    ElseIf frmCanvas.TipoConexao = 2 Then
+        rs.Open "SELECT W.GROUNDHEIGHT AS " + """" + "COTA" + """" + ", P.OBJECT_ID AS " + """" + "TAM" + """" + ", P.OBJECT_ID ,P.X,P.Y FROM " & TB_GEOMETRIA & " P JOIN WATERCOMPONENTS W ON P.OBJECT_ID = W.OBJECT_ID_ ORDER BY TAM, OBJECT_ID"
+    Else
+        a = "INITIALGROUNDHEIGHT"
+        b = "object_id"
+        c = "x"
+        d = "y"
+        e = "WATERCOMPONENTS"
+        f = LCase(TB_GEOMETRIA)
+        g = "OBJECT_ID_"
+        rs.Open "SELECT " + """" + e + """" + "." + """" + a + """" + " AS " + """" + "COTA" + """" + ", " + """" + f + """" + "." + """" + b + """" + " AS " + """" + "TAM" + """" + ", " + """" + f + """" + "." + """" + b + """" + " ," + """" + f + """" + "." + """" + c + """" + ", " + """" + f + """" + "." + """" + d + """" + " FROM  " + """" + f + """" + " JOIN " + """" + e + """" + "ON" + """" + f + """" + "." + """" + b + """" + " = " + """" + e + """" + "." + """" + g + """" + " ORDER BY " + """" + "TAM" + """" + ", " + """" + b + """" + "", Conn, adOpenDynamic, adLockOptimistic
+    End If
+    Screen.MousePointer = vbHourglass
+    Open CAMINHO For Output As #1
+    Print #1, "IDENTIFICADOR;COORD_X;COORD_Y;COTA"
+    Do While Not rs.EOF = True
+        DoEvents                                                                'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            varGlobais.pararExecucao = False
+            Screen.MousePointer = vbDefault
+            FrmMain.Timer1.Enabled = False                                      'deshabilita o timer
+            Close #1
+            rs.Close
+            Exit Sub
+        End If
+        FrmMain.sbStatusBar.Panels(2).Text = "Nó: " & rs!object_id              'mostra na barra de status o nó que está sendo exportado
+        Print #1, rs!object_id & ";" & rs!X & ";" & rs!Y & ";" & rs!cota
+        rs.MoveNext
+    Loop
+    Close #1
+    rs.Close
+    Screen.MousePointer = vbDefault
+    FrmMain.Timer1.Enabled = False                                              'deshabilita o timer
+    MsgBox "Arquivo exportado em " & CAMINHO & ".", vbInformation, "Exportação Concluída!"
+    Exit Sub
+    
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   MousePointer = vbDefault
-   
-   PrintErro CStr(Me.Name), "Private Sub mnuExportLocalNos_Click()", CStr(Err.Number), CStr(Err.Description), True
-   
-   
-End If
-   
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       Screen.MousePointer = vbDefault
+       FrmMain.Timer1.Enabled = False                                           'deshabilita o timer
+       ErroUsuario.Registra "FrmMain", "mnuExportLocalNos_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 
 Private Sub mnuBitmap_Click()
@@ -1978,12 +1864,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .filename = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.filename, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
            End If
         End With
     Else
@@ -2430,32 +2316,12 @@ Trata_Erro:
         ErroUsuario.Registra "FrmMain", "mnuExporta_GeoSan_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
-
+' Atualiza os consumos médios nas ligações e distribui as demandas nos nós das redes
+'
+'
+'
 Private Sub mnuUpdate_Demand_Click()
-
-Dim cgeo As New clsGeoReference
-
-'If frmCanvas.TipoConexao = 1 Then
-
-   
-   frmAtualizacaoConsumo.Show 1
-
-'Else
-'
-'   cgeo.Update_Demand_Node
-'
-'End If
-
-
-'UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = NXGS.CONSUMO_MEDIDO FROM RAMAIS_AGUA_LIGACAO AS RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO AS NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO
-
-'Se ao invés do consumo medido for utilizado o consumo faturado, o comando é:
-
-'UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = NXGS.CONSUMO_FATURADO FROM RAMAIS_AGUA_LIGACAO AS RAL INNER JOIN NXGS_V_LIG_COMERCIAL_CONSUMO AS NXGS ON RAL.NRO_LIGACAO = NXGS.NRO_LIGACAO
-
-
-Set cgeo = Nothing
-
+    frmAtualizacaoConsumo.Show 1
 End Sub
 
 Private Sub mnuUsers_Click()

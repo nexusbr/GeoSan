@@ -1,6 +1,9 @@
 Attribute VB_Name = "Global"
 Option Explicit
 
+Public Const VK_ESCAPE = &H1B                                                              'definie a tecla ESC para eventos de interrupção do programa
+Public Declare Function GetAsyncKeyState Lib "user32" (ByVal vKey As Long) As Integer      'para habilitar o timer e poder interromper tarefas que demoram muito
+
 Public varGlobais As New CVariaveis             'variáveis globais que todas as rotinas podem acessar
 Public cGeoDatabase As New cGeoDatabase         'conexão do TeDatabase única para toda a aplicação
 Public cGeoViewDatabase As New CViewDatabase    'conexão com o TeViewManager para toda a aplicação
@@ -1376,10 +1379,10 @@ End Function
 '   ConectaBanco = False
 'End Function
 
-Public Function GetCboListIndex(id As Long, mCbo As ComboBox) As Integer
+Public Function GetCboListIndex(ID As Long, mCbo As ComboBox) As Integer
    Dim a As Integer
    For a = 0 To mCbo.ListCount - 1
-       If mCbo.ItemData(a) = id Then
+       If mCbo.ItemData(a) = ID Then
          GetCboListIndex = a
          Exit Function
        End If

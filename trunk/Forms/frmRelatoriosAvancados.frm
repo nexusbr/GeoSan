@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmRelatoriosAvancados 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Relatório por Seleção de Polígono"
@@ -214,7 +214,15 @@ Dim i As String
 Dim ii As String
 Dim j As String
 Dim k As String
-   
+
+Dim selecionaArquivo As New CArquivo                                                    'para obter o nome e diretório onde o arquivo será salvo
+Dim nomeArquivo As String                                                               'nome completo do arquivo com o drive e diretório no qual será salvo
+Dim diretorioMyDocuments As String                                                      'diretório meus documentos inicial
+Dim filelocation As String                                                              'nome completo do arquivo onde será salvo o relatório
+' Gera o relatório do tipo 1
+'
+'
+'
 Private Function OPT1() As Boolean
    
 On Error GoTo Trata_Erro
@@ -252,7 +260,7 @@ j = "MATERIALID"
       rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
    
    Open Me.Text1.Text For Output As #1
-   Print #1, "OBJECT_ID;MATERIAL;COMPRIMENTO;DIAMETRO"
+   Print #1, "OBJECT_ID;MATERIAL;COMPRIMENTO;DIAMETRO INTERNO"
    
    Do While Not rs.EOF = True
    
@@ -281,6 +289,10 @@ Else
 End If
 
 End Function
+' Gera o relatório do tipo 2
+'
+'
+'
 Private Function OPT2() As Boolean
 
 a = "OBJECT_ID_"
@@ -320,7 +332,7 @@ On Error GoTo Trata_Erro
       rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
    
    Open Me.Text1.Text For Output As #1
-   Print #1, "MATERIAL;DIAMETRO;COMPRIMENTO"
+   Print #1, "MATERIAL;DIAMETRO INTERNO;COMPRIMENTO"
    
    Do While Not rs.EOF = True
    
@@ -350,10 +362,15 @@ Else
 End If
 
 End Function
+' Gera o relatório do tipo 4
+'
+'
+'
 Private Function OPT4() As Boolean
 
 On Error GoTo Trata_Erro
-   
+   Dim calcConsumo As New CConsumo                              'para calcular as conversões de l/s e m3/mês
+   Dim consumoM3 As String                                      'consumo em m3/mês
    Dim strNro As String
    Dim strRamal As String
    Dim strTipo As String
@@ -396,7 +413,7 @@ ElseIf frmCanvas.TipoConexao = 4 Then
    End If
    
    Open Me.Text1.Text For Output As #1
-   Print #1, "NÚMERO DO RAMAL;CONSUMO MÉDIO;NÚMERO DE ECONOMIAS;TIPO;HIDROMETRADO"
+   Print #1, "NÚMERO DO RAMAL;CONSUMO MÉDIO (l/s);CONSUMO MÉDIO (m3/mês);NÚMERO DE ECONOMIAS;TIPO;HIDROMETRADO"
    
    Set rs = New ADODB.Recordset
     rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
@@ -411,8 +428,8 @@ ElseIf frmCanvas.TipoConexao = 4 Then
             strRamal = ""
          End If
          
-         If rs!CONSUMO <> "" Then
-            strConsumo = Replace(rs!CONSUMO, ".", ",")
+         If rs!consumo <> "" Then
+            strConsumo = Replace(rs!consumo, ".", ",")
          Else
             strConsumo = 0
          End If
@@ -434,8 +451,10 @@ ElseIf frmCanvas.TipoConexao = 4 Then
          Else
             strHidro = ""
          End If
-              
-         Print #1, strRamal & ";" & strConsumo & ";" & strNro & ";" & strTipo & ";" & strHidro
+         consumoM3 = CStr(calcConsumo.lps2m3mes(CDbl(strConsumo)))
+         consumoM3 = Round(consumoM3, 2)
+         consumoM3 = Replace(consumoM3, ".", ",")
+         Print #1, strRamal & ";" & strConsumo & ";" & consumoM3 & ";" & strNro & ";" & strTipo & ";" & strHidro
      
          rs.MoveNext
       Loop
@@ -459,9 +478,10 @@ Else
 End If
 
 End Function
-
-
-
+' Gera o relatório do tipo 3
+'
+'
+'
 Private Function OPT3() As Boolean
 On Error GoTo Trata_Erro:
 
@@ -838,171 +858,124 @@ reinicia:
    
    Next
 End Sub
-
+' Gera o relatório com os componentes que estão dentro do polígono selecionado
+'
+'
+'
 Private Sub cmdGerarRelatorio_Click()
-   Dim filelocation As String
-CommonDialog1.ShowSave
-
-filelocation = CommonDialog1.FileName
-Me.Text1.Text = filelocation
     Dim string2 As String
     Dim user As String
-         Dim stringFinal As String
-   If Me.Text1.Text <> "" Then ' se há um nome de arquivo...
-      If Me.Option1.value = True Then
-         
-         If OPT1 = False Then
-          
-          Exit Sub
-      End If
-      ElseIf Me.Option2.value = True Then
-         
-         If OPT2 = False Then
-        
-         Exit Sub
-      End If
-      ElseIf Me.Option3.value = True Then
-         
-         If OPT3 = False Then
-        
-          Exit Sub
+    Dim stringFinal As String
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+
+    CommonDialog1.Filter = "Texto (.txt)|*.TXT|Todos tipos (*.*)|*.*|"                                          'configura o filtro do arquivo
+    CommonDialog1.filename = nomeArquivo                                                                        'informa a caixa de diálogo que será aberta o nome do arquivo inicial sugerido
+    CommonDialog1.InitDir = diretorioMyDocuments                                                                'sugero o diretório inicial
+    CommonDialog1.ShowSave                                                                                      'abre a caixa de diálogo par ao usuário digitar o nome do arquivo e selecionar o diretório, se desejar
+    filelocation = CommonDialog1.filename
+    Me.Text1.Text = filelocation
+    If Me.Text1.Text <> "" Then ' se há um nome de arquivo...
+        If Me.Option1.value = True Then
+            If OPT1 = False Then
+                Exit Sub
             End If
-      ElseIf Me.Option4.value = True Then
-         
-         If OPT4 = False Then
-       
-          Exit Sub
+        ElseIf Me.Option2.value = True Then
+            If OPT2 = False Then
+                Exit Sub
             End If
-      ElseIf Me.optRelRamalPadrao.value = True Then
-         
-         If frmCanvas.TipoConexao = 1 Then
-         
-         Set rs = New ADODB.Recordset
-
-        
-
-         strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"
-         string2 = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"
-          
-           rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
-         If rs.EOF = False Then
-            strsql = rs(0).value
-            
-         End If
-         rs.Close
-           rs.Open string2, Conn, adOpenDynamic, adLockOptimistic
-
-         If rs.EOF = False Then
-         string2 = rs(0).value
-            
-         End If
-         rs.Close
-         
-         
-         user = strUser
-     
-         
-        
-         stringFinal = strsql + " " + "'" + user + "'" + " " + string2
-
-   
-   'É CHAMADO O MÉTODO PRINTSELECT
-         If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
-          MsgBox "Relatório gerado com sucesso!", vbInformation, ""
-      End If
-     
-
-   
-
-   If frmCanvas.TipoConexao = 2 Then
-    Set rs = New ADODB.Recordset
-
-
-         strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"
-         string2 = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"
-          
-         rs.Open strsql, Conn, adOpenForwardOnly, adLockReadOnly
-         If rs.EOF = False Then
-            strsql = rs(0).value
-            
-         End If
-         rs.Close
-         rs.Open string2, Conn, adOpenForwardOnly, adLockReadOnly
-
-         If rs.EOF = False Then
-         string2 = rs(0).value
-            
-         End If
-         rs.Close
-         
-         
-         user = strUser
+        ElseIf Me.Option3.value = True Then
+            If OPT3 = False Then
+                Exit Sub
+            End If
+        ElseIf Me.Option4.value = True Then
+            If OPT4 = False Then
+                Exit Sub
+            End If
+        ElseIf Me.optRelRamalPadrao.value = True Then
+            If frmCanvas.TipoConexao = 1 Then
+                Set rs = New ADODB.Recordset
+                strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"
+                string2 = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"
+                rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
+                If rs.EOF = False Then
+                    strsql = rs(0).value
+                End If
+                rs.Close
+                rs.Open string2, Conn, adOpenDynamic, adLockOptimistic
+                If rs.EOF = False Then
+                    string2 = rs(0).value
+                End If
+                rs.Close
+                user = strUser
+                stringFinal = strsql + " " + "'" + user + "'" + " " + string2
+                'É CHAMADO O MÉTODO PRINTSELECT
+                If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
+                MsgBox "Relatório gerado com sucesso!", vbInformation, ""
+            End If
+            If frmCanvas.TipoConexao = 2 Then
+                Set rs = New ADODB.Recordset
+                strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"
+                string2 = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"
+                rs.Open strsql, Conn, adOpenForwardOnly, adLockReadOnly
+                If rs.EOF = False Then
+                    strsql = rs(0).value
+                End If
+                rs.Close
+                rs.Open string2, Conn, adOpenForwardOnly, adLockReadOnly
+                If rs.EOF = False Then
+                    string2 = rs(0).value
+                End If
+                rs.Close
+                user = strUser
+                stringFinal = strsql + " " + "'" + user + "'" + " " + string2
+                'É CHAMADO O MÉTODO PRINTSELECT
+                If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
+                MsgBox "Relatório gerado com sucesso!", vbInformation, ""
+            End If
+            If frmCanvas.TipoConexao = 4 Then
+                Set rs = New ADODB.Recordset
+                a = "QUERYSTRING"
+                b = "GS_QUERYS_CLIENT"
+                c = "QUERY_ID"
+                strsql = "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '22'"
+                string2 = "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '23'"
+                rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
+                If rs.EOF = False Then
+                    strsql = rs(0).value
+                End If
+                rs.Close
+                rs.Open string2, Conn, adOpenDynamic, adLockOptimistic
+                If rs.EOF = False Then
+                    string2 = rs(0).value
+                End If
+                rs.Close
+                user = strUser
+                stringFinal = strsql + " " + "'" + user + "'" + " " + string2
+                'É CHAMADO O MÉTODO PRINTSELECT
+                If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
+                MsgBox "Relatório gerado com sucesso!", vbInformation, ""
+            End If
+        End If
+    End If
+    Exit Sub
     
-        
-         stringFinal = strsql + " " + "'" + user + "'" + " " + string2
-
-   
-   'É CHAMADO O MÉTODO PRINTSELECT
-         If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
-           MsgBox "Relatório gerado com sucesso!", vbInformation, ""
-      End If
-    
-     If frmCanvas.TipoConexao = 4 Then
-         
-         Set rs = New ADODB.Recordset
-Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
-
-a = "QUERYSTRING"
-b = "GS_QUERYS_CLIENT"
-c = "QUERY_ID"
-
-        
-
-         strsql = "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '22'"
-         string2 = "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '23'"
-          
-            rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
-         If rs.EOF = False Then
-            strsql = rs(0).value
-            
-         End If
-         rs.Close
-           rs.Open string2, Conn, adOpenDynamic, adLockOptimistic
-
-         If rs.EOF = False Then
-         string2 = rs(0).value
-            
-         End If
-         rs.Close
-         
-         
-         user = strUser
-     
-         
-        
-         stringFinal = strsql + " " + "'" + user + "'" + " " + string2
-
-   
-   'É CHAMADO O MÉTODO PRINTSELECT
-         If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
-          MsgBox "Relatório gerado com sucesso!", vbInformation, ""
-      End If
-   
-   End If
-   End If
-    
-
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmRelatoriosAvancados", "cmdGerarRelatorio_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 
 Private Sub cmdRemCampo_Click()
@@ -1099,7 +1072,8 @@ End Sub
 
 
 Private Sub Form_Load()
-   
+    nomeArquivo = selecionaArquivo.ConfiguraNomeArquivo("exportação_dados_redes", "txt", diretorioMyDocuments)  'obtem o nome do arquivo sugerido e o diretório meus documentos do usuário
+    Me.Text1 = diretorioMyDocuments & "\" & nomeArquivo                                                         'coloca na caixa de diálogo o nome sugerido
    Me.Height = 7000
    
    Dim Texto As String

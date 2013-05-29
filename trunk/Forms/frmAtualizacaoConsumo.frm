@@ -13,6 +13,10 @@ Begin VB.Form frmAtualizacaoConsumo
    ScaleHeight     =   3540
    ScaleWidth      =   7200
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer Timer1 
+      Left            =   5760
+      Top             =   1080
+   End
    Begin MSComctlLib.ProgressBar ProgressBar1 
       Height          =   495
       Left            =   360
@@ -25,7 +29,7 @@ Begin VB.Form frmAtualizacaoConsumo
       Appearance      =   1
    End
    Begin VB.OptionButton optAtualizaConsumo 
-      Caption         =   "Atualizar com o Consumo Médio das Ligações Cadastradas"
+      Caption         =   "Atualiza todas as ligações de água com o Consumo Médio"
       Height          =   255
       Left            =   195
       TabIndex        =   6
@@ -34,12 +38,12 @@ Begin VB.Form frmAtualizacaoConsumo
       Width           =   5985
    End
    Begin VB.OptionButton optDistDem 
-      Caption         =   "Distribuir Demandas"
+      Caption         =   "Distribuir as demandas de consumo, em l/s, em todos os nós das redes"
       Height          =   255
       Left            =   195
       TabIndex        =   4
       Top             =   840
-      Width           =   1800
+      Width           =   6600
    End
    Begin VB.OptionButton optImpMedAtuConsDistDem 
       Caption         =   "Importar Medias de Consumo"
@@ -100,58 +104,53 @@ Dim j As String
 Dim k As String
 Dim l As String
 
-
-
-
+' Inicia a execução da atualização dos consumos médios ou distribuição dos consumos
+'
+'
+'
 Private Sub Command1_Click()
-'On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
 
-   ' if we want to update medium consum in each consumer
-   If Me.optAtualizaConsumo.value = True Then
-      If AtualizaConsumo = True Then
-         MsgBox "Consumo de ligações atualizados com sucesso!", vbInformation, ""
-      Else
-         MsgBox "Falha na atualização de consumo.", vbInformation, ""
-      End If
-      Exit Sub
-   End If
-
-   ' if we want to distribute consume demands
-   If Me.optDistDem.value = True Then
-      
-      If DISTRIBUI_DEMANDAS = True Then
-         MsgBox "Atualização de demanda concluída com sucesso!", vbInformation, "Concluído"
-      End If
-      'If DISTRIBUI_DEMANDAS = False Then
-       '  MsgBox "Atualização de demanda concluída com sucesso!", vbInformation, "Concluído"
-     ' End If
-   
-   End If
-   
-   
-   If Me.optImpMedAtuConsDistDem = True Then
-      If Me.Text1.Text <> "" Then
-         
-         Screen.MousePointer = vbHourglass
-         importa_media
-         Me.Command1.Enabled = False
-      Else
-         MsgBox "Caminho de arquivo inválido!", vbExclamation, ""
-         Exit Sub
-      End If
-   End If
-   
-   Command1.Enabled = True
-   
-'Trata_Erro:
-'If Err.Number = 0 Or Err.Number = 20 Then
-  ' Resume Next
-'Else
- '  MsgBox Err.Number & " - " & Err.Description
-   'Resume
-'End If
-
-   
+    ' if we want to update medium consum in each consumer
+    If Me.optAtualizaConsumo.value = True Then
+        DoEvents                                                            'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            varGlobais.pararExecucao = False
+            Screen.MousePointer = vbNormal
+            Exit Sub
+        End If
+        If AtualizaConsumo = True Then
+            MsgBox "Consumo de ligações atualizados com sucesso!", vbInformation, ""
+        Else
+            MsgBox "Falha na atualização de consumo.", vbInformation, ""
+        End If
+        Exit Sub
+    End If
+    ' if we want to distribute consume demands
+    If Me.optDistDem.value = True Then
+        If DISTRIBUI_DEMANDAS = True Then
+            MsgBox "Atualização de demanda concluída com sucesso!", vbInformation, "Concluído"
+        End If
+    End If
+    If Me.optImpMedAtuConsDistDem = True Then
+        If Me.Text1.Text <> "" Then
+            Screen.MousePointer = vbHourglass
+            importa_media
+            Me.Command1.Enabled = False
+        Else
+            MsgBox "Caminho de arquivo inválido!", vbExclamation, ""
+            Exit Sub
+        End If
+    End If
+    Command1.Enabled = True
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "frmAtualizacaoConsumo", "Command1", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 'Esta função atualiza os consumos médios da vista do banco de dados comercial (NXGS_V_LIG_COM_CONSUMO_MEDIO) para o banco a tabela do GeoSan RAMAIS_AGUA_LIGACAO
 '
@@ -202,10 +201,12 @@ Trata_Erro:
         AtualizaConsumo = False
     End If
 End Function
-
+' Distribui as demandas de consumo em todos os nós da rede
+'
+'
+'
 Private Function DISTRIBUI_DEMANDAS() As Boolean
-'On Error GoTo Trata_Erro
-
+    On Error GoTo Trata_Erro
     Dim rsCon As New ADODB.Recordset
     Dim rsWATER As New ADODB.Recordset
     Dim redeOld As String, Inicial As String, Final As String
@@ -213,25 +214,8 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
     Dim strsql As String
     Dim strMetade As String, strConsumo As String
     Dim rsWTC As New ADODB.Recordset
-    
     Dim TEMPOINI As Date, TEMPOFIM As Date
     Dim contador As Long
-    
-    Me.Command1.Enabled = False
-    Screen.MousePointer = vbHourglass
-      
-    TEMPOINI = Now
-    
-    b = "WATERCOMPONENTS"
-    c = "DEMAND"
-    
-    ' if it is not Postgres
-    If frmCanvas.TipoConexao <> 4 Then
-        Conn.execute ("UPDATE WATERCOMPONENTS SET DEMAND = 0")
-    Else
-        Conn.execute ("UPDATE " + """" + b + """" + " SET " + """" + c + """" + " = '0'")
-    End If
-   
     Dim ma As String
     Dim mb As String
     Dim mc As String
@@ -242,6 +226,18 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
     Dim mi As String
     Dim mj As String
 
+    Me.Timer1.Enabled = True                                    'habilita o timer
+    Me.Command1.Enabled = False
+    Screen.MousePointer = vbHourglass
+    TEMPOINI = Now
+    b = "WATERCOMPONENTS"
+    c = "DEMAND"
+    ' if it is not Postgres
+    If frmCanvas.TipoConexao <> 4 Then
+        Conn.execute ("UPDATE WATERCOMPONENTS SET DEMAND = 0")
+    Else
+        Conn.execute ("UPDATE " + """" + b + """" + " SET " + """" + c + """" + " = '0'")
+    End If
     ' open connection to distribute demands
     ' if it is not Postgres
     If frmCanvas.TipoConexao <> 4 Then
@@ -251,7 +247,7 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
         strsql = strsql & "Where RAL.CONSUMO_LPS > 0 "
         strsql = strsql & "GROUP BY RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT,WTR.FINALCOMPONENT "
         strsql = strsql & "ORDER BY RA.OBJECT_ID_TRECHO,WTR.INITIALCOMPONENT "
-    ' if it is Postgres
+        ' if it is Postgres
     Else
         ma = "RAMAIS_AGUA_LIGACAO"
         mb = "CONSUMO_LPS"
@@ -268,77 +264,74 @@ Private Function DISTRIBUI_DEMANDAS() As Boolean
         strsql = strsql & "Where " + """" + ma + """" + "." + """" + mb + """" + " > '0' "
         strsql = strsql & "GROUP BY " + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + "," + """" + md + """" + "." + """" + mg + """" + " "
         strsql = strsql & "ORDER BY " + """" + mh + """" + "." + """" + mi + """" + "," + """" + md + """" + "." + """" + mf + """" + " "
-   End If
-   
-   Set rsCon = New ADODB.Recordset
-   rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
-   Set rsCon = New ADODB.Recordset
-   rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
-  
-   Do While Not rsCon.EOF = True
-      contador = contador + 1
-      rsCon.MoveNext
-   Loop
-   
-   rsCon.Close
-   Set rsCon = Nothing
-   
-   Me.ProgressBar1.Max = contador + 1
-   Me.ProgressBar1.value = 1
-   Me.ProgressBar1.Visible = True
-   
-   Set rsCon = New ADODB.Recordset
-   rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
-   
-   'MEDIA_TRECHO,OBJECT_ID_TRECHO,INITIALCOMPONENT,FINALCOMPONENT
-   If rsCon.EOF = False Then
-      Do While Not rsCon.EOF = True
-        'DoEvents
-        
-        'strMetade = (rsCon!MEDIA_TRECHO)
-        strMetade = Replace(rsCon!MEDIA_TRECHO, ",", ".")
-        
-        STRINICIAL = rsCon!INITIALCOMPONENT
-        STRFINAL = rsCon!FinalComponent
-        
-        a = "WATERCOMPONENTS"
-        b = "DEMAND"
-        c = "INSCRICAO_LOTE"
-        d = "OBJECT_ID_"
-        e = strMetade
-        'f = "e'"
-        
-        If frmCanvas.TipoConexao <> 4 Then
-            'comando que joga para os 2 nós ponta o consumo da rede
-            On Error Resume Next
-            Conn.execute ("UPDATE WATERCOMPONENTS SET DEMAND = DEMAND + " & strMetade & " WHERE OBJECT_ID_ IN ('" & STRINICIAL & "','" & STRFINAL & "')")
-        Else
-            On Error Resume Next
-            Conn.execute ("UPDATE " + """" + a + """" + " SET " + """" + b + """" + " = '" & strMetade & "' WHERE " + """" + d + """" + " IN ('" & STRINICIAL & "','" & STRFINAL & "')")
-        End If
-        
-        rsCon.MoveNext
-        Me.ProgressBar1.value = Me.ProgressBar1.value + 1
-        Loop
     End If
-   
+    Set rsCon = New ADODB.Recordset
+    rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
+    Set rsCon = New ADODB.Recordset
+    rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
+    Do While Not rsCon.EOF = True
+        DoEvents                                                                'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+        If varGlobais.pararExecucao = True Then
+            varGlobais.pararExecucao = False
+            Screen.MousePointer = vbNormal
+            rsCon.Close
+            Exit Function
+        End If
+        contador = contador + 1
+        rsCon.MoveNext
+    Loop
     rsCon.Close
     Set rsCon = Nothing
-    
+    Me.ProgressBar1.Max = contador + 1
+    Me.ProgressBar1.value = 1
+    Me.ProgressBar1.Visible = True
+    Set rsCon = New ADODB.Recordset
+    rsCon.Open strsql, Conn, adOpenDynamic, adLockReadOnly
+    'MEDIA_TRECHO,OBJECT_ID_TRECHO,INITIALCOMPONENT,FINALCOMPONENT
+    If rsCon.EOF = False Then
+        Do While Not rsCon.EOF = True
+            DoEvents                                                                'para o VB poder escutar o timer e poder parar o processamento caso a tecla ESC tenha sido pressionada
+            If varGlobais.pararExecucao = True Then
+                varGlobais.pararExecucao = False
+                Screen.MousePointer = vbNormal
+                rsCon.Close
+                Exit Function
+            End If
+            strMetade = Replace(rsCon!MEDIA_TRECHO, ",", ".")                       'já vem dividido por dois pelo Select acima
+            STRINICIAL = rsCon!INITIALCOMPONENT
+            STRFINAL = rsCon!FinalComponent
+            a = "WATERCOMPONENTS"
+            b = "DEMAND"
+            c = "INSCRICAO_LOTE"
+            d = "OBJECT_ID_"
+            e = strMetade
+            'f = "e'"
+            If frmCanvas.TipoConexao <> 4 Then
+                'comando que joga para os 2 nós ponta o consumo da rede
+                On Error Resume Next
+                Conn.execute ("UPDATE WATERCOMPONENTS SET DEMAND = DEMAND + " & strMetade & " WHERE OBJECT_ID_ IN ('" & STRINICIAL & "','" & STRFINAL & "')")
+            Else
+                On Error Resume Next
+                Conn.execute ("UPDATE " + """" + a + """" + " SET " + """" + b + """" + " = '" & strMetade & "' WHERE " + """" + d + """" + " IN ('" & STRINICIAL & "','" & STRFINAL & "')")
+            End If
+            rsCon.MoveNext
+            Me.ProgressBar1.value = Me.ProgressBar1.value + 1
+        Loop
+    End If
+    rsCon.Close
+    Set rsCon = Nothing
     Screen.MousePointer = vbNormal
     Me.ProgressBar1.Visible = False
-    
     DISTRIBUI_DEMANDAS = True
-   
-    'Trata_Erro:
-    'If Err.Number = 0 Or Err.Number = 20 Then
-    '  Resume Next
-    'Else
-    '   DISTRIBUI_DEMANDAS = False
-    '   MsgBox Err.Number & " - " & Err.Description
-      'Resume
-    'End If
+    Exit Function
 
+Trata_Erro:
+        If Err.Number = 0 Or Err.Number = 20 Then
+            Resume Next
+        Else
+            DISTRIBUI_DEMANDAS = False
+            ErroUsuario.Registra "frmAtualizacaoConsumo", "DISTRIBUI_DEMANDAS", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        End If
 End Function
 
 Private Function importa_media()
@@ -491,6 +484,11 @@ Else
 End If
 
 End Function
+
+Private Sub Form_Load()
+    Me.Timer1.Interval = 100                               'define o intervalo em que ele vai verificar se alguma tecla foi pressionada
+    Me.Timer1.Enabled = False                              'inicia com o timer desligado, só liga quando tiver cálculo intensivo
+End Sub
 
 Private Sub optAtualizaConsumo_Click()
    Frame1.Enabled = False
@@ -647,4 +645,10 @@ End Sub
 
    'MsgBox "Demandas de consumo atualizadas com sucesso!", vbExclamation, ""
 
-
+' Configura o Timer para o usuário poder apertar a tecla ESC e ele cancelar a operação
+Private Sub Timer1_Timer()
+    If GetAsyncKeyState(VK_ESCAPE) Then         'pressionou ESC e vai avisar para parar a execução
+        MsgBox ("Comando cancelado.")
+        varGlobais.pararExecucao = True
+    End If
+End Sub

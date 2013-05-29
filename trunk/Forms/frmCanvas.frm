@@ -1308,7 +1308,6 @@ Trata_Erro:
       ErroUsuario.Registra "frmCanvas", "onEndSELECT", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Sub
-
 ' Desvia quando encontra um erro
 '
 ' code - Código de identificação do erro
@@ -1319,9 +1318,12 @@ Private Sub TCanvas_onError(ByVal code As String, ByVal errorMessage As String)
         Case "Err032"
             'canvas não foi aberto ainda, desconsiderar
         Case "Err068"
-            MsgBox "Você está desenhando uma rede muito perto de uma existente, por favor desenhe com um pouco mais de distância da mesma. Erro número: " & code & " - " & errorMessage
+            MsgBox "Rede muito próxima." & vbCrLf & vbCrLf & "Erro número: " & code & " - " & errorMessage
+        Case "Err030"
+            MsgBox "Selecione um layer antes." & vbCrLf & vbCrLf & "Erro número: " & code & " - " & errorMessage
         Case Else
-            MsgBox "Não conformidade em DrawNetworkLine. Erro número: " & code & " - " & errorMessage
+            ErroUsuario.Registra "frmCanvas", "TCanvas_onError. Usuário na tela do GeoSan selecionou um comando a apareceu este erro e continuou utilizando o software. Código Erro: " & code & " Descrição: " & errorMessage, CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails 'não mostra mensagem para o usuário
+            MsgBox "Não é possível realizar este comando. Erro número: " & code & " - " & errorMessage
     End Select
 End Sub
 
