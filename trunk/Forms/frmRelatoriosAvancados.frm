@@ -3,14 +3,14 @@ Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmRelatoriosAvancados 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Relatório por Seleção de Polígono"
-   ClientHeight    =   11880
+   ClientHeight    =   10560
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   7710
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   11880
+   ScaleHeight     =   10560
    ScaleWidth      =   7710
    StartUpPosition =   2  'CenterScreen
    Begin MSComDlg.CommonDialog CommonDialog1 

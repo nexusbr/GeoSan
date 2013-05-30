@@ -40,12 +40,13 @@ Begin VB.Form frmAlteraNoPoligono
       Top             =   240
       Width           =   4620
       Begin VB.OptionButton optLocTrechoRede 
-         Caption         =   "Localizar Trecho de Rede do Ramal"
+         Caption         =   "Associa o ramal a rede mais próxima (até 5 m)"
          Height          =   435
          Left            =   165
          TabIndex        =   6
+         ToolTipText     =   "Utilizada caso a rede tenha sido apagada e seja necessário ligar o ramal a outra nova rede"
          Top             =   1650
-         Width           =   3450
+         Width           =   4170
       End
       Begin VB.OptionButton optRelatorios 
          Caption         =   "Relatórios em Arquivo Texto"
@@ -60,6 +61,7 @@ Begin VB.Form frmAlteraNoPoligono
          Height          =   435
          Left            =   165
          TabIndex        =   4
+         ToolTipText     =   "Força consumos em ligações, desconsiderando o consumo vindo do sistema comercial"
          Top             =   750
          Width           =   3450
       End
@@ -261,11 +263,11 @@ usuario = ReadINI("CONEXAO", "USER", App.path & "\CONTROLES\GEOSAN.ini")
 
 If frmCanvas.TipoConexao <> 4 Then
 If count1 <> 10 Then
- TeDatabase1.UserName = usuario
+ TeDatabase1.username = usuario
  TeDatabase1.Provider = frmCanvas.TipoConexao
  TeDatabase1.connection = Conn
  
- TeDatabase2.UserName = usuario
+ TeDatabase2.username = usuario
   TeDatabase2.Provider = typeconnection
  TeDatabase2.connection = Conn
  count1 = 10
@@ -278,10 +280,10 @@ End If
       If count2 <> 10 Then
   TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
 
-TeDatabase1.UserName = usuario
+TeDatabase1.username = usuario
  TeDatabase1.Provider = frmCanvas.TipoConexao
  TeDatabase1.connection = TeAcXConnection1.objectConnection_
-TeDatabase2.UserName = usuario
+TeDatabase2.username = usuario
  TeDatabase2.Provider = frmCanvas.TipoConexao
  TeDatabase2.connection = TeAcXConnection1.objectConnection_
 

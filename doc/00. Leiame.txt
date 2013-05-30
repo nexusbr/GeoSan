@@ -4,6 +4,9 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+30-05-2013 - GeoSan 06.10.08
+
+
 30-05-2013 - GeoSan 06.10.07
 
 Atualizada a querie padrão em GS_QUERYS_CLIENT de número 22 com o seguinte SQL

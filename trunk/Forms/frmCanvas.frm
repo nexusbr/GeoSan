@@ -636,24 +636,28 @@ End Sub
 
 
 
-
+' Entra quando uma tecla é pressionada
+'
+'
+'
 Private Sub Form_KeyPress(KeyAscii As Integer)
-   With FrmMain
-      Select Case KeyAscii
-         Case vbKeyDelete
-            .tbToolBar_ButtonClick .tbToolBar.Buttons("kdelete")
-         Case 19 'vbKeyControl + vbKeyS
-            .tbToolBar_ButtonClick .tbToolBar.Buttons("ksave")
-         Case 27 'ESC
-            TCanvas.Cancel
-            frmNetWorkLegth.txtLength.Text = 0
-      End Select
-      
-      
-      
-   End With
-
+    With FrmMain
+        Select Case KeyAscii
+            Case vbKeyDelete
+                .tbToolBar_ButtonClick .tbToolBar.Buttons("kdelete")
+            Case 19 'vbKeyControl + vbKeyS
+                .tbToolBar_ButtonClick .tbToolBar.Buttons("ksave")
+            Case 27 'ESC
+                TCanvas.Cancel
+                frmNetWorkLegth.txtLength.Text = 0
+'            Case 49 'número 1 seta para esquerda (não captura seta)
+'                MsgBox ("pressionada seta para esquerda.")
+'            Case Else
+'                MsgBox ("Pressionado " & KeyAscii)
+        End Select
+    End With
 End Sub
+
 
 Private Sub Form_Resize()
 On Error GoTo Trata_Erro
@@ -1339,98 +1343,99 @@ Trata_Erro:
       
    End If
 End Sub
-
+' Evento de captura de tecla utilizada
+' A tecla PageUp faz a função de ZOOM OUT(afastamento)
+' A tecla PageDown faz a função de ZOOM IN(aproximação)
+' É utilizado um arquivo externo (geosan.ini) para armazenar o fator de zoom que será aplicado quando a função for chamada
+' Variáveis carregadas no evento MouseMove Position_X e Position_Y possuem coordenadas do mouse
+' É feita centralização do mapa no local do ponteiro do mouse antes do zoom
+'
+' key - código da tecla pressionada
+'
 Private Sub TCanvas_onKeyPress(ByVal key As Long)
-On Error GoTo Trata_Erro
-   Dim retval As String
-   
-   'Evento de captura de tecla utilizada
-   'A tecla PageUp faz a função de ZOOM OUT(afastamento)
-   'A tecla PageDown faz a função de ZOOM IN(aproximação)
-   
-   'É utilizado um arquivo externo (geosan.ini) para armazenar o fator de zoom que será aplicado quando a função for chamada
-   
-   'Variáveis carregadas no evento MouseMove Position_X e Position_Y possuem coordenadas do mouse
-   
-   'É feita centralização do mapa no local do ponteiro do mouse antes do zoom
-'
-'   TCanvas.setWorld Position_X - 50, Position_Y - 50, Position_X - 50, Position_Y - 50
-'   TCanvas.plotView
-'
-'         Dim Scala As Double
-'
-'         Scala = TCanvas.getScale
-         
-         
-   Select Case key
-      Case 27 'ESC
-         
-         TCanvas.ToolTipText = ""
-         
-         TCanvas.Normal
-         TCanvas.Select
-         Tr.TerraEvent = tg_SelectObject
-         TCanvas.clearSelectItens 0
-         
-         TCanvas.clearEditItens 0 '.clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-         
-         LoadToolsBar
-      
-      Case 33 ' PageUp
-         
-         TCanvas.zoomIn dblFatorZoomMenos
-         'TCanvas.zoomIn = Replace(ReadINI("MAPA", "ZOOM_MAIS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
-      
-      Case 34 'PageDown
-        
-         TCanvas.zoomOut dblFatorZoomMais
-         'TCanvas.zoomOut = Replace(ReadINI("MAPA", "ZOOM_MENOS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
-      
-      Case 46 'DEL
-         Tr.Delete
-      Case 48 ' zero
-         FrmMain.sbStatusBar.Panels(5).Text = "0.00"
-         X1 = X1i
-         Y1 = Y1i
-      Case 87
-         TCanvas.verticalPan 50
-      Case 90
-         TCanvas.verticalPan -50
-      Case 65
-         TCanvas.horizontalPan -50
-      Case 83
-         TCanvas.horizontalPan 50
-   End Select
-    
+    On Error GoTo Trata_Erro
+    Dim retval As String
+
+    'TCanvas.setWorld Position_X - 50, Position_Y - 50, Position_X - 50, Position_Y - 50
+    'TCanvas.plotView
+    'Dim Scala As Double
+    'Scala = TCanvas.getScale
+    Select Case key
+        Case 27                     'ESC
+            TCanvas.ToolTipText = ""
+            TCanvas.Normal
+            TCanvas.Select
+            Tr.TerraEvent = tg_SelectObject
+            TCanvas.clearSelectItens 0
+            TCanvas.clearEditItens 0 '.clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+            LoadToolsBar
+        Case 33                     'PageUp
+            TCanvas.zoomIn dblFatorZoomMenos
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+            'TCanvas.zoomIn = Replace(ReadINI("MAPA", "ZOOM_MAIS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
+        Case 34                     'PageDown
+            TCanvas.zoomOut dblFatorZoomMais
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+            'TCanvas.zoomOut = Replace(ReadINI("MAPA", "ZOOM_MENOS", App.path & "\CONTROLES\GEOSAN.ini"), ",", ".")
+        Case 46 'DEL
+            Tr.Delete
+        Case 48                     'zero
+            FrmMain.sbStatusBar.Panels(5).Text = "0.00"
+            X1 = X1i
+            Y1 = Y1i
+        Case 87, 119           'W ou w
+            TCanvas.verticalPan 50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 90, 122            'Z ou z
+            TCanvas.verticalPan -50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 65, 97             'A ou a
+            TCanvas.horizontalPan -50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 83, 115            'S ou s
+            TCanvas.horizontalPan 50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+    End Select
+    Exit Sub
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-       PrintErro CStr(Me.Name), "Private Sub TCanvas_onKeyPress", CStr(Err.Number), CStr(Err.Description), True
-      
+        ErroUsuario.Registra "frmCanvas", "TCanvas_onKeyPress", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
-
+' Entra aqui para as teclas especiais como Enter, seta, etc.
+'
+'
+'
 Private Sub TCanvas_onKeyUp(ByVal key As Long, ByVal Shift As Long, ByVal ctrl As Long)
-On Error GoTo Trata_Erro
-
-
-If key = 13 Then 'ENTER
-    FrmMain.ActiveForm.Tb_SELECT "ksave"
-End If
-
-
-Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
-   Else
+    On Error GoTo Trata_Erro
     
-      PrintErro CStr(Me.Name), "Private Sub TCanvas_onKeyUP", CStr(Err.Number), CStr(Err.Description), True
-       
-   End If
-
+    Select Case key
+        Case 13         'ENTER
+            FrmMain.ActiveForm.Tb_SELECT "ksave"
+        Case 39         'CTRL + Seta para direita
+            TCanvas.horizontalPan 50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 37         'CTRL + Seta para esquerda
+            TCanvas.horizontalPan -50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 38         'CTRL + Seta para cima
+            TCanvas.verticalPan 50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 40         'CTRL + Seta para baixo
+            TCanvas.verticalPan -50
+            TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+    End Select
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "frmCanvas", "TCanvas_onKeyUp", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 ' Evento quando estou desenhando uma linha e entro o segundo ponto da mesma
 ' Este evento está sendo utilizado apenas quando desenho ramais
