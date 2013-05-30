@@ -478,366 +478,257 @@ Else
 End If
 
 End Function
-' Gera o relatório do tipo 3
+' Gera o relatório do tipo 3 - Seleção
 '
 '
 '
 Private Function OPT3() As Boolean
-On Error GoTo Trata_Erro:
-
-   Dim strCabecalho As String
-   Dim blnInnerJoinMaterial As Boolean
-   Dim blnInnerJoinTipo As Boolean
-   Dim strPrint As String
-   Dim strCampo As String
-   
-   strsql = ""
-   Dim i As Integer
-   
-   For i = 0 To List2.ListCount - 1
-      
-      strCampo = ""
-      If List2.list(i) = "DATA DE DESENHO" Then
-         strCampo = "DATA_LOG"
-      
-      ElseIf List2.list(i) = "DATALOG" Then
-         'List1.AddItem
-      
-      ElseIf List2.list(i) = "DATA DE INSTALAÇÃO" Then
-         strCampo = "DATEINSTALLATION"
-      
-      ElseIf List2.list(i) = "DISTÂNCIA DA DIVISA" Then
-         strCampo = "DIVIDEDDISTANCE"
-      
-      ElseIf List2.list(i) = "DIÂMETRO EXTERNO" Then
-         strCampo = "EXTERNALDIAMETER"
-      
-      ElseIf List2.list(i) = "CÓD COMPONENTE FINAL" Then
-         strCampo = "FINALCOMPONENT"
-      
-      ElseIf List2.list(i) = "COTA TERRENO FINAL" Then
-         strCampo = "FINALGROUNDHEIGHT"
-      
-      ElseIf List2.list(i) = "PROFUNDIDADE FINAL" Then
-         strCampo = "FINALTUBEDEEPNESS"
-      
-      ElseIf List2.list(i) = "TIPO DE REDE" Then
-         strCampo = "ID_TYPE"
-      
-      ElseIf List2.list(i) = "VALIDADE" Then
-         strCampo = "INFORMATIONVALIDITY"
-      
-      ElseIf List2.list(i) = "CÓD COMPONENTE INICAL" Then
-         strCampo = "INITIALCOMPONENT"
-      
-      ElseIf List2.list(i) = "COTA TERRENO INICIAL" Then
-         strCampo = "INITIALGROUNDHEIGHT"
-      
-      ElseIf List2.list(i) = "PROFUNDIDADE INICIAL" Then
-         strCampo = "INITIALTUBEDEEPNESS"
-      
-      ElseIf List2.list(i) = "DIÂMETRO INTERNO" Then
-         strCampo = "INTERNALDIAMETER"
-      
-      ElseIf List2.list(i) = "COMPRIM. DIGITADO" Then
-         strCampo = "LENGTH"
-      
-      ElseIf List2.list(i) = "COMPRIM. CALCULADO" Then
-         strCampo = "LENGTHCALCULATED"
-         
-      ElseIf List2.list(i) = "LINE_ID" Then
-         'List1.AddItem ""
-      
-      ElseIf List2.list(i) = "LOCALIZAÇÃO" Then
-         strCampo = "LOCATION"
-      
-      ElseIf List2.list(i) = "FABRICANTE" Then
-         strCampo = "MANUFACTURER"
-      
-      ElseIf List2.list(i) = "MATERIAL NOME" Then
-         strCampo = "MATERIAL"
-      
-      ElseIf List2.list(i) = "ID REDE" Then
-         strCampo = "OBJECT_ID_"
-      
-      ElseIf List2.list(i) = "RUGOSIDADE" Then
-         strCampo = "ROUGHNESS"
-      
-      ElseIf List2.list(i) = "CÓD SETOR" Then
-         strCampo = "SECTOR"
-      
-      ElseIf List2.list(i) = "LADO DA RUA" Then
-         strCampo = "SIDESTREET"
-      
-      ElseIf List2.list(i) = "ESTADO" Then
-         strCampo = "STATE"
-      
-      ElseIf List2.list(i) = "FORNECEDOR" Then
-         strCampo = "SUPPLIER"
-      
-      ElseIf List2.list(i) = "DENSIDADE" Then
-         strCampo = "THICKNESS"
-      
-      ElseIf List2.list(i) = "TROUBLE" Then
-         'List1.AddItem ""
-      
-      ElseIf List2.list(i) = "USUARIO CADASTRO" Then
-         strCampo = "USUARIO_LOG"
-      
-      End If
-
-      
-      If strsql = "" Then
-         If frmCanvas.TipoConexao <> 4 Then
-         If strCampo = "MATERIAL" Then
-            strsql = "X_MATERIAL.MATERIALNAME"
-            blnInnerJoinMaterial = True
-         ElseIf strCampo = "ID_TYPE" Then
-            strsql = "WATERLINESTYPES.DESCRIPTION_"
-            blnInnerJoinTipo = True
-         Else
-            strsql = "WATERLINES." & strCampo
-         End If
-         
-         Else
-         
-           If strCampo = "MATERIAL" Then
-            strsql = """" + "X_MATERIAL" + """" + "." + """" + "MATERIALNAME" + """"
-            blnInnerJoinMaterial = True
-         ElseIf strCampo = "ID_TYPE" Then
-            strsql = """" + "WATERLINESTYPES" + """" + "." + """" + "DESCRIPTION_" + """"
-            blnInnerJoinTipo = True
-         Else
-            strsql = """" + "WATERLINES" + """" + "." + """" + strCampo + """"
-         End If
-         
-         
-         End If
-         
-         qtdCampos = 1
-      Else
-      
-      
-       If frmCanvas.TipoConexao <> 4 Then
-         If strCampo = "MATERIAL" Then
-            strsql = strsql & "," & "X_MATERIAL.MATERIALNAME"
-            blnInnerJoinMaterial = True
-         
-         ElseIf strCampo = "ID_TYPE" Then
-            strsql = strsql & "," & "WATERLINESTYPES.DESCRIPTION_"
-            blnInnerJoinTipo = True
-         
-         Else
-            strsql = strsql & "," & "WATERLINES." & strCampo
-         End If
-         
-         Else
-         
-         If strCampo = "MATERIAL" Then
-            strsql = strsql & "," & """" + "X_MATERIAL" + """" + "." + """" + "MATERIALNAME" + """"
-            blnInnerJoinMaterial = True
-         
-         ElseIf strCampo = "ID_TYPE" Then
-            strsql = strsql & "," & """" + "WATERLINESTYPES" + """" + "." + """" + "DESCRIPTION_" + """"
-            blnInnerJoinTipo = True
-         
-         Else
-            strsql = strsql & "," & """" + "WATERLINES" + """" + "." & """" + strCampo + """"
-         End If
-         
-         
-         End If
-         
-         qtdCampos = qtdCampos + 1
-      End If
-   Next
-      
-   strCabecalho = ""
-   For i = 0 To List2.ListCount - 1
-      If strCabecalho = "" Then
-         strCabecalho = List2.list(i)
-      Else
-         strCabecalho = strCabecalho & ";" & List2.list(i)
-      End If
-   Next
-      
-   'strsql = Replace(strsql, ",", ";")
-   
-   Open Me.Text1.Text For Output As #1
-   
-   Print #1, strCabecalho 'IMPRIME CABEÇALHO
-   
-      
-   If blnInnerJoinMaterial = True And blnInnerJoinTipo = True Then 'INNER JOIN DE TIPO E MATERIAL
-      
-      If frmCanvas.TipoConexao = 1 Then
-         
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
-      
-      ElseIf frmCanvas.TipoConexao = 2 Then
-         
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE AND EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
-      ElseIf frmCanvas.TipoConexao = 4 Then
- 
-
-
-a = "WATERLINES"
-b = "X_MATERIAL"
-c = "MATERIALID"
-d = "WATERLINESTYPES"
-e = "OBJECT_ID_"
-f = "POLIGONO_SELECAO"
-g = "USUARIO"
-h = "TIPO"
-ii = "MATERIAL"
-j = "ID_TYPE"
- 
-      
-
-strsql = "SELECT " & strsql & " FROM " + """" + a + """" + " INNER JOIN " + """" + b + """" + "  ON " + """" + a + """" + "." + """" + ii + """" + " = " + """" + b + """" + "." + """" + c + """" + " INNER JOIN " + """" + d + """" + " ON " + """" + d + """" + "." + """" + j + """" + " = " + """" + a + """" + "." + """" + j + """" + " WHERE " + """" + a + """" + "." + """" + e + """" + " IN (SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')"
-      
-      
-      
-      End If
-   
-   ElseIf blnInnerJoinMaterial = False And blnInnerJoinTipo = True Then 'INNER JOIN SOMENTE DE TIPO
-      
-      If frmCanvas.TipoConexao = 1 Then
-         
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
-      
-      ElseIf frmCanvas.TipoConexao = 2 Then
-      
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE AND EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
-       ElseIf frmCanvas.TipoConexao = 4 Then
-
-
-
-a = "WATERLINES"
-b = "X_MATERIAL"
-c = "MATERIALID"
-d = "WATERLINESTYPES"
-e = "OBJECT_ID_"
-f = "POLIGONO_SELECAO"
-g = "USUARIO"
-h = "TIPO"
-ii = "MATERIAL"
-j = "ID_TYPE"
- 
-       
-
-strsql = "SELECT " + """" + strsql + """" + " FROM " + """" + a + """" + " INNER JOIN " + """" + d + """" + """" + d + """" + "  ON " + """" + d + """" + "." + """" + j + """" + " = " + """" + a + """" + "." + """" + j + """" + "  WHERE " + """" + a + """" + "." + """" + e + """" + " IN '(SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')'"
-      
-      End If
-   
-   ElseIf blnInnerJoinMaterial = True And blnInnerJoinTipo = False Then 'INNER JOIN SOMENTE DE MATERIAL
-      
-      If frmCanvas.TipoConexao = 1 Then
-         
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
-      
-      ElseIf frmCanvas.TipoConexao = 2 Then
-      
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID AND EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
-      
-       ElseIf frmCanvas.TipoConexao = 4 Then
-
-
-
-a = "WATERLINES"
-b = "X_MATERIAL"
-c = "MATERIALID"
-d = "WATERLINESTYPES"
-e = "OBJECT_ID_"
-f = "POLIGONO_SELECAO"
-g = "USUARIO"
-h = "TIPO"
-ii = "MATERIAL"
-j = "ID_TYPE"
- 
-       
-     
-strsql = "SELECT " + """" + strsql + """" + " FROM " + """" + a + """" + """" + a + """" + " INNER JOIN " + """" + b + """" + """" + b + """" + "  ON " + """" + a + """" + "." + """" + i + """" + " = " + """" + b + """" + "." + """" + c + """" + "  WHERE " + """" + a + """" + "." + """" + e + """" + " IN '(SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')'"
-      
-      
-      End If
-   
-   Else
-      
-      If frmCanvas.TipoConexao = 1 Then   'NENHUM INNER JOIN
-         
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
-      
-      ElseIf frmCanvas.TipoConexao = 2 Then
-      
-         strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES WHERE EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
-      
+    On Error GoTo Trata_Erro:
+    Dim strCabecalho As String
+    Dim blnInnerJoinMaterial As Boolean
+    Dim blnInnerJoinTipo As Boolean
+    Dim strPrint As String
+    Dim strCampo As String
+    Dim i As Integer
+    
+    strsql = ""
+    Screen.MousePointer = vbHourglass                                                   'mostra a ampulheta para o usuário
+    For i = 0 To List2.ListCount - 1
+        strCampo = ""
+        If List2.list(i) = "DATA DE DESENHO" Then
+            strCampo = "DATA_LOG"
+        ElseIf List2.list(i) = "DATALOG" Then
+            'List1.AddItem
+        ElseIf List2.list(i) = "DATA DE INSTALAÇÃO" Then
+            strCampo = "DATEINSTALLATION"
+        ElseIf List2.list(i) = "DISTÂNCIA DA DIVISA" Then
+            strCampo = "DIVIDEDDISTANCE"
+        ElseIf List2.list(i) = "DIÂMETRO EXTERNO" Then
+            strCampo = "EXTERNALDIAMETER"
+        ElseIf List2.list(i) = "CÓD COMPONENTE FINAL" Then
+            strCampo = "FINALCOMPONENT"
+        ElseIf List2.list(i) = "COTA TERRENO FINAL" Then
+            strCampo = "FINALGROUNDHEIGHT"
+        ElseIf List2.list(i) = "PROFUNDIDADE FINAL" Then
+            strCampo = "FINALTUBEDEEPNESS"
+        ElseIf List2.list(i) = "TIPO DE REDE" Then
+            strCampo = "ID_TYPE"
+        ElseIf List2.list(i) = "VALIDADE" Then
+            strCampo = "INFORMATIONVALIDITY"
+        ElseIf List2.list(i) = "CÓD COMPONENTE INICAL" Then
+            strCampo = "INITIALCOMPONENT"
+        ElseIf List2.list(i) = "COTA TERRENO INICIAL" Then
+            strCampo = "INITIALGROUNDHEIGHT"
+        ElseIf List2.list(i) = "PROFUNDIDADE INICIAL" Then
+            strCampo = "INITIALTUBEDEEPNESS"
+        ElseIf List2.list(i) = "DIÂMETRO INTERNO" Then
+            strCampo = "INTERNALDIAMETER"
+        ElseIf List2.list(i) = "COMPRIM. DIGITADO" Then
+            strCampo = "LENGTH"
+        ElseIf List2.list(i) = "COMPRIM. CALCULADO" Then
+            strCampo = "LENGTHCALCULATED"
+        ElseIf List2.list(i) = "LINE_ID" Then
+            'List1.AddItem ""
+        ElseIf List2.list(i) = "LOCALIZAÇÃO" Then
+            strCampo = "LOCATION"
+        ElseIf List2.list(i) = "FABRICANTE" Then
+            strCampo = "MANUFACTURER"
+        ElseIf List2.list(i) = "MATERIAL NOME" Then
+            strCampo = "MATERIAL"
+        ElseIf List2.list(i) = "ID REDE" Then
+            strCampo = "OBJECT_ID_"
+        ElseIf List2.list(i) = "RUGOSIDADE" Then
+            strCampo = "ROUGHNESS"
+        ElseIf List2.list(i) = "CÓD SETOR" Then
+            strCampo = "SECTOR"
+        ElseIf List2.list(i) = "LADO DA RUA" Then
+            strCampo = "SIDESTREET"
+        ElseIf List2.list(i) = "ESTADO" Then
+            strCampo = "STATE"
+        ElseIf List2.list(i) = "FORNECEDOR" Then
+            strCampo = "SUPPLIER"
+        ElseIf List2.list(i) = "DENSIDADE" Then
+            strCampo = "THICKNESS"
+        ElseIf List2.list(i) = "TROUBLE" Then
+            'List1.AddItem ""
+        ElseIf List2.list(i) = "USUARIO CADASTRO" Then
+            strCampo = "USUARIO_LOG"
+        End If
+        If strsql = "" Then
+            If frmCanvas.TipoConexao <> 4 Then
+                If strCampo = "MATERIAL" Then
+                    strsql = "X_MATERIAL.MATERIALNAME"
+                    blnInnerJoinMaterial = True
+                ElseIf strCampo = "ID_TYPE" Then
+                    strsql = "WATERLINESTYPES.DESCRIPTION_"
+                    blnInnerJoinTipo = True
+                Else
+                    strsql = "WATERLINES." & strCampo
+                End If
+            Else
+                If strCampo = "MATERIAL" Then
+                    strsql = """" + "X_MATERIAL" + """" + "." + """" + "MATERIALNAME" + """"
+                    blnInnerJoinMaterial = True
+                ElseIf strCampo = "ID_TYPE" Then
+                    strsql = """" + "WATERLINESTYPES" + """" + "." + """" + "DESCRIPTION_" + """"
+                    blnInnerJoinTipo = True
+                Else
+                    strsql = """" + "WATERLINES" + """" + "." + """" + strCampo + """"
+                End If
+            End If
+        qtdCampos = 1
+        Else
+            If frmCanvas.TipoConexao <> 4 Then
+                If strCampo = "MATERIAL" Then
+                    strsql = strsql & "," & "X_MATERIAL.MATERIALNAME"
+                    blnInnerJoinMaterial = True
+                ElseIf strCampo = "ID_TYPE" Then
+                    strsql = strsql & "," & "WATERLINESTYPES.DESCRIPTION_"
+                    blnInnerJoinTipo = True
+                Else
+                    strsql = strsql & "," & "WATERLINES." & strCampo
+                End If
+            Else
+                If strCampo = "MATERIAL" Then
+                    strsql = strsql & "," & """" + "X_MATERIAL" + """" + "." + """" + "MATERIALNAME" + """"
+                    blnInnerJoinMaterial = True
+                ElseIf strCampo = "ID_TYPE" Then
+                    strsql = strsql & "," & """" + "WATERLINESTYPES" + """" + "." + """" + "DESCRIPTION_" + """"
+                    blnInnerJoinTipo = True
+                Else
+                    strsql = strsql & "," & """" + "WATERLINES" + """" + "." & """" + strCampo + """"
+                End If
+            End If
+            qtdCampos = qtdCampos + 1
+        End If
+    Next
+    strCabecalho = ""
+    For i = 0 To List2.ListCount - 1
+        If strCabecalho = "" Then
+            strCabecalho = List2.list(i)
+        Else
+            strCabecalho = strCabecalho & ";" & List2.list(i)
+        End If
+    Next
+    'strsql = Replace(strsql, ",", ";")
+    Open Me.Text1.Text For Output As #1
+    Print #1, strCabecalho 'IMPRIME CABEÇALHO
+    If blnInnerJoinMaterial = True And blnInnerJoinTipo = True Then 'INNER JOIN DE TIPO E MATERIAL
+        If frmCanvas.TipoConexao = 1 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 2 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE AND EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
         ElseIf frmCanvas.TipoConexao = 4 Then
-
-
-
-a = "WATERLINES"
-b = "X_MATERIAL"
-c = "MATERIALID"
-d = "WATERLINESTYPES"
-e = "OBJECT_ID_"
-f = "POLIGONO_SELECAO"
-g = "USUARIO"
-h = "TIPO"
-ii = "MATERIAL"
-j = "ID_TYPE"
- 
-           
-     
-strsql = "SELECT " + strsql + " FROM " + """" + a + """" + " WHERE " + """" + a + """" + "." + """" + e + """" + " IN (SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')"
-      
-
-      End If
-   
-   End If
-   
-   Set rs = New ADODB.Recordset
-     rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
-   
-   'Print #1, strsql
-   Do While Not rs.EOF = True
-      strPrint = ""
-      For i = 0 To qtdCampos - 1
-         If rs.Fields(i).value <> "" Then
-            If strPrint <> "" Then
-               strPrint = strPrint & ";" & rs.Fields(i).value
+            a = "WATERLINES"
+            b = "X_MATERIAL"
+            c = "MATERIALID"
+            d = "WATERLINESTYPES"
+            e = "OBJECT_ID_"
+            f = "POLIGONO_SELECAO"
+            g = "USUARIO"
+            h = "TIPO"
+            ii = "MATERIAL"
+            j = "ID_TYPE"
+            strsql = "SELECT " & strsql & " FROM " + """" + a + """" + " INNER JOIN " + """" + b + """" + "  ON " + """" + a + """" + "." + """" + ii + """" + " = " + """" + b + """" + "." + """" + c + """" + " INNER JOIN " + """" + d + """" + " ON " + """" + d + """" + "." + """" + j + """" + " = " + """" + a + """" + "." + """" + j + """" + " WHERE " + """" + a + """" + "." + """" + e + """" + " IN (SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')"
+        End If
+    ElseIf blnInnerJoinMaterial = False And blnInnerJoinTipo = True Then 'INNER JOIN SOMENTE DE TIPO
+        If frmCanvas.TipoConexao = 1 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 2 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN WATERLINESTYPES WATERLINESTYPES ON WATERLINESTYPES.ID_TYPE = WATERLINES.ID_TYPE AND EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 4 Then
+            a = "WATERLINES"
+            b = "X_MATERIAL"
+            c = "MATERIALID"
+            d = "WATERLINESTYPES"
+            e = "OBJECT_ID_"
+            f = "POLIGONO_SELECAO"
+            g = "USUARIO"
+            h = "TIPO"
+            ii = "MATERIAL"
+            j = "ID_TYPE"
+            strsql = "SELECT " + """" + strsql + """" + " FROM " + """" + a + """" + " INNER JOIN " + """" + d + """" + """" + d + """" + "  ON " + """" + d + """" + "." + """" + j + """" + " = " + """" + a + """" + "." + """" + j + """" + "  WHERE " + """" + a + """" + "." + """" + e + """" + " IN '(SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')'"
+        End If
+    ElseIf blnInnerJoinMaterial = True And blnInnerJoinTipo = False Then 'INNER JOIN SOMENTE DE MATERIAL
+        If frmCanvas.TipoConexao = 1 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 2 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES INNER JOIN X_MATERIAL X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID AND EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 4 Then
+            a = "WATERLINES"
+            b = "X_MATERIAL"
+            c = "MATERIALID"
+            d = "WATERLINESTYPES"
+            e = "OBJECT_ID_"
+            f = "POLIGONO_SELECAO"
+            g = "USUARIO"
+            h = "TIPO"
+            ii = "MATERIAL"
+            j = "ID_TYPE"
+            strsql = "SELECT " + """" + strsql + """" + " FROM " + """" + a + """" + """" + a + """" + " INNER JOIN " + """" + b + """" + """" + b + """" + "  ON " + """" + a + """" + "." + """" + i + """" + " = " + """" + b + """" + "." + """" + c + """" + "  WHERE " + """" + a + """" + "." + """" + e + """" + " IN '(SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')'"
+        End If
+    Else
+        If frmCanvas.TipoConexao = 1 Then   'NENHUM INNER JOIN
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 2 Then
+            strsql = "SELECT " & strsql & " FROM WATERLINES WATERLINES WHERE EXISTS (SELECT 1 FROM POLIGONO_SELECAO P WHERE WATERLINES.LINE_ID = P.OBJECT_ID_ AND P.USUARIO = '" & strUser & "' AND P.TIPO = 1)"
+        ElseIf frmCanvas.TipoConexao = 4 Then
+            a = "WATERLINES"
+            b = "X_MATERIAL"
+            c = "MATERIALID"
+            d = "WATERLINESTYPES"
+            e = "OBJECT_ID_"
+            f = "POLIGONO_SELECAO"
+            g = "USUARIO"
+            h = "TIPO"
+            ii = "MATERIAL"
+            j = "ID_TYPE"
+            strsql = "SELECT " + strsql + " FROM " + """" + a + """" + " WHERE " + """" + a + """" + "." + """" + e + """" + " IN (SELECT " + """" + e + """" + " FROM " + """" + f + """" + " WHERE " + """" + g + """" + " = '" & strUser & "' AND " + """" + h + """" + " = '1')"
+        End If
+    End If
+    Set rs = New ADODB.Recordset
+    rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
+    'Print #1, strsql
+    Do While Not rs.EOF = True
+        strPrint = ""
+        For i = 0 To qtdCampos - 1
+            If rs.Fields(i).value <> "" Then
+                If strPrint <> "" Then
+                    strPrint = strPrint & ";" & rs.Fields(i).value
+                Else
+                    strPrint = rs.Fields(i).value
+                End If
             Else
-               strPrint = rs.Fields(i).value
+                If strPrint <> "" Then
+                    strPrint = strPrint & ";"
+                Else
+                    strPrint = ";"
+                End If
             End If
-         Else
-            If strPrint <> "" Then
-               strPrint = strPrint & ";"
-            Else
-               strPrint = ";"
-            End If
-         End If
-      Next
-      strPrint = Replace(strPrint, ".", ",")
-      Print #1, strPrint
-      rs.MoveNext
-   Loop
-   rs.Close
-   Set rs = Nothing
-   Close #1
-     MsgBox "Relatório gerado com sucesso!", vbInformation, ""
-   OPT3 = True
-   
+        Next
+        strPrint = Replace(strPrint, ".", ",")
+        Print #1, strPrint
+        rs.MoveNext
+    Loop
+    rs.Close
+    Set rs = Nothing
+    Close #1
+    MsgBox "Relatório gerado com sucesso!", vbInformation, ""
+    OPT3 = True
+    Screen.MousePointer = vbNormal
+    Exit Function
+
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 55 Then
-   Resume Next
-ElseIf Err.Number = 52 Then
-   MsgBox "Caminho de arquivo incorreto!", vbExclamation, ""
-   Err.Clear
-Else
-      PrintErro CStr(Me.Name), "OPT3", CStr(Err.Number), CStr(Err.Description), True
-End If
-   'Resume
-   
+    If Err.Number = 0 Or Err.Number = 20 Or Err.Number = 55 Then
+        Resume Next
+    ElseIf Err.Number = 52 Then
+        Screen.MousePointer = vbNormal
+        MsgBox "Caminho de arquivo incorreto!", vbExclamation, ""
+        Err.Clear
+    Else
+        Screen.MousePointer = vbNormal
+        ErroUsuario.Registra "frmRelatoriosAvancados", "OPT3", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Function
 
 
@@ -878,6 +769,7 @@ Private Sub cmdGerarRelatorio_Click()
     Dim j As String
     Dim k As String
     Dim l As String
+    Dim retorno As Integer                                                                                      'Se é para processar ou não o relatório que demora para executar
 
     CommonDialog1.Filter = "Texto (.txt)|*.TXT|Todos tipos (*.*)|*.*|"                                          'configura o filtro do arquivo
     CommonDialog1.filename = nomeArquivo                                                                        'informa a caixa de diálogo que será aberta o nome do arquivo inicial sugerido
@@ -902,28 +794,31 @@ Private Sub cmdGerarRelatorio_Click()
             If OPT4 = False Then
                 Exit Sub
             End If
-        ElseIf Me.optRelRamalPadrao.value = True Then
-            If frmCanvas.TipoConexao = 1 Then
+        ElseIf Me.optRelRamalPadrao.value = True Then                                                           'este é um relatório padrão o qual é executado segundo a querie de número 22 e 23 cadastrada em GS_QUERYS_CLIENT
+            If frmCanvas.TipoConexao = 1 Then                                                                   'se for SQLServer
                 Set rs = New ADODB.Recordset
-                strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"
+                strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"                         'obtem a querie padrão personalizada pela empresa de saneamento
                 string2 = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"
                 rs.Open strsql, Conn, adOpenDynamic, adLockOptimistic
                 If rs.EOF = False Then
-                    strsql = rs(0).value
+                    strsql = rs(0).value                                                                        'obtem a querie 22
                 End If
                 rs.Close
                 rs.Open string2, Conn, adOpenDynamic, adLockOptimistic
                 If rs.EOF = False Then
-                    string2 = rs(0).value
+                    string2 = rs(0).value                                                                       'obtem a querie 23
                 End If
                 rs.Close
                 user = strUser
-                stringFinal = strsql + " " + "'" + user + "'" + " " + string2
-                'É CHAMADO O MÉTODO PRINTSELECT
-                If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub
-                MsgBox "Relatório gerado com sucesso!", vbInformation, ""
+                stringFinal = strsql + " " + "'" + user + "'" + " " + string2                                   'junta as duas queries colocando o filtro por usuário. Elas estão por usuário pois vão procurar o que foi selecionado pelo usuário na tabela POLIGONO_SELECAO
+                retorno = MsgBox("Este relatório irá demorar vários minutos e não poderá ser cancelado. Deseja realmente continuar?", vbYesNo)
+                If retorno = vbYes Then
+                    If PrintSelect(Me.Text1.Text, stringFinal) = False Then Exit Sub 'É CHAMADO O MÉTODO PRINTSELECT
+                    MsgBox "Relatório gerado com sucesso!", vbInformation, ""
+                End If
             End If
             If frmCanvas.TipoConexao = 2 Then
+                'precisa revisar a implementação
                 Set rs = New ADODB.Recordset
                 strsql = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22"
                 string2 = "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"
@@ -944,6 +839,7 @@ Private Sub cmdGerarRelatorio_Click()
                 MsgBox "Relatório gerado com sucesso!", vbInformation, ""
             End If
             If frmCanvas.TipoConexao = 4 Then
+                'precisa revisar a implementação
                 Set rs = New ADODB.Recordset
                 a = "QUERYSTRING"
                 b = "GS_QUERYS_CLIENT"
@@ -992,409 +888,255 @@ reinicia:
       End If
    Next
 End Sub
-
-Private Sub cmdUP_Click()
-
 'evento que modifica a posição do campo dentro do list de campos selecionados, mudando o campo para cima
+'
+'
+'
+Private Sub cmdUP_Click()
+    On Error GoTo Trata_Erro
+    Dim intSELECT As Integer
+    Dim i, jjj As Integer
+    Dim campo(50) As String
 
-On Error GoTo Trata_Erro
-
-Dim intSELECT As Integer
-Dim i, jjj As Integer
-Dim campo(50) As String
-   
-   intSELECT = 100
-   For i = 0 To List2.ListCount - 1
-      campo(i) = List2.list(i)
-      If List2.Selected(i) Then
-         If intSELECT = 100 Then
-            intSELECT = (i - 1)
-            campo(i) = List2.list(i - 1)
-            campo(i - 1) = List2.list(i)
-         End If
-      End If
-   Next
-   
-   i = List2.ListCount - 1
-   List2.Clear
-   For jjj = 0 To i
-      If campo(j) <> "" Then
-         List2.AddItem campo(jjj)
-      End If
-   Next
-   
-   If intSELECT <> 100 Then Me.List2.Selected(intSELECT) = True
+    intSELECT = 100
+    For i = 0 To List2.ListCount - 1
+        campo(i) = List2.list(i)
+        If List2.Selected(i) And i <> 0 Then                                       'verifica se este foi o que o usuário selecionou
+            If intSELECT = 100 Then
+                intSELECT = (i - 1)
+                campo(i) = List2.list(i - 1)
+                campo(i - 1) = List2.list(i)
+            End If
+        End If
+    Next
+    i = List2.ListCount - 1
+    List2.Clear
+    For jjj = 0 To i
+        If campo(jjj) <> "" Then
+            List2.AddItem campo(jjj)
+        End If
+    Next
+    If intSELECT <> 100 Then Me.List2.Selected(intSELECT) = True
+    Exit Sub
 
 Trata_Erro:
-   
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   ElseIf Err.Number = 381 Or Err.Number = 9 Then
-      Exit Sub
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    ElseIf Err.Number = 381 Or Err.Number = 9 Then
+        ErroUsuario.Registra "frmRelatoriosAvancados", "cmdUP_Click - Erro 381 ou 9", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    Else
+        ErroUsuario.Registra "frmRelatoriosAvancados", "cmdUP_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
-
-Private Sub cmdDown_Click()
-
 'evento que modifica a posição do campo dentro do list de campos selecionados, mudando o campo para baixo
-
-On Error GoTo Trata_Erro
-Dim i, jjj As Integer
-Dim campo(50) As String
-Dim intSELECT As Integer
-   
-   For i = 0 To List2.ListCount - 1
-      campo(i) = List2.list(i)
-      If List2.Selected(i) Then
-         intSELECT = (i + 1)
-         campo(i) = List2.list(i + 1)
-         campo(i + 1) = List2.list(i)
-         i = i + 1
-      End If
-   Next
-   
-   List2.Clear
-   For jjj = 0 To i - 1
-      If campo(j) <> "" Then
-         List2.AddItem campo(jjj)
-      End If
-   Next
-   Me.List2.Selected(intSELECT) = True
+'
+'
+'
+Private Sub cmdDown_Click()
+    On Error GoTo Trata_Erro
+    Dim i, jjj As Integer
+    Dim campo(50) As String
+    Dim intSELECT As Integer
+    
+    For i = 0 To List2.ListCount - 1
+        campo(i) = List2.list(i)
+        If List2.Selected(i) And List2.ListCount - 1 <> i Then
+            intSELECT = (i + 1)
+            campo(i) = List2.list(i + 1)
+            campo(i + 1) = List2.list(i)
+            i = i + 1
+        End If
+    Next
+    List2.Clear
+    For jjj = 0 To i - 1
+        If campo(jjj) <> "" Then
+            List2.AddItem campo(jjj)
+        End If
+    Next
+    Me.List2.Selected(intSELECT) = True
+    Exit Sub
 
 Trata_Erro:
-   
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   ElseIf Err.Number = 381 Or Err.Number = 9 Then
-      Exit Sub
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    ElseIf Err.Number = 381 Or Err.Number = 9 Then
+        ErroUsuario.Registra "frmRelatoriosAvancados", "cmdDown_Click - Erro 381 ou 9", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    Else
+        ErroUsuario.Registra "frmRelatoriosAvancados", "cmdDown_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
-
-
+' Carrega o formulário inicial de geração de relatórios
+'
+'
+'
 Private Sub Form_Load()
+    On errror GoTo Trata_Erro:
+    Dim Texto As String
+    Dim rs As ADODB.Recordset
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+    
+    Set rs = New ADODB.Recordset
     nomeArquivo = selecionaArquivo.ConfiguraNomeArquivo("exportação_dados_redes", "txt", diretorioMyDocuments)  'obtem o nome do arquivo sugerido e o diretório meus documentos do usuário
     Me.Text1 = diretorioMyDocuments & "\" & nomeArquivo                                                         'coloca na caixa de diálogo o nome sugerido
-   Me.Height = 7000
-   
-   Dim Texto As String
-   
-   Dim rs As ADODB.Recordset
-   Set rs = New ADODB.Recordset
-   
-Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
-
-
-a = "QUERYSTRING"
-b = "GS_QUERYS_CLIENT"
-c = "QUERY_ID"
-
-   If frmCanvas.TipoConexao <> 4 Then
-   Texto = Replace(RetornaCabecalho("SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22", "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"), ";", "; ")
-   Else
-   Texto = Replace(RetornaCabecalho("SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '22'", "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '23'"), ";", "; ")
-   End If
-   
-   If Trim(Texto) = "" Then
-      Texto = "Não configurado no banco de dados (QUERY_ID=22, QUERY_ID=23)"
-   End If
-   
-   optRelRamalPadrao.Caption = "Personalizado: " & Texto
-   
-   
-   'no Form Load, a estrutura de colunas da tabela waterlines é copiada para a parte de relatórios avançados
-   'ocorrendo uma 'tradução' para que, montar o relatório, fique mais simplificado ao usuário do sistema
-   
-   If frmCanvas.TipoConexao = 1 Then
-      rs.Open "SELECT upper(NAME) as CAMPOS FROM SYSCOLUMNS WHERE ID IN (SELECT ID FROM SYSOBJECTS WHERE NAME = 'WATERLINES') ORDER BY CAMPOS", Conn
-      
-      
+    Me.Height = 7000
+    a = "QUERYSTRING"
+    b = "GS_QUERYS_CLIENT"
+    c = "QUERY_ID"
+    If frmCanvas.TipoConexao <> 4 Then                                                                          'se não for Postgres
+        Texto = Replace(RetornaCabecalho("SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 22", "SELECT QUERYSTRING FROM GS_QUERYS_CLIENT WHERE QUERY_ID = 23"), ";", "; ")
+    Else                                                                                                        'se for Postgres
+        Texto = Replace(RetornaCabecalho("SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '22'", "SELECT " + """" + a + """" + " FROM " + """" + b + """" + " WHERE " + """" + c + """" + " = '23'"), ";", "; ")
+    End If
+    If Trim(Texto) = "" Then
+        Texto = "Não configurado no banco de dados (QUERY_ID=22, QUERY_ID=23)"
+        ErroUsuario.Registra "frmRelatoriosAvancados", "Form_Load", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, Texto
+        Exit Sub
+    End If
+    optRelRamalPadrao.Caption = "Relatório personalizado com as seguintes informações: " & Texto                              'mostra a querie na caixa de diálogo
+    'no Form Load, a estrutura de colunas da tabela waterlines é copiada para a parte de relatórios avançados
+    'ocorrendo uma 'tradução' para que, montar o relatório, fique mais simplificado ao usuário do sistema
+    If frmCanvas.TipoConexao = 1 Then
+        rs.Open "SELECT upper(NAME) as CAMPOS FROM SYSCOLUMNS WHERE ID IN (SELECT ID FROM SYSOBJECTS WHERE NAME = 'WATERLINES') ORDER BY CAMPOS", Conn
         If rs.EOF = False Then
-      Do While Not rs.EOF
-         
-         If rs!campos = "DATA_LOG" Then
-            List1.AddItem "DATA DE DESENHO"
-         
-         ElseIf rs!campos = "DATALOG" Then ' não é copiado
-            'List1.AddItem
-         
-         ElseIf rs!campos = "DATEINSTALLATION" Then
-            List1.AddItem "DATA DE INSTALAÇÃO"
-         
-         ElseIf rs!campos = "DIVIDEDDISTANCE" Then
-            List1.AddItem "DISTÂNCIA DA DIVISA"
-         
-         ElseIf rs!campos = "EXTERNALDIAMETER" Then
-            List1.AddItem "DIÂMETRO EXTERNO"
-         
-         ElseIf rs!campos = "FINALCOMPONENT" Then
-            List1.AddItem "CÓD COMPONENTE FINAL"
-         
-         ElseIf rs!campos = "FINALGROUNDHEIGHT" Then
-            List1.AddItem "COTA TERRENO FINAL"
-         
-         ElseIf rs!campos = "FINALTUBEDEEPNESS" Then
-            List1.AddItem "PROFUNDIDADE FINAL"
-         
-         ElseIf rs!campos = "ID_TYPE" Then
-            List1.AddItem "TIPO DE REDE"
-         
-         ElseIf rs!campos = "INFORMATIONVALIDITY" Then
-            List1.AddItem "VALIDADE"
-         
-         ElseIf rs!campos = "INITIALCOMPONENT" Then
-            List1.AddItem "CÓD COMPONENTE INICAL"
-         
-         ElseIf rs!campos = "INITIALGROUNDHEIGHT" Then
-            List1.AddItem "COTA TERRENO INICIAL"
-         
-         ElseIf rs!campos = "INITIALTUBEDEEPNESS" Then
-            List1.AddItem "PROFUNDIDADE INICIAL"
-         
-         ElseIf rs!campos = "INTERNALDIAMETER" Then
-            List1.AddItem "DIÂMETRO INTERNO"
-         
-         ElseIf rs!campos = "LENGTH" Then
-            List1.AddItem "COMPRIM. DIGITADO"
-         
-         ElseIf rs!campos = "LENGTHCALCULATED" Then
-            List1.AddItem "COMPRIM. CALCULADO"
-            
-         ElseIf rs!campos = "LINE_ID" Then ' LINE_ID é o mesmo que OBJECT_ID_
-            'List1.AddItem ""
-         
-         ElseIf rs!campos = "LOCATION" Then
-            List1.AddItem "LOCALIZAÇÃO"
-         
-         ElseIf rs!campos = "MANUFACTURER" Then
-            List1.AddItem "FABRICANTE"
-         
-         ElseIf rs!campos = "MATERIAL" Then
-            List1.AddItem "MATERIAL NOME"
-         
-         ElseIf rs!campos = "OBJECT_ID_" Then
-            List1.AddItem "ID REDE"
-         
-         ElseIf rs!campos = "ROUGHNESS" Then
-            List1.AddItem "RUGOSIDADE"
-         
-         ElseIf rs!campos = "SECTOR" Then
-            List1.AddItem "CÓD SETOR"
-         
-         ElseIf rs!campos = "SIDESTREET" Then
-            List1.AddItem "LADO DA RUA"
-         
-         ElseIf rs!campos = "STATE" Then
-            List1.AddItem "ESTADO"
-         
-         ElseIf rs!campos = "SUPPLIER" Then
-            List1.AddItem "FORNECEDOR"
-         
-         ElseIf rs!campos = "THICKNESS" Then
-            List1.AddItem "DENSIDADE"
-         
-         ElseIf rs!campos = "TROUBLE" Then
-            'List1.AddItem ""
-         
-         ElseIf rs!campos = "USUARIO_LOG" Then
-            List1.AddItem "USUARIO CADASTRO"
-         
-         End If
-         
-      
-         rs.MoveNext
-      Loop
-   End If
-      
-      End If
-      
-      If frmCanvas.TipoConexao = 2 Then
-                 List1.AddItem "DATA DE DESENHO"
-         
-       
-            List1.AddItem "DATA DE INSTALAÇÃO"
-       
-            List1.AddItem "DISTÂNCIA DA DIVISA"
-         
-      
-            List1.AddItem "DIÂMETRO EXTERNO"
-         
-       
-            List1.AddItem "CÓD COMPONENTE FINAL"
-         
-     
-            List1.AddItem "COTA TERRENO FINAL"
-         
-      
-            List1.AddItem "PROFUNDIDADE FINAL"
-         
-     
-            List1.AddItem "TIPO DE REDE"
-         
-       
-            List1.AddItem "VALIDADE"
-         
-   
-            List1.AddItem "CÓD COMPONENTE INICAL"
-         
-       
-            List1.AddItem "COTA TERRENO INICIAL"
-         
-       
-            List1.AddItem "PROFUNDIDADE INICIAL"
-         
-       
-            List1.AddItem "DIÂMETRO INTERNO"
-         
-      
-            List1.AddItem "COMPRIM. DIGITADO"
-         
-      
-            List1.AddItem "COMPRIM. CALCULADO"
-            
-   
-         
-     
-            List1.AddItem "LOCALIZAÇÃO"
-         
-      
-            List1.AddItem "FABRICANTE"
-        
-            List1.AddItem "MATERIAL NOME"
-         
-       
-            List1.AddItem "ID REDE"
-         
-       
-            List1.AddItem "RUGOSIDADE"
-      
-            List1.AddItem "CÓD SETOR"
-         
-      
-            List1.AddItem "LADO DA RUA"
-         
-       
-            List1.AddItem "ESTADO"
-      
-            List1.AddItem "FORNECEDOR"
-         
-        
-            List1.AddItem "DENSIDADE"
-         
-     
-            List1.AddItem "USUARIO CADASTRO"
-         
-      
-      
-      End If
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-
-      
-       If frmCanvas.TipoConexao = 4 Then
-
- 
-            List1.AddItem "DATA DE DESENHO"
-         
-       
-            List1.AddItem "DATA DE INSTALAÇÃO"
-       
-            List1.AddItem "DISTÂNCIA DA DIVISA"
-         
-      
-            List1.AddItem "DIÂMETRO EXTERNO"
-         
-       
-            List1.AddItem "CÓD COMPONENTE FINAL"
-         
-     
-            List1.AddItem "COTA TERRENO FINAL"
-         
-      
-            List1.AddItem "PROFUNDIDADE FINAL"
-         
-     
-            List1.AddItem "TIPO DE REDE"
-         
-       
-            List1.AddItem "VALIDADE"
-         
-   
-            List1.AddItem "CÓD COMPONENTE INICAL"
-         
-       
-            List1.AddItem "COTA TERRENO INICIAL"
-         
-       
-            List1.AddItem "PROFUNDIDADE INICIAL"
-         
-       
-            List1.AddItem "DIÂMETRO INTERNO"
-         
-      
-            List1.AddItem "COMPRIM. DIGITADO"
-         
-      
-            List1.AddItem "COMPRIM. CALCULADO"
-            
-   
-         
-     
-            List1.AddItem "LOCALIZAÇÃO"
-         
-      
-            List1.AddItem "FABRICANTE"
-        
-            List1.AddItem "MATERIAL NOME"
-         
-       
-            List1.AddItem "ID REDE"
-         
-       
-            List1.AddItem "RUGOSIDADE"
-      
-            List1.AddItem "CÓD SETOR"
-         
-      
-            List1.AddItem "LADO DA RUA"
-         
-       
-            List1.AddItem "ESTADO"
-      
-            List1.AddItem "FORNECEDOR"
-         
-        
-            List1.AddItem "DENSIDADE"
-         
-     
-            List1.AddItem "USUARIO CADASTRO"
-         
-      
-
-
-   End If
-   
-  
- 
-
+            Do While Not rs.EOF
+                If rs!campos = "DATA_LOG" Then
+                    List1.AddItem "DATA DE DESENHO"
+                ElseIf rs!campos = "DATALOG" Then ' não é copiado
+                    'List1.AddItem
+                ElseIf rs!campos = "DATEINSTALLATION" Then
+                    List1.AddItem "DATA DE INSTALAÇÃO"
+                ElseIf rs!campos = "DIVIDEDDISTANCE" Then
+                    List1.AddItem "DISTÂNCIA DA DIVISA"
+                ElseIf rs!campos = "EXTERNALDIAMETER" Then
+                    List1.AddItem "DIÂMETRO EXTERNO"
+                ElseIf rs!campos = "FINALCOMPONENT" Then
+                    List1.AddItem "CÓD COMPONENTE FINAL"
+                ElseIf rs!campos = "FINALGROUNDHEIGHT" Then
+                    List1.AddItem "COTA TERRENO FINAL"
+                ElseIf rs!campos = "FINALTUBEDEEPNESS" Then
+                    List1.AddItem "PROFUNDIDADE FINAL"
+                ElseIf rs!campos = "ID_TYPE" Then
+                    List1.AddItem "TIPO DE REDE"
+                ElseIf rs!campos = "INFORMATIONVALIDITY" Then
+                    List1.AddItem "VALIDADE"
+                ElseIf rs!campos = "INITIALCOMPONENT" Then
+                    List1.AddItem "CÓD COMPONENTE INICAL"
+                ElseIf rs!campos = "INITIALGROUNDHEIGHT" Then
+                    List1.AddItem "COTA TERRENO INICIAL"
+                ElseIf rs!campos = "INITIALTUBEDEEPNESS" Then
+                    List1.AddItem "PROFUNDIDADE INICIAL"
+                ElseIf rs!campos = "INTERNALDIAMETER" Then
+                    List1.AddItem "DIÂMETRO INTERNO"
+                ElseIf rs!campos = "LENGTH" Then
+                    List1.AddItem "COMPRIM. DIGITADO"
+                ElseIf rs!campos = "LENGTHCALCULATED" Then
+                    List1.AddItem "COMPRIM. CALCULADO"
+                ElseIf rs!campos = "LINE_ID" Then ' LINE_ID é o mesmo que OBJECT_ID_
+                    'List1.AddItem ""
+                ElseIf rs!campos = "LOCATION" Then
+                    List1.AddItem "LOCALIZAÇÃO"
+                ElseIf rs!campos = "MANUFACTURER" Then
+                    List1.AddItem "FABRICANTE"
+                ElseIf rs!campos = "MATERIAL" Then
+                    List1.AddItem "MATERIAL NOME"
+                ElseIf rs!campos = "OBJECT_ID_" Then
+                    List1.AddItem "ID REDE"
+                ElseIf rs!campos = "ROUGHNESS" Then
+                    List1.AddItem "RUGOSIDADE"
+                ElseIf rs!campos = "SECTOR" Then
+                    List1.AddItem "CÓD SETOR"
+                ElseIf rs!campos = "SIDESTREET" Then
+                    List1.AddItem "LADO DA RUA"
+                ElseIf rs!campos = "STATE" Then
+                    List1.AddItem "ESTADO"
+                ElseIf rs!campos = "SUPPLIER" Then
+                    List1.AddItem "FORNECEDOR"
+                ElseIf rs!campos = "THICKNESS" Then
+                    List1.AddItem "DENSIDADE"
+                ElseIf rs!campos = "TROUBLE" Then
+                    'List1.AddItem ""
+                ElseIf rs!campos = "USUARIO_LOG" Then
+                    List1.AddItem "USUARIO CADASTRO"
+                End If
+                rs.MoveNext
+            Loop
+        End If
+    End If
+    If frmCanvas.TipoConexao = 2 Then
+        List1.AddItem "DATA DE DESENHO"
+        List1.AddItem "DATA DE INSTALAÇÃO"
+        List1.AddItem "DISTÂNCIA DA DIVISA"
+        List1.AddItem "DIÂMETRO EXTERNO"
+        List1.AddItem "CÓD COMPONENTE FINAL"
+        List1.AddItem "COTA TERRENO FINAL"
+        List1.AddItem "PROFUNDIDADE FINAL"
+        List1.AddItem "TIPO DE REDE"
+        List1.AddItem "VALIDADE"
+        List1.AddItem "CÓD COMPONENTE INICAL"
+        List1.AddItem "COTA TERRENO INICIAL"
+        List1.AddItem "PROFUNDIDADE INICIAL"
+        List1.AddItem "DIÂMETRO INTERNO"
+        List1.AddItem "COMPRIM. DIGITADO"
+        List1.AddItem "COMPRIM. CALCULADO"
+        List1.AddItem "LOCALIZAÇÃO"
+        List1.AddItem "FABRICANTE"
+        List1.AddItem "MATERIAL NOME"
+        List1.AddItem "ID REDE"
+        List1.AddItem "RUGOSIDADE"
+        List1.AddItem "CÓD SETOR"
+        List1.AddItem "LADO DA RUA"
+        List1.AddItem "ESTADO"
+        List1.AddItem "FORNECEDOR"
+        List1.AddItem "DENSIDADE"
+        List1.AddItem "USUARIO CADASTRO"
+    End If
+    If frmCanvas.TipoConexao = 4 Then
+        List1.AddItem "DATA DE DESENHO"
+        List1.AddItem "DATA DE INSTALAÇÃO"
+        List1.AddItem "DISTÂNCIA DA DIVISA"
+        List1.AddItem "DIÂMETRO EXTERNO"
+        List1.AddItem "CÓD COMPONENTE FINAL"
+        List1.AddItem "COTA TERRENO FINAL"
+        List1.AddItem "PROFUNDIDADE FINAL"
+        List1.AddItem "TIPO DE REDE"
+        List1.AddItem "VALIDADE"
+        List1.AddItem "CÓD COMPONENTE INICAL"
+        List1.AddItem "COTA TERRENO INICIAL"
+        List1.AddItem "PROFUNDIDADE INICIAL"
+        List1.AddItem "DIÂMETRO INTERNO"
+        List1.AddItem "COMPRIM. DIGITADO"
+        List1.AddItem "COMPRIM. CALCULADO"
+        List1.AddItem "LOCALIZAÇÃO"
+        List1.AddItem "FABRICANTE"
+        List1.AddItem "MATERIAL NOME"
+        List1.AddItem "ID REDE"
+        List1.AddItem "RUGOSIDADE"
+        List1.AddItem "CÓD SETOR"
+        List1.AddItem "LADO DA RUA"
+        List1.AddItem "ESTADO"
+        List1.AddItem "FORNECEDOR"
+        List1.AddItem "DENSIDADE"
+        List1.AddItem "USUARIO CADASTRO"
+    End If
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmRelatoriosAvancados", "Form_Load", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
 
 Private Sub Option1_Click()

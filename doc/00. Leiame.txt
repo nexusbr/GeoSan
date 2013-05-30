@@ -4,6 +4,20 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+30-05-2013 - GeoSan 06.10.07
+
+Atualizada a querie padrão em GS_QUERYS_CLIENT de número 22 com o seguinte SQL
+
+SELECT n.NRO_LIGACAO AS LIGAÇÃO, n.CLASSIFICACAO_FISCAL AS INSCRIÇÃO, n.ENDERECO AS ENDEREÇO, n.NUM_CASA AS NÚMERO_CASA, n.COMPL_LOGRADOURO AS COMPLEMENTO, n.BAIRRO, n.HIDROMETRO, n.CONSUMIDOR, n.TIPO AS CONSUMIDOR, n.ECONOMIAS, n.HIDROMETRADO,n.DATA_IMPLANTACAO_AGUA AS DATA_IMPLANTAÇÃO_ÁGUA, n.DATA_IMPLANTACAO_ESGOTO AS DATA_IMPLANTAÇÃO_ESGOTO,n.ROTA_LEITURA,n.GRUPO_LEITURA, n.ROTEIRO_LEITURA, n.SEQUENCIA_LEITURA FROM NXGS_V_LIG_COMERCIAL n WHERE n.NRO_LIGACAO_SEM_DV IN(SELECT r.NRO_LIGACAO / 10 FROM RAMAIS_AGUA_LIGACAO r INNER JOIN POLIGONO_SELECAO p ON r.OBJECT_ID_ = p.OBJECT_ID_ WHERE  p.USUARIO =
+
+personalizados. Pois se consulta com o dígito verificador a vista demora para
+retornar.
+
+Corrigida a movimentação dos campos para cima e para baixo no relatório por
+seleção.
+
+
+
 23-05-2013 - GeoSan 06.10.01
 Atualizada a base de dados padrão geosan_curso
 Atualizado o número da versão do GeoSan na tabela NX_BASE

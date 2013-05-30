@@ -499,122 +499,119 @@ Public Function Imprima(str As String) As Boolean
    Close #3
 
 End Function
-
+' Retorna em uma String o nome das colunas que foram retornadas num select
+'
+' strSelect - querie sql
+' strSelect2 - querie sql
+'
 Public Function RetornaCabecalho(ByVal strSelect As String, ByVal strSelect2 As String) As String
-
-
-   ' Retorna em uma String o nome das colunas que foram retornadas num select
-
-   Dim rs As ADODB.Recordset
-   Dim rs2 As ADODB.Recordset
-   Dim nomeCols As String
-   Dim strSel As String
-   Dim strSel3 As String
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset
+    Dim rs2 As ADODB.Recordset
+    Dim nomeCols As String
+    Dim strSel As String
+    Dim strSel3 As String
     Dim strSel4 As String
-   Dim i As Integer
-   Set rs = New ADODB.Recordset
+    Dim i As Integer
+    
+    Set rs = New ADODB.Recordset
     Set rs2 = New ADODB.Recordset
-   strSel4 = strSelect2
-   
-  
-   rs2.Open strSel4, Conn, adOpenDynamic, adLockOptimistic
- 
-   
-   If rs2.EOF = False Then
-    strSel4 = rs2(0).value
-    
-    
-   End If
-   
+    strSel4 = strSelect2
+    rs2.Open strSel4, Conn, adOpenDynamic, adLockOptimistic
+    If rs2.EOF = False Then
+        strSel4 = rs2(0).value
+    End If
     rs.Open strSelect, Conn, adOpenForwardOnly, adLockReadOnly
-   If rs.EOF = False Then
-      strSel = rs!querystring
-      Set rs = New ADODB.Recordset
-      strSel3 = strSel + " " + "'" + strUser + "'" + " " + strSel4
-      'MsgBox strSel3, vbInformation, ""
-      rs.Open strSel3, Conn, adOpenDynamic, adLockOptimistic
- 
-      'monta a string de colunas
-      nomeCols = rs.Fields(0).Name
-      For i = 1 To rs.Fields.count - 1
-         nomeCols = nomeCols & ";" & rs.Fields(i).Name
-      Next
-   
-      RetornaCabecalho = nomeCols
-   End If
-
-
-
+    If rs.EOF = False Then
+        strSel = rs!querystring
+        Set rs = New ADODB.Recordset
+        strSel3 = strSel + " " + "'" + strUser + "'" + " " + strSel4            'adiciona a querie existente em GS_QUERYS_CLIENT de 22 + usuário logado + 23 formando uma única querie
+        rs.Open strSel3, Conn, adOpenDynamic, adLockOptimistic
+        'monta a string de colunas, obtendo o nome de todas as colunas existentes na querie cocactenada 22 + usuário logado + 23
+        nomeCols = rs.Fields(0).Name
+        For i = 1 To rs.Fields.count - 1
+            nomeCols = nomeCols & ";" & rs.Fields(i).Name
+        Next
+        RetornaCabecalho = nomeCols
+    End If
+    Exit Function
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "Global", "RetornaCabecalho", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Function
-
-
+' Gera um relatório e salva em arquivo texto a partir de um nome do arquivo a salvar e uma querie SQL
+'
+' strArqDestino - nome do arquivo destino onde será salvo o relatório
+' strSelect - querie do relatório
+'
 Public Function PrintSelect(ByVal strArqDestino As String, ByVal strSelect As String) As Boolean
-      
-   
-   Dim rs As ADODB.Recordset
-   Dim nomeCols As String
-   Dim i As Long
-   Dim j As Long
-   
-   If Trim(strArqDestino) = "" Then
-      MsgBox "Não há caminho de arquivo para gerar o relatório.", vbInformation, ""
-      PrintSelect = False
-      Exit Function
-   End If
-   
-   If Trim(strSelect) = "" Then
-      MsgBox "Não há um script SQL definido para gerar o relatório.", vbInformation, ""
-      PrintSelect = False
-      Exit Function
-   End If
-       
-   Set rs = New ADODB.Recordset
-   
-   rs.Open strSelect, Conn, adOpenDynamic, adLockOptimistic
-   
-   If rs.EOF = False Then
-      
-      Open strArqDestino For Output As #1
-      
-      'monta a string de colunas
-      nomeCols = rs.Fields(0).Name
-      For i = 1 To rs.Fields.count - 1
-         nomeCols = nomeCols & ";" & rs.Fields(i).Name
-      Next
-      
-      Dim dbvetor
-      Dim colunas As Integer
-      Dim registros As Long
-      Dim linha As String
-      
-      'obtenho o número de colunas e o número de linhas
-      dbvetor = rs.GetRows
-   
-      colunas = UBound(dbvetor, 1)
-      registros = UBound(dbvetor, 2)
-      
-      'imprime o cabeçalho
-      Print #1, nomeCols
-      
-      For i = 0 To registros
-         For j = 0 To colunas
-            linha = linha & dbvetor(j, i) & ";"
-         Next j
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset
+    Dim nomeCols As String
+    Dim i As Long
+    Dim j As Long
+    Dim dbvetor As Variant                                                              'vetor com todos os nomes das colunas que são retornadas pela querie
+    Dim colunas As Integer
+    Dim registros As Long
+    Dim linha As String
+    Dim numeroDeColunas As Integer                                                      'número total de colunas retornadas na querie
+    
+    Screen.MousePointer = vbHourglass                                                   'mostra a ampulheta para o usuário
+    If Trim(strArqDestino) = "" Then
+        MsgBox "Não há caminho de arquivo para gerar o relatório.", vbInformation, ""
+        PrintSelect = False
+        Exit Function
+    End If
+    If Trim(strSelect) = "" Then
+        MsgBox "Não há um script SQL definido para gerar o relatório.", vbInformation, ""
+        PrintSelect = False
+        Exit Function
+    End If
+    Set rs = New ADODB.Recordset
+    rs.Open strSelect, Conn, adOpenDynamic, adLockOptimistic
+    If rs.EOF = False Then
+        Open strArqDestino For Output As #1
+        numeroDeColunas = rs.Fields.count                                               'obtem o número total de colunas
+        'monta a string de colunas para imprimir no cabeçalho
+        nomeCols = rs.Fields(0).Name
+        For i = 1 To numeroDeColunas - 1
+            nomeCols = nomeCols & ";" & rs.Fields(i).Name
+        Next
+        'obtenho o número de colunas e o número de linhas
+        dbvetor = rs.GetRows
+        colunas = UBound(dbvetor, 1)
+        registros = UBound(dbvetor, 2)
+        'imprime o cabeçalho
+        Print #1, nomeCols
+        For i = 0 To registros
+            For j = 0 To colunas
+                linha = linha & dbvetor(j, i) & ";"
+            Next j
             Print #1, linha
             linha = ""
-      Next i
-      
-      Close #1
-      
-      PrintSelect = True
-   Else
-      MsgBox "Não foram retornados registros.", vbInformation, ""
-   End If
-
-   
+        Next i
+        Close #1
+        PrintSelect = True
+    Else
+        MsgBox "Não existe informação para gerar o relatório.", vbInformation, ""
+    End If
+    rs.Close
+    Screen.MousePointer = vbNormal
+    Exit Function
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Screen.MousePointer = vbNormal
+        ErroUsuario.Registra "Global", "PrintSelect", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Function
 'Acrescenta ao arquivo de log o erro ocorrido
-
 '
 'Modulo - string que contém em arquivo VB o erro ocorreu
 'EVENTO - string que contém em que rotina o erro ocorreu
@@ -1379,10 +1376,10 @@ End Function
 '   ConectaBanco = False
 'End Function
 
-Public Function GetCboListIndex(ID As Long, mCbo As ComboBox) As Integer
+Public Function GetCboListIndex(id As Long, mCbo As ComboBox) As Integer
    Dim a As Integer
    For a = 0 To mCbo.ListCount - 1
-       If mCbo.ItemData(a) = ID Then
+       If mCbo.ItemData(a) = id Then
          GetCboListIndex = a
          Exit Function
        End If
