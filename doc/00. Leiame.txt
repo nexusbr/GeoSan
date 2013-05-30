@@ -4,8 +4,31 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+30-05-2013 - GeoSan 06.10.09
+
+Versão do GeoSan fechada para implementação.
+
+Foram detectadas as seguintes não conformidades:
+
+1. Revisar as ícones de procura para verificar se realmente localiza e estão
+eficientes.
+
+2. Ao cadastrar uma nova ligação, revisar a procura.
+
+3. Quando move uma rede ou insere um nó na mesma a cota não é atualizada.
+
+4. Quando apaga um ponto de um documento associado, são mostrados dois 
+plotviews. Deve existir apenas um.
+
 30-05-2013 - GeoSan 06.10.08
 
+Atualizadas as teclas de zoom. Selecionando CRTL e as setas ele faz zoom sem
+sair do comando se seleção de um polígono. O polígono continua visível após
+o zoom. Funciona com PGUP e PGDOWN e com a rodinha do mouse.
+Funciona com as letras A, Z, S e W
+
+Colocados tooltips e alterado o texto da caixa de diálogo de relatórios de
+seleção por polígono e atualizada figura no manual.
 
 30-05-2013 - GeoSan 06.10.07
 
@@ -19,6 +42,53 @@ retornar.
 Corrigida a movimentação dos campos para cima e para baixo no relatório por
 seleção.
 
+23-05-2013 - Geosan 06.10.06
+
+Inserida classe que converte consumos l/s m3/mes.
+
+Inserida caixa de diálogo que permite exportar os consumos em um determinado
+mês e ano.
+
+Inseridas opções de seleção de diretório e arquivo onde necessitavam de
+seleção.
+
+Realizados mais testes e corrigidos bugs.
+
+23-05-2013 - Geosan 06.10.05
+
+Implementada função de barra de status onde apresenta o andamento da
+atualização das cotas.
+
+Implementada funcionalidade que possibilita o usuário cancelar uma operacão
+de atualizar cotas ou exportar shape, que são demoradas, pressionando a tecla
+ESC.
+
+Implementadas e revisadas funções de controle de erro.
+
+Realizados testes.
+
+23-05-2013 - Geosan 06.10.04
+
+Desenvolvida função que calcula a cota do no do trecho da rede automaticamente
+enquanto o usuário desenha a rede.
+
+Necessário verificar performance e controle de erro para esta funcionalidade.
+
+Necessário implementar função de barra de progresso para atualizar todas as
+cotas.
+
+23-05-2013 - Geosan 06.10.03
+
+Finalização da funcionalidade de cálculo da cota Z para todos os nós.
+
+É necessário desenvolver a funcionalidade para cálculo enquanto o usuário
+desenha.
+
+Necessário acertar a interface com o usuário.
+
+23-05-2013 - Geosan 06.10.02
+
+Início do desenvolvimento da Cota Z.
 
 
 23-05-2013 - GeoSan 06.10.01
@@ -27,16 +97,13 @@ Atualizado o número da versão do GeoSan na tabela NX_BASE
 Atualizada a ícone de entrada do GeoSan, criando um arquivo novo com o
 Resource file editor.
 
+23-05-2013 - Geosan 06.10.01
+Gerado novo instalável para testes. Alterada ícone do GeoSan e do FrmMain.
 
 23-05-2013 - GeoSan 06.10.00
 Gerado a versão de instalação de testes
 
-23-05-2013 - GeoSan 06.09.17
-
-Em resumo, foi finalizada a função de mover nó de rede junto com os ramais.
-Implementada a rotina de envio de erros por email.
-Modificadas as ícones.
-
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 Em detalhes foram realizados os seguintes commits:
 
 Realizada formatação no código do PManager4.
@@ -89,7 +156,124 @@ Para solucionar bloqueios da porta SMTP pelo Firewall da empresa, o cliente
 poderá configurar no arquivo GEOSAN.INI suas opções de email e este será
 enviado para um email interno da empresa, o qual fará um redirecionamento
 para o email tec@nexusbr.com, da NEXUS.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+23-05-2013 - rev. 91
+
+Implementada funcionalidade no arquivo geosan.ini para enviar erros por email
+
+[EMAIL]
+EMAILDESTINATARIO=tec@nexusbr.com
+EMAILREMETENTE=NEXUS <tec@nexusbr.com>
+ENDERECOSMTP=smtp.gmail.com
+PORTASMTP=465
+USUARIOSMTP=tec@nexusbr.com
+SENHASMTP=xxxxxxxx
+SSLSMTP=TRUE
+
+Assim agora é possível ao ocorrer um erro no GeoSan, ser enviado um email para
+a NEXUS com a informação do mesmo.
+
+Para solucionar bloqueios da porta SMTP pelo Firewall da empresa, o cliente
+poderá configurar no arquivo GEOSAN.INI suas opções de email e este será
+enviado para um email interno da empresa, o qual fará um redirecionamento
+para o email tec@nexusbr.com, da NEXUS.
+
+21-05-2013 - rev. 90
+
+Realizada rotina de envio de erros por email automaticamente.
+Revisada a exportação para shape.
+
+20-05-2013 - rev. 89
+
+Finalizada rotina que apresenta erros e envia automativamente e-mail para a
+NEXUS informando o erro ocorrido.
+Inserida em todas as classes novas e em dois eventos do frmCanvas este novo
+controle de mensagens de erro.
+Realizados alguns testes bem básicos e aparentemente funcionou a movimentação
+de ramais junto com os trechos de redes.
+
+20-05-2013 - rev. 88
+
+Função de mover ramais está funcionando. Iniciada mofificação no tratamento
+de erros.
+
+19-05-2013 - rev. 87
+
+Realizadas modificações para mover todos os ramais de várias redes ao mesmo
+tempo.
+
+18-05-2013 - rev. 86
+
+Realizadas as modificações para mover mais de um ramal, só que move somente
+de um único trecho. Não move do(s) outro(s) trecho(s).
+
+18-05-2013 - rev. 85
+
+Corrigido bug na função delete que ocorria quando ia apagar uma ramal e
+selecionava apenas o ramal, sem selecionar o hidrômetro (ponto).
+
+Agora aparece uma mensagem para o usuário, solicitando a seleção dos dois.
+
+Ainda falta:
+
+1. Tratar quando tem mais de um ramal no trecho
+2. quando a distância do ramal ao início do trecho, calculada, cai fora do
+segumento do trecho (entre os pontos inicia e final)
+
+18-05-2013 - rev. 84
+
+Pronto, agora as linhas dos ramais estão chegando corretamente no trecho de rede
+Precisa agora:
+
+1. Tratar quando tem mais de um ramal no trecho
+2. quando a distância do ramal ao início do trecho, calculada, cai fora do
+segumento do trecho (entre os pontos inicia e final)
+
+18-05-2013 - rev. 83
+
+Aparentemente as rotinas de mover ramal iniciaram o funcionamento. Só está
+trocando a coordenada inicial do trecho pela final. Os ramais voltaram a
+aparecer depois que foi acertado no banco de dados o box que estava no infinito
+no layer de RAMAIS_AGUA na tabela te_layer.
+
+18-05-2013 - rev. 82
+
+Feitas alterações nas classes de mover ramal. Existe bug que os ramais não
+aparecem na visualização
+
+17-05-2013 - rev. 81
+
+Corrigido o bug do TeDatabase4 o qual foi retirado e iniciada a implementação
+da rotina de mover ramais.
+
+15-05-2013 - rev. 80
+
+Commit agora com as classes e documentação novas do branch de mover ramais
+com rede
+
+14-05-2013 - rev. 79
+
+Agora com as ícones todas colocadas e funcionando.
+
+23-05-2013 - GeoSan 06.09.17
+
+Em resumo, foi finalizada a função de mover nó de rede junto com os ramais.
+Implementada a rotina de envio de erros por email.
+Modificadas as ícones.
+
+14-05-2013 - rev. 78
+
+Funcionou o gerenciador de propriedades com as ícones no tamanho 24x24.
+O que tinha que realizar era diminuir o tamanho da caixa de diálogo e deixar
+as ícones em duas fileiras. Ai elas funcionam de primeira sem necessidade de
+dar um resize na janela toda para aparecer corretamente o gerenciador de
+propriedades.
+
+14-05-2013 - rev. 77
+
+Versão funcionando com as ícones do menu em 32x32 antes de mudar para
+24x24 o tamanho das mesmas.
 
 02-05-2013 - GeoSan 06.09.17
 
