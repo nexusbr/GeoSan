@@ -140,263 +140,205 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+' Localiza os consumidores
+'
+'
+'
 Private Sub cmdLocalizar_Click()
-On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
+    Dim aa As String
+    Dim ab As String
+    Dim ac As String
+    Dim ad As String
+    Dim ae As String
+    Dim af As String
+    Dim ag As String
+    Dim ah As String
+    Dim ai As String
+    Dim aj As String
+    Dim mPROVEDOR As String
+    Dim mSERVIDOR As String
+    Dim mPORTA As String
+    Dim mBANCO As String
+    Dim mUSUARIO As String
+    Dim Senha As String
+    Dim decriptada As String
+    Dim tbPoints As String
+    Dim str As String
+    Dim rs As New ADODB.Recordset
 
-Dim aa As String
-Dim ab As String
-Dim ac As String
-Dim ad As String
-Dim ae As String
-Dim af As String
-Dim ag As String
-Dim ah As String
-Dim ai As String
-Dim aj As String
-
-
-
-
-Dim mPROVEDOR As String
-Dim mSERVIDOR As String
-Dim mPORTA As String
-Dim mBANCO As String
-Dim mUSUARIO As String
-Dim Senha As String
-Dim decriptada As String
-                         
-                         
-        If (frmCanvas.TipoConexao = 4) Then
-        
-    If (frmCanvas.POST <> 10) Then
-
-mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
-mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
-Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
-frmCanvas.FunDecripta (Senha)
-decriptada = frmCanvas.Senha
- TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
-frmCanvas.POST2 (10)
-
-
-
-
-     
-   TeDatabase.Provider = frmCanvas.TipoConexao
-   TeDatabase.connection = TeAcXConnection1.objectConnection_
-   End If
-   Else
-    TeDatabase.Provider = frmCanvas.TipoConexao
-   TeDatabase.connection = Conn
-   
-   End If
-
-   'RECUPERA A TABELA QUE POSSUI OS PONTOS REFERENTES A RAMAIS AGUA
-   Dim tbPoints As String
-   tbPoints = TeDatabase.getRepresentationTableName("RAMAIS_AGUA", tpPOINTS)
-     
-   
-   
-   Dim str As String
-   Dim rs As New ADODB.Recordset
-   
-   If Trim(Me.txtBusca.Text) = "" Then
-      MsgBox "Informe o valor que deseja procurar", vbInformation, ""
-      Me.txtBusca.SetFocus
-      Exit Sub
-   End If
-   
-   MousePointer = vbHourglass
-   
-     If Me.optNroLigacao.value = True Then
-   
-    If frmCanvas.TipoConexao <> 4 Then
- 
-      
-If Me.optInicio.value = True Then
-         
-         str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",RAL.NRO_LIGACAO AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y FROM "
-         str = str & "RAMAIS_AGUA_LIGACAO RAL JOIN " & tbPoints & " PT ON PT.OBJECT_ID = RAL.OBJECT_ID_ "
-         str = str & "WHERE RAL.NRO_LIGACAO like '" & Me.txtBusca.Text & "%'"
-      
-      ElseIf Me.optQQRParte.value = True Then
-         
-         str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",RAL.NRO_LIGACAO AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y FROM "
-         str = str & "RAMAIS_AGUA_LIGACAO RAL JOIN " & tbPoints & " PT ON PT.OBJECT_ID = RAL.OBJECT_ID_ "
-         str = str & "WHERE RAL.NRO_LIGACAO like '" & "%" & Me.txtBusca.Text & "%'"
-      
-      ElseIf Me.optFim.value = True Then
-         
-         str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",RAL.NRO_LIGACAO AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y FROM "
-         str = str & "RAMAIS_AGUA_LIGACAO RAL JOIN " & tbPoints & " PT ON PT.OBJECT_ID = RAL.OBJECT_ID_ "
-         str = str & "WHERE RAL.NRO_LIGACAO like '" & "%" & Me.txtBusca.Text & "%'"
-
-      End If
-      Else
-      
-    aa = "RAMAIS_AGUA_LIGACAO"
-    ab = "OBJECT_ID_"
-    ac = "NRO_LIGACAO"
-    ad = LCase(tbPoints)
-    ae = "x"
-    af = "y"
-    ag = "object_id"
-    ah = "NXGS_V_LIG_COMERCIAL"
-    ai = "CONSUMIDOR"
-    
-     
-     
-     If Me.optInicio.value = True Then
-     str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + aa + """" + "." + """" + ac + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
-         str = str & "" + """" + aa + """" + " JOIN " + """" + ad + """" + "  ON " + """" + ad + """" + "." + """" + ag + """" + "=" + """" + aa + """" + "." + """" + ab + """" + ""
-         str = str & "WHERE " + """" + aa + """" + "." + """" + ac + """" + " like '" & Me.txtBusca.Text & "%'"
-      
-    '  MsgBox "ARQUIVO DEBUG SALVO"
-' WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-      
-      ElseIf Me.optQQRParte.value = True Then
-         
-      str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + aa + """" + "." + """" + ac + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
-         str = str & "" + """" + aa + """" + " JOIN " + """" + ad + """" + "  ON " + """" + ad + """" + "." + """" + ag + """" + "=" + """" + aa + """" + "." + """" + ab + """" + ""
-         str = str & "WHERE " + """" + aa + """" + "." + """" + ac + """" + " like '%" & Me.txtBusca.Text & "%'"
-      ElseIf Me.optFim.value = True Then
-         
-       str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + aa + """" + "." + """" + ac + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
-         str = str & "" + """" + aa + """" + " JOIN " + """" + ad + """" + "  ON " + """" + ad + """" + "." + """" + ag + """" + "=" + """" + aa + """" + "." + """" + ab + """" + ""
-         str = str & "WHERE " + """" + aa + """" + "." + """" + ac + """" + " like '%" & Me.txtBusca.Text & "'"
-
-      End If
-End If
-End If
-     
-
-
- If Me.optNomeCliente.value = True Then
- If frmCanvas.TipoConexao <> 4 Then
-
-
-      If Me.optInicio.value = True Then
-         
-      
-      
-      
-     
-       str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",COM.CONSUMIDOR AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y "
-         str = str & "FROM NXGS_V_LIG_COMERCIAL COM "
-         str = str & "JOIN RAMAIS_AGUA_LIGACAO RAL ON RAL.NRO_LIGACAO = COM.NRO_LIGACAO "
-         str = str & "JOIN " & tbPoints & " PT ON RAL.OBJECT_ID_ = PT.OBJECT_ID "
-         str = str & "WHERE COM.CONSUMIDOR LIKE '" & Me.txtBusca.Text & "%'"
-      
-      ElseIf Me.optQQRParte.value = True Then
-      
-         str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",COM.CONSUMIDOR AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y "
-         str = str & "FROM NXGS_V_LIG_COMERCIAL COM "
-         str = str & "JOIN RAMAIS_AGUA_LIGACAO RAL ON RAL.NRO_LIGACAO = COM.NRO_LIGACAO "
-         str = str & "JOIN " & tbPoints & " PT ON RAL.OBJECT_ID_ = PT.OBJECT_ID "
-         str = str & "WHERE COM.CONSUMIDOR LIKE '%" & Me.txtBusca.Text & "%'"
-         
-      ElseIf Me.optFim.value = True Then
-         
-         str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",COM.CONSUMIDOR AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y "
-         str = str & "FROM NXGS_V_LIG_COMERCIAL COM "
-         str = str & "JOIN RAMAIS_AGUA_LIGACAO RAL ON RAL.NRO_LIGACAO = COM.NRO_LIGACAO "
-         str = str & "JOIN " & tbPoints & " PT ON RAL.OBJECT_ID_ = PT.OBJECT_ID "
-         str = str & "WHERE COM.CONSUMIDOR LIKE '%" & Me.txtBusca.Text & "'"
-         End If
-       Else
- aa = "RAMAIS_AGUA_LIGACAO"
-    ab = "OBJECT_ID_"
-    ac = "NRO_LIGACAO"
-    ad = LCase(tbPoints)
-    ae = "x"
-    af = "y"
-    ag = "object_id"
-    ah = "NXGS_V_LIG_COMERCIAL"
-    ai = "CONSUMIDOR"
-      If Me.optInicio.value = True Then
-         
-         str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + ah + """" + "." + """" + ai + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
-         str = str & "" + """" + ah + """" + ""
-         str = str & "JOIN " + """" + aa + """" + " ON " + """" + aa + """" + "." + """" + ac + """" + " = " + """" + ah + """" + "." + """" + ac + """" + " "
-         str = str & "JOIN " + """" + LCase(tbPoints) + """" + "  ON " + """" + aa + """" + "." + """" + ab + """" + " = " + """" + ad + """" + "." + """" + ag + """" + " "
-         str = str & "WHERE " + """" + ah + """" + "." + """" + ai + """" + " LIKE '" & Me.txtBusca.Text & "%'"
-      
-      ElseIf Me.optQQRParte.value = True Then
-      
-          str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + ah + """" + "." + """" + ai + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
-         str = str & " " + """" + ah + """" + ""
-         str = str & "JOIN " + """" + aa + """" + " ON " + """" + aa + """" + "." + """" + ac + """" + " = " + """" + ah + """" + "." + """" + ac + """" + " "
-         str = str & "JOIN " + """" + LCase(tbPoints) + """" + "  ON " + """" + aa + """" + "." + """" + ab + """" + " = " + """" + ad + """" + "." + """" + ag + """" + " "
-         str = str & "WHERE " + """" + ah + """" + "." + """" + ai + """" + " LIKE '%" & Me.txtBusca.Text & "%'"
-      
-         
-      ElseIf Me.optFim.value = True Then
-         
-          str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + ah + """" + "." + """" + ai + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
-         str = str & " " + """" + ah + """" + ""
-         str = str & "JOIN " + """" + aa + """" + " ON " + """" + aa + """" + "." + """" + ac + """" + " = " + """" + ah + """" + "." + """" + ac + """" + " "
-         str = str & "JOIN " + """" + LCase(tbPoints) + """" + "  ON " + """" + aa + """" + "." + """" + ab + """" + " = " + """" + ad + """" + "." + """" + ag + """" + " "
-         str = str & "WHERE " + """" + ah + """" + "." + """" + ai + """" + " LIKE '%" & Me.txtBusca.Text & "'"
-      
-      
-      End If
-   End If
-   End If
-   
-      rs.Open str, Conn, adOpenDynamic, adLockOptimistic
-
+    If (frmCanvas.TipoConexao = 4) Then
+        If (frmCanvas.POST <> 10) Then
+            mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
+            mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
+            mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
+            mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
+            Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
+            frmCanvas.FunDecripta (Senha)
+            decriptada = frmCanvas.Senha
+            TeAcXConnection1.Open mUSUARIO, decriptada, mBANCO, mSERVIDOR, mPORTA
+            frmCanvas.POST2 (10)
+            TeDatabase.Provider = frmCanvas.TipoConexao
+            TeDatabase.connection = TeAcXConnection1.objectConnection_
+        End If
+    Else
+        TeDatabase.Provider = frmCanvas.TipoConexao
+        TeDatabase.connection = Conn
+    End If
+    'RECUPERA A TABELA QUE POSSUI OS PONTOS REFERENTES A RAMAIS AGUA
+    tbPoints = TeDatabase.getRepresentationTableName("RAMAIS_AGUA", tpPOINTS)
+    If Trim(Me.txtBusca.Text) = "" Then
+        MsgBox "Informe o valor que deseja procurar", vbInformation, ""
+        Me.txtBusca.SetFocus
+        Exit Sub
+    End If
+    MousePointer = vbHourglass
+    If Me.optNroLigacao.value = True Then
+        If frmCanvas.TipoConexao <> 4 Then
+            If Me.optInicio.value = True Then
+                str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",RAL.NRO_LIGACAO AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y FROM "
+                str = str & "RAMAIS_AGUA_LIGACAO RAL JOIN " & tbPoints & " PT ON PT.OBJECT_ID = RAL.OBJECT_ID_ "
+                str = str & "WHERE RAL.NRO_LIGACAO like '" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optQQRParte.value = True Then
+                str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",RAL.NRO_LIGACAO AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y FROM "
+                str = str & "RAMAIS_AGUA_LIGACAO RAL JOIN " & tbPoints & " PT ON PT.OBJECT_ID = RAL.OBJECT_ID_ "
+                str = str & "WHERE RAL.NRO_LIGACAO like '" & "%" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optFim.value = True Then
+                str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",RAL.NRO_LIGACAO AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y FROM "
+                str = str & "RAMAIS_AGUA_LIGACAO RAL JOIN " & tbPoints & " PT ON PT.OBJECT_ID = RAL.OBJECT_ID_ "
+                str = str & "WHERE RAL.NRO_LIGACAO like '" & "%" & Me.txtBusca.Text & "%'"
+            End If
+        Else
+            aa = "RAMAIS_AGUA_LIGACAO"
+            ab = "OBJECT_ID_"
+            ac = "NRO_LIGACAO"
+            ad = LCase(tbPoints)
+            ae = "x"
+            af = "y"
+            ag = "object_id"
+            ah = "NXGS_V_LIG_COMERCIAL"
+            ai = "CONSUMIDOR"
+            If Me.optInicio.value = True Then
+                str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + aa + """" + "." + """" + ac + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
+                str = str & "" + """" + aa + """" + " JOIN " + """" + ad + """" + "  ON " + """" + ad + """" + "." + """" + ag + """" + "=" + """" + aa + """" + "." + """" + ab + """" + ""
+                str = str & "WHERE " + """" + aa + """" + "." + """" + ac + """" + " like '" & Me.txtBusca.Text & "%'"
+                '  MsgBox "ARQUIVO DEBUG SALVO"
+                ' WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
+            ElseIf Me.optQQRParte.value = True Then
+                str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + aa + """" + "." + """" + ac + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
+                str = str & "" + """" + aa + """" + " JOIN " + """" + ad + """" + "  ON " + """" + ad + """" + "." + """" + ag + """" + "=" + """" + aa + """" + "." + """" + ab + """" + ""
+                str = str & "WHERE " + """" + aa + """" + "." + """" + ac + """" + " like '%" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optFim.value = True Then
+                str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + aa + """" + "." + """" + ac + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
+                str = str & "" + """" + aa + """" + " JOIN " + """" + ad + """" + "  ON " + """" + ad + """" + "." + """" + ag + """" + "=" + """" + aa + """" + "." + """" + ab + """" + ""
+                str = str & "WHERE " + """" + aa + """" + "." + """" + ac + """" + " like '%" & Me.txtBusca.Text & "'"
+            End If
+        End If
+    End If
+    If Me.optNomeCliente.value = True Then
+        If frmCanvas.TipoConexao <> 4 Then
+            If Me.optInicio.value = True Then
+                str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",COM.CONSUMIDOR AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y "
+                str = str & "FROM NXGS_V_LIG_COMERCIAL COM "
+                str = str & "JOIN RAMAIS_AGUA_LIGACAO RAL ON RAL.NRO_LIGACAO = COM.NRO_LIGACAO "
+                str = str & "JOIN " & tbPoints & " PT ON RAL.OBJECT_ID_ = PT.OBJECT_ID "
+                str = str & "WHERE COM.CONSUMIDOR LIKE '" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optQQRParte.value = True Then
+                str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",COM.CONSUMIDOR AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y "
+                str = str & "FROM NXGS_V_LIG_COMERCIAL COM "
+                str = str & "JOIN RAMAIS_AGUA_LIGACAO RAL ON RAL.NRO_LIGACAO = COM.NRO_LIGACAO "
+                str = str & "JOIN " & tbPoints & " PT ON RAL.OBJECT_ID_ = PT.OBJECT_ID "
+                str = str & "WHERE COM.CONSUMIDOR LIKE '%" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optFim.value = True Then
+                str = "SELECT RAL.OBJECT_ID_ AS " + """" + "ID" + """" + ",COM.CONSUMIDOR AS " + """" + "BUSCA" + """" + ",PT.X,PT.Y "
+                str = str & "FROM NXGS_V_LIG_COMERCIAL COM "
+                str = str & "JOIN RAMAIS_AGUA_LIGACAO RAL ON RAL.NRO_LIGACAO = COM.NRO_LIGACAO "
+                str = str & "JOIN " & tbPoints & " PT ON RAL.OBJECT_ID_ = PT.OBJECT_ID "
+                str = str & "WHERE COM.CONSUMIDOR LIKE '%" & Me.txtBusca.Text & "'"
+            End If
+        Else
+            aa = "RAMAIS_AGUA_LIGACAO"
+            ab = "OBJECT_ID_"
+            ac = "NRO_LIGACAO"
+            ad = LCase(tbPoints)
+            ae = "x"
+            af = "y"
+            ag = "object_id"
+            ah = "NXGS_V_LIG_COMERCIAL"
+            ai = "CONSUMIDOR"
+            If Me.optInicio.value = True Then
+                str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + ah + """" + "." + """" + ai + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
+                str = str & "" + """" + ah + """" + ""
+                str = str & "JOIN " + """" + aa + """" + " ON " + """" + aa + """" + "." + """" + ac + """" + " = " + """" + ah + """" + "." + """" + ac + """" + " "
+                str = str & "JOIN " + """" + LCase(tbPoints) + """" + "  ON " + """" + aa + """" + "." + """" + ab + """" + " = " + """" + ad + """" + "." + """" + ag + """" + " "
+                str = str & "WHERE " + """" + ah + """" + "." + """" + ai + """" + " LIKE '" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optQQRParte.value = True Then
+                str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + ah + """" + "." + """" + ai + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
+                str = str & " " + """" + ah + """" + ""
+                str = str & "JOIN " + """" + aa + """" + " ON " + """" + aa + """" + "." + """" + ac + """" + " = " + """" + ah + """" + "." + """" + ac + """" + " "
+                str = str & "JOIN " + """" + LCase(tbPoints) + """" + "  ON " + """" + aa + """" + "." + """" + ab + """" + " = " + """" + ad + """" + "." + """" + ag + """" + " "
+                str = str & "WHERE " + """" + ah + """" + "." + """" + ai + """" + " LIKE '%" & Me.txtBusca.Text & "%'"
+            ElseIf Me.optFim.value = True Then
+                str = "SELECT " + """" + aa + """" + "." + """" + ab + """" + " AS " + """" + "ID" + """" + "," + """" + ah + """" + "." + """" + ai + """" + " AS " + """" + "BUSCA" + """" + "," + """" + ad + """" + "." + """" + ae + """" + "," + """" + ad + """" + "." + """" + af + """" + " FROM "
+                str = str & " " + """" + ah + """" + ""
+                str = str & "JOIN " + """" + aa + """" + " ON " + """" + aa + """" + "." + """" + ac + """" + " = " + """" + ah + """" + "." + """" + ac + """" + " "
+                str = str & "JOIN " + """" + LCase(tbPoints) + """" + "  ON " + """" + aa + """" + "." + """" + ab + """" + " = " + """" + ad + """" + "." + """" + ag + """" + " "
+                str = str & "WHERE " + """" + ah + """" + "." + """" + ai + """" + " LIKE '%" & Me.txtBusca.Text & "'"
+            End If
+        End If
+    End If
+    rs.Open str, Conn, adOpenDynamic, adLockOptimistic
     Me.Lista.ListItems.Clear
-
     If rs.EOF = False Then
         'CARREGA NO FORM TODAS AS LIGAÇÕES DISPONIVEIS COM BASE NO PRÉ FILTRO
         Do While Not rs.EOF
-
             Set itmx = Lista.ListItems.Add(, , rs.Fields("BUSCA").value)
             itmx.SubItems(1) = IIf(IsNull(rs.Fields("X").value), "", rs.Fields("X").value)
             itmx.SubItems(2) = IIf(IsNull(rs.Fields("Y").value), "", rs.Fields("Y").value)
             itmx.Tag = rs.Fields("ID").value
-            
             rs.MoveNext
         Loop
-    
     End If
     rs.Close
-    
     MousePointer = vbDefault
+    Exit Sub
+
 Trata_Erro:
-    
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   Else
-      
-      PrintErro CStr(Me.Name), "Private Sub cmdLocalizar_Click()", CStr(Err.Number), CStr(Err.Description), True
-      
-   End If
-   MousePointer = vbDefault
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmEncontraConsumidor", "cmdLocalizar_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
+    MousePointer = vbDefault
 End Sub
-
-
+' Usuário selecionou com dois cliques do mouse um consumidor e irá fazer o zoom no mesmo
+'
+'
+'
 Private Sub Lista_DblClick()
+    On Error GoTo Trata_Erro
+    Dim i As Long
+    Dim X As Double, Y As Double
+    Dim xmin As Double
+    Dim ymin As Double
+    Dim xmax As Double
+    Dim ymax As Double
+    Dim a As String
+    Dim Object_id_ As String
     
-   Dim i As Long
-   Dim X As Double, Y As Double
-   
-   Dim xmin As Double
-   Dim ymin As Double
-   Dim xmax As Double
-   Dim ymax As Double
-   Dim a As String
-   Dim Object_id_ As String
-   
-   X = Lista.SelectedItem.ListSubItems(1)
-   Y = Lista.SelectedItem.ListSubItems(2)
-   
-   blnLocalizandoConsumidor = True
-   
-   xWorld = X 'carrega as variáveis públicas
-   yWorld = Y 'carrega as variáveis públicas
+    X = Lista.SelectedItem.ListSubItems(1)
+    Y = Lista.SelectedItem.ListSubItems(2)
+    blnLocalizandoConsumidor = True
+    xWorld = X 'carrega as variáveis públicas
+    yWorld = Y 'carrega as variáveis públicas
+    Exit Sub
 
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmEncontraConsumidor", "Lista_DblClick", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
+    MousePointer = vbDefault
 End Sub
 

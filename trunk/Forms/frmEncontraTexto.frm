@@ -231,10 +231,15 @@ Else
     Me.cmdPesquisar.Enabled = False
 End If
 End Sub
+' Carrega os temas que estão ativos para o usuário
+'
+'
+'
 Private Sub Form_Load()
     On Error GoTo Trata_Erro
     Dim Vetor As Variant
     Dim str As String
+    
     Close #3
     Open glo.diretorioGeoSan & "\CONTROLES\FTema.txt" For Input As #3 'LÊ O ARQUIVO LOG QUE FOI CRIADO NO MOMENTO DE ABERTURA DO MAPA
     Do While Not EOF(3)
@@ -243,21 +248,26 @@ Private Sub Form_Load()
         Combo1.AddItem Vetor(1)
     Loop
     Close #3
+
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        Err.Clear
+       ErroUsuario.Registra "frmEncontraTexto", "Form_Load", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
-
-
-
-
+' Localiza os textos no mapa para poder fazer zoom
+'
+'
+'
 Private Sub cmdPesquisar_Click()
-     Dim j As Long
-     Lista.ListItems.Clear
-         gu1 = "theme_id"
+    On Error GoTo Trata_Erro
+    Dim j As Long
+    Dim itmx As ListItem
+    Dim rs As New ADODB.Recordset
+
+    Lista.ListItems.Clear
+    gu1 = "theme_id"
     gu2 = "layer_id"
     gu3 = "te_theme"
     gu4 = "geom_id"
@@ -265,62 +275,63 @@ Private Sub cmdPesquisar_Click()
     gu6 = "texts"
     gu7 = "x"
     gu8 = "y"
-    
     If Me.optInicio.value = True Then
         If frmCanvas.TipoConexao <> 4 Then
-    str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE TEXT_VALUE LIKE '" & TXTSTRING.Text & "%'"
-    
-
-    Else
-    str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu5 + """" + " LIKE '" & TXTSTRING.Text & "%'"
-    End If
-    ElseIf Me.optFim.value = True Then
-       If frmCanvas.TipoConexao <> 4 Then
-        str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE TEXT_VALUE LIKE '%" & TXTSTRING.Text & "'"
+            str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE TEXT_VALUE LIKE '" & TXTSTRING.Text & "%'"
         Else
-        str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu5 + """" + " LIKE '" & TXTSTRING.Text & "%'"
+            str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu5 + """" + " LIKE '" & TXTSTRING.Text & "%'"
+        End If
+    ElseIf Me.optFim.value = True Then
+        If frmCanvas.TipoConexao <> 4 Then
+            str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE TEXT_VALUE LIKE '%" & TXTSTRING.Text & "'"
+        Else
+            str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu5 + """" + " LIKE '" & TXTSTRING.Text & "%'"
         End If
     ElseIf Me.optQQRParte.value = True Then
-         If frmCanvas.TipoConexao <> 4 Then
-        str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE TEXT_VALUE LIKE '%" & TXTSTRING.Text & "%'"
+        If frmCanvas.TipoConexao <> 4 Then
+            str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE TEXT_VALUE LIKE '%" & TXTSTRING.Text & "%'"
         Else
-        str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu5 + """" + " LIKE '" & TXTSTRING.Text & "%'"
+            str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu5 + """" + " LIKE '" & TXTSTRING.Text & "%'"
         End If
     End If
-
-
-     Dim itmx As ListItem
-    
     'FAZ SELECT COM BASE NOS CAMPOS CRIADOS
     j = 0
     If str <> "" Then
-        Dim rs As New ADODB.Recordset
-        
-        
         Set rs = Conn.execute(str)
         If rs.EOF = False Then
             'CARREGA NO FORM TODAS AS LIGAÇÕES DISPONIVEIS COM BASE NO PRÉ FILTRO
             Do While Not rs.EOF
-    
-               'DoEvents
-   
-               Set itmx = Lista.ListItems.Add(, , rs.Fields("TEXT_VALUE").value)
-               itmx.SubItems(1) = IIf(IsNull(rs.Fields("X").value), "", rs.Fields("X").value)
-               itmx.SubItems(2) = IIf(IsNull(rs.Fields("Y").value), "", rs.Fields("Y").value)
-               itmx.Tag = rs.Fields("GEOM_ID").value
-               j = j + 1
-                
-               rs.MoveNext
+                'DoEvents
+                Set itmx = Lista.ListItems.Add(, , rs.Fields("TEXT_VALUE").value)
+                itmx.SubItems(1) = IIf(IsNull(rs.Fields("X").value), "", rs.Fields("X").value)
+                itmx.SubItems(2) = IIf(IsNull(rs.Fields("Y").value), "", rs.Fields("Y").value)
+                itmx.Tag = rs.Fields("GEOM_ID").value
+                j = j + 1
+                rs.MoveNext
             Loop
         End If
         rs.Close
         'Set Rs = Nothing
     End If
     Label3.Caption = "Localizadas " & j & " referências."
-
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmEncontraTexto", "cmdPesquisar_Click", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
 End Sub
-
+' Usuário clicou duas vezes no texto que deseja visualizar no mapa
+'
+'
+'
 Private Sub Lista_DblClick()
+    On Error GoTo Trata_Erro
+    Dim i As Long
+    Dim X As Double, Y As Double
+    Dim rs As New ADODB.Recordset
 
     gu1 = "theme_id"
     gu2 = "layer_id"
@@ -330,33 +341,30 @@ Private Sub Lista_DblClick()
     gu6 = "texts"
     gu7 = "x"
     gu8 = "y"
-    
-    Dim i As Long
-    Dim x As Double, y As Double
     If strLayerID <> "" And Me.cmdPesquisar.Enabled = True Then
-        
         If Lista.ListItems.count <= 0 Then
             Exit Sub
         End If
-        
         i = Lista.SelectedItem.Tag
-         If frmCanvas.TipoConexao <> 4 Then
-        str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE GEOM_ID =" & i & ""
+        If frmCanvas.TipoConexao <> 4 Then
+            str = "SELECT GEOM_ID,TEXT_VALUE,X,Y FROM TEXTS" & strLayerID & " WHERE GEOM_ID =" & i & ""
         Else
-        str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu4 + """" + "='" & i & "'"
+            str = "SELECT " + """" + gu4 + """" + "," + """" + gu5 + """" + "," + """" + gu7 + """" + "," + """" + gu8 + """" + " FROM " + """" + gu6 + strLayerID + """" + " WHERE " + """" + gu4 + """" + "='" & i & "'"
         End If
-        Dim rs As New ADODB.Recordset
         Set rs = Conn.execute(str)
-        
         If rs.EOF = False Then
-    
-            xWorld = CLng(rs!x) 'carrega as variáveis públicas com valores do banco
-            yWorld = CLng(rs!y) 'carrega as variáveis públicas com valores do banco
-          
-        
+            xWorld = CLng(rs!X) 'carrega as variáveis públicas com valores do banco
+            yWorld = CLng(rs!Y) 'carrega as variáveis públicas com valores do banco
         End If
-        
         rs.Close
+    End If
+    Exit Sub
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmEncontraTexto", "Lista_DblClick", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 

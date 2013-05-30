@@ -1206,6 +1206,8 @@ Private Sub TCanvas_onEndPlotView()
     Else
         TCanvas.tolerance = 1
     End If
+    Exit Sub
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next

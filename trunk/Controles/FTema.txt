@@ -1,13 +1,15 @@
-1479;WATERCOMPONENTS;
-1480;RAMAIS_AGUA;
-1481;Quadras-lin;
-1483;Ortofoto_2003;
-1484;Ortofoto_2007;
-1485;Ortofoto_2010;
-1486;Lotes-pol;
-1487;Curvas_Nível-lin;
-1491;RESERVATÓRIO;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='28')
-1488;Registros;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='27')
-1490;Registro Fixo;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='35')
-1478;WATERLINES;
-1489;VRP;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='32')
+1437;WATERCOMPONENTS;
+1458;Todas as redes;
+1435;FOTO2010;
+1457;REGISTRO FIXO DIV SETOR ABAST;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='35')
+1454;VRPs;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='32')
+1456;REGISTROS;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='27')
+1459;REGISTRO DE SETOR;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='36')
+1467;RNV;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='28')
+1468;RAMAIS_AGUA;
+1469;BAIRROS_CORREIO_TEXTO;
+1470;BOMBA;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='3')
+1471;RNF;object_id in (select object_id_ from WATERCOMPONENTS WHERE ID_TYPE='36')
+1472;NOME_RUAS_NOV_09;
+1481;Limite de Município;
+1482;DOCUMENTOS;
