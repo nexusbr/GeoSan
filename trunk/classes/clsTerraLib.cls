@@ -180,13 +180,14 @@ On Error GoTo Trata_Erro
             Dim objIdTrecho As String
             Dim objIdRamal As String
             Dim geomIdRamal As String
-            Dim contador As Integer                         'número de ramais processados
-            Dim comprTrecho As Double                       'comprimento total do trecho de rede antes de mover
+            Dim contador As Integer                                     'número de ramais processados
+            Dim comprTrecho As Double                                   'comprimento total do trecho de rede antes de mover
             Dim retorno As Boolean
             
             'nesta etapa ele vai localizar todos os trechos que serão movidos e os respectivos ramais se houverem e armazenar tudo na memória
                 contador = 0
                 objIdNoMovendo = tcs.getSelectObjectId(0, 4)                        'obtem o object_id da primeira (0) (e única) geometria do tipo 4=ponto (ver tipos em setActiveGeometry)
+                varGlobais.objIdNoSelecionado = objIdNoMovendo                      'guarda o valor do objId do nó da rede que está movendo e foi selecionado, para depois poder atribir a cota ao mesmo
                 trechos.obtemTrechos objIdNoMovendo, objIDsTrechosMovendo           'obtem todos os object_ids dos trechos de rede que estão conectados ao nó que está movendo
                 varGlobais.objIdTre = Null                                          'zera a variável global, caso contenha algum valor lá
                 varGlobais.objIdTre = objIDsTrechosMovendo                          'armazena na variável global todos os object_ids dos trechos de rede que estão conectados ao nó que está movendo
@@ -719,28 +720,63 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
     Dim object_id As String, CompCalc As Double, a As Integer, ld As String, nd1 As String, nd2 As String
     Dim LayerName As String
     Dim LayerReferencia As String
-   
-    If Movendo = True Then ' SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA
+    Dim i As Byte
+    Dim No As String
+    Dim getZNo As New CObtemZdoNo                           'método para o cálculo da cota z do nó inserido
+    Dim zNo As Double                                       'cota z do nó inserido que será calculada
+    Dim stringSQL As String
+    Dim rsq As New ADODB.Recordset
+    Dim TBGeometria As String
+    Dim compMax As Double
+    Dim getObjIdsNos As New CObtemObjIdsNos                 'para receber os obj_ids dos nós inicial e final
+    Dim noInicial As String
+    Dim noFinal As String
+    Dim retorno As Boolean
+    
+    If Movendo = True Then  'SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA, E ATUALIZA A COTA DO NÓ
         LayerName = tcs.GetReferenceLayer 'SETA O LAYER DE REFERENCIA COMO ATIVO
         cgeo.DeleteTextObjectWithInsertText LayerName, LINE_ID, CStr(LINE_ID)
-    Else
+        'atualização da cota do nó
+        No = varGlobais.objIdNoSelecionado
+        If No <> "NULO" Then
+            If frmCanvas.TipoConexao <> 4 Then      'caso seja Oracle ou SQLServer
+                stringSQL = "SELECT object_id FROM POINTS2 WHERE OBJECT_ID = " & No
+                rsq.Open stringSQL, Conn, adOpenDynamic, adLockReadOnly
+            Else    'caso seja Postgres
+                    'implementar
+            End If
+            If rsq.EOF = False Then ' SE ENCONTROU O REGISTRO, ou seja o nó existe
+                zNo = getZNo.CObtemZFromObjIdNo(No)                     'obtem a cota z do nó a partir do object_id do mesmo
+                If frmCanvas.TipoConexao <> 4 Then
+                    stringSQL = "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " where object_id_ = " & No   'atualiza a cota do nó
+                    Conn.execute (stringSQL)
+                Else 'Postgres
+                    'Implementar
+                End If
+            Else                    'nó não existe
+                'deveria ter encontrado o nó - exibir mensagem de erro
+                MsgBox ("Nó " & No & " não foi encontrado.")
+            End If
+            rsq.Close
+            varGlobais.objIdNoSelecionado = "NULO"                      'para rodar só uma vez (a primeira), pois entra nesta rotina várias vezes para cada seguimento de rede
+        End If
+        'fim da atualização da cota do nó movido
+    Else                    ' ESTÁ DESENHANDO A REDE
         If TerraEvent = tg_DrawNetWorkline Then
             LayerName = tcs.getCurrentLayer
         Else
             LayerName = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
         End If
         LayerReferencia = cgeo.GetReferenceLayer(LayerName)
-        Dim rs As ADODB.Recordset
         Set rs = New ADODB.Recordset
-        Dim stringSQL As String
         'prepara querie para procurar em todas as linhas de rede se já existe alguma com o object_id_ da que será criada
         If frmCanvas.TipoConexao <> 4 Then
-            rs.Open ("SELECT * FROM " & LayerName & " WHERE OBJECT_ID_ = " & LINE_ID), Conn, adOpenDynamic, adLockReadOnly
+            rsq.Open ("SELECT * FROM " & LayerName & " WHERE OBJECT_ID_ = " & LINE_ID), Conn, adOpenDynamic, adLockReadOnly
         Else
             b = "OBJECT_ID_"
-            rs.Open ("SELECT * FROM " + """" + LayerName + """" + " WHERE " + """" + b + """" + " = '" & LINE_ID & "'"), Conn, adOpenDynamic, adLockOptimistic
+            rsq.Open ("SELECT * FROM " + """" + LayerName + """" + " WHERE " + """" + b + """" + " = '" & LINE_ID & "'"), Conn, adOpenDynamic, adLockOptimistic
         End If
-        If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO
+        If rsq.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO
             'CRIA UM NOVO REGISTRO NA TABELA DE ATRIBUTOS DE LINHAS COM LINE_ID,OBJECT_ID_ IGUAL AO CÓDIGO DA GEOMETRIA
             ' O PRIMNEIRO LINE ID É NUMERICO E O SEGUNDO É TEXTO
             If frmCanvas.TipoConexao <> 4 Then
@@ -755,13 +791,12 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         Else
             'NÃO DEVERIA TER ENCONTRADO
         End If
-        rs.Close
+        rsq.Close
         'DLL Pm4Manager SALAVA AS PRORPIEDADES DA LINHA NA TABELA DE ATRIBUTOS
         CtrlMgr.SaveProperties CStr(LINE_ID), strUser
         'OBTEM NA VARIÁVEL CompCalc O COMPRIMENTO DA NOVA LINHA
         tdb.getLengthOfLine LINE_ID, CStr(LINE_ID), CompCalc
         'ATUALIZADO O COMPRIMENTO, NÓ INICIAL E NÓ FINAL DA LINHA NA TABELA DE ATRIBUTOS
-        Dim compMax As Double
         compMax = CompCalc  ' Replace(Round(CompCalc, 2), ",", ".")
         If frmCanvas.TipoConexao <> 4 Then
             If compMax > 9999.99 Then
@@ -792,11 +827,8 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         Conn.execute (stringSQL)
         'DEPOIS DE CARREGADAS AS INFORMAÇÕES NA TABELA DE ATRIBUTOS, CHAMA O MÉTODO DE CRIAR TEXTOS
         InsertTextAttributesLine LayerName, LINE_ID, CStr(LINE_ID)
-        Dim TBGeometria As String
         TBGeometria = tdb.getRepresentationTableName(LayerReferencia, tpPOINTS)
         'INSERE O ATRIBUTO DO NÓ 1 E NÓ 2 NA TABELA DE ATRIBUTOS COM O SEGUINTE LOOP
-        Dim i As Byte
-        Dim No As String
         For i = 1 To 2 'EXECUTA 2 VEZES A ROTINA ABAIXO
             If i = 1 Then
                 No = Node_id1
@@ -805,17 +837,13 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
             End If
             Set rs = New ADODB.Recordset
             If frmCanvas.TipoConexao <> 4 Then
-                rs.Open ("SELECT * FROM " & LayerReferencia & " WHERE OBJECT_ID_ = '" & No & "'"), Conn, adOpenDynamic, adLockReadOnly
+                rsq.Open ("SELECT * FROM " & LayerReferencia & " WHERE OBJECT_ID_ = '" & No & "'"), Conn, adOpenDynamic, adLockReadOnly
             Else
                 az = "OBJECT_ID_"
-                rs.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
+                rsq.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
             End If
-            If rs.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
-                Dim getZNo As New CObtemZdoNo                           'método para o cálculo da cota z do nó inserido
-                Dim zNo As Double                                       'cota z do nó inserido que será calculada
-                
+            If rsq.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
                 zNo = getZNo.CObtemZFromObjIdNo(No)                     'obtem a cota z do nó a partir do object_id do mesmo
-                
                 If frmCanvas.TipoConexao <> 4 Then
                     stringSQL = "INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"
                     Conn.execute (stringSQL)
@@ -835,7 +863,7 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                     cgeo.InsertTextInPoint CLng(No), CStr(No), LayerReferencia, 0, 0
                 End If
             End If
-            rs.Close
+            rsq.Close
         Next
         'Rotina que procura Atributos por referencia
         'If FrmMain.mnuLoadAttributeByReference.Checked Then
@@ -844,12 +872,13 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         'End If
     End If
     CreatNetWorkAttribute = True
+    Exit Function
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        PrintErro "clsTerraLib", "Public Function CreatNetWorkAttribute", CStr(Err.Number), CStr(Err.Description), True
+        ErroUsuario.Registra "clsTerraLib", "CreatNetWorkAttribute", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function
 

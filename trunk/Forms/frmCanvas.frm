@@ -521,7 +521,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True, Erl
+        ErroUsuario.Registra "frmCanvas", "init", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
         End
     End If
 End Function

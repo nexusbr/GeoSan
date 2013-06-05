@@ -360,3 +360,36 @@ DESCRIÇÃO      Object variable or With block variable not set
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           04/06/2013 10:15:52 
+USUÁRIO        nexus
+VERSÃO         06.10.09
+MÓDULO         clsTerraLib
+EVENTO         Public Function CreatNetWorkAttribute
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/06/2013 10:56:47 
+USUÁRIO        nexus
+VERSÃO         06.10.09
+MÓDULO         clsTerraLib
+EVENTO         Public Function CreatNetWorkAttribute
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           04/06/2013 10:57:02 
+USUÁRIO        nexus
+VERSÃO         06.10.09
+MÓDULO         clsTerraLib
+EVENTO         Public Function CreatNetWorkAttribute
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+

@@ -17,6 +17,7 @@ Private objIDsTrechos As Variant
 Private totalTrechosMovendo As Integer
 Private retornaEmailErro As Boolean
 Private paraExe As Boolean
+Private objIdNoMovendo As String
 'Retorna valor de do object_id do trecho
 '
 Property Get objIdTre() As Variant
@@ -56,6 +57,16 @@ End Property
 '
 Property Let pararExecucao(ByVal para As Variant)
     paraExe = para
+End Property
+'Retorna valor do object_id do nó selecionado para mover
+'
+Property Get objIdNoSelecionado() As Variant
+    objIdNoSelecionado = objIdNoMovendo
+End Property
+'  Recebe valor do object_id do nó selecionado para mover
+'
+Property Let objIdNoSelecionado(ByVal objId As Variant)
+    objIdNoMovendo = objId
 End Property
 Private Function variaveis()
 
