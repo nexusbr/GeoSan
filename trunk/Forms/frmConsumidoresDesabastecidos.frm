@@ -152,6 +152,8 @@ Public Function init(Object_id_trecho As String) As Boolean
     Dim fl As String
     Dim fm As String
     Dim numeroErro As String                'indica o número do erro que pode ocorrer
+    Dim ddd As String
+    Dim rsNro_Ligacao As ADODB.Recordset
     
     numeroErro = "Erro não identificado"
     count2 = 0
@@ -161,10 +163,6 @@ Public Function init(Object_id_trecho As String) As Boolean
     fk = "ramais_agua"
     fl = "OBJECT_ID_"
     fm = "OBJECT_ID_TRECHO"
-    ' str = "SELECT l.nro_ligacao from ramais_agua r inner join ramais_agua_ligacao l " & _
-    '     "on r.object_id_=l.object_id_ " & _
-    '  "where object_id_trecho in(" & Object_id_trecho & ")"
-    'alerado em 20/10/2010
     If frmCanvas.TipoConexao = 4 Then
         'se for Postgres
         If connection <> 10 Then
@@ -218,8 +216,6 @@ Public Function init(Object_id_trecho As String) As Boolean
         End If
     End If
     'Conn.execute ("INSERT INTO GS_TEMP(NRO_LIGACAO) VALUES (" & Object_id_trecho & ")")
-    Dim ddd As String
-    Dim rsNro_Ligacao As ADODB.Recordset
     Set rsNro_Ligacao = New ADODB.Recordset
     'abre o recordset da tabela temporária de ligações cujo nome está definido no banco de dados em GetQueryProcess(19)
     If frmCanvas.TipoConexao = 1 Then
@@ -236,7 +232,7 @@ Public Function init(Object_id_trecho As String) As Boolean
     End If
     'adiciona os números de todas as ligações conectadas aos trechos de rede afetados pela pesquisa (nro_ligacao)
     While Not rs.EOF
-       rsNro_Ligacao.AddNew
+       rsNro_Ligacao.AddNew                                 'adiciona nova linha na tabela GS_TEMP com todos os seguimentos (trechos de rede) que foram pintados. GS_TEMP já foi apagada anteriormente
        rsNro_Ligacao.Fields(0).value = rs.Fields(0).value
        rsNro_Ligacao.Update
        rs.MoveNext
@@ -252,11 +248,11 @@ Public Function init(Object_id_trecho As String) As Boolean
     ' Me.Show vbModal
     ' 'LoozeXP1.EndWinXPCSubClassing
     'prepara a querie para obter os dados das listas das ligações afetadas pela manobra
-    str = GetQueryProcess(18)
+    str = GetQueryProcess(18)                               'vai consultar a vista que tem as ligações de água do comercial, mas somente aqueles trechos registrados em GS_TEMP
     If frmCanvas.TipoConexao <> 4 Then
         'caso SQLServer ou Oracle
         numeroErro = "String conexão: " & str
-        Set rs = ConnSec.execute(str)
+        Set rs = Conn.execute(str)
     Else
         'caso Postgres
         Set rs = conexao.execute(str)
@@ -265,22 +261,22 @@ Public Function init(Object_id_trecho As String) As Boolean
     'prepara a lista para ser apresentada na caixa de diálogo para o usuário
     If frmCanvas.TipoConexao <> 4 Then
         'caso SQLServer ou Oracle
-        Lv.ListItems.Clear
+        lv.ListItems.Clear
         While Not rs.EOF
-            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
-            itmx.SubItems(1) = rs.Fields(1).value
-            itmx.SubItems(2) = rs.Fields(2).value
-            itmx.SubItems(3) = rs.Fields(3).value
-            itmx.SubItems(4) = rs.Fields(4).value
+            Set itmx = lv.ListItems.Add(, , rs.Fields(0).value)
+            itmx.SubItems(1) = IIf(IsNull(rs.Fields(1).value), "", rs.Fields(1).value) 'foi inserido o IsNull, pois foi verificado que em alguns bancos comerciais algumas colunas podem vir com valores nulos o que ocasiona um erro
+            itmx.SubItems(2) = IIf(IsNull(rs.Fields(2).value), "", rs.Fields(2).value)
+            itmx.SubItems(3) = IIf(IsNull(rs.Fields(3).value), "", rs.Fields(3).value)
+            itmx.SubItems(4) = IIf(IsNull(rs.Fields(4).value), "", rs.Fields(4).value)
             QtdeLig = QtdeLig + 1                                   'incrementa a quantidade total de ligações
             rs.MoveNext
         Wend
         rs.Close
     Else
         'caso Postgres
-        Lv.ListItems.Clear
+        lv.ListItems.Clear
         While Not rs.EOF
-            Set itmx = Lv.ListItems.Add(, , rs.Fields(0).value)
+            Set itmx = lv.ListItems.Add(, , rs.Fields(0).value)
             itmx.SubItems(1) = rs.Fields(1).value
             itmx.SubItems(2) = rs.Fields(5).value
             itmx.SubItems(3) = rs.Fields(6).value
@@ -300,7 +296,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "init -(Object_id_trecho As String), " & numeroErro, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        ErroUsuario.Registra "frmConsumidoresDesabastecidos", "init, object_id selecionado: " & Object_id_trecho & " querie: " & numeroErro, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
         init = False
     End If
 End Function
@@ -316,12 +312,12 @@ On Error GoTo Trata_Erro
     cdl1.ShowSave
     If cdl1.filename <> "" Then
         Open cdl1.filename For Output As #1
-        For a = 1 To Lv.ListItems.count
-            Print #1, Lv.ListItems.Item(a).Text & ";" & _
-                        Lv.ListItems.Item(a).SubItems(1) & ";" & _
-                        Lv.ListItems.Item(a).SubItems(2) & ";" & _
-                        Lv.ListItems.Item(a).SubItems(3) & ";" & _
-                        Lv.ListItems.Item(a).SubItems(4)
+        For a = 1 To lv.ListItems.count
+            Print #1, lv.ListItems.Item(a).Text & ";" & _
+                        lv.ListItems.Item(a).SubItems(1) & ";" & _
+                        lv.ListItems.Item(a).SubItems(2) & ";" & _
+                        lv.ListItems.Item(a).SubItems(3) & ";" & _
+                        lv.ListItems.Item(a).SubItems(4)
         Next
         Close #1
         MsgBox "Arquivo gerado com sucesso e disponível no no seguinte endereço: " & cdl1.filename, vbInformation

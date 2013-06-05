@@ -240,6 +240,7 @@ Trata_Erro:
    End If
    
 End Function
+' Chamada quando o usuário seleciona para inserir um nó na rede
 Public Function DrawNetWorkNode()
 On Error GoTo Trata_Erro
    
