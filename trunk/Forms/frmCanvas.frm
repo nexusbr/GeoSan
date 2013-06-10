@@ -889,13 +889,15 @@ Public Sub Tb_SELECT(ByVal Button As String)
         TCanvas_onEndPlotView                   'chama Tcanvas_onEndPlotView para acertar x,y,min e max e a tolerância de localização para desenho de redes
         LoadToolsBar                            'ativa o comando selecionado, caso seja desenho de rede, zoom área, etc. Para o programa ficar sabendo o que ele está fazendo
     End With
+    Exit Sub
+   
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     ElseIf Err.Number = 13 Then
-       Exit Sub
+        Exit Sub
     Else
-       PrintErro CStr(Me.Name), "Public Sub Tb_SELECT", CStr(Err.Number), CStr(Err.Description), True
+       ErroUsuario.Registra "frnCanvas", "Tb_SELECT", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
 
@@ -1898,7 +1900,7 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
     If Node_id1 = 0 Or Node_id2 = 0 Then 'ESTA MOVENDO A REDE. Sempre quando move ele entra com os objects_ids dos nós com zero para indicar movendo, vindo apenas
         'Call objIDsRamais.getObjIDs(LINE_ID, TeDatabase4, listObjIDsRamais)                             'obtem todos os objIDs dos ramais que estão ligados ao trecho de rede que está sendo movido
 
-        'aqui inicializa o redesenho dos ramais na nova posição
+        If RefLayer = "WATERLINES" Then                                 'aqui inicializa o redesenho dos ramais de água na nova posição
             Dim contTrechos As Integer
             Dim contRamais As Integer
             Dim totalRamais As Integer
@@ -1936,6 +1938,7 @@ Private Sub TCanvas_onSaveNetWorkLine(ByVal LINE_ID As Long, ByVal Node_id1 As L
                     End If
                 Next
             'Next
+        End If
         'finaliza
 
         'CALCULAR O NOVO COMPRIMENTO DA LINHA E ATUALIZAR NA BASE

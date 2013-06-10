@@ -4,6 +4,11 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+10-06-2013 - GeoSan 06.10.14
+
+Cotas de esgoto quando movia a rede não estavam sendo atualizadas. Corrigido.
+Correção de bugs em redes de água relacionados as mudanças em esgoto.
+
 10-06-2013 - GeoSan 06.10.13
 
 Corrigido bug de ao desenhar uma rede de esgoto, não inseria a cota Z do

@@ -162,11 +162,13 @@ End Function
 '
 '
 Public Function MoveNetWorkNode()
-On Error GoTo Trata_Erro
-   
-   If cgeo.GetReferenceLayer(tcs.getCurrentLayer) <> "" Then
-      If tcs.getSelectCount(points) - 1 = 0 Then                        'VERIFICA SE SOMENTE 1 PONTO FOI SELECIONADO PARA MOVER
-                     Dim objIdNoMovendo As Long                         'object_id do nó que foi selecionado para mover
+    On Error GoTo Trata_Erro
+    Dim layerReferencia As String                                       'nome do layer de referência
+    
+    layerReferencia = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
+    If layerReferencia <> "" Then
+        If tcs.getSelectCount(points) - 1 = 0 Then                      'VERIFICA SE SOMENTE 1 PONTO FOI SELECIONADO PARA MOVER
+            Dim objIdNoMovendo As Long                                  'object_id do nó que foi selecionado para mover
             Dim trechos As New CLocalizaTrechos                         'instancia objeto que irá localizar os trechos conectados ao nó selecionado
             Dim objIDsTrechosMovendo() As String                        'lista com todos os object_ids dos trechos que serão movidos com o nó (presos no nó)
             Dim contTrecho As Integer                                   'contador de trechos de rede sendo movidos
@@ -184,6 +186,7 @@ On Error GoTo Trata_Erro
             Dim comprTrecho As Double                                   'comprimento total do trecho de rede antes de mover
             Dim retorno As Boolean
             
+            If layerReferencia = "WATERLINES" Then                      'é água, tem que tratar todos os ramais
             'nesta etapa ele vai localizar todos os trechos que serão movidos e os respectivos ramais se houverem e armazenar tudo na memória
                 contador = 0
                 objIdNoMovendo = tcs.getSelectObjectId(0, 4)                        'obtem o object_id da primeira (0) (e única) geometria do tipo 4=ponto (ver tipos em setActiveGeometry)
@@ -221,6 +224,10 @@ On Error GoTo Trata_Erro
                     End If
                 Next                                                                'próximo trecho
             'final da etapa
+            Else                                                                    'é esgoto, não trata ramais de esgoto
+                objIdNoMovendo = tcs.getSelectObjectId(0, 4)                        'obtem o object_id da primeira (0) (e única) geometria do tipo 4=ponto (ver tipos em setActiveGeometry)
+                varGlobais.objIdNoSelecionado = objIdNoMovendo                      'guarda o valor do objId do nó da rede que está movendo e foi selecionado, para depois poder atribir a cota ao mesmo
+            End If
             tcs.addLayerToSnap cgeo.GetReferenceLayer(tcs.getCurrentLayer)
             tcs.setReferenceLayer cgeo.GetReferenceLayer(tcs.getCurrentLayer)
             tcs.MoveNetWorkNode: TerraEvent = tg_MoveNetWorkNode
@@ -230,14 +237,14 @@ On Error GoTo Trata_Erro
     Else
         MsgBox "Selecione um plano válido e um ponto, para esta operação", vbExclamation
     End If
+    Exit Function
 
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   Else
-      PrintErro "clsTerraLib", "Public Function MoveNetWorkNode()", CStr(Err.Number), CStr(Err.Description), True
-    
-   End If
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "clsTerralib", "MoveNetWorkNode", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
    
 End Function
 ' Chamada quando o usuário seleciona para inserir um nó na rede
@@ -265,14 +272,13 @@ On Error GoTo Trata_Erro
          MsgBox "Selecione um plano válido, para esta operação", vbExclamation
       End If
    End With
+   Exit Function
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-       PrintErro "clsTerraLib", "Public Function DrawNetWorkNode()", CStr(Err.Number), CStr(Err.Description), True
-       
+       ErroUsuario.Registra "clsTerralib", "DrawNetWorkNode", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function
 
@@ -720,7 +726,7 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
     Dim az As String
     Dim object_id As String, CompCalc As Double, a As Integer, ld As String, nd1 As String, nd2 As String
     Dim LayerName As String
-    Dim LayerReferencia As String
+    Dim layerReferencia As String
     Dim i As Byte
     Dim No As String
     Dim getZNo As New CObtemZdoNo                           'método para o cálculo da cota z do nó inserido
@@ -739,25 +745,25 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
     Else
         LayerName = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
     End If
-    LayerReferencia = cgeo.GetReferenceLayer(LayerName)
-    TBGeometria = tdb.getRepresentationTableName(LayerReferencia, tpPOINTS)
-    If Movendo = True Then  'SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA, E ATUALIZA A COTA DO NÓ
-        LayerName = tcs.GetReferenceLayer 'SETA O LAYER DE REFERENCIA COMO ATIVO
+    layerReferencia = cgeo.GetReferenceLayer(LayerName)                         'obtem o nome do layer de atributos de referência WaterComponents ou SwerComponents
+    TBGeometria = tdb.getRepresentationTableName(layerReferencia, tpPOINTS)     'obtem o nome do layer de geometrias de referência Points2 ou Points4
+    If Movendo = True Then                                                      'SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA, E ATUALIZA A COTA DO NÓ
+        LayerName = tcs.GetReferenceLayer                                       'SETA O LAYER DE REFERENCIA COMO ATIVO
         cgeo.DeleteTextObjectWithInsertText LayerName, LINE_ID, CStr(LINE_ID)
         'atualização da cota do nó
         No = varGlobais.objIdNoSelecionado
         
         If No <> "NULO" Then
             If frmCanvas.TipoConexao <> 4 Then      'caso seja Oracle ou SQLServer
-                stringSQL = "SELECT object_id FROM POINTS2 WHERE OBJECT_ID = " & No
+                stringSQL = "SELECT object_id FROM " & TBGeometria & " WHERE OBJECT_ID = " & No     'Tabela Points2 para água ou Points4 para esgoto
                 rsq.Open stringSQL, Conn, adOpenDynamic, adLockReadOnly
             Else    'caso seja Postgres
                     'implementar
             End If
             If rsq.EOF = False Then ' SE ENCONTROU O REGISTRO, ou seja o nó existe
-                zNo = getZNo.CObtemZFromObjIdNo(No, LayerReferencia)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
+                zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
                 If frmCanvas.TipoConexao <> 4 Then
-                    stringSQL = "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " where object_id_ = " & No   'atualiza a cota do nó
+                    stringSQL = "UPDATE " & layerReferencia & " SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " where object_id_ = " & No   'atualiza a cota do nó
                     Conn.execute (stringSQL)
                 Else 'Postgres
                     'Implementar
@@ -840,15 +846,15 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
             End If
             Set rs = New ADODB.Recordset
             If frmCanvas.TipoConexao <> 4 Then
-                rsq.Open ("SELECT * FROM " & LayerReferencia & " WHERE OBJECT_ID_ = '" & No & "'"), Conn, adOpenDynamic, adLockReadOnly
+                rsq.Open ("SELECT * FROM " & layerReferencia & " WHERE OBJECT_ID_ = '" & No & "'"), Conn, adOpenDynamic, adLockReadOnly
             Else
                 az = "OBJECT_ID_"
-                rsq.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
+                rsq.Open ("SELECT * FROM " + """" + layerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
             End If
             If rsq.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
                 zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
                 If frmCanvas.TipoConexao <> 4 Then
-                    stringSQL = "INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"
+                    stringSQL = "INSERT INTO " & layerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"
                     Conn.execute (stringSQL)
                 Else
                     az = "OBJECT_ID_"
@@ -859,11 +865,11 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                     f = "ECONOMIAS"
                     g = "CONSUMO_LPS"
                     h = "TB_LIGACOES"
-                    Conn.execute ("INSERT INTO " + """" + LayerReferencia + """" + " (" + """" + b + """" + "," + """" + az + """" + ") VALUES ('" & No & "','" & No & "')")
+                    Conn.execute ("INSERT INTO " + """" + layerReferencia + """" + " (" + """" + b + """" + "," + """" + az + """" + ") VALUES ('" & No & "','" & No & "')")
                 End If
                 'CRIA UM NOVO REGISTRO NA TABELA DE ATRIBUTOS DE NÓS COM COMPONENT_ID,OBJECT_ID_
                 If cgeo.GetTypeText(LayerName) = 2 Then
-                    cgeo.InsertTextInPoint CLng(No), CStr(No), LayerReferencia, 0, 0
+                    cgeo.InsertTextInPoint CLng(No), CStr(No), layerReferencia, 0, 0
                 End If
             End If
             rsq.Close
