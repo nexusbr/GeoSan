@@ -139,9 +139,10 @@ Trata_Erro:
 End Function
 ' Obtem o z de um nó a partir do Object_id do nó
 '
+' objId - do nó com o qual precisa-se procurar o z
+' layerGeometriasNos - nome do layer de geometrias dos nós da rede de água ou esgoto
 '
-'
-Public Function CObtemZFromObjIdNo(objId As String) As Double
+Public Function CObtemZFromObjIdNo(objId As String, layerGeometriasNos As String) As Double
     On Error GoTo Trata_Erro
     Dim RSNos As ADODB.Recordset                            'para localizar as coordenadas x e y do nó que está sendo inserido
     Dim xNo As Double                                       'coordenada x do nó que está sendo inserido
@@ -151,7 +152,7 @@ Public Function CObtemZFromObjIdNo(objId As String) As Double
     Dim retorno As Boolean
     
     Set RSNos = New ADODB.Recordset
-    RSNos.Open "Select x, y from Points2 where object_id = " & objId, Conn, adOpenKeyset, adLockOptimistic         'Localiza na tabela de geometria as coordenadas do nó a partir do object_id
+    RSNos.Open "Select x, y from " & layerGeometriasNos & " where object_id = " & objId, Conn, adOpenKeyset, adLockOptimistic         'Localiza na tabela de geometria as coordenadas do nó a partir do object_id. Points2 - Água. Points4 - Esgoto
     If RSNos.EOF = False Then
         xNo = RSNos.Fields("x").value
         yNo = RSNos.Fields("y").value

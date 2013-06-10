@@ -734,11 +734,19 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
     Dim noFinal As String
     Dim retorno As Boolean
     
+    If TerraEvent = tg_DrawNetWorkline Then
+        LayerName = tcs.getCurrentLayer
+    Else
+        LayerName = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
+    End If
+    LayerReferencia = cgeo.GetReferenceLayer(LayerName)
+    TBGeometria = tdb.getRepresentationTableName(LayerReferencia, tpPOINTS)
     If Movendo = True Then  'SE ESTIVER APENAS MOVENDO, EXCLUI E REFAZ O TEXTO DA LINHA, E ATUALIZA A COTA DO NÓ
         LayerName = tcs.GetReferenceLayer 'SETA O LAYER DE REFERENCIA COMO ATIVO
         cgeo.DeleteTextObjectWithInsertText LayerName, LINE_ID, CStr(LINE_ID)
         'atualização da cota do nó
         No = varGlobais.objIdNoSelecionado
+        
         If No <> "NULO" Then
             If frmCanvas.TipoConexao <> 4 Then      'caso seja Oracle ou SQLServer
                 stringSQL = "SELECT object_id FROM POINTS2 WHERE OBJECT_ID = " & No
@@ -747,7 +755,7 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                     'implementar
             End If
             If rsq.EOF = False Then ' SE ENCONTROU O REGISTRO, ou seja o nó existe
-                zNo = getZNo.CObtemZFromObjIdNo(No)                     'obtem a cota z do nó a partir do object_id do mesmo
+                zNo = getZNo.CObtemZFromObjIdNo(No, LayerReferencia)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
                 If frmCanvas.TipoConexao <> 4 Then
                     stringSQL = "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " where object_id_ = " & No   'atualiza a cota do nó
                     Conn.execute (stringSQL)
@@ -763,12 +771,6 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         End If
         'fim da atualização da cota do nó movido
     Else                    ' ESTÁ DESENHANDO A REDE
-        If TerraEvent = tg_DrawNetWorkline Then
-            LayerName = tcs.getCurrentLayer
-        Else
-            LayerName = cgeo.GetReferenceLayer(tcs.getCurrentLayer)
-        End If
-        LayerReferencia = cgeo.GetReferenceLayer(LayerName)
         Set rs = New ADODB.Recordset
         'prepara querie para procurar em todas as linhas de rede se já existe alguma com o object_id_ da que será criada
         If frmCanvas.TipoConexao <> 4 Then
@@ -827,8 +829,8 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         End If
         Conn.execute (stringSQL)
         'DEPOIS DE CARREGADAS AS INFORMAÇÕES NA TABELA DE ATRIBUTOS, CHAMA O MÉTODO DE CRIAR TEXTOS
-        InsertTextAttributesLine LayerName, LINE_ID, CStr(LINE_ID)
-        TBGeometria = tdb.getRepresentationTableName(LayerReferencia, tpPOINTS)
+        InsertTextAttributesLine LayerName, LINE_ID, CStr(LINE_ID)                                  'aqui entre outras coisas insere as cotas iniciais e finais no trecho de rede de esgoto, quanto for esgoto
+        'xxxxxxxxxxx
         'INSERE O ATRIBUTO DO NÓ 1 E NÓ 2 NA TABELA DE ATRIBUTOS COM O SEGUINTE LOOP
         For i = 1 To 2 'EXECUTA 2 VEZES A ROTINA ABAIXO
             If i = 1 Then
@@ -844,7 +846,7 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                 rsq.Open ("SELECT * FROM " + """" + LayerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
             End If
             If rsq.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
-                zNo = getZNo.CObtemZFromObjIdNo(No)                     'obtem a cota z do nó a partir do object_id do mesmo
+                zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
                 If frmCanvas.TipoConexao <> 4 Then
                     stringSQL = "INSERT INTO " & LayerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"
                     Conn.execute (stringSQL)
@@ -994,7 +996,7 @@ Private Function InsertTextAttributesLine(LayerName As String, geom_id As Long, 
         Diameter = Chr$(216) & " " & IIf(IsNull(rs!INTERNALDIAMETER), 0, rs!INTERNALDIAMETER)
         Material = IIf(IsNull(rs!MATERIALNAME), 0, rs!MATERIALNAME)
         LENGTH = IIf(rs!LENGTH = 0, rs!LENGTHCALCULATED, rs!LENGTH)
-        If tcs.getCurrentLayer = "SEWERLINES" Then
+        If tcs.getCurrentLayer = "SEWERLINES" Then                                                              'aqui deve ser inserida a cota a partir do MDT. Tenho o geom_id e obj_id da rede de esgoto
             CotaIni = rs!INITIALTUBEDEEPNESS
             CotaFim = rs!FINALTUBEDEEPNESS
         Else

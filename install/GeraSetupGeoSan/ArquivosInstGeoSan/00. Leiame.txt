@@ -4,6 +4,33 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+10-06-2013 - GeoSan 06.10.13
+
+Corrigido bug de ao desenhar uma rede de esgoto, não inseria a cota Z do
+terreno automaticament.
+
+30-05-2013 - GeoSan 06.10.12
+
+Corrigido bug em que algumas vezes não mostrava os consumidores desabastecidos
+quando existiam colunas com valores nulos.
+
+30-05-2013 - GeoSan 06.10.11
+
+Criado método para obter obj_ids dos nós de uma rede.
+Implementada funcionalidade que ao mover um nó a cota do mesmo é sempre
+atualizada.
+
+30-05-2013 - GeoSan 06.10.10
+
+Realizados testes nas rotinas de localização de textos e consumidores e
+funcionaram normalmente. É apenas necessário manter a atenção que quando em
+desenvolvimento o arquivo FTema.txt, que contem os temas ativos do usuário,
+pode estar sendo acessado em c:\arquivos de programas\geosan\controles e não no
+diretório de desenvolvimento.
+
+Revisados e reformatados ambos os códigos de localização de consumidores e
+textos onde foram colocadas rotinas de controle de erro.
+
 30-05-2013 - GeoSan 06.10.09
 
 Versão do GeoSan fechada para implementação.
