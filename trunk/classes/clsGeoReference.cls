@@ -1785,6 +1785,7 @@ End Function
 Public Function GetLayerOperation(LayerName As String, T_Operation As Integer) As String
     Dim rs As ADODB.Recordset, layer_id As Integer
     Dim s As String
+    Dim mensagemInformativa As String                   'para informar o que aconteceu simplesmente. Não foi um erro e sim o usuário não selecionou o plano correto.
     
     k = "GS_LAYER_CONFIG_LAYERS"
     h = "LAYER_ID"
@@ -1801,7 +1802,9 @@ Public Function GetLayerOperation(LayerName As String, T_Operation As Integer) A
     If rs.EOF = False Then
         GetLayerOperation = GetLayerNameLayerID(rs("LAYER_REFERENCE").value)
     Else
-        MsgBox "Não foi localizada referencia para para o layer " & LayerName & ", ID = " & layer_id & " na tabela gs_layer_config_layers com o tipo de operação = " & T_Operation, vbExclamation, ""
+        'MsgBox "Não foi localizada referencia para para o layer " & LayerName & ", ID = " & layer_id & " na tabela gs_layer_config_layers com o tipo de operação = " & T_Operation, vbExclamation, "" ---- retirado e colocado como mensagem para a NEXUS
+        mensagemInformativa = "Mensagem informativa. Usuário não selecionou o plano correto antes de desenhar a rede. Não foi localizada referencia para para o layer " & LayerName & ", ID = " & layer_id & " na tabela gs_layer_config_layers com o tipo de operação = " & T_Operation
+        ErroUsuario.Registra "clsGeoReference", "GetLayerOperation", CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails, mensagemInformativa   'não apresenta nada para o usuário, pois o usuário apenas não selecionou o plano correto antes de desenhar
     End If
     rs.Close
     Set rs = Nothing
@@ -1809,7 +1812,7 @@ End Function
 ' Função para localizar o nome de um layer na tabela te_layer, tendo o número do mesmo
 ' Retorna nome do layer a partir do número (id) do layer
 '
-' layer_id - número (id) do layer a ser procurado
+' layer_id - número (id) do layer a er procurado
 '
 Public Function GetLayerNameLayerID(layer_id As Integer) As String
     Dim rs As ADODB.Recordset
