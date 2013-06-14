@@ -4,6 +4,12 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+
+10-06-2013 - GeoSan 06.10.15
+
+Foram inseridas rotinas para gestão de erros no caso de uma lentidão na rede
+para que as mesmas informem onde o mesmo pode estar ocorrendo.
+
 10-06-2013 - GeoSan 06.10.14
 
 Cotas de esgoto quando movia a rede não estavam sendo atualizadas. Corrigido.

@@ -1326,12 +1326,14 @@ Private Sub TCanvas_onError(ByVal code As String, ByVal errorMessage As String)
         Case "Err032"
             'canvas não foi aberto ainda, desconsiderar
         Case "Err068"
-            MsgBox "Rede muito próxima." & vbCrLf & vbCrLf & "Erro número: " & code & " - " & errorMessage
+            MsgBox "Rede muito próxima." & vbCrLf & vbCrLf & "Mensagem: " & code & " - " & errorMessage
         Case "Err030"
-            MsgBox "Selecione um layer antes." & vbCrLf & vbCrLf & "Erro número: " & code & " - " & errorMessage
+            MsgBox "Selecione um layer antes." & vbCrLf & vbCrLf & "Mensagem: " & code & " - " & errorMessage
+        Case "Err028"
+            ErroUsuario.Registra "frmCanvas", "TCanvas_onError. Usuário na tela do GeoSan selecionou um comando a apareceu este erro e continuou utilizando o software. Mensagem: " & code & " Descrição: " & errorMessage, CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails 'não mostra mensagem para o usuário
         Case Else
-            ErroUsuario.Registra "frmCanvas", "TCanvas_onError. Usuário na tela do GeoSan selecionou um comando a apareceu este erro e continuou utilizando o software. Código Erro: " & code & " Descrição: " & errorMessage, CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails 'não mostra mensagem para o usuário
-            MsgBox "Não é possível realizar este comando. Erro número: " & code & " - " & errorMessage
+            ErroUsuario.Registra "frmCanvas", "TCanvas_onError. Usuário na tela do GeoSan selecionou um comando a apareceu este erro e continuou utilizando o software. Mensagem: " & code & " Descrição: " & errorMessage, CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails 'não mostra mensagem para o usuário
+            MsgBox "Não é possível realizar este comando. Mensagem: " & code & " - " & errorMessage
     End Select
 End Sub
 

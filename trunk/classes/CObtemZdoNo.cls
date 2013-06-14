@@ -17,8 +17,9 @@ Dim obtemZdoNo As New CIntBilinear                                      'para ob
 '
 ' xNo - coordenada x do ponto em que será localizada a cota z
 ' yNo - coordenada y do ponto em que será localizada a cota z
+' object_Id_No - obj_id somente para em caso de erros saber onde o mesmo ocorreu
 '
-Public Function ObtemZ(xNo As Double, yNo As Double) As Double
+Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As Double
     On Error GoTo Trata_Erro
     Dim retorno As Boolean                                          'retorna false caso tenha ocorrido algum erro
     Dim idObjPonto As String                                        'object_id do ponto o qual é obtido inicialmente e não sabemos qual é
@@ -101,33 +102,38 @@ Public Function ObtemZ(xNo As Double, yNo As Double) As Double
     End If
     
     'obtem agora as cotas dos 4 pontos do MDT
-    mensagemDeErro = mensagemDeErro + "ObjId1 = " & idObjPonto1 & ", ObjId2 = " & idObjPonto2 & ", ObjId3 = " & idObjPonto3 & ", ObjId4 = " & idObjPonto4
-    rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto1, Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z1 = rs(0).value
+    mensagemDeErro = mensagemDeErro + "Nó com obj_id = " & object_Id_No & " coord. x = " & CStr(Round(xNo, 2)) & " coord. y = " & CStr(Round(yNo, 2)) & "MDT com obj_ids: ObjId1 = " & idObjPonto1 & ", ObjId2 = " & idObjPonto2 & ", ObjId3 = " & idObjPonto3 & ", ObjId4 = " & idObjPonto4
+    If idObjPonto1 = Null Or idObjPonto2 = Null Or idObjPonto3 = Null Or idObjPonto4 = Null Then                                        'verifica se ele encontrou os nós do MDT, pois se não encontra não adianta realizar o cálculo
+        ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails, mensagemDeErro   'não exibe mensagem para o usuário
+        ObtemZ = 0                                                                                                                      'retorna sem calcular a cota Z
+    Else                                                                                                                                'encontrou
+        rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto1, Conn, adOpenKeyset, adLockOptimistic
+        If Not rs.EOF Then
+            z1 = rs(0).value
+        End If
+        rs.Close
+        
+        rs.Open "SELECT * from mdt where " & nomeColunaObjIdMdt & " = " & idObjPonto2, Conn, adOpenKeyset, adLockOptimistic
+        If Not rs.EOF Then
+            z2 = rs(0).value
+        End If
+        rs.Close
+        
+        rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto3, Conn, adOpenKeyset, adLockOptimistic
+        If Not rs.EOF Then
+            z3 = rs(0).value
+        End If
+        rs.Close
+        
+        rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto4, Conn, adOpenKeyset, adLockOptimistic
+        If Not rs.EOF Then
+            z4 = rs(0).value
+        End If
+        rs.Close
+        
+        z = obtemZdoNo.CalcInterpolacao(xNo, yNo, xInt1, yInt1, xInt2, yInt2, xInt3, yInt3, xInt4, yInt4, z1, z2, z3, z4)
+        ObtemZ = Round(z, 2)                                    'arredonda com apenas duas casas decimais
     End If
-    rs.Close
-    
-    rs.Open "SELECT * from mdt where " & nomeColunaObjIdMdt & " = " & idObjPonto2, Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z2 = rs(0).value
-    End If
-    rs.Close
-    
-    rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto3, Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z3 = rs(0).value
-    End If
-    rs.Close
-    
-    rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto4, Conn, adOpenKeyset, adLockOptimistic
-    If Not rs.EOF Then
-        z4 = rs(0).value
-    End If
-    rs.Close
-    
-    z = obtemZdoNo.CalcInterpolacao(xNo, yNo, xInt1, yInt1, xInt2, yInt2, xInt3, yInt3, xInt4, yInt4, z1, z2, z3, z4)
-    ObtemZ = Round(z, 2)                                    'arredonda com apenas duas casas decimais
     Exit Function
 
 Trata_Erro:
@@ -163,7 +169,7 @@ Public Function CObtemZFromObjIdNo(objId As String, layerGeometriasNos As String
         MsgBox ("É necessário que o layer MDT esteja adicionado na vista e ligado para processar a cota.")
         CObtemZFromObjIdNo = 0
     Else
-        zNo = getZNo.ObtemZ(xNo, yNo)                                                                               'localiza o z desta nó
+        zNo = getZNo.ObtemZ(xNo, yNo, objId)                                                                               'localiza o z desta nó
         CObtemZFromObjIdNo = zNo
     End If
     Exit Function

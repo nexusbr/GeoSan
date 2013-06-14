@@ -60,7 +60,7 @@ Public Sub AtribuiZs()
         xNo = RSNos("x").value
         yNo = RSNos("y").value
         objIdNo = RSNos("object_id").value
-        zNo = getZNo.ObtemZ(xNo, yNo)
+        zNo = getZNo.ObtemZ(xNo, yNo, objIdNo)
         RSNos.MoveNext
         Set rsAtributoNos = New ADODB.Recordset
         rsAtributoNos.Open "SELECT GROUNDHEIGHT FROM WATERCOMPONENTS WHERE OBJECT_ID_ = " & objIdNo, Conn, adOpenKeyset, adLockOptimistic
