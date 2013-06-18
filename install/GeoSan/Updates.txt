@@ -1,0 +1,2 @@
+SetupGeoSan-v.06.10.14.exe;c:\tempApp;06.10.14
+SetupGeoSan-v.06.10.15.exe;c:\tempApp;06.10.15
