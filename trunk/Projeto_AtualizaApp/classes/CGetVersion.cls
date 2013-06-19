@@ -12,7 +12,35 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' Para obter a versão de um arquivo .exe
+Option Explicit
 Private linha() As String
+
+'declarações para poder descobrir a versão de um arquivo executável
+Private Type VS_FIXEDFILEINFO
+   dwSignature As Long
+   dwStrucVersionl As Integer     '  e.g. = &h0000 = 0
+   dwStrucVersionh As Integer     '  e.g. = &h0042 = .42
+   dwFileVersionMSl As Integer    '  e.g. = &h0003 = 3
+   dwFileVersionMSh As Integer    '  e.g. = &h0075 = .75
+   dwFileVersionLSl As Integer    '  e.g. = &h0000 = 0
+   dwFileVersionLSh As Integer    '  e.g. = &h0031 = .31
+   dwProductVersionMSl As Integer '  e.g. = &h0003 = 3
+   dwProductVersionMSh As Integer '  e.g. = &h0010 = .1
+   dwProductVersionLSl As Integer '  e.g. = &h0000 = 0
+   dwProductVersionLSh As Integer '  e.g. = &h0031 = .31
+   dwFileFlagsMask As Long        '  = &h3F for version "0.42"
+   dwFileFlags As Long            '  e.g. VFF_DEBUG Or VFF_PRERELEASE
+   dwFileOS As Long               '  e.g. VOS_DOS_WINDOWS16
+   dwFileType As Long             '  e.g. VFT_DRIVER
+   dwFileSubtype As Long          '  e.g. VFT2_DRV_KEYBOARD
+   dwFileDateMS As Long           '  e.g. 0
+   dwFileDateLS As Long           '  e.g. 0
+End Type
+
+Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
+Private Declare Function GetFileVersionInfo Lib "Version.dll" Alias "GetFileVersionInfoA" (ByVal lptstrFilename As String, ByVal dwhandle As Long, ByVal dwlen As Long, lpData As Any) As Long
+Private Declare Function GetFileVersionInfoSize Lib "Version.dll" Alias "GetFileVersionInfoSizeA" (ByVal lptstrFilename As String, lpdwHandle As Long) As Long
+Private Declare Function VerQueryValue Lib "Version.dll" Alias "VerQueryValueA" (pBlock As Any, ByVal lpSubBlock As String, lplpBuffer As Any, puLen As Long) As Long
 Public Function ObtemVersao(dirNomeArquivo As String) As String
     Dim fso As FileSystemObject
     
@@ -79,3 +107,30 @@ Trata_Erro:
         DownloadArquivo = False
     End If
 End Sub
+
+
+Public Function ExisteArquivo(sFile As String) As Boolean
+    On Error Resume Next
+    bFileExists = ((GetAttr(sFile) And vbDirectory) = 0)
+End Function
+
+
+Public Function ObtemVersaoArquivo(ByVal FileName As String) As String
+   
+   Dim nDummy       As Long
+   Dim sBuffer()    As Byte
+   Dim nBufferLen   As Long
+   Dim lplpBuffer   As Long
+   Dim udtVerBuffer As VS_FIXEDFILEINFO
+   Dim puLen        As Long
+      
+   nBufferLen = GetFileVersionInfoSize(FileName, nDummy)
+   If nBufferLen > 0 Then
+        ReDim sBuffer(nBufferLen) As Byte
+        Call GetFileVersionInfo(FileName, 0&, nBufferLen, sBuffer(0))
+        Call VerQueryValue(sBuffer(0), "\", lplpBuffer, puLen)
+        Call CopyMemory(udtVerBuffer, ByVal lplpBuffer, Len(udtVerBuffer))
+        GetFileVersion = udtVerBuffer.dwFileVersionMSh & "." & udtVerBuffer.dwFileVersionMSl & "." & udtVerBuffer.dwFileVersionLSh & "." & udtVerBuffer.dwFileVersionLSl
+    End If
+    
+End Function
