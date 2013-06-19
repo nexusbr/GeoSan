@@ -198,7 +198,7 @@ Public Sub Main()
     End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.10.16"
+    Versao_Geo = "06.10.20"
     glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
     SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -519,7 +519,7 @@ Public Function RetornaCabecalho(ByVal strSelect As String, ByVal strSelect2 As 
     strSel4 = strSelect2
     rs2.Open strSel4, Conn, adOpenDynamic, adLockOptimistic
     If rs2.EOF = False Then
-        strSel4 = rs2(0).Value
+        strSel4 = rs2(0).value
     End If
     rs.Open strSelect, Conn, adOpenForwardOnly, adLockReadOnly
     If rs.EOF = False Then
@@ -1443,7 +1443,7 @@ Function capturaRede(ByVal LayName As String, ByVal tcs As TeCanvas, ByRef allSE
    End If
    tcs.setCurrentLayer "WATERLINES"
    If Not rsValidaTrecho.EOF Then
-      Object_id_Line_1 = rsValidaTrecho.Fields("object_id_").Value
+      Object_id_Line_1 = rsValidaTrecho.Fields("object_id_").value
    Else
       MsgBox "Trecho não encontrado" '
       Exit Function
@@ -2662,7 +2662,7 @@ Public Function GetQueryProcess(query_id As Integer) As String
         'Conexão com bancos SQLServer ou Oracle
         Set rs = Conn.execute("SELECT querystring from gs_querys_client where query_id=" & query_id) '& " and client_id=" & client_id)
         If rs.EOF = False Then
-            GetQueryProcess = rs.Fields("querystring").Value
+            GetQueryProcess = rs.Fields("querystring").value
         Else
             MsgBox "Não há a QUERY_ID n." & query_id & " na tabela GS_QUERYS_CLIENT.", vbInformation, "Falta de registro detectada"
         End If
@@ -2671,7 +2671,7 @@ Public Function GetQueryProcess(query_id As Integer) As String
         'alterado em 19/10/2010
         Set rs = Conn.execute("SELECT " + """" + zx + """" + " from " + """" + zy + """" + " where " + """" + zu + """" + "='" & query_id & "'")
         If rs.EOF = False Then
-           GetQueryProcess = rs.Fields("querystring").Value
+           GetQueryProcess = rs.Fields("querystring").value
         Else
            MsgBox "Não há a QUERY_ID n." & query_id & " na tabela GS_QUERYS_CLIENT.", vbInformation, "Falta de registro detectada"
         End If

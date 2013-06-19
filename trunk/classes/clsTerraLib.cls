@@ -595,13 +595,13 @@ End Function
 '
 Public Function SaveInDatabase() As Boolean
     On Error GoTo Trata_Erro
-    tcs.saveOnMemory
-    tcs.SaveInDatabase
     With tcs
         'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
         Select Case TerraEvent
             'caso o usuario esteja desenhando uma ou mais geometrias, salva as geometrias
             Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys
+                tcs.saveOnMemory
+                tcs.SaveInDatabase
                 Screen.MousePointer = vbHourglass
                 'Conn.BeginTrans
                 Dim USR As String

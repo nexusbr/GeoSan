@@ -4,6 +4,27 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+19-06-2013 - GeoSan 06.10.20
+
+Corrigido bug de ao alterar um atributo de uma rede já desenhada, ele
+apresentava um erro de linha sem nós, quando na verdade não deveria apresentar
+este erro. Estava salvando novamente a linha existente.
+
+19-06-2013 - GeoSan 06.10.19
+
+Geração de novo instalador GeoSan.
+
+19-06-2013 - GeoSan 06.10.18
+
+Commit de todas as atualizações, para geração do novo executável.
+
+10-06-2013 - GeoSan 06.10.17
+
+Commit inicial da versão de atualização automática do GeoSan.
+
+10-06-2013 - GeoSan 06.10.16
+
+Atualizadas mensagens e versão
 
 10-06-2013 - GeoSan 06.10.15
 

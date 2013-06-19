@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "06.10.15"
+#define AppVersionFile  "06.10.20"
 
 [Setup]
 AppName=GeoSan
@@ -22,6 +22,10 @@ AppMutex=GeoSan
 SolidCompression=yes
 OutputDir=Output
 OutputBaseFilename={#SetupBaseName + AppVersionFile}
+;para não aparecer ao usuário para ele entrar o diretório de instalação do GeoSan
+DisableDirPage=yes              
+;para não aparecer o nome do Grupo no menu Início do Windows para o usuário selecionar
+DisableProgramGroupPage=yes
 
 [Language]
 MessagesFile=compiler:BrazilianPortuguese.isl
