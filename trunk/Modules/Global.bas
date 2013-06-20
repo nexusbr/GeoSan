@@ -162,9 +162,9 @@ End Enum
 'The GetDC function retrieves a handle of a display device context (DC) for the client area of the specified window.
 'The display device context can be used in subsequent GDI functions to draw in the client area of the window.
 'Utilizada na função para converter Twits para Pixels
-Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
+Declare Function GetDC Lib "user32" (ByVal hWnd As Long) As Long
 
-Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
+Declare Function ReleaseDC Lib "user32" (ByVal hWnd As Long, ByVal hdc As Long) As Long
   
 'Returns pixels per inch
 'Utilizada na função para converter Twits para Pixels
@@ -198,7 +198,7 @@ Public Sub Main()
     End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.10.20"
+    Versao_Geo = "06.10.21"
     glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
     SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -2195,21 +2195,25 @@ End Function
 ' LayerName - nome do layer em que será gerado o relatório
 '
 Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
-   Dim rs As ADODB.Recordset, Material As String
-   Dim CompCalc As Double, ComplMed As Double, Qtde As Long
-   Dim CompCalcTot As Double, ComplMedTot As Double, QtdeTot As Long
-   Dim aa As String
-   Dim bb As String
-   Dim cc As String
-   Dim dd As String
-   Dim ee As String
-   Dim ff As String
-   Dim gg As String
-   Dim hh As String
-   Dim ii As String
-   Dim ll As String
-   Dim sPathUser As String              ' caminho do diretório do usuário em My Documents
-   
+    On Error GoTo Trata_Erro:
+    Dim rs As ADODB.Recordset, Material As String
+    Dim CompCalc As Double, ComplMed As Double, Qtde As Long
+    Dim CompCalcTot As Double, ComplMedTot As Double, QtdeTot As Long
+    Dim aa As String
+    Dim bb As String
+    Dim cc As String
+    Dim dd As String
+    Dim ee As String
+    Dim ff As String
+    Dim gg As String
+    Dim hh As String
+    Dim ii As String
+    Dim ll As String
+    Dim sPathUser As String                 'caminho do diretório do usuário em My Documents
+    Dim mensagem As String                  'mensagem de erro, caso ocorra
+    Dim diret As New CEncontraDiretorio     'para localizar um determinado diretório do Windows
+    
+    'diret = New CEncontraDiretorio          'inicializa o objeto para localizar o diretório de documentos do usuário
    aa = "MATERIALNAME"
    bb = "INTERNALDIAMETER"
    cc = "LENGTH"
@@ -2332,14 +2336,22 @@ Private Function GeraRelatorioHtm_RedeMaterialDiametro(LayerName As String)
    str = str & ""
    str = str & "</BODY>"
    str = str & "</HTML>"
-   sPathUser = Environ$("USERPROFILE") & "\my documents\"
-   sPathUser = sPathUser + "RelatorioRede.htm"
+   sPathUser = diret.ObtemDiretorio(CSIDL_PERSONAL) + "RelatorioRede.htm"           'obtem o diretório de documentos do usuário
+   mensagem = "Caminho do relatório: " & sPathUser
    Open sPathUser For Output As #1
    Print #1, str
    Close #1
    rs.Close
    Set rs = Nothing
    AbrirArquivo.Abre (sPathUser)
+   Exit Function
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "Global", "GeraRelatorioHtm_RedeMaterialDiametro", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, mensagem
+    End If
 End Function
 ' Função para gerar relatórios de registros cadastrados
 '
@@ -2367,6 +2379,8 @@ Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
     Dim pp As String
     Dim zz As String
     Dim sPathUser As String                     ' caminho do diretório do usuário em My Documents
+    Dim mensagem As String                      'mensagem de erro, caso ocorra
+    Dim diret As New CEncontraDiretorio         'para localizar um determinado diretório do Windows
     'Dim ss As String
    
    'PEGA O CÓDIGO IDENTIFICADOR
@@ -2439,7 +2453,7 @@ Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
    str = ""
    str = str & "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.0 Transitional//EN'>"
    str = str & "<HTML><HEAD>"
-   str = str & "<META http-equiv=Content-Type content='text/html; charset=unicode'>"
+   str = str & "<META http-equiv=Content-Type content='text/html; charset=charset=ISO-8859-1'>"
    str = str & "<META content='MSHTML 6.00.6000.16481' name=GENERATOR></HEAD>"
    str = str & "<BODY>"
    str = str & "<TABLE style='WIDTH: 781px; HEIGHT: 103px' cellSpacing=1 cellPadding=1 width=781 border=1 id=TABLE1>"
@@ -2472,13 +2486,20 @@ Private Function GeraRelatorioHtm_RegistrosLocalizacaoEstado()
    str = str & "    <TD><P align=center><FONT color=black>" & TotalComp & "</FONT></P></TD></TR></TABLE>"
    str = str & "</BODY>"
    str = str & "</HTML>"
-   
-   sPathUser = Environ$("USERPROFILE") & "\my documents\"
-   sPathUser = sPathUser + "RelatorioRegistros.htm"
+   sPathUser = diret.ObtemDiretorio(CSIDL_PERSONAL) + "RelatorioRegistros.htm"           'obtem o diretório de documentos do usuário
+   mensagem = "Caminho do relatório: " & sPathUser
    Open sPathUser For Output As #1
    Print #1, str
    Close #1
    AbrirArquivo.Abre (sPathUser)
+   Exit Function
+   
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "Global", "GeraRelatorioHtm_RegistrosLocalizacaoEstado", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, mensagem
+    End If
 End Function
 ' Gera relatório de todas componentes de uma rede
 '
@@ -2486,10 +2507,13 @@ End Function
 ' Filtro -
 '
 Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Filtro As Boolean)
+    On Error GoTo Trata_Erro:
     Dim rs As ADODB.Recordset, Material As String
     Dim TotalComp As Long
     Dim str As String
     Dim sPathUser As String                     ' caminho do diretório do usuário em My Documents
+    Dim mensagem As String                      'mensagem de erro, caso ocorra
+    Dim diret As New CEncontraDiretorio         'para localizar um determinado diretório do Windows
     
     If frmCanvas.TipoConexao <> 4 Then
    
@@ -2596,13 +2620,20 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
    str = str & "Total Componentes: &nbsp; &nbsp;&nbsp; " & TotalComp
    str = str & "</body>"
    str = str & "</html>"
-   
-    sPathUser = Environ$("USERPROFILE") & "\my documents\"
-    sPathUser = sPathUser + "RelatorioComponentes.htm"
+    sPathUser = diret.ObtemDiretorio(CSIDL_PERSONAL) + "RelatorioComponentes.htm"           'obtem o diretório de documentos do usuário
+    mensagem = "Caminho do relatório: " & sPathUser
     Open sPathUser For Output As #1
     Print #1, str
     Close #1
     AbrirArquivo.Abre (sPathUser)
+    Exit Function
+   
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "Global", "GeraRelatorioHtm_ComponentsRede", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, mensagem
+    End If
 End Function
 
 

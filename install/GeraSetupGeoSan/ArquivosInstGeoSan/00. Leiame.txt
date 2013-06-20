@@ -4,6 +4,13 @@ Versão para Windows
 Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
 Verificar como fica isso na tabela WaterComponentsTypes
 
+20-06-2013 - GeoSan 06.10.21
+
+Em alguns computadores o GeoSan não apresentava os relatórios de quantidades.
+Foram inseridas rotinas de controle de erro.
+Criada classe para localização automática dos diretórios do Windows.
+Gerado executável de instalação para liberação.
+
 19-06-2013 - GeoSan 06.10.20
 
 Corrigido bug de ao alterar um atributo de uma rede já desenhada, ele

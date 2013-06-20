@@ -42,50 +42,68 @@ Const ERROR_BAD_FORMAT = 11&
 ' DocName - nome do arquivo a ser aberto
 '
 Private Function StartDoc(DocName As String) As Long
+          On Error GoTo Trata_Erro:
           Dim Scr_hDC As Long
           Scr_hDC = GetDesktopWindow()
           StartDoc = ShellExecute(Scr_hDC, "Open", DocName, _
           "", "C:\", SW_SHOWNORMAL)
-      End Function
+    Exit Function
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "clsAbreArquivo", "StartDoc", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
+End Function
 'Subrotina para abrir um arquivo com a aplicação associada a extensão do mesmo.
 'Esta função verifica se houve erro na abertura e mostra mensagem de erro que ocorreu
 '
 ' nomeArquivo - nome do arquivo, podendo conter o número do disco (c:\ por exemplo) a ser aberto pela aplicação associada a extensão do mesmo.
 '
 Public Sub Abre(nomeArquivo As String)
-          Dim r As Long, msg As String
-          r = StartDoc(nomeArquivo)         'chama o arquivo a ser aberto
-          If r <= 32 Then
-              'There was an error
-              Select Case r
-                  Case SE_ERR_FNF
-                      msg = "GeoSan: O arquivo não foi encontrado"
-                  Case SE_ERR_PNF
-                      msg = "GeoSan: O diretório não foi encontrado"
-                  Case SE_ERR_ACCESSDENIED
-                      msg = "GeoSan: Acesso negado"
-                  Case SE_ERR_OOM
-                      msg = "GeoSan: Disco cheio"
-                  Case SE_ERR_DLLNOTFOUND
-                      msg = "GeoSan: DLL não encontrada"
-                  Case SE_ERR_SHARE
-                      msg = "GeoSan: Ocorreu uma violação de compartilhamento"
-                  Case SE_ERR_ASSOCINCOMPLETE
-                      msg = "GeoSan: Associação de arquivo incompleta ou inválida"
-                  Case SE_ERR_DDETIMEOUT
-                      msg = "GeoSan: Tempo limite de DDE atingido"
-                  Case SE_ERR_DDEFAIL
-                      msg = "GeoSan: Transação de DDE falhou"
-                  Case SE_ERR_DDEBUSY
-                      msg = "GeoSan: DDE em uso/ocupada"
-                  Case SE_ERR_NOASSOC
-                      msg = "GeoSan: Não existe associação para a extensão do arquivo"
-                  Case ERROR_BAD_FORMAT
-                      msg = "GeoSan: Erro de arquivo executável inválido ou erro na imagem do arquivo executável"
-                  Case Else
-                      msg = "GeoSan: Erro desconhecido"
-              End Select
-              MsgBox msg
-          End If
-      End Sub
+    On Error GoTo Trata_Erro:
+    Dim r As Long, msg As String
+    r = StartDoc(nomeArquivo)         'chama o arquivo a ser aberto
+    If r <= 32 Then
+        'There was an error
+        Select Case r
+            Case SE_ERR_FNF
+                msg = "GeoSan: O arquivo não foi encontrado"
+            Case SE_ERR_PNF
+                msg = "GeoSan: O diretório não foi encontrado"
+            Case SE_ERR_ACCESSDENIED
+                msg = "GeoSan: Acesso negado"
+            Case SE_ERR_OOM
+                msg = "GeoSan: Disco cheio"
+            Case SE_ERR_DLLNOTFOUND
+                msg = "GeoSan: DLL não encontrada"
+            Case SE_ERR_SHARE
+                msg = "GeoSan: Ocorreu uma violação de compartilhamento"
+            Case SE_ERR_ASSOCINCOMPLETE
+                msg = "GeoSan: Associação de arquivo incompleta ou inválida"
+            Case SE_ERR_DDETIMEOUT
+                msg = "GeoSan: Tempo limite de DDE atingido"
+            Case SE_ERR_DDEFAIL
+                msg = "GeoSan: Transação de DDE falhou"
+            Case SE_ERR_DDEBUSY
+                msg = "GeoSan: DDE em uso/ocupada"
+            Case SE_ERR_NOASSOC
+                msg = "GeoSan: Não existe associação para a extensão do arquivo"
+            Case ERROR_BAD_FORMAT
+                msg = "GeoSan: Erro de arquivo executável inválido ou erro na imagem do arquivo executável"
+            Case Else
+                msg = "GeoSan: Erro desconhecido"
+        End Select
+        MsgBox msg
+    End If
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "clsAbreArquivo", "Abre", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+    End If
+End Sub
 
