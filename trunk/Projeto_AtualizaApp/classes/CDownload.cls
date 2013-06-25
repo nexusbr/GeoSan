@@ -11,6 +11,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+' Classe para realizar download de arquivos
+
 Private b() As Byte                             'contem o arquivo em que será realizado o download
 Private nomeUrl As String                       'caminho em que está o arquivo em que será realizado o download
 Private proxyNome As String                     'nome do servidor Proxy da empresa, caso exista
