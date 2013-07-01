@@ -47,6 +47,10 @@ End Property
 Property Let diretorioLocal(diretorioL As String)   'nome do diretório local onde serão baixadas todas as atualizações
     diretorioComputador = diretorioL
 End Property
+Property Get diretorioLocal() As String         'retorna o valor do diretório local
+    diretorioLocal = diretorioComputador
+End Property
+
 
 Property Let diretorioServidor(diretorioS As String) 'nome do diretório remoto onde estão todas as atualizações
     diretorioRemoto = diretorioS

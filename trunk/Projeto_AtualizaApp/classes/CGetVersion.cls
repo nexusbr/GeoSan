@@ -58,6 +58,7 @@ End Function
 ' vbCr is the carriage return (return to line beginning),
 ' vbLf is the line feed (go to next line)
 ' vbCrLf is the carriage return / line feed (similar to pressing Enter)
+'
 Public Function VerificaAtualizacoes(dirNomeArquivo As String) As Integer
     On Error GoTo Trata_Erro:
     Dim contador As Integer
@@ -75,21 +76,22 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "CGetVersion", "VerificaAtualizacoes", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
-        DownloadArquivo = False
+        ErroUsuario.Registra "CGetVersion", "VerificaAtualizacoes", CStr(Err.Number), CStr(Err.Description), True, True
+        VerificaAtualizacoes = False
     End If
 End Function
 ' Dada uma linha lida no arquivo remoto de atualizações a serem realizada, faz um parse para ver o que tem que realizar no computador local para uma determinada atualização
 ' Segue o formato:
 '
-' nome do arquivo a atualizar;diretorio local;versão
+' nome do arquivo a atualizar;diretorio local;versão;diretório de instalação
 '
 ' atualizacao - string contendo todos os parâmetros separados por ;
 ' nomeArquivo - nome do arquivo a ser atualizado
 ' diretorio - localização do mesmo no computador cliente
 ' versao - número da nova versão para comparar com a existente e ver se necessita atualizar
+' dirInstalacao - diretório local onde a atualização deverá ser realizada para o cliente
 '
-Public Sub SplitAtualizacoes(numeroLinha As Integer, ByRef nomeArquivo As String, ByRef diretorio As String, ByRef versao As String)
+Public Sub SplitAtualizacoes(numeroLinha As Integer, ByRef nomeArquivo As String, ByRef diretorio As String, ByRef versao As String, ByRef dirInstalacao As String)
     On Error GoTo Trata_Erro:
     Dim splitAtualizacao() As String
     
@@ -97,26 +99,28 @@ Public Sub SplitAtualizacoes(numeroLinha As Integer, ByRef nomeArquivo As String
     nomeArquivo = splitAtualizacao(0)
     diretorio = splitAtualizacao(1)
     versao = splitAtualizacao(2)
+    dirInstalacao = splitAtualizacao(3)
     Exit Sub
     
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "CGetVersion", "SplitAtualizacoes", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
-        DownloadArquivo = False
+        ErroUsuario.Registra "CGetVersion", "SplitAtualizacoes", CStr(Err.Number), CStr(Err.Description), True, True
     End If
 End Sub
 
 
 Public Function ExisteArquivo(sFile As String) As Boolean
     On Error Resume Next
-    bFileExists = ((GetAttr(sFile) And vbDirectory) = 0)
+    ExisteArquivo = ((GetAttr(sFile) And vbDirectory) = 0)
 End Function
-
-
+' Obtem o número da versão de um determinado arquivo
+'
+' FileName - nome completo do arquivo com o drive e diretório
+'
 Public Function ObtemVersaoArquivo(ByVal FileName As String) As String
-   
+   On Error GoTo Trata_Erro:
    Dim nDummy       As Long
    Dim sBuffer()    As Byte
    Dim nBufferLen   As Long
@@ -130,7 +134,14 @@ Public Function ObtemVersaoArquivo(ByVal FileName As String) As String
         Call GetFileVersionInfo(FileName, 0&, nBufferLen, sBuffer(0))
         Call VerQueryValue(sBuffer(0), "\", lplpBuffer, puLen)
         Call CopyMemory(udtVerBuffer, ByVal lplpBuffer, Len(udtVerBuffer))
-        GetFileVersion = udtVerBuffer.dwFileVersionMSh & "." & udtVerBuffer.dwFileVersionMSl & "." & udtVerBuffer.dwFileVersionLSh & "." & udtVerBuffer.dwFileVersionLSl
+        ObtemVersaoArquivo = udtVerBuffer.dwFileVersionMSh & "." & udtVerBuffer.dwFileVersionMSl & "." & udtVerBuffer.dwFileVersionLSh & "." & udtVerBuffer.dwFileVersionLSl
     End If
+    Exit Function
     
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        ErroUsuario.Registra "CGetVersion", "ObtemVersaoArquivo", CStr(Err.Number), CStr(Err.Description), True, True
+    End If
 End Function

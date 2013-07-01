@@ -77,8 +77,8 @@ Public Function enviaEmail(arquivoParaAnexar As String) 'As String
     Dim retval As String
     Dim textoErro As String
     
-    textoErro = "Segue em anexo o arquivo de log do erro ocorrido no GeoSan."
-    retval = SendMail(emailDestinatario, "GeoSan - Aviso de erro", emailRemetente, textoErro, enderecoSMTP, portaSMTP, usuarioSMTP, senhaSMTP, arquivoParaAnexar, SslSmtp)
+    textoErro = "Segue em anexo o arquivo de log da atualização ocorrido no GeoSan."
+    retval = SendMail(emailDestinatario, "GeoSan - Aviso de atulização", emailRemetente, textoErro, enderecoSMTP, portaSMTP, usuarioSMTP, senhaSMTP, arquivoParaAnexar, SslSmtp)
     enviaEmail = retval
 End Function
 ' Método para ler as configurações de envio de email
@@ -89,7 +89,7 @@ Public Function leConfiguracoesEmail()
     Dim configuracoes As CArquivoIni
     
     Set configuracoes = New CArquivoIni
-    caminhoGeoSanIni = App.Path & "\CONTROLES\GEOSAN.INI"
+    caminhoGeoSanIni = "C:\Arquivos de programas\GeoSan\Controles\GEOSAN.INI"
     emailDestinatario = configuracoes.ReadINI("EMAIL", "EMAILDESTINATARIO")
     emailRemetente = configuracoes.ReadINI("EMAIL", "EMAILREMETENTE")
     enderecoSMTP = configuracoes.ReadINI("EMAIL", "ENDERECOSMTP")

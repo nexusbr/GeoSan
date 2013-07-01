@@ -37,26 +37,26 @@ Attribute VB_Exposed = False
 '       ErroUsuario.Registra "CCoordIniFinLinha", "GetStartEndPointsTrecho", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
 '    End If
 '
-Private Email As New CEmail                      'Classe responsável pelo envio de emails
+
 
 Public Function Registra(ByVal Modulo As String, ByVal EVENTO As String, ByVal ErrNum As String, ByVal ErrDescr As String, ByVal ExibeMensagem As Boolean, ByVal enviaEmail As Boolean, Optional ByVal linha As String = "Não registrada")
     Dim nomeArquivoErro As String
     Dim sucesso As String
     
-    Set Email = New CEmail
     nomeArquivoErro = Environ("HOMEDRIVE") & Environ("HOMEPATH")
     'nomeArquivoErro = Environ$("USERPROFILE") & "\Meus Documentos" & Environ("LOCALAPPDATA")
     nomeArquivoErro = nomeArquivoErro + "\GeoSanLogErro.txt"
     Close #1 'FECHA O ARQUIVO DE LOG
     Open nomeArquivoErro For Append As #1
-    Print #1, "DATA"; Tab(16); Now
-    Print #1, "USUÁRIO"; Tab(16); strUser
-    Print #1, "VERSÃO"; Tab(16); Versao_Geo
-    Print #1, "ARQUIVO"; Tab(16); Modulo
-    Print #1, "ROTINA"; Tab(16); EVENTO
-    Print #1, "LINHA"; Tab(16); linha
-    Print #1, "CÓDIGO ERRO"; Tab(16); ErrNum
-    Print #1, "DESCRIÇÃO"; Tab(16); ErrDescr
+    Print #1, "DATA"; Tab(20); Now
+    Print #1, "Endereço IP"; Tab(20); frmAtualiza.Winsock1.LocalIP
+    Print #1, "Nome Computador"; Tab(20); frmAtualiza.Winsock1.LocalHostName
+    Print #1, "ARQUIVO"; Tab(20); Modulo
+    Print #1, "ROTINA"; Tab(20); EVENTO
+    Print #1, "LINHA"; Tab(20); linha
+    Print #1, ""
+    Print #1, "CÓDIGO ERRO"; Tab(20); ErrNum
+    Print #1, "DESCRIÇÃO"; Tab(20); ErrDescr
     Print #1, ""
     Print #1, "-----------------------------------------------------------------------------------------------------"
     Print #1, ""
