@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "06.10.21"
+#define AppVersionFile  "06.10.24"
 
 [Setup]
 AppName=GeoSan
@@ -43,10 +43,11 @@ Source: "ArquivosInstGeoSan\00. Leiame.txt";          DestDir: "{app}";         
 
 Source: "ArquivosInstGeoSan\Exporte EPANet.exe";  DestDir: "{app}"; CopyMode: alwaysoverwrite;
 Source: "ArquivosInstGeoSan\ValidaBase.exe";      DestDir: "{app}"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\GeoSanIni.exe";       DestDir: "{app}"; CopyMode: alwaysoverwrite;
 Source: "ArquivosInstGeoSan\NSecurity.dll";       DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NUsers.dll";          DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NexusConnection.dll"; DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\NxViewManager2.ocx";   DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\NxViewManager2.ocx";  DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NexusPM4.ocx";        DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 
 ;Source: "ArquivosInstGeoSan\LoozeXP.ocx";        DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
@@ -76,6 +77,10 @@ Source: "ArquivosInstGeoSan\STDOLE2.TLB";  DestDir: "{sys}"; CopyMode: alwaysski
 Source: "ArquivosInstGeoSan\TABCTL32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\VB6.OLB";      DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\VB6STKIT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\scrrun.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\cdosys.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\MSINET.OCX";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\mswsock.dll";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
 
 ;ARQUIVOS TERRALIB 3.3.1.7 - *******************************************************************************************************************
 
@@ -93,5 +98,5 @@ Source: "ArquivosInstGeoSan\VB6STKIT.DLL"; DestDir: "{sys}"; CopyMode: alwaysski
 
 [Icons]
 ;Name: "{group}\My Program"; Filename: "{app}\MyProg.exe"
-Name: "{commonprograms}\GeoSan"; Filename: "{app}\GeoSan.exe"
-Name: "{commondesktop}\GeoSan";  Filename: "{app}\GeoSan.exe"
+Name: "{commonprograms}\GeoSan"; Filename: "{app}\GeoSanIni.exe"
+Name: "{commondesktop}\GeoSan";  Filename: "{app}\GeoSanIni.exe"

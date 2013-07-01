@@ -1,0 +1,1 @@
+GeoSan.exe;c:\tempApp;6.10.0.24;C:\Arquivos de programas\GeoSan

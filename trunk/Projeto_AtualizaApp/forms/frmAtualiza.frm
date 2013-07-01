@@ -71,6 +71,7 @@ Attribute VB_Exposed = False
 '
 '
 Private Sub fecha_Click()
+    Shell ("C:\Arquivos de programas\GeoSan\GeoSan.exe")
     End
 End Sub
 ' Carrega a caixa de diálogo que mostrará as atualizações

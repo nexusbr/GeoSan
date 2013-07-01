@@ -1,8 +1,16 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
-Todo: BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
-Verificar como fica isso na tabela WaterComponentsTypes
+01-07-2013 - GeoSan 06.10.24
+
+Atualizado o novo instalável do GeoSan que atualiza automaticamente o software.
+GeoSanIni v 01.01.04
+
+01-07-2013 - GeoSan 06.10.22
+
+Desenvolvida rotina para atualizar automativamente o GeoSan e suas
+componentes. 
+GeoSanIni v 01.01.03
 
 20-06-2013 - GeoSan 06.10.21
 
