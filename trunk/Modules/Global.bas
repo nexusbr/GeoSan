@@ -190,7 +190,9 @@ Public Sub Main()
     Dim strMais As String
     Dim strMenos As String
     Dim gsParameters As New clsGS_Parameters
-  
+    Dim atualizaAplicacao As CAtualiza                                                              'para poder atualizar GeoSanIni.exe se necessário, assim da próxima vez que entrar no GeoSan ele está com a versão atualizada
+    Dim retornoAtualizaAplicacao As Boolean                                                         'para saber se atualizou ou não com sucesso a aplicação GeoSanIni.exe
+    
     If UCase(ReadINI("EMAIL", "ENVIARMENSAGENS", App.path & "\CONTROLES\GEOSAN.INI")) = "SIM" Then  'informa todo o sistema de é ou não para enviar por email as mensagens de erro que ocorrem
         glo.enviaEmails = True                                                                      'sempre enviar emails de erros. Salva globalmente
     Else
@@ -198,7 +200,7 @@ Public Sub Main()
     End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "06.10.25"
+    Versao_Geo = "06.10.26"
     glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
     SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -445,9 +447,11 @@ Public Sub Main()
             'MsgBox "Conexão com banco comercial apontando para outro banco", vbInformation, "Conexão comercial"
         End If
     End If
-    exp.AtivaRamaisGeoSan                                           'precisa ativar o te_representation, uma vez que na exportação que pode ter ocorrido ou ter sido cancelada, pode ter sido apagado
-    cGeoDatabase.configura Conn, typeconnection, usuario.UseName    'aqui ele inicializa a conexão com o banco de dados, com TeDatabase, para fazer todas as operações necessárias ao longo de toda a aplicação
-
+    exp.AtivaRamaisGeoSan                                                   'precisa ativar o te_representation, uma vez que na exportação que pode ter ocorrido ou ter sido cancelada, pode ter sido apagado
+    cGeoDatabase.configura Conn, typeconnection, usuario.UseName            'aqui ele inicializa a conexão com o banco de dados, com TeDatabase, para fazer todas as operações necessárias ao longo de toda a aplicação
+    Set atualizaAplicacao = New CAtualiza                                   'para atualizar o GeoSanIni.exe se necessário
+    retornoAtualizaAplicacao = atualizaAplicacao.AtualizaAplicacaoLocal     'retorna verdadeiro se atualizou com sucesso, falso se houve uma falha em localização de algum arquivo
+    
 pulaConexaoComercial:
     momento = ""
     Set gsParameters = Nothing
@@ -799,7 +803,7 @@ Inicio:
     End If
     Set rsBase = Conn.execute(SQL)
     If rsBase.EOF = False Then
-       If Trim(rsBase!VERSAO) = "6.0.0" Then
+       If Trim(rsBase!versao) = "6.0.0" Then
         
 
             Exit Function
@@ -846,7 +850,7 @@ CRIA_NXBASE:
 ATUALIZACAO600:
     
     i = 0
- If Trim(rsBase!VERSAO) < "5.9.8" Then
+ If Trim(rsBase!versao) < "5.9.8" Then
     arrSQL(0) = "ALTER TABLE SYSTEMUSERS ADD USRMAIL VARCHAR(50)"
     arrSQL(1) = "ALTER TABLE SYSTEMUSERS ADD USRDEPTO VARCHAR(50)"
     arrSQL(2) = "ALTER TABLE SYSTEMUSERS ADD USRDATA VARCHAR(8)"
@@ -1026,7 +1030,7 @@ Inicio:
     Set rsBase = Conn.execute(SQL)
     If rsBase.EOF = False Then
     
-     If Trim(rsBase!VERSAO) = "6.0.0" Then
+     If Trim(rsBase!versao) = "6.0.0" Then
      
    
            Exit Function
@@ -1073,7 +1077,7 @@ ATUALIZA600:
   
     
   
- If Trim(rsBase!VERSAO) < "5.9.8" Then
+ If Trim(rsBase!versao) < "5.9.8" Then
 
 
    'CARREGA EM UM ARRAY TODOS OS SCRIPTS DE ATUALIZAÇÃO DA BASE DE DADOS

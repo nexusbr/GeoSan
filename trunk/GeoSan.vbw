@@ -1,4 +1,4 @@
-Global = 8, 128, 1421, 965, C
+Global = 10, 9, 1377, 884, C
 calcDetecta = 154, 154, 1238, 886, C
 FrmCreatTextForLayer = 308, 162, 1378, 878, C, 100, 100, 1170, 817, C
 frmAbout = 22, 22, 1106, 754, C, 132, 132, 824, 696, C
@@ -94,3 +94,5 @@ frmExportaConsumos = 0, 0, 0, 0, C, 220, 220, 1313, 968, C
 CConsumo = 110, 110, 1336, 746, C
 CObtemObjIdsNos = 58, 94, 1310, 915, C
 CEncontraDiretorio = 308, 308, 1401, 1056, C
+CAtualiza = 44, 44, 1400, 923, C
+CGetVersion = 0, 0, 0, 0, C

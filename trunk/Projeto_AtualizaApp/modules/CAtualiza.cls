@@ -69,7 +69,7 @@ Public Function AtualizaDirRemoto() As Boolean
         If versao.ExisteArquivo(carrega.diretorioLocal & "\" & nomeArquivo) Then                        'verifica se existe o arquivo localmente referente a atualização a ser realizada
             versaoLocal = versao.ObtemVersaoArquivo(carrega.diretorioLocal & "\" & nomeArquivo)
             mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoLocal & " - www.nexusbr.com\" & nomeArquivo & " - " & versaoNova
-            frmAtualiza.Text1 = mensagem
+            frmAtualiza.Text1 = mensagem                                        'isto deveria estar fora da classe, pois inviabiliza a reutilização
             If versaoLocal <> versaoNova Then
                 retorno = carrega.DownloadArquivo(nomeArquivo)                  'faz o download para o diretório local, da atualização
                 If retorno = True Then
@@ -130,9 +130,14 @@ Public Function AtualizaAplicacaoLocal() As Boolean
             mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoLocal & " - " & dirInstalacaoLocal & "\" & nomeArquivo & " - " & versaoNova
             frmAtualiza.Text1 = mensagem
             If versaoLocal <> versaoNova Then
-                fs.CopyFile carrega.diretorioLocal & "\" & nomeArquivo, dirInstalacaoLocal & "\" & nomeArquivo, True
-                mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - realizada copia para atualização"
-                frmAtualiza.Text1 = mensagem
+                If nomeArquivo <> "GeoSanIni.exe" Then                                      'não pode copiar sobre a aplicação que está rodando, terá que ser realizado mais tarde quando entrar no GeoSan
+                    fs.CopyFile carrega.diretorioLocal & "\" & nomeArquivo, dirInstalacaoLocal & "\" & nomeArquivo, True
+                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - realizada copia para atualização"
+                    frmAtualiza.Text1 = mensagem
+                Else
+                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - não realizou a cópia, pois é a própria aplicação de atualização. Será realizada quando entrar no GeoSan"
+                    frmAtualiza.Text1 = mensagem
+                End If
             Else
                 mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - não foi preciso copiar, versão já estava atualizada"
                 frmAtualiza.Text1 = mensagem
