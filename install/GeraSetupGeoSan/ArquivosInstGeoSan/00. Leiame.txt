@@ -1,6 +1,11 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+02-07-2013 - GeoSan 06.10.27
+
+Para realização de testes na atualização automática.
+GeoSanIni v 01.01.07
+
 02-07-2013 - GeoSan 06.10.26
 
 Incorporada a atualização do GeoSanIni.exe no GeoSan e corrigida atualização
