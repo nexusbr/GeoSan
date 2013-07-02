@@ -90,10 +90,10 @@ Private Sub Form_Load()
     Screen.MousePointer = vbHourglass
     mensagem = "Iniciando o download das atualizações ..."
     frmAtualiza.Text1 = mensagem
-    Timer1.Enabled = True               'ativa o timer
-    Me.ProgressBar1.Visible = True      'ativa a visualização da barra de progresso
-    retorno = atualiza.AtualizaDirRemoto
-    retorno = atualiza.AtualizaAplicacaoLocal
+    Timer1.Enabled = True                                   'ativa o timer
+    Me.ProgressBar1.Visible = True                          'ativa a visualização da barra de progresso
+    retorno = atualiza.AtualizaDirRemoto                    'atualiza os arquivos do servidor da NEXUS para o servidor de arquivos do cliente
+    retorno = atualiza.AtualizaAplicacaoLocal               'atualiza os arquivos do servidor do cliente para o diretório da máquina local da aplicação do cliente
     ErroUsuario.Registra "frmAtualiza", "Form_Load - Atualização realizada", CStr(Err.Number), CStr(Err.Description), False, True, mensagem
     mensagem = mensagem & vbCrLf & vbCrLf & "Final do processamento das atualizações"
     frmAtualiza.Text1 = mensagem

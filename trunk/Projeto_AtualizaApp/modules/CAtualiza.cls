@@ -55,22 +55,25 @@ Public Function AtualizaDirRemoto() As Boolean
     Dim i As Integer
     
     LeConfiguracoes                                         'Realiza as configurações de atualização do usuário
+    If versao.ExisteArquivo(carrega.diretorioLocal & "\" & "Updates.txt") Then
+        Kill (carrega.diretorioLocal & "\" & "Updates.txt")
+    End If
     retorno = carrega.DownloadArquivo("Updates.txt")                                        'obtem a lista de atualizações disponíveis
     numeroAtualizacoes = versao.VerificaAtualizacoes(carrega.diretorioLocal & "\" & "Updates.txt")
     frmAtualiza.ProgressBar1.Max = numeroAtualizacoes + 1
-    mensagem = mensagem & vbCrLf & vbCrLf & "Iniciando a atualização do servidor local, copiando os arquivos mais atualizados da NEXUS para o servidor de arquivos local no diretório " & carrega.diretorioLocal
+    mensagem = mensagem & vbCrLf & vbCrLf & "www.nexusbr.com ---> " & carrega.diretorioLocal
     frmAtualiza.Text1 = mensagem
     For i = 0 To numeroAtualizacoes - 1                                                     'enquanto existirem atualizações para se fazer download
         frmAtualiza.ProgressBar1.Value = i + 1
         versao.SplitAtualizacoes i, nomeArquivo, diretorio, versaoNova, dirInstalacaoLocal  'obtem os dados detalhados das atualizações remotas que não foram baixadas ainda
         If versao.ExisteArquivo(carrega.diretorioLocal & "\" & nomeArquivo) Then                        'verifica se existe o arquivo localmente referente a atualização a ser realizada
             versaoLocal = versao.ObtemVersaoArquivo(carrega.diretorioLocal & "\" & nomeArquivo)
-            mensagem = mensagem & vbCrLf & Str(i + 1) & " - Versão local do aqruivo: " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoLocal & " - Nova versão no site da NEXUS: " & versaoNova
+            mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoLocal & " - www.nexusbr.com\" & nomeArquivo & " - " & versaoNova
             frmAtualiza.Text1 = mensagem
             If versaoLocal <> versaoNova Then
                 retorno = carrega.DownloadArquivo(nomeArquivo)                  'faz o download para o diretório local, da atualização
                 If retorno = True Then
-                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - Realizado download do arquivo: " & nomeArquivo & " para o diretório local: " & carrega.diretorioLocal & " substituindo o existente"
+                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - Download: " & nomeArquivo & " ---> " & carrega.diretorioLocal & " - substituindo o existente"
                 Else
                     mensagem = mensagem & vbCrLf & Str(i + 1) & " - Não conseguiu realizar o download do arquivo: " & nomeArquivo & " para o diretório local: " & carrega.diretorioLocal
                 End If
@@ -79,7 +82,7 @@ Public Function AtualizaDirRemoto() As Boolean
         Else                                                                    'é um arquivo novo e não existe nada locamente no diretório do usuário
             retorno = carrega.DownloadArquivo(nomeArquivo)                      'faz o download para o diretório local, da atualização
             If retorno = True Then
-                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - Realizado download do arquivo: " & nomeArquivo & " para o diretório local: " & carrega.diretorioLocal & " - Arquivo novo adicionado"
+                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - Download: " & nomeArquivo & " ---> " & carrega.diretorioLocal & " - Arquivo novo adicionado"
                 Else
                     mensagem = mensagem & vbCrLf & Str(i + 1) & " - Não conseguiu realizar o download do arquivo: " & nomeArquivo & " para o diretório local: " & carrega.diretorioLocal
             End If
@@ -118,23 +121,26 @@ Public Function AtualizaAplicacaoLocal() As Boolean
     
     Set fs = New Scripting.FileSystemObject                 'inicializa objeto de copia de arquivos
     numeroAtualizacoes = versao.VerificaAtualizacoes(carrega.diretorioLocal & "\" & "Updates.txt")
-    mensagem = mensagem & vbCrLf & vbCrLf & "Iniciando a atualização no diretório da aplicação na máquina local do usuário, copiando os arquivos mais atualizados do servidor local de arquivos para o diretório da aplicação: " & carrega.diretorioLocal
+    mensagem = mensagem & vbCrLf & vbCrLf & carrega.diretorioLocal & " ---> c:\Arquivo de Programas\GeoSan"
     frmAtualiza.Text1 = mensagem
     For i = 0 To numeroAtualizacoes - 1                                                     'enquanto existirem atualizações para se fazer download
         versao.SplitAtualizacoes i, nomeArquivo, diretorio, versaoNova, dirInstalacaoLocal  'obtem os dados detalhados das atualizações remotas que não foram baixadas ainda
         If versao.ExisteArquivo(dirInstalacaoLocal & "\" & nomeArquivo) And versao.ExisteArquivo(carrega.diretorioLocal & "\" & nomeArquivo) Then                        'verifica se existem os arquivos localmente e remotamente (diretório no servidor local) referente a atualização a ser realizada
             versaoLocal = versao.ObtemVersaoArquivo(dirInstalacaoLocal & "\" & nomeArquivo)
-            mensagem = mensagem & vbCrLf & Str(i + 1) & " - Versão local do aqruivo: " & carrega.diretorioLocal & "\" & nomeArquivo & " - versão:" & versaoLocal & " - Novo arquivo copiado: " & dirInstalacaoLocal & "\" & nomeArquivo & " - versão:" & versaoNova
+            mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoLocal & " - " & dirInstalacaoLocal & "\" & nomeArquivo & " - " & versaoNova
             frmAtualiza.Text1 = mensagem
             If versaoLocal <> versaoNova Then
                 fs.CopyFile carrega.diretorioLocal & "\" & nomeArquivo, dirInstalacaoLocal & "\" & nomeArquivo, True
-                mensagem = mensagem & vbCrLf & Str(i + 1) & " - Copiado arquivo: " & carrega.diretorioLocal & "\" & nomeArquivo & " para " & dirInstalacaoLocal & "\" & nomeArquivo
+                mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - realizada copia para atualização"
+                frmAtualiza.Text1 = mensagem
+            Else
+                mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - não foi preciso copiar, versão já estava atualizada"
                 frmAtualiza.Text1 = mensagem
             End If
         Else                                                                                'é um arquivo novo e não existe nada locamente no diretório do usuário
                 If versao.ExisteArquivo(carrega.diretorioLocal & "\" & nomeArquivo) Then    'verifica antes se foi baixado realmente do servidor o arquivo que será copiado para o diretório da aplicação do usuário
                     fs.CopyFile carrega.diretorioLocal & "\" & nomeArquivo, dirInstalacaoLocal & "\" & nomeArquivo, True
-                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - Copiado arquivo: " & carrega.diretorioLocal & "\" & nomeArquivo & " para " & dirInstalacaoLocal & "\" & nomeArquivo & " - Novo arquivo incorporado"
+                    mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " ---> " & dirInstalacaoLocal & "\" & nomeArquivo & " - Novo arquivo incorporado"
                     frmAtualiza.Text1 = mensagem
                 End If
         End If

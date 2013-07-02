@@ -1,8 +1,8 @@
-frmAtualiza = 40, 37, 1329, 740, , 22, 22, 1115, 770, C
+frmAtualiza = 34, 90, 1323, 793, , 22, 22, 1115, 770, C
 CDownload = 147, 54, 1381, 667, C
 CPrintErro = 34, 26, 1370, 985, C
 CEmail = 29, 24, 1373, 960, C
 CGetVersion = 51, 186, 1393, 955, C
 CArquivoIni = 27, 89, 1302, 951, C
-Global = 176, 176, 1269, 924, 
-CAtualiza = 44, 44, 1331, 792, C
+Global = 176, 176, 1269, 924, C
+CAtualiza = 79, 82, 1366, 829, 

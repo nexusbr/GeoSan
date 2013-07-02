@@ -1,6 +1,11 @@
 GeoSan - Notas de Liberação
 Versão para Windows
 
+02-07-2013 - GeoSan 06.10.25
+
+Corrigidas as mensagens e realizadas atualizações de bugs
+GeoSanIni v 01.01.05
+
 01-07-2013 - GeoSan 06.10.24
 
 Atualizado o novo instalável do GeoSan que atualiza automaticamente o software.
