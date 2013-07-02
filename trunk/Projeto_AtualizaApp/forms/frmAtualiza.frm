@@ -87,6 +87,7 @@ Private Sub Form_Load()
     Set atualiza = New CAtualiza
     Set versao = New CGetVersion
     Me.Show
+    frmAtualiza.fecha.Enabled = False
     Screen.MousePointer = vbHourglass
     mensagem = "Iniciando o download das atualizações ..."
     frmAtualiza.Text1 = mensagem
@@ -101,6 +102,7 @@ Private Sub Form_Load()
     Timer1.Enabled = False               'ativa o timer
     Me.ProgressBar1.Visible = False      'ativa a visualização da barra de progresso
     Screen.MousePointer = vbDefault
+    frmAtualiza.fecha.Enabled = True
 End Sub
 ' Não está mais sendo utilizado
 Private Sub ObtemVersao_Click()
