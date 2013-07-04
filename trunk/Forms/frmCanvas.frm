@@ -873,7 +873,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
                             TCanvas.Normal
                             TCanvas.drawPolygon
                         Case "kMoveVertice"
-                            Tr.MoveVertice: Tr.TerraEvent = tg_MoveNetWorkVertice       'chama clsTerralib.MoveVertice e informa o evento que está realizando
+                            Tr.moveVertice: Tr.TerraEvent = tg_MoveNetWorkVertice       'chama clsTerralib.MoveVertice e informa o evento que está realizando, para iniciar o método de movimentação do vértice da rede e salvar na memória quem são os ramais conectados a mesma
                     End Select
                 Else
                     MsgBox "Nenhum plano está ativo. Selecione antes o plano de informação que deseja realizar esta operação.", vbExclamation
@@ -1134,6 +1134,56 @@ End Sub
 Private Sub TCanvas_onBeginPlotView()
     'MsgBox "Inicio: " & tempo & "Fim: " & Time
 End Sub
+
+
+
+' Evento que é disparado quando é terminado de mover o vértice de uma linha, no caso um trecho de rede de água
+' Como terminou de mover o vértice da rede, tem agora que salvar a rede na nova posição e recalcular o
+' novo posicionamento dos ramais
+'
+'
+'
+Private Sub TCanvas_onEndMoveGeometryPoint()
+    Dim contTrechos As Integer
+    Dim contRamais As Integer
+    Dim totalRamais As Integer
+    Dim xIniRa As Double
+    Dim yIniRa As Double
+    
+    TCanvas.saveOnMemory                                    'salva na memória a nova posição da rede
+    TCanvas.SaveInDatabase                                  'salva no banco de dados a nova posição da rede
+    TCanvas.redraw
+    'inicia agora a movimentação de todos os ramais associados a esta rede que foi recém salva no banco de dados.
+    totalRamais = UBound(ramalMovendo)                      'início para mover os ramais, começa
+    For contRamais = 0 To totalRamais
+        If ramalMovendo(contRamais).objIdTrecho = varGlobais.objIdTreSelecionado And ramalMovendo(contRamais).objIdRamal <> -1 And ramalMovendo(contRamais).objIdTrecho = varGlobais.objIdTreSelecionado Then
+            Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
+            Dim moveRamal As New CCoordIniRamalDistTrecho   'classe para obter a coordenada inicial do ramal a uma determinada distância do início do trecho de rede
+            Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
+            Dim retorno As Boolean
+            Dim novoComprTrecho As Double
+            Dim xRamal(1) As Double, yRamal(1) As Double
+            Dim comprimentoRamal As Double                  'comprimento calculado da extensão do ramal
+            Dim pontoSobreLinha As Long                     'indica se o ponto de início do ramal ficou ou não sobre a linha
+
+            pontoSobreLinha = True
+            cGeoDatabase.geoDatabase.setCurrentLayer ("Waterlines")
+            retorno = cGeoDatabase.geoDatabase.getLengthOfLine(varGlobais.objIdTreSelecionado, "", novoComprTrecho)
+            distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contRamais).comprTrecho, novoComprTrecho, ramalMovendo(contRamais).Distancia)
+            'moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase       'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede. Desativada, pois foi substituído pelo ponto perpendicular
+            retorno = cGeoDatabase.geoDatabase.getMinimumDistance(0, ramalMovendo(contRamais).objIdTrecho, 2, ramalMovendo(contRamais).xHidrom, ramalMovendo(contRamais).yHidrom, comprimentoRamal, pontoSobreLinha, xIniRa, yIniRa)    'obtem a nova coordenada inicial do ramal, perpendicular ao segmento de linha mais próximo
+            xRamal(0) = xIniRa
+            yRamal(0) = yIniRa
+            xRamal(1) = ramalMovendo(contRamais).xHidrom                                            'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
+            yRamal(1) = ramalMovendo(contRamais).yHidrom
+            cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")                                'seta o layer em que serão apagadas e adicionadas as geometrias
+            cGeoDatabase.geoDatabase.deleteGeometry ramalMovendo(contRamais).geomIdRamal, ramalMovendo(contRamais).objIdRamal, 2
+            cGeoDatabase.geoDatabase.addLine ramalMovendo(contRamais).objIdRamal, xRamal(0), yRamal(0), 2
+        End If
+    Next                                                    'final da movimentação de ramais
+    TCanvas.plotView
+End Sub
+
 ' Evento que ocorre quando é selecionado um ou mais objetos no canvas
 ' A rotina dentro do evento  carrega as propridades
 ' na componente manage1(Gerenciador de Propridades) do Form Principal
@@ -1843,7 +1893,22 @@ Trata_Erro:
     End If
 End Sub
 Private Sub TCanvas_onMoveGeometries(ByVal distance As Double, ByVal deltaX As Double, ByVal deltaY As Double)
-    MsgBox ("movendo geometria")        'para teste de movimentação de geometria e verificar quando entra aqui
+    'MsgBox ("movendo geometria")        'para teste de movimentação de geometria e verificar quando entra aqui
+End Sub
+' Entra neste evento quando o usuário selecionou um vértice de uma linha para mover
+' Ele vai chegar se não é o inicial ou final, pois estes só podem ser movidos pelo nó
+'
+' distanceSegment1 - comprimento do primeiro seguimento conectado no vértice da linha
+' distanceSegment2 - comprimento do segundo seguimento conectado no vértice da linha
+' distanceOldToNewPoint - distância do vértice antes de mover até a nova posição onde foi movido
+'
+Private Sub TCanvas_onMoveGeometryPoint(ByVal distanceSegment1 As Double, ByVal distanceSegment2 As Double, ByVal distanceOldToNewPoint As Double)
+    If distanceSegment2 = 0 Or distanceSegment1 = 0 Then
+        varGlobais.moverVertice = False                     'indica que o usuário selecionou a extremidade de uma rede e não pode mover pois é um nó
+        MsgBox "Você não pode mover um nó com a ferramenta de mover vértice. Selecione o layer nó e em seguida a ferramenta de mover nós."
+    Else
+        varGlobais.moverVertice = True                      'é um vértice, não sendo o ponto inicial nem final
+    End If
 End Sub
 
 Private Sub TCanvas_onPoint(ByVal X As Double, ByVal Y As Double)

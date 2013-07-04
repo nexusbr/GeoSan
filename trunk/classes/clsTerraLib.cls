@@ -282,38 +282,40 @@ Trata_Erro:
        ErroUsuario.Registra "clsTerralib", "DrawNetWorkNode", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function
-' Para mover um vértice de um trecho de rede de água. Entra nesta rotina após
+' Para mover um vértice de um trecho de rede de água. Entra nesta rotina após selecionar a rede
+' O objetivo aqui é coletar os dados para que o sistema possa depois saber quais ramais necessitam
+' ser recalculados em sua nova posição. São todos salvos em memória
 '
 '
 '
-Public Function MoveVertice()
+Public Function moveVertice()
     Dim objIdSelecionado As String                                          'objectId do trecho que foi selecionado no qual será movido um ou mais vértices
     Dim contador As Integer                                                 'número de ramais processados
     Dim objIdTrecho As String                                               'objectId do trecho que foi selecionado no qual será movido, mesmo que o anterior, só para ficar igual o código
     Dim objIDsRamais As New CObtemObjIDsRamais
-    Dim listObjIDsRamais() As String                            'lista de todos objIDs dos ramais de um determinado trecho
-    Dim listGeomIDsRamais() As String                           'lista de todos os geomIDs dos ramais de um determinado trecho
-    Dim contRamal As Integer                                    'contador de ramais conectados em um determinado trecho de rede
+    Dim listObjIDsRamais() As String                                        'lista de todos objIDs dos ramais de um determinado trecho
+    Dim listGeomIDsRamais() As String                                       'lista de todos os geomIDs dos ramais de um determinado trecho
+    Dim contRamal As Integer                                                'contador de ramais conectados em um determinado trecho de rede
     Dim objIdRamal As String
     Dim geomIdRamal As String
-    Dim distIniRamalAntes As Double                             'distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
-    Dim distRamalDoInicioTrecho As New CDistRamalInicioTrecho   'clases para calcular a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+    Dim distIniRamalAntes As Double                                         'distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
+    Dim distRamalDoInicioTrecho As New CDistRamalInicioTrecho               'clases para calcular a distância do início do ramal antes de tanto o trecho quanto o ramal serem movidos
     Dim retorno As Boolean
-    Dim coordRamal As New CCoordIniFinLinha                     'classe para obter as coordenadas inicial e final do ramal que foi movido
-    Dim comprTrecho As Double                                   'comprimento total do trecho de rede antes de mover
+    Dim coordRamal As New CCoordIniFinLinha                                 'classe para obter as coordenadas inicial e final do ramal que foi movido
+    Dim comprTrecho As Double                                               'comprimento total do trecho de rede antes de mover
 
     If tcs.getCurrentLayer = "WATERLINES" Then
-        objIdSelecionado = varGlobais.objIdTreSelecionado               'para obter o object_id da linha que foi selecionada para mover o vértice da mesma. Esta variável foi configurada em  frmCanvas.TCanvas_onEndSELECT
+        objIdSelecionado = varGlobais.objIdTreSelecionado                   'para obter o object_id da linha que foi selecionada para mover o vértice da mesma. Esta variável foi configurada em  frmCanvas.TCanvas_onEndSELECT
         tcs.moveGeometryPoint
         'nesta etapa ele vai localizar todos os trechos que serão movidos e os respectivos ramais se houverem e armazenar tudo na memória
         contador = 0
         varGlobais.objIdTre = Null                                          'zera a variável global, caso contenha algum valor lá
-        varGlobais.objIdTre = objIdSelecionado                         'só um revisar para ver se nao deveria ser vetor 'armazena na variável global todos os object_ids dos trechos de rede que estão conectados ao nó que está movendo
+        varGlobais.objIdTre = objIdSelecionado                              'só um revisar para ver se nao deveria ser vetor 'armazena na variável global todos os object_ids dos trechos de rede que estão conectados ao nó que está movendo
         varGlobais.totalTrechos = 1                                         'armazena o número total de trechos de rede que estão sendo movidos. Um só pois está movendo o vértice de um trecho
         objIdTrecho = objIdSelecionado
         objIDsRamais.getObjIDs objIdTrecho, listObjIDsRamais, listGeomIDsRamais     'obtem todos os objIDs dos ramais que estão ligados ao trecho de rede que está sendo movido
-        If listObjIDsRamais(0) <> "" Then                               'existem ramais conectados ao trecho
-            For contRamal = 0 To UBound(listObjIDsRamais)               'enquanto existirem ramais
+        If listObjIDsRamais(0) <> "" Then                                   'existem ramais conectados ao trecho
+            For contRamal = 0 To UBound(listObjIDsRamais)                   'enquanto existirem ramais
                 contador = contador + 1
                 ReDim Preserve ramalMovendo(contador - 1)
                 objIdRamal = listObjIDsRamais(contRamal)
@@ -323,14 +325,14 @@ Public Function MoveVertice()
                 ramalMovendo(contador - 1).objIdRamal = objIdRamal
                 ramalMovendo(contador - 1).geomIdRamal = geomIdRamal
                 ramalMovendo(contador - 1).Distancia = distIniRamalAntes
-                coordRamal.GetStartEndPointsRamal objIdRamal                                'obtem as coordenadas inicial e final do ramal
-                ramalMovendo(contador - 1).xHidrom = coordRamal.linha.xf                    'pega as coordenadas de onde está o hidrômetro
+                coordRamal.GetStartEndPointsRamal objIdRamal                'obtem as coordenadas inicial e final do ramal
+                ramalMovendo(contador - 1).xHidrom = coordRamal.linha.xf    'pega as coordenadas de onde está o hidrômetro
                 ramalMovendo(contador - 1).yHidrom = coordRamal.linha.yf
                 retorno = cGeoDatabase.geoDatabase.setCurrentLayer("WaterLines")
                 retorno = cGeoDatabase.geoDatabase.getLengthOfLine(objIdTrecho, "", comprTrecho) 'está como geom_id deveria ser na segunda
                 ramalMovendo(contador - 1).comprTrecho = comprTrecho
-            Next                                                        'próximo ramal
-        Else                                                            'não existem ramais
+            Next                                                            'próximo ramal
+        Else                                                                'não existem ramais
             contador = contador + 1
             ReDim Preserve ramalMovendo(contador - 1)
             ramalMovendo(contador - 1).objIdTrecho = objIdTrecho
@@ -682,43 +684,9 @@ Public Function SaveInDatabase() As Boolean
                 End Select
                 .plotView
             Case tg_MoveNetWorkVertice      'está movendo apenas um vértice da rede de água
-                Dim contTrechos As Integer
-                Dim contRamais As Integer
-                Dim totalRamais As Integer
-                Dim xIniRa As Double
-                Dim yIniRa As Double
-                tcs.saveOnMemory
-                tcs.SaveInDatabase
-                totalRamais = UBound(ramalMovendo)                      'início para mover os ramais
-                For contRamais = 0 To totalRamais
-                    If ramalMovendo(contRamais).objIdTrecho = varGlobais.objIdTreSelecionado And ramalMovendo(contRamais).objIdRamal <> -1 And ramalMovendo(contRamais).objIdTrecho = varGlobais.objIdTreSelecionado Then
-                        Dim distIniRamalDepois As Double                'distância do início do ramal depois de tanto o trecho quanto o ramal serem movidos
-                        Dim moveRamal As New CCoordIniRamalDistTrecho   'classe para obter a coordenada inicial do ramal a uma determinada distância do início do trecho de rede
-                        Dim distEquiv As New CDistanciaEquivalente      'classe para obter a distância do início do ramal ao início do trecho após movido os mesmos
-                        Dim retorno As Boolean
-                        Dim novoComprTrecho As Double
-                        Dim xRamal(1) As Double, yRamal(1) As Double
-                        Dim comprimentoRamal As Double                  'comprimento calculado da extensão do ramal
-                        Dim pontoSobreLinha As Long                     'indica se o ponto de início do ramal ficou ou não sobre a linha
-                        
-                        pontoSobreLinha = True
-                        
-                        cGeoDatabase.geoDatabase.setCurrentLayer ("Waterlines")
-                        retorno = cGeoDatabase.geoDatabase.getLengthOfLine(varGlobais.objIdTreSelecionado, "", novoComprTrecho)
-                        distIniRamalDepois = distEquiv.distanciaRamalDepoisMovido(ramalMovendo(contRamais).comprTrecho, novoComprTrecho, ramalMovendo(contRamais).Distancia)
-                        'moveRamal.coordsRamal distIniRamalDepois, CStr(LINE_ID), cGeoDatabase.geoDatabase       'obtem as novas coordenadas inicial e final do ramal movido após mover o trecho de rede. Desativada, pois foi substituído pelo ponto perpendicular
-                        retorno = cGeoDatabase.geoDatabase.getMinimumDistance(0, ramalMovendo(contRamais).objIdTrecho, 2, ramalMovendo(contRamais).xHidrom, ramalMovendo(contRamais).yHidrom, comprimentoRamal, pontoSobreLinha, xIniRa, yIniRa)    'obtem a nova coordenada inicial do ramal, perpendicular ao segmento de linha mais próximo
-                        
-                        xRamal(0) = xIniRa
-                        yRamal(0) = yIniRa
-                        xRamal(1) = ramalMovendo(contRamais).xHidrom                                            'estas coordenadas foram testadas e estão corretas, bate com a coordenada onde está o ponto (nó) do hidrômetro
-                        yRamal(1) = ramalMovendo(contRamais).yHidrom
-                        cGeoDatabase.geoDatabase.setCurrentLayer ("RAMAIS_AGUA")                                'seta o layer em que serão apagadas e adicionadas as geometrias
-                        cGeoDatabase.geoDatabase.deleteGeometry ramalMovendo(contRamais).geomIdRamal, ramalMovendo(contRamais).objIdRamal, 2
-                        cGeoDatabase.geoDatabase.addLine ramalMovendo(contRamais).objIdRamal, xRamal(0), yRamal(0), 2
-                    End If
-                Next                                                    'final da movimentação de ramais
-                tcs.plotView
+'                tcs.saveOnMemory
+'                tcs.SaveInDatabase
+'                tcs.plotView
         End Select
     End With
     Exit Function

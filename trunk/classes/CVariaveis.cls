@@ -19,6 +19,18 @@ Private totalTrechosMovendo As Integer
 Private retornaEmailErro As Boolean
 Private paraExe As Boolean
 Private objIdNoMovendo As String
+Private moveVertice As Boolean                          'indica se está ou não movendo um vértice de uma rede
+'Retorna se o vértice está sendo movido ou não
+'
+Property Get moverVertice() As Boolean
+    moverVertice = moveVertice
+End Property
+'  Recebe se o vértice está sendo movido ou não
+'
+Property Let moverVertice(ByVal vertice As Boolean)
+    moveVertice = vertice
+End Property
+
 'Retorna valor de do object_id do trecho
 '
 Property Get objIdTreSelecionado() As String
