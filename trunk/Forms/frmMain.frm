@@ -132,12 +132,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   7515
+      Height          =   6615
       Left            =   6090
-      ScaleHeight     =   7515
+      ScaleHeight     =   6615
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   510
+      Top             =   1410
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1335
@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "08:17"
+            TextSave        =   "01:02"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -313,19 +313,19 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   510
+      Height          =   1410
       Left            =   0
       TabIndex        =   7
       Top             =   0
       Width           =   10035
       _ExtentX        =   17701
-      _ExtentY        =   900
+      _ExtentY        =   2487
       ButtonWidth     =   820
       ButtonHeight    =   794
       ImageList       =   "ImageList4"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   38
+         NumButtons      =   39
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "knew"
             Object.ToolTipText     =   "Novo"
@@ -509,6 +509,10 @@ Begin VB.MDIForm FrmMain
             Object.Visible         =   0   'False
             Key             =   "kConsumoLote"
             Object.ToolTipText     =   "Apresenta Consumo"
+         EndProperty
+         BeginProperty Button39 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "kMoveVertice"
+            Object.ToolTipText     =   "Mover Vértice"
          EndProperty
       EndProperty
       Begin VB.Timer Timer1 
@@ -1660,7 +1664,7 @@ Dim strCaminho As String
    'ABRE O CPMPONENTE DE LOCALIZAÇÃO DE ARQUIVOS
    Me.cmmSalvaImg.ShowOpen
    
-   strCaminho = Me.cmmSalvaImg.filename
+   strCaminho = Me.cmmSalvaImg.FileName
          
    'SE NÃO FOI DEFINIDO UM CAMINHO, SAI DA FUNÇÃO
    If Trim(strCaminho) = "" Then
@@ -1865,11 +1869,11 @@ Private Sub mnuImagem_Click()
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
         With CDL
-           .filename = ""
+           .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
-           If .filename <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.filename, .FilterIndex - 1
+           If .FileName <> "" Then
+              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
            End If
         End With
     Else

@@ -14,10 +14,21 @@ Attribute VB_Exposed = False
 ' Classe para armazenamento de variáveis globais de uma forma um pouco mais elegante
 '
 Private objIDsTrechos As Variant
+Private objIDTrechoSelecionado As String
 Private totalTrechosMovendo As Integer
 Private retornaEmailErro As Boolean
 Private paraExe As Boolean
 Private objIdNoMovendo As String
+'Retorna valor de do object_id do trecho
+'
+Property Get objIdTreSelecionado() As String
+    objIdTreSelecionado = objIDTrechoSelecionado
+End Property
+'  Recebe valor do object_id do trecho
+'
+Property Let objIdTreSelecionado(ByVal objIdTreSel As String)
+    objIDTrechoSelecionado = objIdTreSel
+End Property
 'Retorna valor de do object_id do trecho
 '
 Property Get objIdTre() As Variant

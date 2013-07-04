@@ -872,6 +872,8 @@ Public Sub Tb_SELECT(ByVal Button As String)
                             Tr.TerraEvent = 0
                             TCanvas.Normal
                             TCanvas.drawPolygon
+                        Case "kMoveVertice"
+                            Tr.MoveVertice: Tr.TerraEvent = tg_MoveNetWorkVertice       'chama clsTerralib.MoveVertice e informa o evento que está realizando
                     End Select
                 Else
                     MsgBox "Nenhum plano está ativo. Selecione antes o plano de informação que deseja realizar esta operação.", vbExclamation
@@ -1217,7 +1219,10 @@ Trata_Erro:
         PrintErro CStr(Me.Name), "Erro na tolerância de localização em Private Sub TCanvas_onEndPlotView", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Sub
-
+' Entra nesta rotina quando o usuário termina de selecionar uma geometria.
+'
+'
+'
 Private Sub TCanvas_onEndSELECT()
 On Error GoTo Trata_Erro
 
@@ -1233,10 +1238,11 @@ On Error GoTo Trata_Erro
             Case LayerTypeRefence.Trecho_Rede_Agua, LayerTypeRefence.Trecho_Rede_Drenagem, LayerTypeRefence.Trecho_Rede_esgoto, _
                LayerTypeRefence.Componente_Rede_Agua, LayerTypeRefence.Componente_Rede_Drenagem, LayerTypeRefence.Componente_Rede_Esgoto
                'Verifica a seleção apenas das geometrias 2(linhas) e 4(Pontos)
+               varGlobais.objIdTreSelecionado = TCanvas.getSelectObjectId(0, 2)             'obtem o object_id do trecho de rede selecionado. Será utilizado para movimentação do vértice
                For j = 2 To 4 Step 2
                   
                   Dim X As String
-                  X = TCanvas.getSelectObjectId(0, 2) ' LINHAS
+                  X = TCanvas.getSelectObjectId(0, 2) ' 2 - representa elemento tipo linha
                   
                   If TCanvas.getSelectCount(j) = 1 Then
                      .LoadDefaultProperties TCanvas.getSelectObjectId(0, j), TCanvas.getCurrentLayer, False

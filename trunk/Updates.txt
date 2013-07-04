@@ -1,2 +1,2 @@
-GeoSan.exe;c:\tempApp;6.10.0.27;C:\Arquivos de programas\GeoSan
-GeoSanIni.exe;c:\tempApp;1.1.0.7;C:\Arquivos de programas\GeoSan
+GeoSan.exe;c:\tempApp;6.10.0.28;C:\Arquivos de programas\GeoSan
+GeoSanIni.exe;c:\tempApp;1.1.0.8;C:\Arquivos de programas\GeoSan
