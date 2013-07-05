@@ -20,28 +20,39 @@ Private retornaEmailErro As Boolean
 Private paraExe As Boolean
 Private objIdNoMovendo As String
 Private moveVertice As Boolean                          'indica se está ou não movendo um vértice de uma rede
-'Retorna se o vértice está sendo movido ou não
+Private podeRealizarCommit As Boolean                   'tem objetivo de informar se é para realizar um Commit ou Rollback, pois houve falha
+' Retorna se pode ou não realizar um Commit no banco de dados
+'
+Property Get realizaCommit() As Boolean
+    realizaCommit = podeRealizarCommit
+End Property
+' Recebe se pode ou não realizar um Commit no banco de dados
+'
+Property Let realizaCommit(ByVal podeComitar As Boolean)
+    podeRealizarCommit = podeComitar
+End Property
+' Retorna se o vértice está sendo movido ou não
 '
 Property Get moverVertice() As Boolean
     moverVertice = moveVertice
 End Property
-'  Recebe se o vértice está sendo movido ou não
+' Recebe se o vértice está sendo movido ou não
 '
 Property Let moverVertice(ByVal vertice As Boolean)
     moveVertice = vertice
 End Property
 
-'Retorna valor de do object_id do trecho
+' Retorna valor de do object_id do trecho
 '
 Property Get objIdTreSelecionado() As String
     objIdTreSelecionado = objIDTrechoSelecionado
 End Property
-'  Recebe valor do object_id do trecho
+' Recebe valor do object_id do trecho
 '
 Property Let objIdTreSelecionado(ByVal objIdTreSel As String)
     objIDTrechoSelecionado = objIdTreSel
 End Property
-'Retorna valor de do object_id do trecho
+' Retorna valor de do object_id do trecho
 '
 Property Get objIdTre() As Variant
     objIdTre = objIDsTrechos

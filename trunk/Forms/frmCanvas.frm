@@ -2102,6 +2102,7 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
+      varGlobais.realizaCommit = False                      'pede para voltar tudo o que está fazendo no banco de dados, para traz e não comitar nada
       ErroUsuario.Registra "frmCanvas", "onSaveNetWorkLine", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
    End If
 End Sub

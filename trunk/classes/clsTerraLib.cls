@@ -662,7 +662,14 @@ Public Function SaveInDatabase() As Boolean
             'caso o usuario esteja desenhando uma ou mais geometrias, salva as geometrias
             Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys
                 tcs.saveOnMemory
+                varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
+                Conn.BeginTrans
                 tcs.SaveInDatabase
+                If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
+                    Conn.CommitTrans
+                Else
+                    Conn.RollbackTrans
+                End If
                 Screen.MousePointer = vbHourglass
                 'Conn.BeginTrans
                 Dim USR As String
@@ -677,9 +684,21 @@ Public Function SaveInDatabase() As Boolean
                         MsgBox "Somente leitura", vbExclamation
                     Case Else
                         If tcs.getSelectCount(GetGeometrySELECTed()) = 1 Then
+                            varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
                             SaveNetWorkAttributesSingle GetGeometrySELECTed()
+                            If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
+                                Conn.CommitTrans
+                            Else
+                                Conn.RollbackTrans
+                            End If
                         ElseIf tcs.getSelectCount(GetGeometrySELECTed()) > 1 Then
+                            varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
                             SaveNetWorkAttributesMultiple GetGeometrySELECTed()
+                            If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
+                                Conn.CommitTrans
+                            Else
+                                Conn.RollbackTrans
+                            End If
                         End If
                 End Select
                 .plotView
@@ -722,61 +741,63 @@ Trata_Erro:
       
    End If
 End Function
-
+' Salva somente os atributos de um trecho de rede
+'
+'
+'
 Public Function SaveNetWorkAttributesSingle(Geometry As TypeGeometry)
-On Error GoTo Trata_Erro
-   If CtrlMgr.Itens.Item(1).ValueStore >= 0 Then
-      
-      CtrlMgr.SaveProperties tcs.getSelectObjectId(0, Geometry), strUser 'inserido dia 25/11/08 Jonathas
-      
-      If Geometry = lines Then
-         cgeo.UpdateTextsInLines tcs.getCurrentLayer, tcs.getSelectObjectId(0, Geometry)
-      Else
-         
-         'SALVA TEXTO DE PONTO SOMENTE SE O PONTO FOR UMA PEÇA DE ESGOTO
-         If tcs.getCurrentLayer = "SEWERCOMPONENTS" Then
-         
-            cgeo.InsertTextInPoint tcs.getSelectObjectId(0, Geometry), tcs.getSelectObjectId(0, Geometry), tcs.getCurrentLayer
-
-         End If
-         
-
-      End If
-   End If
+    On Error GoTo Trata_Erro
+    
+    If CtrlMgr.Itens.Item(1).ValueStore >= 0 Then
+       CtrlMgr.SaveProperties tcs.getSelectObjectId(0, Geometry), strUser 'inserido dia 25/11/08 Jonathas
+       If Geometry = lines Then
+          cgeo.UpdateTextsInLines tcs.getCurrentLayer, tcs.getSelectObjectId(0, Geometry)
+       Else
+          'SALVA TEXTO DE PONTO SOMENTE SE O PONTO FOR UMA PEÇA DE ESGOTO
+          If tcs.getCurrentLayer = "SEWERCOMPONENTS" Then
+             cgeo.InsertTextInPoint tcs.getSelectObjectId(0, Geometry), tcs.getSelectObjectId(0, Geometry), tcs.getCurrentLayer
+          End If
+       End If
+    End If
+    Exit Function
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-       PrintErro "clsTerraLib", "Public Function SaveNetWorkAttributesSingle", CStr(Err.Number), CStr(Err.Description), True
-      
+       varGlobais.realizaCommit = False                      'pede para voltar tudo o que está fazendo no banco de dados, para traz e não comitar nada
+       ErroUsuario.Registra "clsTerraLib", "SaveNetWorkAttributesSingle", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function
-
+' Salva os atributos de vários trechos de rede
+'
+'
+'
 Public Function SaveNetWorkAttributesMultiple(Geometry As TypeGeometry) As Boolean
-On Error GoTo Trata_Erro
-   Dim object_id As String, i As Integer
-   If CtrlMgr.Itens.Item(1).ValueStore >= 0 Then
-      For i = 0 To tcs.getSelectCount(Geometry) - 1
-         object_id = tcs.getSelectObjectId(i, Geometry)
-         If object_id <> "" Then
-             CtrlMgr.SaveMultProperties object_id, tcs.getCurrentLayer
-             If Geometry = lines Then
-                cgeo.UpdateTextsInLines tcs.getCurrentLayer, object_id
-             Else
-                cgeo.InsertTextInPoint CLng(object_id), object_id, tcs.getCurrentLayer
-                'cgeo.InsertTextInPoint tcs.getCurrentLayer, object_id
-             End If
-         End If
-      Next
-   End If
+    On Error GoTo Trata_Erro
+    Dim object_id As String, i As Integer
+    If CtrlMgr.Itens.Item(1).ValueStore >= 0 Then
+       For i = 0 To tcs.getSelectCount(Geometry) - 1
+          object_id = tcs.getSelectObjectId(i, Geometry)
+          If object_id <> "" Then
+              CtrlMgr.SaveMultProperties object_id, tcs.getCurrentLayer
+              If Geometry = lines Then
+                 cgeo.UpdateTextsInLines tcs.getCurrentLayer, object_id
+              Else
+                 cgeo.InsertTextInPoint CLng(object_id), object_id, tcs.getCurrentLayer
+                 'cgeo.InsertTextInPoint tcs.getCurrentLayer, object_id
+              End If
+          End If
+       Next
+    End If
+    Exit Function
+   
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-       PrintErro "clsTerraLib", "Public Function SaveNetWorkAttributesMultiple", CStr(Err.Number), CStr(Err.Description), True
-       
+       varGlobais.realizaCommit = False                      'pede para voltar tudo o que está fazendo no banco de dados, para traz e não comitar nada
+       ErroUsuario.Registra "clsTerraLib", "SaveNetWorkAttributesMultiple", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function
 ' Cria agora a tabela de atributos de rede
@@ -952,6 +973,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
+        varGlobais.realizaCommit = False                      'pede para voltar tudo o que está fazendo no banco de dados, para traz e não comitar nada
         ErroUsuario.Registra "clsTerraLib", "CreatNetWorkAttribute", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function

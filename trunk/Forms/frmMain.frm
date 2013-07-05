@@ -132,12 +132,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   6615
+      Height          =   7515
       Left            =   6090
-      ScaleHeight     =   6615
+      ScaleHeight     =   7515
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   1410
+      Top             =   510
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1335
@@ -297,7 +297,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "16:53"
+            TextSave        =   "19:12"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -313,13 +313,13 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   1410
+      Height          =   510
       Left            =   0
       TabIndex        =   7
       Top             =   0
       Width           =   10035
       _ExtentX        =   17701
-      _ExtentY        =   2487
+      _ExtentY        =   900
       ButtonWidth     =   820
       ButtonHeight    =   794
       ImageList       =   "ImageList4"
