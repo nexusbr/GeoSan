@@ -127,7 +127,7 @@ Public Function AtualizaAplicacaoLocal() As Boolean
         versao.SplitAtualizacoes i, nomeArquivo, diretorio, versaoNova, dirInstalacaoLocal  'obtem os dados detalhados das atualizações remotas que não foram baixadas ainda
         If versao.ExisteArquivo(dirInstalacaoLocal & "\" & nomeArquivo) And versao.ExisteArquivo(carrega.diretorioLocal & "\" & nomeArquivo) Then                        'verifica se existem os arquivos localmente e remotamente (diretório no servidor local) referente a atualização a ser realizada
             versaoLocal = versao.ObtemVersaoArquivo(dirInstalacaoLocal & "\" & nomeArquivo)
-            mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoLocal & " - " & dirInstalacaoLocal & "\" & nomeArquivo & " - " & versaoNova
+            mensagem = mensagem & vbCrLf & Str(i + 1) & " - " & carrega.diretorioLocal & "\" & nomeArquivo & " - " & versaoNova & " - " & dirInstalacaoLocal & "\" & nomeArquivo & " - " & versaoLocal
             frmAtualiza.Text1 = mensagem
             If versaoLocal <> versaoNova Then
                 If nomeArquivo <> "GeoSanIni.exe" Then                                      'não pode copiar sobre a aplicação que está rodando, terá que ser realizado mais tarde quando entrar no GeoSan

@@ -57,30 +57,31 @@ Source: "ArquivosInstGeoSan\NexusPM4.ocx";        DestDir: "{app}\Controles";   
 
 
 ;ARQUIVOS VISUAL BASIC 6 - ****************************************************************************************************************
-Source: "ArquivosInstGeoSan\ASYCFILT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\COMCAT.DLL";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\COMDLG32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSADO26.TLB";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regtypelib noregerror
-Source: "ArquivosInstGeoSan\MSCHRT20.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSCOMCT2.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSCOMCTL.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSDBRPT.DLL";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSFLXGRD.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSMASK32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSSTDFMT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSVBVM60.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSVCRT.DLL";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\OLEAUT32.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\OLEPRO32.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\RICHTX32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\STDOLE2.TLB";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regtypelib noregerror
-Source: "ArquivosInstGeoSan\TABCTL32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\VB6.OLB";      DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\VB6STKIT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\scrrun.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\cdosys.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\MSINET.OCX";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\mswsock.dll";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\ASYCFILT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\COMCAT.DLL";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\COMDLG32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSADO26.TLB";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regtypelib noregerror 32bit
+Source: "ArquivosInstGeoSan\MSCHRT20.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSCOMCT2.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSCOMCTL.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSDBRPT.DLL";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSFLXGRD.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSMASK32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSSTDFMT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSVBVM60.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSVCRT.DLL";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\OLEAUT32.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\OLEPRO32.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\RICHTX32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\STDOLE2.TLB";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regtypelib noregerror 32bit
+Source: "ArquivosInstGeoSan\TABCTL32.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\VB6.OLB";      DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\VB6STKIT.DLL"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\scrrun.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\cdosys.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSINET.OCX";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\mswsock.dll";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
+Source: "ArquivosInstGeoSan\MSCOMCTL.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
 
 ;ARQUIVOS TERRALIB 3.3.1.7 - *******************************************************************************************************************
 

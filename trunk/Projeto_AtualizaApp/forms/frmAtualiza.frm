@@ -1,17 +1,31 @@
 VERSION 5.00
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmAtualiza 
+   BorderStyle     =   1  'Fixed Single
    Caption         =   "Atualiza GeoSan"
-   ClientHeight    =   4560
-   ClientLeft      =   60
-   ClientTop       =   345
-   ClientWidth     =   7080
+   ClientHeight    =   4620
+   ClientLeft      =   -15
+   ClientTop       =   270
+   ClientWidth     =   10290
    LinkTopic       =   "Form1"
-   ScaleHeight     =   4560
-   ScaleWidth      =   7080
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   4620
+   ScaleWidth      =   10290
    StartUpPosition =   3  'Windows Default
+   Begin MSComctlLib.ProgressBar ProgressBar1 
+      Height          =   255
+      Left            =   120
+      TabIndex        =   2
+      Top             =   120
+      Width           =   9975
+      _ExtentX        =   17595
+      _ExtentY        =   450
+      _Version        =   393216
+      Appearance      =   1
+   End
    Begin MSWinsockLib.Winsock Winsock1 
       Left            =   1800
       Top             =   3960
@@ -20,10 +34,10 @@ Begin VB.Form frmAtualiza
       _Version        =   393216
    End
    Begin VB.CommandButton fecha 
-      Caption         =   "Fecha"
+      Caption         =   "Inicia GeoSan"
       Height          =   495
-      Left            =   2760
-      TabIndex        =   2
+      Left            =   4418
+      TabIndex        =   1
       Top             =   3960
       Width           =   1455
    End
@@ -33,21 +47,9 @@ Begin VB.Form frmAtualiza
       Locked          =   -1  'True
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Both
-      TabIndex        =   1
-      Text            =   "frmAtualiza.frx":0000
-      Top             =   480
-      Width           =   6855
-   End
-   Begin MSComctlLib.ProgressBar ProgressBar1 
-      Height          =   255
-      Left            =   120
       TabIndex        =   0
-      Top             =   120
-      Width           =   6855
-      _ExtentX        =   12091
-      _ExtentY        =   450
-      _Version        =   393216
-      Appearance      =   1
+      Top             =   480
+      Width           =   9975
    End
    Begin VB.Timer Timer1 
       Left            =   1080
@@ -71,14 +73,24 @@ Attribute VB_Exposed = False
 '
 '
 Private Sub fecha_Click()
+    On Error GoTo Trata_Erro
     Shell ("C:\Arquivos de programas\GeoSan\GeoSan.exe")
     End
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmAtualiza", "fecha_Click", CStr(Err.Number), CStr(Err.Description), True, True
+    End If
 End Sub
 ' Carrega a caixa de diálogo que mostrará as atualizações
 '
 '
 '
 Private Sub Form_Load()
+    On Error GoTo Trata_Erro
+    
     Dim atualiza As CAtualiza                               'classe para atualizar tanto remoto para servidor quanto servidor para cliente
     Dim retorno As Boolean
     
@@ -103,14 +115,30 @@ Private Sub Form_Load()
     Me.ProgressBar1.Visible = False      'ativa a visualização da barra de progresso
     Screen.MousePointer = vbDefault
     frmAtualiza.fecha.Enabled = True
+    Exit Sub
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmAtualiza", "Form_Load", CStr(Err.Number), CStr(Err.Description), True, True
+    End If
 End Sub
 ' Não está mais sendo utilizado
 Private Sub ObtemVersao_Click()
+    On Error GoTo Trata_Erro
     Dim retorno As Boolean
     
     retorno = versao.ExisteArquivo("D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_AtualizaApp\GeoSanIni.exe")
     If retorno = True Then
         MsgBox versao.ObtemVersaoArquivo("D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_AtualizaApp\GeoSanIni.exe")
+    End If
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+       ErroUsuario.Registra "frmAtualiza", "ObtemVersao_Click", CStr(Err.Number), CStr(Err.Description), True, True
     End If
 End Sub
 ' Para barra de progresso

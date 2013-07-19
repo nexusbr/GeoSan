@@ -94,7 +94,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "CDownload", "DownloadArquivo", CStr(Err.Number), CStr(Err.Description), False, True
+        ErroUsuario.Registra "CDownload", "DownloadArquivo: " & arquivoDownload, CStr(Err.Number), CStr(Err.Description), False, True
         DownloadArquivo = False
     End If
 End Function

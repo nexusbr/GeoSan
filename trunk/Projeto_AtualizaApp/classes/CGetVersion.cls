@@ -76,7 +76,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "CGetVersion", "VerificaAtualizacoes", CStr(Err.Number), CStr(Err.Description), True, True
+        ErroUsuario.Registra "CGetVersion", "VerificaAtualizacoes: " & dirNomeArquivo, CStr(Err.Number), CStr(Err.Description), True, True
         VerificaAtualizacoes = False
     End If
 End Function
