@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "06.10.28"
+#define AppVersionFile  "06.10.34"
 
 [Setup]
 AppName=GeoSan
@@ -42,8 +42,13 @@ Source: "ArquivosInstGeoSan\GeoSan.exe";          DestDir: "{app}";             
 Source: "ArquivosInstGeoSan\00. Leiame.txt";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
 
 Source: "ArquivosInstGeoSan\Exporte EPANet.exe";  DestDir: "{app}"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\ValidaBase.exe";      DestDir: "{app}"; CopyMode: alwaysoverwrite;
 Source: "ArquivosInstGeoSan\GeoSanIni.exe";       DestDir: "{app}"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\ValidaBase.exe";      DestDir: "{app}"; CopyMode: alwaysoverwrite;
+; arquivos de atualização contínua do GeoSan
+Source: "ArquivosInstGeoSan\GeoSan.exe";          DestDir: "c:\tempApp"; CopyMode: alwaysoverwrite;     
+Source: "ArquivosInstGeoSan\GeoSanIni.exe";       DestDir: "c:\tempApp"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\Updates.txt";         DestDir: "c:\tempApp"; CopyMode: alwaysoverwrite;
+
 Source: "ArquivosInstGeoSan\NSecurity.dll";       DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NUsers.dll";          DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror
 Source: "ArquivosInstGeoSan\NexusConnection.dll"; DestDir: "{app}\Controles";   CopyMode: alwaysoverwrite; Flags: regserver noregerror

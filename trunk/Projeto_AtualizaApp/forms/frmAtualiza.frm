@@ -141,6 +141,14 @@ Trata_Erro:
        ErroUsuario.Registra "frmAtualiza", "ObtemVersao_Click", CStr(Err.Number), CStr(Err.Description), True, True
     End If
 End Sub
+
+' Evento disparado quando o usuário seleciona o X indicando que não quer mais atualizar o software nem entrar no GeoSan
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    If UnloadMode = vbFormControlMenu Then
+        End
+    End If
+End Sub
+
 ' Para barra de progresso
 '
 '

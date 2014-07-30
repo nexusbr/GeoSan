@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form FrmManufactures 
    Caption         =   "Fabricante"
    ClientHeight    =   6750
@@ -16,7 +15,7 @@ Begin VB.Form FrmManufactures
       Left            =   4560
       Picture         =   "FrmManufactures.frx":030A
       Style           =   1  'Graphical
-      TabIndex        =   27
+      TabIndex        =   24
       ToolTipText     =   "Editar"
       Top             =   6240
       Width           =   435
@@ -26,7 +25,7 @@ Begin VB.Form FrmManufactures
       Left            =   3960
       Picture         =   "FrmManufactures.frx":0B6C
       Style           =   1  'Graphical
-      TabIndex        =   26
+      TabIndex        =   23
       ToolTipText     =   "Novo"
       Top             =   6240
       Width           =   435
@@ -36,7 +35,7 @@ Begin VB.Form FrmManufactures
       Left            =   5160
       Picture         =   "FrmManufactures.frx":13CE
       Style           =   1  'Graphical
-      TabIndex        =   25
+      TabIndex        =   22
       ToolTipText     =   "Salvar"
       Top             =   6240
       Width           =   435
@@ -44,13 +43,37 @@ Begin VB.Form FrmManufactures
    Begin VB.Frame Frame1 
       Height          =   6135
       Left            =   30
-      TabIndex        =   12
+      TabIndex        =   9
       Top             =   0
       Width           =   6015
+      Begin VB.TextBox mskPostalCode 
+         Height          =   315
+         Left            =   1800
+         TabIndex        =   27
+         Text            =   "Text1"
+         Top             =   3720
+         Width           =   1815
+      End
+      Begin VB.TextBox mskPhone 
+         Height          =   285
+         Left            =   1800
+         TabIndex        =   26
+         Text            =   "Text1"
+         Top             =   4680
+         Width           =   1815
+      End
+      Begin VB.TextBox mskFax 
+         Height          =   285
+         Left            =   1800
+         TabIndex        =   25
+         Text            =   "Text1"
+         Top             =   5160
+         Width           =   1815
+      End
       Begin VB.TextBox txtCountry 
          Height          =   285
          Left            =   1800
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   4200
          Width           =   1815
       End
@@ -108,55 +131,16 @@ Begin VB.Form FrmManufactures
       Begin VB.TextBox txtHomePage 
          Height          =   285
          Left            =   1800
-         TabIndex        =   11
+         TabIndex        =   8
          Top             =   5640
          Width           =   4095
-      End
-      Begin MSMask.MaskEdBox mskFax 
-         Height          =   285
-         Left            =   1800
-         TabIndex        =   10
-         Top             =   5160
-         Width           =   1815
-         _ExtentX        =   3201
-         _ExtentY        =   503
-         _Version        =   393216
-         MaxLength       =   14
-         Mask            =   "(###)####-####"
-         PromptChar      =   "_"
-      End
-      Begin MSMask.MaskEdBox mskPhone 
-         Height          =   285
-         Left            =   1800
-         TabIndex        =   9
-         Top             =   4680
-         Width           =   1815
-         _ExtentX        =   3201
-         _ExtentY        =   503
-         _Version        =   393216
-         MaxLength       =   14
-         Mask            =   "(###)####-####"
-         PromptChar      =   "_"
-      End
-      Begin MSMask.MaskEdBox mskPostalCode 
-         Height          =   285
-         Left            =   1800
-         TabIndex        =   7
-         Top             =   3720
-         Width           =   1815
-         _ExtentX        =   3201
-         _ExtentY        =   503
-         _Version        =   393216
-         MaxLength       =   9
-         Mask            =   "#####-###"
-         PromptChar      =   "_"
       End
       Begin VB.Label Label12 
          AutoSize        =   -1  'True
          Caption         =   "Telefone"
          Height          =   195
          Left            =   960
-         TabIndex        =   24
+         TabIndex        =   21
          Top             =   4680
          Width           =   630
       End
@@ -165,7 +149,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "País"
          Height          =   195
          Left            =   1320
-         TabIndex        =   23
+         TabIndex        =   20
          Top             =   4200
          Width           =   330
       End
@@ -174,7 +158,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Home Page"
          Height          =   195
          Left            =   720
-         TabIndex        =   22
+         TabIndex        =   19
          Top             =   5640
          Width           =   840
       End
@@ -183,7 +167,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Fax"
          Height          =   195
          Left            =   1320
-         TabIndex        =   21
+         TabIndex        =   18
          Top             =   5160
          Width           =   255
       End
@@ -192,7 +176,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Código Postal"
          Height          =   195
          Left            =   600
-         TabIndex        =   20
+         TabIndex        =   17
          Top             =   3720
          Width           =   975
       End
@@ -201,7 +185,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Região"
          Height          =   195
          Left            =   1080
-         TabIndex        =   19
+         TabIndex        =   16
          Top             =   3240
          Width           =   510
       End
@@ -210,7 +194,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Cidade"
          Height          =   195
          Left            =   1080
-         TabIndex        =   18
+         TabIndex        =   15
          Top             =   2760
          Width           =   495
       End
@@ -219,7 +203,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Endereço"
          Height          =   195
          Left            =   960
-         TabIndex        =   17
+         TabIndex        =   14
          Top             =   2280
          Width           =   690
       End
@@ -228,7 +212,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Cargo do Contato"
          Height          =   195
          Left            =   360
-         TabIndex        =   16
+         TabIndex        =   13
          Top             =   1800
          Width           =   1245
       End
@@ -237,7 +221,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Nome do Contato"
          Height          =   195
          Left            =   360
-         TabIndex        =   15
+         TabIndex        =   12
          Top             =   1320
          Width           =   1245
       End
@@ -246,7 +230,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Nome da Companhia"
          Height          =   195
          Left            =   120
-         TabIndex        =   14
+         TabIndex        =   11
          Top             =   840
          Width           =   1485
       End
@@ -255,7 +239,7 @@ Begin VB.Form FrmManufactures
          Caption         =   "Nº Fabricante"
          Height          =   195
          Left            =   600
-         TabIndex        =   13
+         TabIndex        =   10
          Top             =   360
          Width           =   975
       End

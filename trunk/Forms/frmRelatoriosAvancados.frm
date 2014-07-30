@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmRelatoriosAvancados 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Relatório por Seleção de Polígono"
@@ -772,10 +772,10 @@ Private Sub cmdGerarRelatorio_Click()
     Dim retorno As Integer                                                                                      'Se é para processar ou não o relatório que demora para executar
 
     CommonDialog1.Filter = "Texto (.txt)|*.TXT|Todos tipos (*.*)|*.*|"                                          'configura o filtro do arquivo
-    CommonDialog1.filename = nomeArquivo                                                                        'informa a caixa de diálogo que será aberta o nome do arquivo inicial sugerido
+    CommonDialog1.FileName = nomeArquivo                                                                        'informa a caixa de diálogo que será aberta o nome do arquivo inicial sugerido
     CommonDialog1.InitDir = diretorioMyDocuments                                                                'sugero o diretório inicial
     CommonDialog1.ShowSave                                                                                      'abre a caixa de diálogo par ao usuário digitar o nome do arquivo e selecionar o diretório, se desejar
-    filelocation = CommonDialog1.filename
+    filelocation = CommonDialog1.FileName
     Me.Text1.Text = filelocation
     If Me.Text1.Text <> "" Then ' se há um nome de arquivo...
         If Me.Option1.value = True Then

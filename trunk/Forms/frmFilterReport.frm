@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form frmFilterReport 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Filtro"
@@ -21,39 +20,27 @@ Begin VB.Form frmFilterReport
       TabIndex        =   4
       Top             =   570
       Width           =   3495
-      Begin MSMask.MaskEdBox mskDataInicio 
-         Height          =   315
-         Left            =   510
-         TabIndex        =   5
-         Top             =   330
-         Width           =   1065
-         _ExtentX        =   1879
-         _ExtentY        =   556
-         _Version        =   393216
-         MaxLength       =   10
-         Format          =   "dd/mm/yyyy"
-         Mask            =   "99/99/9999"
-         PromptChar      =   "_"
+      Begin VB.TextBox mskDataFim 
+         Height          =   285
+         Left            =   2280
+         TabIndex        =   8
+         Text            =   "Text1"
+         Top             =   360
+         Width           =   1095
       End
-      Begin MSMask.MaskEdBox mskDataFim 
-         Height          =   315
-         Left            =   2310
-         TabIndex        =   6
-         Top             =   330
-         Width           =   1065
-         _ExtentX        =   1879
-         _ExtentY        =   556
-         _Version        =   393216
-         MaxLength       =   10
-         Format          =   "dd/mm/yyyy"
-         Mask            =   "99/99/9999"
-         PromptChar      =   "_"
+      Begin VB.TextBox mskDataInicio 
+         Height          =   285
+         Left            =   480
+         TabIndex        =   7
+         Text            =   "Text1"
+         Top             =   360
+         Width           =   1095
       End
       Begin VB.Label Label2 
          Caption         =   "Até"
          Height          =   255
          Left            =   1800
-         TabIndex        =   8
+         TabIndex        =   6
          Top             =   360
          Width           =   375
       End
@@ -61,7 +48,7 @@ Begin VB.Form frmFilterReport
          Caption         =   "De"
          Height          =   255
          Left            =   120
-         TabIndex        =   7
+         TabIndex        =   5
          Top             =   390
          Width           =   1095
       End

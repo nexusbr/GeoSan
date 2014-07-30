@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
 Begin VB.Form FrmSuppliers 
    Caption         =   "Fornecedores"
    ClientHeight    =   6810
@@ -16,7 +15,7 @@ Begin VB.Form FrmSuppliers
       Left            =   5100
       Picture         =   "FrmSuppliers.frx":030A
       Style           =   1  'Graphical
-      TabIndex        =   15
+      TabIndex        =   12
       ToolTipText     =   "Salvar"
       Top             =   6270
       Width           =   435
@@ -26,7 +25,7 @@ Begin VB.Form FrmSuppliers
       Left            =   3900
       Picture         =   "FrmSuppliers.frx":0B6C
       Style           =   1  'Graphical
-      TabIndex        =   13
+      TabIndex        =   10
       ToolTipText     =   "Novo"
       Top             =   6270
       Width           =   435
@@ -36,7 +35,7 @@ Begin VB.Form FrmSuppliers
       Left            =   4500
       Picture         =   "FrmSuppliers.frx":13CE
       Style           =   1  'Graphical
-      TabIndex        =   14
+      TabIndex        =   11
       ToolTipText     =   "Editar"
       Top             =   6270
       Width           =   435
@@ -44,13 +43,37 @@ Begin VB.Form FrmSuppliers
    Begin VB.Frame Frame1 
       Height          =   6135
       Left            =   60
-      TabIndex        =   12
+      TabIndex        =   9
       Top             =   90
       Width           =   6015
+      Begin VB.TextBox mskFax 
+         Height          =   285
+         Left            =   1800
+         TabIndex        =   30
+         Text            =   "Text3"
+         Top             =   5160
+         Width           =   1815
+      End
+      Begin VB.TextBox mskPhone 
+         Height          =   285
+         Left            =   1800
+         TabIndex        =   29
+         Text            =   "Text2"
+         Top             =   4680
+         Width           =   1815
+      End
+      Begin VB.TextBox mskPostalCode 
+         Height          =   285
+         Left            =   1800
+         TabIndex        =   28
+         Text            =   "Text1"
+         Top             =   3720
+         Width           =   1815
+      End
       Begin VB.TextBox txtHomePage 
          Height          =   285
          Left            =   1800
-         TabIndex        =   11
+         TabIndex        =   8
          Top             =   5640
          Width           =   4095
       End
@@ -108,55 +131,16 @@ Begin VB.Form FrmSuppliers
       Begin VB.TextBox txtCountry 
          Height          =   285
          Left            =   1800
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   4200
          Width           =   1815
-      End
-      Begin MSMask.MaskEdBox mskFax 
-         Height          =   285
-         Left            =   1800
-         TabIndex        =   10
-         Top             =   5160
-         Width           =   1815
-         _ExtentX        =   3201
-         _ExtentY        =   503
-         _Version        =   393216
-         MaxLength       =   14
-         Mask            =   "(###)####-####"
-         PromptChar      =   "_"
-      End
-      Begin MSMask.MaskEdBox mskPhone 
-         Height          =   285
-         Left            =   1800
-         TabIndex        =   9
-         Top             =   4680
-         Width           =   1815
-         _ExtentX        =   3201
-         _ExtentY        =   503
-         _Version        =   393216
-         MaxLength       =   14
-         Mask            =   "(###)####-####"
-         PromptChar      =   "_"
-      End
-      Begin MSMask.MaskEdBox mskPostalCode 
-         Height          =   285
-         Left            =   1800
-         TabIndex        =   7
-         Top             =   3720
-         Width           =   1815
-         _ExtentX        =   3201
-         _ExtentY        =   503
-         _Version        =   393216
-         MaxLength       =   9
-         Mask            =   "#####-###"
-         PromptChar      =   "_"
       End
       Begin VB.Label Label1 
          AutoSize        =   -1  'True
          Caption         =   "Nº Fornecedor"
          Height          =   195
          Left            =   600
-         TabIndex        =   27
+         TabIndex        =   24
          Top             =   360
          Width           =   1035
       End
@@ -165,7 +149,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Nome da Companhia"
          Height          =   195
          Left            =   120
-         TabIndex        =   26
+         TabIndex        =   23
          Top             =   840
          Width           =   1485
       End
@@ -174,7 +158,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Nome do Contato"
          Height          =   195
          Left            =   360
-         TabIndex        =   25
+         TabIndex        =   22
          Top             =   1320
          Width           =   1245
       End
@@ -183,7 +167,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Cargo do Contato"
          Height          =   195
          Left            =   360
-         TabIndex        =   24
+         TabIndex        =   21
          Top             =   1800
          Width           =   1245
       End
@@ -192,7 +176,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Endereço"
          Height          =   195
          Left            =   960
-         TabIndex        =   23
+         TabIndex        =   20
          Top             =   2280
          Width           =   690
       End
@@ -201,7 +185,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Cidade"
          Height          =   195
          Left            =   1080
-         TabIndex        =   22
+         TabIndex        =   19
          Top             =   2760
          Width           =   495
       End
@@ -210,7 +194,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Região"
          Height          =   195
          Left            =   1080
-         TabIndex        =   21
+         TabIndex        =   18
          Top             =   3240
          Width           =   510
       End
@@ -219,7 +203,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Código Postal"
          Height          =   195
          Left            =   600
-         TabIndex        =   20
+         TabIndex        =   17
          Top             =   3720
          Width           =   975
       End
@@ -228,7 +212,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Fax"
          Height          =   195
          Left            =   1320
-         TabIndex        =   19
+         TabIndex        =   16
          Top             =   5160
          Width           =   255
       End
@@ -237,7 +221,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Home Page"
          Height          =   195
          Left            =   720
-         TabIndex        =   18
+         TabIndex        =   15
          Top             =   5640
          Width           =   840
       End
@@ -246,7 +230,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "País"
          Height          =   195
          Left            =   1320
-         TabIndex        =   17
+         TabIndex        =   14
          Top             =   4200
          Width           =   330
       End
@@ -255,7 +239,7 @@ Begin VB.Form FrmSuppliers
          Caption         =   "Telefone"
          Height          =   195
          Left            =   960
-         TabIndex        =   16
+         TabIndex        =   13
          Top             =   4680
          Width           =   630
       End
@@ -264,7 +248,7 @@ Begin VB.Form FrmSuppliers
       Caption         =   "Salvar"
       Height          =   255
       Left            =   5310
-      TabIndex        =   30
+      TabIndex        =   27
       Top             =   6600
       Width           =   465
    End
@@ -272,7 +256,7 @@ Begin VB.Form FrmSuppliers
       Caption         =   "Editar"
       Height          =   255
       Left            =   4740
-      TabIndex        =   29
+      TabIndex        =   26
       Top             =   6600
       Width           =   465
    End
@@ -280,7 +264,7 @@ Begin VB.Form FrmSuppliers
       Caption         =   "Novo"
       Height          =   255
       Left            =   4110
-      TabIndex        =   28
+      TabIndex        =   25
       Top             =   6600
       Width           =   465
    End
