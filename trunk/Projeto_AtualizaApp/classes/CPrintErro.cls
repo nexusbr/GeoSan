@@ -40,6 +40,8 @@ Attribute VB_Exposed = False
 
 
 Public Function Registra(ByVal Modulo As String, ByVal EVENTO As String, ByVal ErrNum As String, ByVal ErrDescr As String, ByVal ExibeMensagem As Boolean, ByVal enviaEmail As Boolean, Optional ByVal linha As String = "Não registrada")
+    On Error GoTo Trata_Erro:
+    
     Dim nomeArquivoErro As String
     Dim sucesso As String
     
@@ -70,5 +72,13 @@ Public Function Registra(ByVal Modulo As String, ByVal EVENTO As String, ByVal E
     End If
     If ExibeMensagem = True Then
         MsgBox "A operação não pode ser completada, favor enviar o arquivo: " & nomeArquivoErro & " para o suporte técnico para maiores detalhes.", vbInformation
+    End If
+    
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        MsgBox ("Não exite permissão de acesso ao arquivo " + nomeArquivoErro)
+        End
     End If
 End Function
