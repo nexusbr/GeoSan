@@ -15,47 +15,8 @@ Begin VB.Form frmTePrinter
    ScaleWidth      =   9960
    StartUpPosition =   1  'CenterOwner
    Begin TeComPrinterLibCtl.TePrinter TePrinter1 
-      Height          =   9255
-      Left            =   240
-      ScaleHeight     =   9195
-      ScaleWidth      =   8955
-      TabIndex        =   1
-      Top             =   240
-      Width           =   9015
-   End
-   Begin MSComctlLib.StatusBar StatusBar1 
-      Align           =   2  'Align Bottom
-      Height          =   300
-      Left            =   0
-      TabIndex        =   0
-      Top             =   10320
-      Width           =   9960
-      _ExtentX        =   17568
-      _ExtentY        =   529
-      _Version        =   393216
-      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
-         NumPanels       =   1
-         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
-         EndProperty
-      EndProperty
-   End
-   Begin MSComDlg.CommonDialog cmmOpen 
-      Left            =   8805
-      Top             =   9645
-      _ExtentX        =   847
-      _ExtentY        =   847
-      _Version        =   393216
-   End
-   Begin TeComViewDatabaseLibCtl.TeViewDatabase TeViewDatabase1 
-      Left            =   7320
-      OleObjectBlob   =   "frm1TePrinter.frx":0000
-      Top             =   9720
-   End
-   Begin TeComConnectionLibCtl.TeAcXConnection TeAcXConnection1 
-      Left            =   1680
-      OleObjectBlob   =   "frm1TePrinter.frx":0024
-      Top             =   9720
-   End	  
+      Height          =   9375
+      Left            =   120
    Begin VB.Menu mnArquivo 
       Caption         =   "Arquivo"
       Begin VB.Menu mnConfPagina 

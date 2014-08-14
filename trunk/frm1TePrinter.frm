@@ -1,7 +1,4 @@
 VERSION 5.00
-Object = "{F141AAE7-BD4C-4793-88DB-10FE8CBA518C}#1.0#0"; "TeComPrinter.dll"
-Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
-Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmTePrinter 
@@ -14,15 +11,6 @@ Begin VB.Form frmTePrinter
    ScaleHeight     =   10620
    ScaleWidth      =   9960
    StartUpPosition =   1  'CenterOwner
-   Begin TeComPrinterLibCtl.TePrinter TePrinter1 
-      Height          =   9255
-      Left            =   240
-      ScaleHeight     =   9195
-      ScaleWidth      =   8955
-      TabIndex        =   1
-      Top             =   240
-      Width           =   9015
-   End
    Begin MSComctlLib.StatusBar StatusBar1 
       Align           =   2  'Align Bottom
       Height          =   300
@@ -46,16 +34,6 @@ Begin VB.Form frmTePrinter
       _ExtentY        =   847
       _Version        =   393216
    End
-   Begin TeComViewDatabaseLibCtl.TeViewDatabase TeViewDatabase1 
-      Left            =   7320
-      OleObjectBlob   =   "frm1TePrinter.frx":0000
-      Top             =   9720
-   End
-   Begin TeComConnectionLibCtl.TeAcXConnection TeAcXConnection1 
-      Left            =   1680
-      OleObjectBlob   =   "frm1TePrinter.frx":0024
-      Top             =   9720
-   End	  
    Begin VB.Menu mnArquivo 
       Caption         =   "Arquivo"
       Begin VB.Menu mnConfPagina 
