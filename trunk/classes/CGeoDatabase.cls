@@ -19,14 +19,14 @@ Public geoDatabase As New TeDatabase           'aqui ele deixa como herança todo
 ' provedor - 0 - Access, 1 - SQLServer, 2 - Oracle, 3 - Firebird, 4 - Postgres (isto vem do VB6 em object browser)
 ' usuário - nome do usuário Terralib que se conecta ao banco geográfico
 '
-Public Function configura(conexao As ADODB.connection, provedor As cAppType, usuario As String) As Boolean
+Public Function configura(conexao As ADODB.Connection, provedor As cAppType, usuario As String) As Boolean
     On Error GoTo Trata_Erro:
     
-    If typeconnection <> postgreSQL Then
+    If typeconnection <> POSTGRESQL Then
         'se não for Postgresss
-        geoDatabase.username = usuario
+        geoDatabase.UserName = usuario
         geoDatabase.Provider = provedor
-        geoDatabase.connection = conexao
+        geoDatabase.Connection = conexao
     Else
         'implementar
     End If
