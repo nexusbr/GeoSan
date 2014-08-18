@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupValidaBase-v."
-#define AppVersionFile  "01.00.17"
+#define AppVersionFile  "07.00.00"
 
 [Setup]
 AppName=ValidaBase
