@@ -960,227 +960,175 @@ Trata_Erro:
    End If
    
 End Function
-
+' Apaga uma rede de água, esgoto ou drenagem, eliminando os trechos e nós das redes
+'
+'
 Public Function DeleteRede(LayerName As String, object_id As String)
-On Error GoTo Trata_Erro
-   Dim rs As ADODB.Recordset, RsCount As ADODB.Recordset, strsql As String
-   Dim LayId As Integer, LayIdRef As Integer
-   
-   
-   
- If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & GetReferenceLayer(LayerName) & "'", CInt(typeconnection)))
-   Else
-   Dim aa As String
-   Dim ab As String
-   Dim ac As String
-   aa = "layer_id"
-   ab = "te_layer"
-   ac = "name"
-    Set rs = Conn.execute(convertQuery("SELECT " + """" + aa + """" + " from " + """" + ab + """" + " where " + """" + ac + """" + "='" & GetReferenceLayer(LayerName) & "'", CInt(typeconnection)))
-   End If
-   LayId = rs(0).value
-   'rs.Close
-If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & LayerName & "'", CInt(typeconnection)))
-   Else
-   Set rs = Conn.execute(convertQuery("SELECT " + """" + aa + """" + " from " + """" + ab + """" + " where " + """" + ac + """" + "='" & LayerName & "'", CInt(typeconnection)))
-   End If
-   LayIdRef = rs(0).value
-  ' rs.Close
-  ' Set rs = Nothing
-   
-   'Conn.Execute "Delete From lines" & GetLayerID(LayerName) & " where object_Id = " & Object_id & "'"
-   a = "INITIALCOMPONENT"
-   b = "FINALCOMPONENT"
+    On Error GoTo Trata_Erro
+    Dim rs As ADODB.Recordset, RsCount As ADODB.Recordset, strsql As String
+    Dim LayId As Integer, LayIdRef As Integer
+
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & GetReferenceLayer(LayerName) & "'", CInt(typeconnection)))
+    Else
+        Dim aa As String
+        Dim ab As String
+        Dim ac As String
+        aa = "layer_id"
+        ab = "te_layer"
+        ac = "name"
+        Set rs = Conn.execute(convertQuery("SELECT " + """" + aa + """" + " from " + """" + ab + """" + " where " + """" + ac + """" + "='" & GetReferenceLayer(LayerName) & "'", CInt(typeconnection)))
+    End If
+    LayId = rs(0).value
+    'rs.Close
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & LayerName & "'", CInt(typeconnection)))
+    Else
+        Set rs = Conn.execute(convertQuery("SELECT " + """" + aa + """" + " from " + """" + ab + """" + " where " + """" + ac + """" + "='" & LayerName & "'", CInt(typeconnection)))
+    End If
+    LayIdRef = rs(0).value
+    ' rs.Close
+    ' Set rs = Nothing
+    'Conn.Execute "Delete From lines" & GetLayerID(LayerName) & " where object_Id = " & Object_id & "'"
+    a = "INITIALCOMPONENT"
+    b = "FINALCOMPONENT"
     c = "OBJECT_ID_"
-   'd = rs.Fields("InitialComponent")
-  ' MsgBox "SELECT " + """" + a + """" + ", " + """" + b + """" + " From " + """" + LayerName + """" + "Where " + """" + c + """" + " = '" & object_id & "'"
-                         
-
-   If frmCanvas.TipoConexao <> 4 Then
-   Set rs = Conn.execute("SELECT InitialComponent, FinalComponent From " & LayerName & _
-                         " Where Object_id_ = " & object_id)
-                         Else
-              Set rs = Conn.execute("SELECT " + """" + "INITIALCOMPONENT" + """" + ", " + """" + "FINALCOMPONENT" + """" + " From " + """" + LayerName + """" + "Where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "'")
-                         End If
-                         
-                         
-                         
-   If Not rs.EOF Then
-   
-      If frmCanvas.TipoConexao <> 4 Then
-    Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " & LayerName & _
-                         " Where InitialComponent=" & rs.Fields("InitialComponent") & _
-                         " or FinalComponent = " & rs.Fields("InitialComponent"))
-      If RsCount!Qde = 1 Then
-         strsql = "'" & rs!INITIALCOMPONENT & "'"
-      End If
-      RsCount.Close
-      
-      Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " & LayerName & _
-                         " Where InitialComponent=" & rs.Fields("FinalComponent") & _
-                         " or FinalComponent = " & rs.Fields("FinalComponent"))
-      
-      If RsCount!Qde = 1 Then
-         strsql = strsql & IIf(strsql <> "", ",", "") & "'" & rs!FinalComponent & "'"
-      End If
-      
-      Else
-        Dim aq As String
-      aq = LayerName
-      'Dim aw As String
-      'aw = "SELECT count(*) as" + """" + " Qde " + """" + " From " + """" + aq + """" + _
-                          " Where " + """" + a + """" + "='" & rs.Fields("InitialComponent") & "'" + _
-                         " or " + """" + b + """" + " = '" & rs.Fields("InitialComponent") & "'"
-      
-'MsgBox "ARQUIVO DEBUG SALVO"
- 'WritePrivateProfileString "A", "A", aw, App.path & "\DEBUG.INI"
-    
-      
-       Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " + """" + aq + """" + _
-                          " Where " + """" + a + """" + "='" & rs.Fields("INITIALCOMPONENT") & "'" + _
-                         " or " + """" + b + """" + " = '" & rs.Fields("INITIALCOMPONENT") & "'")
-                      
-      If RsCount!Qde = 1 Then
-         strsql = "'" & rs!INITIALCOMPONENT & "'"
-      End If
-      
-      
-                 
-      
-     
-       Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " + """" + aq + """" + _
-                          " Where " + """" + a + """" + "='" & rs.Fields("FINALCOMPONENT") & "'" + _
-                         " or " + """" + b + """" + " = '" & rs.Fields("FINALCOMPONENT") & "'")
-      If RsCount!Qde = 1 Then
-         strsql = strsql & IIf(strsql <> "", ",", "") & "'" & rs!FinalComponent & "'"
-      End If
-      
-      End If
-      
-
-
-   End If
-   RsCount.Close
-   rs.Close
-   
-   Set rs = Nothing
-   Dim comandDelete As String
-   Dim CMD_Delete As String
-   
-   Dim RefLayer As String
-   RefLayer = GetReferenceLayer(LayerName)
-   
-   If strsql <> "" Then
-      
-a = RefLayer
-b = "+a+"
-c = "OBJECT_ID_"
-d = "points"
-e = LayId
-f = "e"
-g = "DATA"
-h = "texts"
-ii = "object_id"
- Dim d2 As String
-   d2 = "object_id_"
-     If frmCanvas.TipoConexao <> 4 Then
-      CMD_Delete = "Delete From " & RefLayer & "data where object_id_ In (" & strsql & ")"
-      Conn.execute (CMD_Delete)
-      
-      CMD_Delete = "Delete From " & RefLayer & " where object_id_ In (" & strsql & ")"
-      Conn.execute (CMD_Delete)
-      
-      CMD_Delete = "Delete From points" & LayId & " where object_id In (" & strsql & ")"
-      Conn.execute (CMD_Delete)
-      
-      tdb.setCurrentLayer RefLayer
-      
-      'VERIFICA SE OS NÓS POSSUEM TEXTOS PARA SEREM DELETADOS
-      If Not tdb.existsRepresentation(128) = 0 Then
-      
-         CMD_Delete = "Delete From texts" & LayId & " where object_id In (" & strsql & ")"
-         Conn.execute (CMD_Delete)
-      End If
-      Else
-      
-      CMD_Delete = "Delete From " + """" + a + g + """" + " where " + """" + c + """" + " In (" & strsql & ")"
-      Conn.execute (CMD_Delete)
-      
-      CMD_Delete = "Delete From " + """" + a + """" + " where " + """" + "OBJECT_ID_" + """" + " In (" & strsql & ")"
-     ' MsgBox CMD_Delete
-      Conn.execute (CMD_Delete)
-      
-      CMD_Delete = "Delete From " + """" + d + e + """" + " where " + """" + ii + """" + " In (" & strsql & ")"
-      Conn.execute (CMD_Delete)
-      
-      tdb.setCurrentLayer RefLayer
-      
-      'VERIFICA SE OS NÓS POSSUEM TEXTOS PARA SEREM DELETADOS
-      If Not tdb.existsRepresentation(128) = 0 Then
-
-         CMD_Delete = "Delete From " + """" + h + e + """" + " where " + """" + ii + """" + " In (" & strsql & ")"
-         End If
-         Conn.execute (CMD_Delete)
-      End If
-      
+    'd = rs.Fields("InitialComponent")
+    ' MsgBox "SELECT " + """" + a + """" + ", " + """" + b + """" + " From " + """" + LayerName + """" + "Where " + """" + c + """" + " = '" & object_id & "'"
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute("SELECT InitialComponent, FinalComponent From " & LayerName & _
+        " Where Object_id_ = " & object_id)
+    Else
+        Set rs = Conn.execute("SELECT " + """" + "INITIALCOMPONENT" + """" + ", " + """" + "FINALCOMPONENT" + """" + " From " + """" + LayerName + """" + "Where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "'")
+    End If
+    If Not rs.EOF Then
+        If frmCanvas.TipoConexao <> 4 Then
+            Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " & LayerName & _
+            " Where InitialComponent=" & rs.Fields("InitialComponent") & _
+            " or FinalComponent = " & rs.Fields("InitialComponent"))
+            If RsCount!Qde = 1 Then
+                strsql = "'" & rs!INITIALCOMPONENT & "'"
+            End If
+            RsCount.Close
+            Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " & LayerName & _
+            " Where InitialComponent=" & rs.Fields("FinalComponent") & _
+            " or FinalComponent = " & rs.Fields("FinalComponent"))
+            If RsCount!Qde = 1 Then
+                strsql = strsql & IIf(strsql <> "", ",", "") & "'" & rs!FinalComponent & "'"
+            End If
+        Else
+            Dim aq As String
+            aq = LayerName
+            'Dim aw As String
+            'aw = "SELECT count(*) as" + """" + " Qde " + """" + " From " + """" + aq + """" + _
+            " Where " + """" + a + """" + "='" & rs.Fields("InitialComponent") & "'" + _
+            " or " + """" + b + """" + " = '" & rs.Fields("InitialComponent") & "'"
+            'MsgBox "ARQUIVO DEBUG SALVO"
+            'WritePrivateProfileString "A", "A", aw, App.path & "\DEBUG.INI"
+            Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " + """" + aq + """" + _
+            " Where " + """" + a + """" + "='" & rs.Fields("INITIALCOMPONENT") & "'" + _
+            " or " + """" + b + """" + " = '" & rs.Fields("INITIALCOMPONENT") & "'")
+            If RsCount!Qde = 1 Then
+                strsql = "'" & rs!INITIALCOMPONENT & "'"
+            End If
+            Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " + """" + aq + """" + _
+            " Where " + """" + a + """" + "='" & rs.Fields("FINALCOMPONENT") & "'" + _
+            " or " + """" + b + """" + " = '" & rs.Fields("FINALCOMPONENT") & "'")
+            If RsCount!Qde = 1 Then
+                strsql = strsql & IIf(strsql <> "", ",", "") & "'" & rs!FinalComponent & "'"
+            End If
+        End If
+    End If
+    RsCount.Close
+    rs.Close
+    Set rs = Nothing
+    Dim comandDelete As String
+    Dim CMD_Delete As String
+    Dim RefLayer As String
+    RefLayer = GetReferenceLayer(LayerName)
+    If strsql <> "" Then
+        a = RefLayer
+        b = "+a+"
+        c = "OBJECT_ID_"
+        d = "points"
+        e = LayId
+        f = "e"
+        g = "DATA"
+        h = "texts"
+        ii = "object_id"
+        Dim d2 As String
+        d2 = "object_id_"
+        If frmCanvas.TipoConexao <> 4 Then
+            CMD_Delete = "Delete From " & RefLayer & "data where object_id_ In (" & strsql & ")"
+            Conn.execute (CMD_Delete)
+            CMD_Delete = "Delete From " & RefLayer & " where object_id_ In (" & strsql & ")"
+            Conn.execute (CMD_Delete)
+            CMD_Delete = "Delete From points" & LayId & " where object_id In (" & strsql & ")"
+            Conn.execute (CMD_Delete)
+            tdb.setCurrentLayer RefLayer
+            'VERIFICA SE OS NÓS POSSUEM TEXTOS PARA SEREM DELETADOS
+            If Not tdb.existsRepresentation(128) = 0 Then
+                CMD_Delete = "Delete From texts" & LayId & " where object_id In (" & strsql & ")"
+                Conn.execute (CMD_Delete)
+            End If
+        Else
+            CMD_Delete = "Delete From " + """" + a + g + """" + " where " + """" + c + """" + " In (" & strsql & ")"
+            Conn.execute (CMD_Delete)
+            CMD_Delete = "Delete From " + """" + a + """" + " where " + """" + "OBJECT_ID_" + """" + " In (" & strsql & ")"
+            ' MsgBox CMD_Delete
+            Conn.execute (CMD_Delete)
+            CMD_Delete = "Delete From " + """" + d + e + """" + " where " + """" + ii + """" + " In (" & strsql & ")"
+            Conn.execute (CMD_Delete)
+            tdb.setCurrentLayer RefLayer
+            'VERIFICA SE OS NÓS POSSUEM TEXTOS PARA SEREM DELETADOS
+            If Not tdb.existsRepresentation(128) = 0 Then
+                CMD_Delete = "Delete From " + """" + h + e + """" + " where " + """" + ii + """" + " In (" & strsql & ")"
+            End If
+            Conn.execute (CMD_Delete)
+        End If
     '  End If
-   End If
-   If frmCanvas.TipoConexao <> 4 Then
-   Conn.execute "Delete From " & LayerName & "Data where object_id_ = '" & object_id & "'"
-   
-   Conn.execute "Delete From " & LayerName & " where object_id_ = '" & object_id & "'"
-   
-   DeleteTXTVisual LayIdRef, object_id
-   
-   Conn.execute "Delete From texts" & LayIdRef & " where object_id = '" & object_id & "'"
-   
-   Conn.execute "Delete From lines" & LayIdRef & " where object_id = '" & object_id & "'"
-   
-   Else
-   Dim d1 As String
-   d1 = "object_id"
-a = LayerName
-b = "DATA"
-c = LayIdRef
-e = "c"
-d = "OBJECT_ID_"
-f = "texts"
-g = "lines"
-  ' Conn.execute " Delete From " + """" + a & b + """" + " where " + d + """" + " = '" & object_id & "' "
-    CMD_Delete = "Delete From " + """" + a + b + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' "
-      Conn.execute (CMD_Delete)
-   Conn.execute "Delete From " + """" + a + """" + " where " + """" + d + """" + " = '" & object_id & "'"
-   
-   DeleteTXTVisual LayIdRef, object_id
-   f = "texts"
-   c = LayIdRef
-   CMD_Delete = "Delete From " + """" + f + c + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
-  ' CMD_Delete = "Delete From " + """" + "texts" + LayIdRef + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
-      Conn.execute (CMD_Delete)
-   
-  ' Conn.execute "Delete From " + """" + f & c + """" + " where " + """" + d1 + """" + " = '" & object_id & "'"
- ' CMD_Delete = "Delete From " + """" + g + c + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
- c = LayIdRef
- g = "lines"
-   CMD_Delete = "Delete From " + """" + g + c + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
-      Conn.execute (CMD_Delete)
-   
-   'Conn.execute "Delete From " + """" + g & c + """" + " where " + """" + d1 + """" + " = '" & object_id & "'"
-   
-   End If
-
+    End If
+    If frmCanvas.TipoConexao <> 4 Then
+        Conn.execute "Delete From " & LayerName & "Data where object_id_ = '" & object_id & "'"
+        Conn.execute "Delete From " & LayerName & " where object_id_ = '" & object_id & "'"
+        DeleteTXTVisual LayIdRef, object_id
+        Conn.execute "Delete From texts" & LayIdRef & " where object_id = '" & object_id & "'"
+        Conn.execute "Delete From lines" & LayIdRef & " where object_id = '" & object_id & "'"
+    Else
+        Dim d1 As String
+        d1 = "object_id"
+        a = LayerName
+        b = "DATA"
+        c = LayIdRef
+        e = "c"
+        d = "OBJECT_ID_"
+        f = "texts"
+        g = "lines"
+        ' Conn.execute " Delete From " + """" + a & b + """" + " where " + d + """" + " = '" & object_id & "' "
+        CMD_Delete = "Delete From " + """" + a + b + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' "
+        Conn.execute (CMD_Delete)
+        Conn.execute "Delete From " + """" + a + """" + " where " + """" + d + """" + " = '" & object_id & "'"
+        DeleteTXTVisual LayIdRef, object_id
+        f = "texts"
+        c = LayIdRef
+        CMD_Delete = "Delete From " + """" + f + c + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
+        ' CMD_Delete = "Delete From " + """" + "texts" + LayIdRef + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
+        Conn.execute (CMD_Delete)
+        ' Conn.execute "Delete From " + """" + f & c + """" + " where " + """" + d1 + """" + " = '" & object_id & "'"
+        ' CMD_Delete = "Delete From " + """" + g + c + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
+        c = LayIdRef
+        g = "lines"
+        CMD_Delete = "Delete From " + """" + g + c + """" + " where " + """" + d1 + """" + " = '" & object_id & "' "
+        Conn.execute (CMD_Delete)
+        'Conn.execute "Delete From " + """" + g & c + """" + " where " + """" + d1 + """" + " = '" & object_id & "'"
+    End If
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     Else
-       
-      PrintErro "clsGeoReference", "Public Function DeleteRede", CStr(Err.Number), CStr(Err.Description), True
-          
+        PrintErro "clsGeoReference", "Public Function DeleteRede", CStr(Err.Number), CStr(Err.Description), True
     End If
-   
 End Function
 '###############################################################
 ' Autor     : Luis Claudio Rodrigues Domingues    Data: 20/12/05
