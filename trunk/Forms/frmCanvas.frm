@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{18576B0E-A129-4A50-9930-59E18A6FE5E1}#1.0#0"; "TeComCanvas.dll"
-Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
 Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
+Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
 Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Begin VB.Form frmCanvas 
    Caption         =   "Mapa"
@@ -364,7 +364,7 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
     Dim linha As Integer
     
     tipoDeConexao = typeconnection
-    If typeconnection <> postgreSQL Then
+    If typeconnection <> POSTGRESQL Then
         'se não for Postgresss
         TeViewDatabase1.username = username
         TeViewDatabase1.Provider = typeconnection
@@ -1342,11 +1342,11 @@ On Error GoTo Trata_Erro
                  idPoligonSel = TCanvas.getSelectGeoId(0, 1)
                strLayerAtivo = TCanvas.getCurrentLayer
                
-               
+            ' Caso esteja tratando um ramal
             Case LayerTypeRefence.RAMAIS_AGUA, LayerTypeRefence.RAMAIS_ESGOTO
                Set Tr.tcs = TCanvas
                Set Tr.tdbconref = TeDatabase2
-               Tr.tdbconref.setCurrentLayer Tr.cgeo.GetLayerOperation(TCanvas.getCurrentLayer, 2)
+               Tr.tdbconref.setCurrentLayer Tr.cgeo.GetLayerOperation(TCanvas.getCurrentLayer, 1)           ' trecho de rede de água. Não temos mais retorno de polígono de lote associado a ligação de água
                
 
                If TCanvas.getSelectCount(lines) Then

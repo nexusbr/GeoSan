@@ -361,18 +361,21 @@ Trata_Erro:
    End If
 
 End Function
-
+' Desenha um ramal junto a rede de água ou esgoto
+' Estamos utilizando atualmente apenas ramais de água
+'
+'
 Public Function DrawRamal() As Boolean
 On Error GoTo Trata_Erro
    
    If cgeo.IsValidLayerOperation(tcs.getCurrentLayer, RAMAIS_AGUA) Or cgeo.IsValidLayerOperation(tcs.getCurrentLayer, RAMAIS_ESGOTO) Then
       Screen.MousePointer = vbHourglass
       tcs.drawLine
-      tcs.addLayerToSnap cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
-      tdb.setCurrentLayer tcs.getCurrentLayer
+      tcs.addLayerToSnap cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)         ' Seta o layer de snap de referência. Para isso tem que buscar esta informação na tabela GS_LAYER_CONFIG_LAYERS. Onde o layer ativo selecionado e o tipo de operação 1 (desenhar ramal) retorne o número do layer de referência para snap. Por exemplo, se for um ramal o layer de referência de snap é o de redes de água (1)
+      tdb.setCurrentLayer tcs.getCurrentLayer                                   ' Seta o layer ativo de desenho o que estiver selecionado pelo usuário
       tdbcon.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
-      tdbconref.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 2)
-      FrmMain.sbStatusBar.Panels(1).Text = "Desenho de ramal: Clique em um treho da rede e desenhe a linha ultrapassando o lote"
+      tdbconref.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
+      FrmMain.sbStatusBar.Panels(1).Text = "Desenho de ramal: Clique em um treho da rede e desenhe o ramal"
       Screen.MousePointer = vbNormal
    Else
       MsgBox "Selecione um tema de plano de ramais", vbExclamation
@@ -387,6 +390,7 @@ Trata_Erro:
        PrintErro "clsTerraLib", "Public Function DrawRamal", CStr(Err.Number), CStr(Err.Description), True
        
     End If
+    Screen.MousePointer = vbNormal
 End Function
 ' Apaga um elemento do banco de dados geográfico
 '
@@ -589,7 +593,9 @@ Trata_Erro:
    End If
    
 End Function
-
+' Entra nesta função quando está desenhando ou selecionando o ramal
+'
+'
 Public Function OnRamal(X As Double, Y As Double, object_id_ramal As String) As Boolean
 On Error GoTo Trata_Erro
     
@@ -598,7 +604,7 @@ On Error GoTo Trata_Erro
     'Dim frmRamalEsgoto As New FrmCadastroRamalEsgoto
         
     Dim object_id_lote As String
-    tdbconref.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 2)
+    tdbconref.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
     
          If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
             
@@ -610,17 +616,18 @@ On Error GoTo Trata_Erro
          End If
     
     
-    
-    With tcs
-       Qtde = tdbconref.locateGeometryXY(X, Y, 1)
-       For a = 0 To Qtde - 1
-          If object_id_lote = "" Then
-             object_id_lote = "'" & tdbconref.objectIds(a) & "'"
-          Else
-             object_id_lote = object_id_lote & "," & "'" & tdbconref.objectIds(a) & "'"
-          End If
-       Next
-    End With
+        object_id_lote = ""    ' zera apenas para aparecer na caixa de diálogo
+' Esta parte do código foi retirada, pois era do GeoSan inicial implementado em Votuporanga em que a ligação era associada ao lote da Prefeitura
+'    With tcs
+'       Qtde = tdbconref.locateGeometryXY(X, Y, 1)
+'       For a = 0 To Qtde - 1
+'          If object_id_lote = "" Then
+'             object_id_lote = "'" & tdbconref.objectIds(a) & "'"
+'          Else
+'             object_id_lote = object_id_lote & "," & "'" & tdbconref.objectIds(a) & "'"
+'          End If
+'       Next
+'    End With
     
     If UCase(tcs.getCurrentLayer) = "RAMAIS_AGUA" Then
          'ORIGINAL

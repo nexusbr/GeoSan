@@ -1,0 +1,11 @@
+DATA           22/08/2014 12:49:00 
+USUÁRIO        nexus
+VERSÃO         07.00.03
+MÓDULO         clsTerraLib
+EVENTO         Public Function OnRamal
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
+
+-----------------------------------------------------------------------------------------------------
+

@@ -412,7 +412,7 @@ Public Function UpdateTextsInLines(LayerName_ As String, object_id As String)
       Material = "0"
       End If
       End If
-      comprimento = IIf(rsWLines!LENGTH = 0, rsWLines!LENGTHCALCULATED, rsWLines!LENGTH)
+      comprimento = IIf(rsWLines!Length = 0, rsWLines!LENGTHCALCULATED, rsWLines!Length)
       
          If LayerName_ = "SEWERLINES" Then
             CotaI = rsWLines!INITIALTUBEDEEPNESS
@@ -1777,10 +1777,11 @@ If frmCanvas.TipoConexao <> 4 Then
    rs.Close
    Set rs = Nothing
 End Function
-'
+' Esta função tem como objetivo obter o layer de referência de uma determinad operação. Ele está informado na tabela S_LAYER_CONFIG_LAYERS
+' Esta função simplesmente vai nesta tabela e obtem o nome do layer de referência a partir do layer slecionado pelo usuário e o tipo de operação que o usuário deseja realizar
 '
 ' LayerName - recebe o nome do layer que foi selecionado pelo usuário
-' T_Operation - tipo de operação
+' T_Operation - tipo de operação (ver tabela com os tipos de operações GS_LAYER_CONFIG_LAYERS)
 '
 Public Function GetLayerOperation(LayerName As String, T_Operation As Integer) As String
     Dim rs As ADODB.Recordset, layer_id As Integer
