@@ -967,7 +967,9 @@ Public Function DeleteRede(LayerName As String, object_id As String)
     On Error GoTo Trata_Erro
     Dim rs As ADODB.Recordset, RsCount As ADODB.Recordset, strsql As String
     Dim LayId As Integer, LayIdRef As Integer
+    Dim localErro As String
 
+    localErro = "0"
     If frmCanvas.TipoConexao <> 4 Then
         Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & GetReferenceLayer(LayerName) & "'", CInt(typeconnection)))
     Else
@@ -979,6 +981,7 @@ Public Function DeleteRede(LayerName As String, object_id As String)
         ac = "name"
         Set rs = Conn.execute(convertQuery("SELECT " + """" + aa + """" + " from " + """" + ab + """" + " where " + """" + ac + """" + "='" & GetReferenceLayer(LayerName) & "'", CInt(typeconnection)))
     End If
+    localErro = "1"
     LayId = rs(0).value
     If frmCanvas.TipoConexao <> 4 Then
         Set rs = Conn.execute(convertQuery("SELECT Layer_id from Te_Layer where name='" & LayerName & "'", CInt(typeconnection)))
@@ -995,8 +998,10 @@ Public Function DeleteRede(LayerName As String, object_id As String)
     Else
         Set rs = Conn.execute("SELECT " + """" + "INITIALCOMPONENT" + """" + ", " + """" + "FINALCOMPONENT" + """" + " From " + """" + LayerName + """" + "Where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "'")
     End If
+    localErro = "2"
     If Not rs.EOF Then
         If frmCanvas.TipoConexao <> 4 Then
+            localErro = "2A"
             Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " & LayerName & _
             " Where InitialComponent=" & rs.Fields("InitialComponent") & _
             " or FinalComponent = " & rs.Fields("InitialComponent"))
@@ -1010,7 +1015,9 @@ Public Function DeleteRede(LayerName As String, object_id As String)
             If RsCount!Qde = 1 Then
                 strsql = strsql & IIf(strsql <> "", ",", "") & "'" & rs!FinalComponent & "'"
             End If
+            RsCount.Close
         Else
+            localErro = "2B"
             Dim aq As String
             aq = LayerName
             Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " + """" + aq + """" + _
@@ -1019,16 +1026,18 @@ Public Function DeleteRede(LayerName As String, object_id As String)
             If RsCount!Qde = 1 Then
                 strsql = "'" & rs!INITIALCOMPONENT & "'"
             End If
+            RsCount.Close
             Set RsCount = Conn.execute("SELECT count(*) as " + """" + "Qde" + """" + " From " + """" + aq + """" + _
             " Where " + """" + a + """" + "='" & rs.Fields("FINALCOMPONENT") & "'" + _
             " or " + """" + b + """" + " = '" & rs.Fields("FINALCOMPONENT") & "'")
             If RsCount!Qde = 1 Then
                 strsql = strsql & IIf(strsql <> "", ",", "") & "'" & rs!FinalComponent & "'"
             End If
+            RsCount.Close
         End If
     End If
-    RsCount.Close
     rs.Close
+    localErro = "3"
     Set rs = Nothing
     Dim comandDelete As String
     Dim CMD_Delete As String
@@ -1047,6 +1056,7 @@ Public Function DeleteRede(LayerName As String, object_id As String)
         Dim d2 As String
         d2 = "object_id_"
         If frmCanvas.TipoConexao <> 4 Then
+            localErro = "3A"
             CMD_Delete = "Delete From " & RefLayer & "data where object_id_ In (" & strsql & ")"
             Conn.execute (CMD_Delete)
             CMD_Delete = "Delete From " & RefLayer & " where object_id_ In (" & strsql & ")"
@@ -1060,6 +1070,7 @@ Public Function DeleteRede(LayerName As String, object_id As String)
                 Conn.execute (CMD_Delete)
             End If
         Else
+            localErro = "3B"
             CMD_Delete = "Delete From " + """" + a + g + """" + " where " + """" + c + """" + " In (" & strsql & ")"
             Conn.execute (CMD_Delete)
             CMD_Delete = "Delete From " + """" + a + """" + " where " + """" + "OBJECT_ID_" + """" + " In (" & strsql & ")"
@@ -1074,6 +1085,7 @@ Public Function DeleteRede(LayerName As String, object_id As String)
             Conn.execute (CMD_Delete)
         End If
     End If
+    localErro = "4"
     If frmCanvas.TipoConexao <> 4 Then
         Conn.execute "Delete From " & LayerName & "Data where object_id_ = '" & object_id & "'"
         Conn.execute "Delete From " & LayerName & " where object_id_ = '" & object_id & "'"
@@ -1081,6 +1093,7 @@ Public Function DeleteRede(LayerName As String, object_id As String)
         Conn.execute "Delete From texts" & LayIdRef & " where object_id = '" & object_id & "'"
         Conn.execute "Delete From lines" & LayIdRef & " where object_id = '" & object_id & "'"
     Else
+        localErro = "5"
         Dim d1 As String
         d1 = "object_id"
         a = LayerName
@@ -1108,7 +1121,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        PrintErro "clsGeoReference", "Public Function DeleteRede", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro "clsGeoReference - Local Erro:" + localErro, "Public Function DeleteRede", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Function
 '###############################################################
