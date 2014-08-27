@@ -9,3 +9,14 @@ DESCRIÇÃO      O plano corrente não possui a representação geométrica especifica
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           22/08/2014 17:18:02 
+USUÁRIO        nexus
+VERSÃO         07.00.04
+MÓDULO         clsGeoReference - Local Erro:2
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+

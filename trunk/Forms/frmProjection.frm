@@ -441,6 +441,7 @@ Public Function init() As Boolean
    cboDatum.AddItem "NAD27"
    cboDatum.AddItem "NAD83"
    cboDatum.AddItem "Esférico"
+   cboDatum.AddItem "SIRGAS2000"
    Dim a As Integer
    For a = 1 To 60
       cboZone.AddItem a
@@ -451,6 +452,7 @@ Public Function init() As Boolean
    init = Confirm
    'LoozeXP1.EndWinXPCSubClassing
 End Function
+
 
 Private Sub cboZone_Click()
 
