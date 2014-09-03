@@ -131,12 +131,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   6615
+      Height          =   7515
       Left            =   6090
-      ScaleHeight     =   6615
+      ScaleHeight     =   7515
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   1410
+      Top             =   510
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   855
@@ -296,7 +296,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "10:52"
+            TextSave        =   "21:48"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -312,13 +312,13 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   1410
+      Height          =   510
       Left            =   0
       TabIndex        =   7
       Top             =   0
       Width           =   10035
       _ExtentX        =   17701
-      _ExtentY        =   2487
+      _ExtentY        =   900
       ButtonWidth     =   820
       ButtonHeight    =   794
       ImageList       =   "ImageList4"
@@ -1228,6 +1228,9 @@ Begin VB.MDIForm FrmMain
       Begin VB.Menu mnuSep016 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuCalculaZNo 
+         Caption         =   "Calcular Z Nó Enquanto Desenha"
+      End
       Begin VB.Menu mnuMultProperteis 
          Caption         =   "Propriedades Multiplas"
       End
@@ -1862,12 +1865,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.FileName, .FilterIndex - 1
            End If
         End With
     Else
@@ -2061,7 +2064,16 @@ Private Sub mnuMultProperteis_Click()
    mnuMultProperteis.Checked = Not mnuMultProperteis.Checked
    
 End Sub
-
+'Indica se é para calcular ou não a cota Z do nó enquanto estiver desenhando. Caso não exista o layer MDT ainda esta função é muito útil
+'
+Private Sub mnuCalculaZNo_Click()
+    mnuCalculaZNo.Checked = Not mnuCalculaZNo.Checked
+    If mnuCalculaZNo.Checked = True Then            'Indica se a aplicação deve calcular ou não o Z do nó enquanto o usuário está desenhando a rede
+        varGlobais.deveCalcularZNo = True
+    Else
+        varGlobais.deveCalcularZNo = False
+    End If
+End Sub
 
 
 

@@ -200,7 +200,7 @@ Public Sub Main()
     End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "07.00.07"
+    Versao_Geo = "07.00.08"
     glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
     SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -279,6 +279,7 @@ Public Sub Main()
         If rs!UsrFun = 1 Then 'ADMINISTRADOR
             FrmMain.mnuChangePassword.Visible = False 'desabilita a troca de senha pelo menu arquivo, pois o admin. pode fazer isso por outro menu
             FrmMain.mnuAutoLogin.Visible = False
+            FrmMain.mnuCalculaZNo = True                                        'Exibe a opção de o usuário selecionar se deseja ou não que as cotas sejam calculadas enquanto ele desenha uma rede
         ElseIf rs!UsrFun = 2 Then                                               'USUÁRIO
             FrmMain.mnuUsers.Enabled = False                                    'NÃO PERMITE QUE SEJAM EDITADOS USUÁRIOS
             FrmMain.mnuProdutividade.Enabled = False                            'NÃO PERMITE GERAR RELATORIO DE PRODUTIVIDADE
@@ -286,12 +287,14 @@ Public Sub Main()
             FrmMain.mnuAutoLogin.Visible = False                                'Não permite o login automático
             FrmMain.mnuExporta_GeoSan.Visible = False                           'Não permite exportar para o formato shape
             FrmMain.mnuAtualizaCotas.Visible = False                                    'não permite atualizar todas as cotas de todos os nós das redes da cidade toda
+            FrmMain.mnuCalculaZNo = True                                        'Exibe a opção de o usuário selecionar se deseja ou não que as cotas sejam calculadas enquanto ele desenha uma rede
         ElseIf rs!UsrFun = 3 Then 'VISITANTE - BLOQUEIA A MAIORIA DAS FUNÇÕES
             blnAutoLogin = True
             '          If blnAutoLogin = True Then              'CASO LOGIN AUTOMÁTICO, NÃO PERMITE ALTERAR VISTAS
             '               FrmMain.pctSfondo.Visible = False   'PARA ALTERAR VISTAS DEVE SE ENTRAR COM O USUÁRIO
             '               FrmMain.mnuLayers.Visible = False   'E SENHA NO MODO CONVENCIONAL
             '          End If
+            FrmMain.mnuCalculaZNo = False                                        'Não exibe a opção de o usuário selecionar se deseja ou não que as cotas sejam calculadas enquanto ele desenha uma rede
             FrmMain.mnuDrawLineWater.Visible = False
             FrmMain.mnuDrawPointInLineWater.Visible = False
             FrmMain.mnuMovePointWithLines.Visible = False
@@ -324,6 +327,7 @@ Public Sub Main()
             FrmMain.mnuAtualizaCotas.Visible = False                                    'não permite atualizar todas as cotas de todos os nós das redes da cidade toda
         ElseIf rs!UsrFun = 4 Then                                               'VISUALIZADOR - BLOQUEIA A MAIORIA DAS FUNÇÕES
             blnAutoLogin = True
+            FrmMain.mnuCalculaZNo = False                                       'Não exibe a opção de o usuário selecionar se deseja ou não que as cotas sejam calculadas enquanto ele desenha uma rede
             FrmMain.pctSfondo.Visible = False
             FrmMain.mnuLayers.Checked = False
             FrmMain.mnuExpAutoCad.Visible = False

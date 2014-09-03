@@ -844,29 +844,32 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
         LayerName = tcs.GetReferenceLayer                                       'SETA O LAYER DE REFERENCIA COMO ATIVO
         cgeo.DeleteTextObjectWithInsertText LayerName, LINE_ID, CStr(LINE_ID)
         'atualização da cota do nó
-        No = varGlobais.objIdNoSelecionado
-        
-        If No <> "NULO" Then
-            If frmCanvas.TipoConexao <> 4 Then      'caso seja Oracle ou SQLServer
-                stringSQL = "SELECT object_id FROM " & TBGeometria & " WHERE OBJECT_ID = " & No     'Tabela Points2 para água ou Points4 para esgoto
-                rsq.Open stringSQL, Conn, adOpenDynamic, adLockReadOnly
-            Else    'caso seja Postgres
-                    'implementar
-            End If
-            If rsq.EOF = False Then ' SE ENCONTROU O REGISTRO, ou seja o nó existe
-                zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
-                If frmCanvas.TipoConexao <> 4 Then
-                    stringSQL = "UPDATE " & layerReferencia & " SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " where object_id_ = " & No   'atualiza a cota do nó
-                    Conn.execute (stringSQL)
-                Else 'Postgres
-                    'Implementar
+        'Antes de atribuir o Z do nó verifica se o usuário quer que isso seja realizado enquanto ele desenha a rede. Se o MDT não estiver pronto o usuário pode optar por desligar esta opção
+        If varGlobais.deveCalcularZNo = True Then
+            No = varGlobais.objIdNoSelecionado
+            
+            If No <> "NULO" Then
+                If frmCanvas.TipoConexao <> 4 Then      'caso seja Oracle ou SQLServer
+                    stringSQL = "SELECT object_id FROM " & TBGeometria & " WHERE OBJECT_ID = " & No     'Tabela Points2 para água ou Points4 para esgoto
+                    rsq.Open stringSQL, Conn, adOpenDynamic, adLockReadOnly
+                Else    'caso seja Postgres
+                        'implementar
                 End If
-            Else                    'nó não existe
-                'deveria ter encontrado o nó - exibir mensagem de erro
-                MsgBox ("Nó " & No & " não foi encontrado.")
+                If rsq.EOF = False Then ' SE ENCONTROU O REGISTRO, ou seja o nó existe
+                    zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
+                    If frmCanvas.TipoConexao <> 4 Then
+                        stringSQL = "UPDATE " & layerReferencia & " SET GROUNDHEIGHT = " & Replace(Round(zNo, 2), ",", ".") & " where object_id_ = " & No   'atualiza a cota do nó
+                        Conn.execute (stringSQL)
+                    Else 'Postgres
+                        'Implementar
+                    End If
+                Else                    'nó não existe
+                    'deveria ter encontrado o nó - exibir mensagem de erro
+                    MsgBox ("Nó " & No & " não foi encontrado.")
+                End If
+                rsq.Close
+                varGlobais.objIdNoSelecionado = "NULO"                      'para rodar só uma vez (a primeira), pois entra nesta rotina várias vezes para cada seguimento de rede
             End If
-            rsq.Close
-            varGlobais.objIdNoSelecionado = "NULO"                      'para rodar só uma vez (a primeira), pois entra nesta rotina várias vezes para cada seguimento de rede
         End If
         'fim da atualização da cota do nó movido
     Else                    ' ESTÁ DESENHANDO A REDE
@@ -945,7 +948,13 @@ Public Function CreatNetWorkAttribute(LINE_ID As Long, Node_id1 As Long, Node_id
                 rsq.Open ("SELECT * FROM " + """" + layerReferencia + """" + " WHERE " + """" + az + """" + " = '" & No & "'"), Conn, adOpenDynamic, adLockOptimistic
             End If
             If rsq.EOF = True Then ' SE NÃO ENCONTROU O REGISTRO, ou seja o nó não existe ainda
-                zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
+                'Aqui ele atribui o Z ao nó
+                'Antes de atribuir o Z do nó verifica se o usuário quer que isso seja realizado enquanto ele desenha a rede. Se o MDT não estiver pronto o usuário pode optar por desligar esta opção
+                If varGlobais.deveCalcularZNo = True Then
+                    zNo = getZNo.CObtemZFromObjIdNo(No, TBGeometria)                     'obtem a cota z do nó a partir do object_id do mesmo. Passa o nome do layer de geometrias dos nós de água o esgoto
+                Else
+                    zNo = 0
+                End If
                 If frmCanvas.TipoConexao <> 4 Then
                     stringSQL = "INSERT INTO " & layerReferencia & " (COMPONENT_ID,OBJECT_ID_, GROUNDHEIGHT) VALUES (" & No & ",'" & No & "', " & Replace(Round(zNo, 2), ",", ".") & ")"
                     Conn.execute (stringSQL)

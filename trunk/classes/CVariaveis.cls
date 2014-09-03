@@ -21,6 +21,17 @@ Private paraExe As Boolean
 Private objIdNoMovendo As String
 Private moveVertice As Boolean                          'indica se está ou não movendo um vértice de uma rede
 Private podeRealizarCommit As Boolean                   'tem objetivo de informar se é para realizar um Commit ou Rollback, pois houve falha
+Private calcularOZNo As Boolean                         'para saber se a cota Z do nó deve ser calculada no momento em que estou desenhando a rede
+' Retorna se pode ou não realizar um Commit no banco de dados
+'
+Property Get deveCalcularZNo() As Boolean
+    deveCalcularZNo = calcularOZNo
+End Property
+' Recebe se pode ou não realizar um Commit no banco de dados
+'
+Property Let deveCalcularZNo(ByVal calculaZNo As Boolean)
+    calcularOZNo = calculaZNo
+End Property
 ' Retorna se pode ou não realizar um Commit no banco de dados
 '
 Property Get realizaCommit() As Boolean
