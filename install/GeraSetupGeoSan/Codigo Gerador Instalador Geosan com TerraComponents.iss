@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "07.00.08"
+#define AppVersionFile  "07.00.09"
 
 [Setup]
 AppName=GeoSan
@@ -231,8 +231,8 @@ Source: "ArquivosInstGeoSan\cdosys.dll";   DestDir: "{sys}"; CopyMode: alwaysski
 Source: "ArquivosInstGeoSan\MSINET.OCX";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
 Source: "ArquivosInstGeoSan\mswsock.dll";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
 Source: "ArquivosInstGeoSan\MSCOMCTL.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit
-
-
+; Microsoft Winsock Control DLL versão 6.00.81694
+Source: "ArquivosInstGeoSan\MSWINSCK.OCX"; DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: regserver noregerror 32bit   
 
 [Icons]
 ;Name: "{group}\My Program"; Filename: "{app}\MyProg.exe"
