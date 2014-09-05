@@ -67,11 +67,11 @@ Public Function Registra(ByVal Modulo As String, ByVal EVENTO As String, ByVal E
     If enviaEmail = True Then
         sucesso = Email.enviaEmail(nomeArquivoErro)
         If sucesso <> "ok" Then
-            MsgBox "Não conseguiu enviar a mensagem do erro ocorrido para a NEXUS. Mensagem: " & sucesso & " Favor entrar em contato com o suporte técnico da NEXUS."
+            MsgBox "Provavelmente você está sem conexão com a Internet, ou a mesma está muito lenta. Favor verificar. Mensagem: " & sucesso & " Favor entrar em contato com o suporte técnico da NEXUS."
         End If
     End If
     If ExibeMensagem = True Then
-        MsgBox "A operação não pode ser completada, favor enviar o arquivo: " & nomeArquivoErro & " para o suporte técnico para maiores detalhes.", vbInformation
+        MsgBox "A operação não pode ser completada, favor enviar o arquivo: " & nomeArquivoErro & " para o suporte técnico da NEXUS para maiores detalhes.", vbInformation
     End If
     
 Trata_Erro:
