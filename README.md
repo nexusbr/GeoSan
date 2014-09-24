@@ -14,4 +14,4 @@ Caso você seja uma empresa prestadora de serviços de tecnologia e inovação p
 
 ### Como nos contactar ###
  
-José Maria Villac Pinheiro +55 11 9 9491 1068 TIMt
+José Maria Villac Pinheiro +55 11 9 9491 1068 TIM
