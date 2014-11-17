@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form FrmAssociation 
    BorderStyle     =   4  'Fixed ToolWindow
@@ -183,80 +183,63 @@ Private tcs As TeCanvas, tdb As TeDatabase, X As Double, Y As Double
 Const SW_SHOW As Long = 5
 Dim er As String
 
-
-
 Public Function init(ObjectID_ As String, mtcs As TeCanvas, mtdb As TeDatabase, Optional mx As Double, Optional my As Double) As Boolean
-On Error GoTo Trata_Erro
-   Set tcs = mtcs
-   Set tdb = mtdb
-   X = mx
-   Y = my
-   LvAssociations.ListItems.Clear
-   'LvAssociations.ColumnHeaders(1).Width = 2100
-   'LvAssociations.ColumnHeaders(2).Width = LvAssociations.Width - 2600
-   'LvAssociations.ColumnHeaders(3).Width = LvAssociations.Width - 3550
-  
-   object_id = ObjectID_
-   Dim af As String
-   Dim ag As String
-   Dim ah As String
-   Dim ai As String
-   Dim aj As String
-   af = "PATH_"
-   ag = "FILE_"
-   ah = "EXTENSION_"
-   ai = "X_FILES"
-   aj = "OBJECT_ID_"
-   
-   If frmCanvas.TipoConexao <> 4 Then
-   
-   Set rs = Conn.execute("SELECT path_, file_, extension_ from X_Files where object_id_ = '" & object_id & "' ")
-   
-      While Not rs.EOF
-         Set Lv = LvAssociations.ListItems.Add(, , rs.Fields("path_").value)
-             Lv.SubItems(1) = rs.Fields("file_").value
-             Lv.SubItems(2) = rs.Fields("extension_").value
-         rs.MoveNext
-      Wend
-   rs.Close
-   Set rs = Nothing
-   
-   Else
-    Dim awe As String
-     
-Set rs = Conn.execute("SELECT " + """" + af + """" + ", " + """" + ag + """" + ", " + """" + ah + """" + " from " + """" + ai + """" + " where " + """" + aj + """" + " = '" & object_id & "' ")
-     
- 'WritePrivateProfileString "A", "A", "SELECT " + """" + af + """" + ", " + """" + ag + """" + ", " + """" + ah + """" + " from " + """" + ai + """" + " where " + """" + aj + """" + " = '" & object_id & "' ", App.path & "\DEBUG.INI"
-     LvAssociations.ListItems.Clear
-     
-     
-     While Not rs.EOF
-       er = Replace(rs.Fields("path_").value, "9qwert2", "\")
-         Set Lv = LvAssociations.ListItems.Add(, , er)
-             Lv.SubItems(1) = rs.Fields("file_").value
-             Lv.SubItems(2) = rs.Fields("extension_").value
-         rs.MoveNext
-      Wend
-   rs.Close
-   Set rs = Nothing
-   
-   
-   End If
-   
-  
+    On Error GoTo Trata_Erro
+    Dim af As String
+    Dim ag As String
+    Dim ah As String
+    Dim ai As String
+    Dim aj As String
     
-   Me.Show vbModal
-   
-Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   
-   PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True
-   
-End If
+    Set tcs = mtcs
+    Set tdb = mtdb
+    X = mx
+    Y = my
+    LvAssociations.ListItems.Clear
+    'LvAssociations.ColumnHeaders(1).Width = 2100
+    'LvAssociations.ColumnHeaders(2).Width = LvAssociations.Width - 2600
+    'LvAssociations.ColumnHeaders(3).Width = LvAssociations.Width - 3550
+    object_id = ObjectID_
+    af = "PATH_"
+    ag = "FILE_"
+    ah = "EXTENSION_"
+    ai = "X_FILES"
+    aj = "OBJECT_ID_"
+    If frmCanvas.TipoConexao <> 4 Then
+        Set rs = Conn.execute("SELECT path_, file_, extension_ from X_Files where object_id_ = '" & object_id & "' ")
+        While Not rs.EOF
+            Set Lv = LvAssociations.ListItems.Add(, , rs.Fields("path_").value)
+            Lv.SubItems(1) = rs.Fields("file_").value
+            Lv.SubItems(2) = rs.Fields("extension_").value
+            rs.MoveNext
+        Wend
+        rs.Close
+        Set rs = Nothing
+    Else
+        Dim awe As String
+        Set rs = Conn.execute("SELECT " + """" + af + """" + ", " + """" + ag + """" + ", " + """" + ah + """" + " from " + """" + ai + """" + " where " + """" + aj + """" + " = '" & object_id & "' ")
+        'WritePrivateProfileString "A", "A", "SELECT " + """" + af + """" + ", " + """" + ag + """" + ", " + """" + ah + """" + " from " + """" + ai + """" + " where " + """" + aj + """" + " = '" & object_id & "' ", App.path & "\DEBUG.INI"
+        LvAssociations.ListItems.Clear
+        While Not rs.EOF
+            er = Replace(rs.Fields("path_").value, "9qwert2", "\")
+            Set Lv = LvAssociations.ListItems.Add(, , er)
+            Lv.SubItems(1) = rs.Fields("file_").value
+            Lv.SubItems(2) = rs.Fields("extension_").value
+            rs.MoveNext
+        Wend
+        rs.Close
+        Set rs = Nothing
+    End If
+    Me.Show vbModal
 
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+    Resume Next
+    Else
+    PrintErro CStr(Me.Name), "Public Function Init", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Function
+
 ' Subrotina para abrir um arquivo de um documento associado ao layer DOCUMENTS
 ' Abre a aplicação associada a extensão do mesmo
 '
@@ -264,7 +247,7 @@ Private Sub cmdAbrirDoc_Click()
     On Error GoTo Trata_Erro
     Dim Cont As Integer
     Dim arquivo As String
-    
+
     With LvAssociations
         If .ListItems.count > 0 Then
             If .SelectedItem.Selected = True Then
@@ -282,6 +265,7 @@ Private Sub cmdAbrirDoc_Click()
             MsgBox "Não foi selecionado nenhum arquivo", vbExclamation, "GeoSan"
         End If
     End With
+
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -290,206 +274,153 @@ Trata_Erro:
     End If
 End Sub
 
-
-
 Private Sub cmdSalvarPonto_Click()
-On Error GoTo Trata_Erro
-   Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
-   
-Dim stringconexao As String
-
-Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
-Dim m As String
-If frmCanvas.TipoConexao <> 4 Then
-     
-
-   If LvAssociations.ListItems.count > 0 Then
-      tcs.object_id = object_id
-      tcs.saveOnMemory
-      
-      'Conn.BeginTrans
-      If object_id = "" Then
-         tcs.SaveInDatabase
-         'tcs.getSELECTBox x, y, x, y
-      '   geom_id = tcs.getSelectGeometry(0, 4)
+    On Error GoTo Trata_Erro
+    Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
+    Dim stringconexao As String
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+    Dim m As String
     
-      
-        
-         Set rs = Conn.execute("SELECT max(geom_id) from points" & cgeo.GetLayerID(tcs.getCurrentLayer))
-         Conn.execute "update points" & cgeo.GetLayerID(tcs.getCurrentLayer) & " set object_id = geom_id where geom_id =" & rs(0).value
-         object_id = rs(0).value
-         rs.Close
-         Set rs = Nothing
-         tcs.plotView
-         'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
-         
-      Else
-
-
-     
-         Set rs = Conn.execute("delete from X_Files where object_id_ = '" & object_id & "' ")
-         End If
-      
-      'salva atributos
-    
-      For Cont = 1 To LvAssociations.ListItems.count
-     
-   
-         Set rs = Conn.execute("insert into X_Files (object_id_, path_, file_, extension_) values ('" & object_id & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
-      Next
-      'Conn.CommitTrans
-      
-      'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
-      LvAssociations.ListItems.Clear
-      Me.Hide
-   Else
-      MsgBox "Insira um documento para associar ao ponto", vbExclamation, "GeoSan"
-   End If
-   Set cgeo = Nothing
-   
-   
-   
-    
-     Else
-     
-a = "points"
-b = "geom_id"
-c = cgeo.GetLayerID(tcs.getCurrentLayer)
-d = "object_id"
-l = "points"
-f = l + c
-g = "X_FILES"
-h = "PATH_"
-i = "FILE_"
-j = "EXTENSION_"
-k = "OBJECT_ID_"
-m = l + f
-    If LvAssociations.ListItems.count > 0 Then
-      tcs.object_id = object_id
-      tcs.saveOnMemory
-      
-      'Conn.BeginTrans
-      If object_id = "" Then
-         tcs.SaveInDatabase
-         'tcs.getSELECTBox x, y, x, y
-        ' geom_id = tcs.getSelectGeometry(0, 4)
-        
-         Set rs = Conn.execute("SELECT max(" + """" + b + """" + ") from " + """" + f + """" + "")
-      'MsgBox "update " + """" + f + """" + " set " + """" + d + """" + " ='" & geom_id & "'  where " + """" + b + """" + " =   '" & rs(0).value & "'"
-      
-     
-      
-      
-      
-         Conn.execute "update " + """" + f + """" + " set " + """" + d + """" + " =" + """" + "geom_id" + """" + "  where " + """" + b + """" + " =   '" & rs(0).value & "'"
-         
-         
-         object_id = rs(0).value
-         rs.Close
-         Set rs = Nothing
-         tcs.plotView
-         'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
-         
-      Else
-      
-         Set rs = Conn.execute("delete from " + """" + g + """" + " where " + """" + k + """" + " = '" & object_id & "' ")
-      End If
-     ' MsgBox "insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') "
-      ' Dim a1, a2, a3, a4 As String
-     ' a1 = object_id
-     ' a2 = LvAssociations.ListItems(1).Text
-    '  a3 = LvAssociations.ListItems(1).SubItems(1)
-    '  a4 = LvAssociations.ListItems(1).SubItems(2)
-     ' a1 = Replace(a1, "", "'")
-      'salva atributos
-      For Cont = 1 To LvAssociations.ListItems.count
-        er = Replace(LvAssociations.ListItems(Cont).Text, "\", "9qwert2")
-      
-         Set rs = Conn.execute("insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & er & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
-      Next
-      'Conn.CommitTrans
-      
-      'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
-      LvAssociations.ListItems.Clear
-      Me.Hide
-   Else
-      MsgBox "Insira um documento para associar ao ponto", vbExclamation, "GeoSan"
-   End If
-   Set cgeo = Nothing
-
-  
-   End If
-   
+    If frmCanvas.TipoConexao <> 4 Then
+        If LvAssociations.ListItems.count > 0 Then
+            tcs.object_id = object_id
+            tcs.saveOnMemory
+            'Conn.BeginTrans
+            If object_id = "" Then
+                tcs.SaveInDatabase
+                'tcs.getSELECTBox x, y, x, y
+                '   geom_id = tcs.getSelectGeometry(0, 4)
+                Set rs = Conn.execute("SELECT max(geom_id) from points" & cgeo.GetLayerID(tcs.getCurrentLayer))
+                Conn.execute "update points" & cgeo.GetLayerID(tcs.getCurrentLayer) & " set object_id = geom_id where geom_id =" & rs(0).value
+                object_id = rs(0).value
+                rs.Close
+                Set rs = Nothing
+                tcs.plotView
+                'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
+            Else
+                Set rs = Conn.execute("delete from X_Files where object_id_ = '" & object_id & "' ")
+            End If
+            'salva atributos
+            For Cont = 1 To LvAssociations.ListItems.count
+                Set rs = Conn.execute("insert into X_Files (object_id_, path_, file_, extension_) values ('" & object_id & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
+            Next
+            'Conn.CommitTrans
+            'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
+            LvAssociations.ListItems.Clear
+            Me.Hide
+        Else
+            MsgBox "Insira um documento para associar ao ponto", vbExclamation, "GeoSan"
+        End If
+        Set cgeo = Nothing
+    Else
+        a = "points"
+        b = "geom_id"
+        c = cgeo.GetLayerID(tcs.getCurrentLayer)
+        d = "object_id"
+        l = "points"
+        f = l + c
+        g = "X_FILES"
+        h = "PATH_"
+        i = "FILE_"
+        j = "EXTENSION_"
+        k = "OBJECT_ID_"
+        m = l + f
+        If LvAssociations.ListItems.count > 0 Then
+            tcs.object_id = object_id
+            tcs.saveOnMemory
+            'Conn.BeginTrans
+            If object_id = "" Then
+                tcs.SaveInDatabase
+                'tcs.getSELECTBox x, y, x, y
+                ' geom_id = tcs.getSelectGeometry(0, 4)
+                Set rs = Conn.execute("SELECT max(" + """" + b + """" + ") from " + """" + f + """" + "")
+                'MsgBox "update " + """" + f + """" + " set " + """" + d + """" + " ='" & geom_id & "'  where " + """" + b + """" + " =   '" & rs(0).value & "'"
+                Conn.execute "update " + """" + f + """" + " set " + """" + d + """" + " =" + """" + "geom_id" + """" + "  where " + """" + b + """" + " =   '" & rs(0).value & "'"
+                object_id = rs(0).value
+                rs.Close
+                Set rs = Nothing
+                tcs.plotView
+                'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
+            Else
+                Set rs = Conn.execute("delete from " + """" + g + """" + " where " + """" + k + """" + " = '" & object_id & "' ")
+            End If
+            ' MsgBox "insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') "
+            ' Dim a1, a2, a3, a4 As String
+            ' a1 = object_id
+            ' a2 = LvAssociations.ListItems(1).Text
+            '  a3 = LvAssociations.ListItems(1).SubItems(1)
+            '  a4 = LvAssociations.ListItems(1).SubItems(2)
+            ' a1 = Replace(a1, "", "'")
+            'salva atributos
+            For Cont = 1 To LvAssociations.ListItems.count
+                er = Replace(LvAssociations.ListItems(Cont).Text, "\", "9qwert2")
+                Set rs = Conn.execute("insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & er & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
+            Next
+            'Conn.CommitTrans
+            'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
+            LvAssociations.ListItems.Clear
+            Me.Hide
+        Else
+            MsgBox "Insira um documento para associar ao ponto", vbExclamation, "GeoSan"
+        End If
+        Set cgeo = Nothing
+    End If
 
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   
-   PrintErro CStr(Me.Name), "Private Sub cmdSalvarPonto", CStr(Err.Number), CStr(Err.Description), True
-
-End If
-   
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Private Sub cmdSalvarPonto", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Sub
+
 'inserir documento na lista
 Private Sub cmdInserirDoc_Click()
-On Error GoTo Trata_Erro
-  Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
-   
-Dim stringconexao As String
-
-   Dim fso As New Scripting.FileSystemObject
-   Dim ts As Scripting.TextStream
-   Dim conteudoArquivo As String, path As String, file As String, extension As String
+    On Error GoTo Trata_Erro
+    Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
+    Dim stringconexao As String
+    Dim fso As New Scripting.FileSystemObject
+    Dim ts As Scripting.TextStream
+    Dim conteudoArquivo As String, path As String, file As String, extension As String
+    
     path = ""
     file = ""
     extension = ""
-    
     Dialog.Filter = "BBA Files (*.*)|*.*"
     Dialog.Filter = "Arquivo all (*.*)|*.*|"
     Dialog.DialogTitle = "Open File"
-
     Dialog.Flags = _
     cdlOFNFileMustExist + _
     cdlOFNHideReadOnly + _
     cdlOFNLongNames + _
     cdlOFNExplorer
     Dialog.ShowOpen
- 
- 
- 
- 
- 
-
- 
-       ' If frmCanvas.TipoConexao <> 4 Then
-        
-        
-          If Dialog.filename <> "" Then
+    ' If frmCanvas.TipoConexao <> 4 Then
+    If Dialog.FileName <> "" Then
         'guarda caminho diretório
         'path = fso.GetParentFolderName(Dialog.fileName)
-        path = Left(Dialog.filename, InStrRev(Dialog.filename, "\") - 1)
+        path = Left(Dialog.FileName, InStrRev(Dialog.FileName, "\") - 1)
         'guarda nome do arquivo
         'file = fso.GetBaseName(Dialog.fileName)
-        file = mid(Dialog.filename, InStrRev(Dialog.filename, "\") + 1, InStrRev(Dialog.filename, ".") - (InStrRev(Dialog.filename, "\") + 1))
+        file = mid(Dialog.FileName, InStrRev(Dialog.FileName, "\") + 1, InStrRev(Dialog.FileName, ".") - (InStrRev(Dialog.FileName, "\") + 1))
         'guarda extensão do arquivo
         'extension = "." & fso.GetExtensionName(Dialog.fileName)
-        extension = Right(Dialog.filename, Len(Dialog.filename) - (InStrRev(Dialog.filename, ".") - 1))
+        extension = Right(Dialog.FileName, Len(Dialog.FileName) - (InStrRev(Dialog.FileName, ".") - 1))
         Set Lv = LvAssociations.ListItems.Add(, , path)
-            Lv.SubItems(1) = file
-            Lv.SubItems(2) = extension
-            'Lv.Tag = LvAssociations.ListItems.count
+        Lv.SubItems(1) = file
+        Lv.SubItems(2) = extension
+        'Lv.Tag = LvAssociations.ListItems.count
     Else
         path = ""
         file = ""
@@ -497,281 +428,192 @@ Dim stringconexao As String
         'FrmCanvas.NewAssociationPoint = False
     End If
     '
-      '  Else
-        
-       '    If Dialog.FileName <> "" Then
-        'guarda caminho diretório
-        'path = fso.GetParentFolderName(Dialog.fileName)
-     '   path = Left(Dialog.FileName, InStrRev(Dialog.FileName, "\") - 1)
-        'guarda nome do arquivo
-        'file = fso.GetBaseName(Dialog.fileName)
-       ' file = mid(Dialog.FileName, InStrRev(Dialog.FileName, "\") + 1, InStrRev(Dialog.FileName, ".") - (InStrRev(Dialog.FileName, "\") + 1))
-        'guarda extensão do arquivo
-        'extension = "." & fso.GetExtensionName(Dialog.fileName)
-      '  extension = Right(Dialog.FileName, Len(Dialog.FileName) - (InStrRev(Dialog.FileName, ".") - 1))
-        '  er = Replace(path, "\", "9qwert2")
-      '  Set Lv = LvAssociations.ListItems.Add(, , er)
-           
-           ' Lv.SubItems(1) = file
-          '  Lv.SubItems(2) = extension
-            'Lv.Tag = LvAssociations.ListItems.count
-   ' Else
-     '   path = ""
-     '   file = ""
+    '  Else
+
+    '    If Dialog.FileName <> "" Then
+    'guarda caminho diretório
+    'path = fso.GetParentFolderName(Dialog.fileName)
+    '   path = Left(Dialog.FileName, InStrRev(Dialog.FileName, "\") - 1)
+    'guarda nome do arquivo
+    'file = fso.GetBaseName(Dialog.fileName)
+    ' file = mid(Dialog.FileName, InStrRev(Dialog.FileName, "\") + 1, InStrRev(Dialog.FileName, ".") - (InStrRev(Dialog.FileName, "\") + 1))
+    'guarda extensão do arquivo
+    'extension = "." & fso.GetExtensionName(Dialog.fileName)
+    '  extension = Right(Dialog.FileName, Len(Dialog.FileName) - (InStrRev(Dialog.FileName, ".") - 1))
+    '  er = Replace(path, "\", "9qwert2")
+    '  Set Lv = LvAssociations.ListItems.Add(, , er)
+    ' Lv.SubItems(1) = file
+    '  Lv.SubItems(2) = extension
+    'Lv.Tag = LvAssociations.ListItems.count
+    ' Else
+    '   path = ""
+    '   file = ""
     '    extension = ""
-        'FrmCanvas.NewAssociationPoint = False
-        
-        
+    'FrmCanvas.NewAssociationPoint = False
     '    End If
-        
- '  End If
- 
- 
- If frmCanvas.TipoConexao <> 4 Then
-     
-  Conn.execute ("DELETE  from X_Files where object_id_ = '" & object_id & "' ")
-   
-   Else
-    Conn.execute ("DELETE  from " + """" + "X_FILES" + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' ")
-   
-   End If
-   
- 
- Salva
- 
- 
+    '  End If
+    If frmCanvas.TipoConexao <> 4 Then
+        Conn.execute ("DELETE  from X_Files where object_id_ = '" & object_id & "' ")
+    Else
+        Conn.execute ("DELETE  from " + """" + "X_FILES" + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' ")
+    End If
+    Salva
+
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   
-   PrintErro CStr(Me.Name), "Private Sub cmdInserirDoc_Click", CStr(Err.Number), CStr(Err.Description), True
-   
-End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Private Sub cmdInserirDoc_Click", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Sub
+
 Public Function Salva()
- Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
- 
-Dim a As String
-Dim b As String
-Dim c As String
-Dim d As String
-Dim e As String
-Dim f As String
-Dim g As String
-Dim h As String
-Dim i As String
-Dim j As String
-Dim k As String
-Dim l As String
-Dim m As String
-If frmCanvas.TipoConexao <> 4 Then
-     
-
-   If LvAssociations.ListItems.count > 0 Then
-      tcs.object_id = object_id
-      tcs.saveOnMemory
-      
-      'Conn.BeginTrans
-      If object_id = "" Then
-         tcs.SaveInDatabase
-         'tcs.getSELECTBox x, y, x, y
-      '   geom_id = tcs.getSelectGeometry(0, 4)
-        
-         Set rs = Conn.execute("SELECT max(geom_id) from points" & cgeo.GetLayerID(tcs.getCurrentLayer))
-         Conn.execute "update points" & cgeo.GetLayerID(tcs.getCurrentLayer) & " set object_id = geom_id where geom_id =" & rs(0).value
-         object_id = rs(0).value
-         rs.Close
-         Set rs = Nothing
-         tcs.plotView
-         'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
-         
+    Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
+    Dim a As String
+    Dim b As String
+    Dim c As String
+    Dim d As String
+    Dim e As String
+    Dim f As String
+    Dim g As String
+    Dim h As String
+    Dim i As String
+    Dim j As String
+    Dim k As String
+    Dim l As String
+    Dim m As String
     
-         End If
-      
-      'salva atributos
-    
-      For Cont = 1 To LvAssociations.ListItems.count
-     
-   
-         Set rs = Conn.execute("insert into X_Files (object_id_, path_, file_, extension_) values ('" & Val(object_id) & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
-      Next
-      'Conn.CommitTrans
-      
-      'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
-     ' LvAssociations.ListItems.Clear
-    '  Me.Hide
-  
-   End If
-   Set cgeo = Nothing
-   
-   
-   
-    
-     Else
-     
-a = "points"
-b = "geom_id"
-c = cgeo.GetLayerID(tcs.getCurrentLayer)
-d = "object_id"
-l = "points"
-f = l + c
-g = "X_FILES"
-h = "PATH_"
-i = "FILE_"
-j = "EXTENSION_"
-k = "OBJECT_ID_"
-m = l + f
-    If LvAssociations.ListItems.count > 0 Then
-      tcs.object_id = object_id
-      tcs.saveOnMemory
-      
-      'Conn.BeginTrans
-      If object_id = "" Then
-         tcs.SaveInDatabase
-         'tcs.getSELECTBox x, y, x, y
-        ' geom_id = tcs.getSelectGeometry(0, 4)
-        
-         Set rs = Conn.execute("SELECT max(" + """" + b + """" + ") from " + """" + f + """" + "")
-      'MsgBox "update " + """" + f + """" + " set " + """" + d + """" + " ='" & geom_id & "'  where " + """" + b + """" + " =   '" & rs(0).value & "'"
-      
-     
-      
-      
-      
-         Conn.execute "update " + """" + f + """" + " set " + """" + d + """" + " =" + """" + "geom_id" + """" + "  where " + """" + b + """" + " =   '" & rs(0).value & "'"
-         
-         
-         object_id = rs(0).value
-         rs.Close
-         Set rs = Nothing
-         tcs.plotView
-         'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
-         
-     
-      End If
-     ' MsgBox "insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') "
-      ' Dim a1, a2, a3, a4 As String
-     ' a1 = object_id
-     ' a2 = LvAssociations.ListItems(1).Text
-    '  a3 = LvAssociations.ListItems(1).SubItems(1)
-    '  a4 = LvAssociations.ListItems(1).SubItems(2)
-     ' a1 = Replace(a1, "", "'")
-      'salva atributos
-      For Cont = 1 To LvAssociations.ListItems.count
-        er = Replace(LvAssociations.ListItems(Cont).Text, "\", "9qwert2")
-      
-         Set rs = Conn.execute("insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & er & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
-      Next
-      'Conn.CommitTrans
-      
-      'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
-   '   LvAssociations.ListItems.Clear
-     ' Me.Hide
-  
-   End If
-   Set cgeo = Nothing
-
-  
-   End If
- 
-   
-   
- 
-
-
-
+    If frmCanvas.TipoConexao <> 4 Then
+        If LvAssociations.ListItems.count > 0 Then
+            tcs.object_id = object_id
+            tcs.saveOnMemory
+            'Conn.BeginTrans
+            If object_id = "" Then
+                tcs.SaveInDatabase
+                'tcs.getSELECTBox x, y, x, y
+                '   geom_id = tcs.getSelectGeometry(0, 4)
+                Set rs = Conn.execute("SELECT max(geom_id) from points" & cgeo.GetLayerID(tcs.getCurrentLayer))
+                Conn.execute "update points" & cgeo.GetLayerID(tcs.getCurrentLayer) & " set object_id = geom_id where geom_id =" & rs(0).value
+                object_id = rs(0).value
+                rs.Close
+                Set rs = Nothing
+                tcs.plotView
+                'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
+            End If
+            'salva atributos
+            For Cont = 1 To LvAssociations.ListItems.count
+                Set rs = Conn.execute("insert into X_Files (object_id_, path_, file_, extension_) values ('" & Val(object_id) & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
+            Next
+            'Conn.CommitTrans
+            'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
+            ' LvAssociations.ListItems.Clear
+            '  Me.Hide
+        End If
+        Set cgeo = Nothing
+    Else
+        a = "points"
+        b = "geom_id"
+        c = cgeo.GetLayerID(tcs.getCurrentLayer)
+        d = "object_id"
+        l = "points"
+        f = l + c
+        g = "X_FILES"
+        h = "PATH_"
+        i = "FILE_"
+        j = "EXTENSION_"
+        k = "OBJECT_ID_"
+        m = l + f
+        If LvAssociations.ListItems.count > 0 Then
+            tcs.object_id = object_id
+            tcs.saveOnMemory
+            'Conn.BeginTrans
+            If object_id = "" Then
+                tcs.SaveInDatabase
+                'tcs.getSELECTBox x, y, x, y
+                ' geom_id = tcs.getSelectGeometry(0, 4)
+                Set rs = Conn.execute("SELECT max(" + """" + b + """" + ") from " + """" + f + """" + "")
+                'MsgBox "update " + """" + f + """" + " set " + """" + d + """" + " ='" & geom_id & "'  where " + """" + b + """" + " =   '" & rs(0).value & "'"
+                Conn.execute "update " + """" + f + """" + " set " + """" + d + """" + " =" + """" + "geom_id" + """" + "  where " + """" + b + """" + " =   '" & rs(0).value & "'"
+                object_id = rs(0).value
+                rs.Close
+                Set rs = Nothing
+                tcs.plotView
+                'tdb.updateObjectIdInt geom_id, CStr(geom_id), 4
+            End If
+            ' MsgBox "insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & LvAssociations.ListItems(Cont).Text & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') "
+            ' Dim a1, a2, a3, a4 As String
+            ' a1 = object_id
+            ' a2 = LvAssociations.ListItems(1).Text
+            '  a3 = LvAssociations.ListItems(1).SubItems(1)
+            '  a4 = LvAssociations.ListItems(1).SubItems(2)
+            ' a1 = Replace(a1, "", "'")
+            'salva atributos
+            For Cont = 1 To LvAssociations.ListItems.count
+                er = Replace(LvAssociations.ListItems(Cont).Text, "\", "9qwert2")
+                Set rs = Conn.execute("insert into " + """" + g + """" + "(" + """" + k + """" + "," + """" + h + """" + "," + """" + i + """" + "," + """" + j + """" + ") values ('" & object_id & "', '" & er & "', '" & LvAssociations.ListItems(Cont).SubItems(1) & "', '" & LvAssociations.ListItems(Cont).SubItems(2) & "') ")
+            Next
+            'Conn.CommitTrans
+            'MsgBox "Associação concluída com sucesso", vbExclamation, "GeoSan"
+            '   LvAssociations.ListItems.Clear
+            ' Me.Hide
+        End If
+        Set cgeo = Nothing
+    End If
 End Function
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 'remover documento da lista
 Private Sub cmdRemoverDoc_Click()
-On Error GoTo Trata_Erro
-   Dim Cont As Integer
-   
-   
-   
-   
-   
-         If frmCanvas.TipoConexao <> 4 Then
-     
-  Conn.execute ("DELETE  from X_Files where object_id_ = '" & object_id & "' ")
-   
-   Else
-    Conn.execute ("DELETE  from " + """" + "X_FILES" + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' ")
-   
-   End If
-   
+    On Error GoTo Trata_Erro
+    Dim Cont As Integer
 
-   
-   'verifica se existe documento para excluir
-   If LvAssociations.ListItems.count > 0 Then
-      'verifica se algum documento está selecionado
-      If LvAssociations.SelectedItem.Selected = True Then
-         For Cont = 1 To LvAssociations.ListItems.count
-            If LvAssociations.ListItems.Item(Cont).Selected = True Then
-               LvAssociations.ListItems.Remove (Cont)
-                Salva
-               Exit Sub
-            End If
-         Next
-      Else
-         MsgBox "Selecione um documento para excluir", vbExclamation, "GeoSan"
-      End If
-   Else
-      MsgBox "Este ponto não possui documento(s) para exclusão", vbExclamation, "GeoSan"
-   End If
+    If frmCanvas.TipoConexao <> 4 Then
+        Conn.execute ("DELETE  from X_Files where object_id_ = '" & object_id & "' ")
+    Else
+        Conn.execute ("DELETE  from " + """" + "X_FILES" + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' ")
+    End If
+    'verifica se existe documento para excluir
+    If LvAssociations.ListItems.count > 0 Then
+        'verifica se algum documento está selecionado
+        If LvAssociations.SelectedItem.Selected = True Then
+            For Cont = 1 To LvAssociations.ListItems.count
+                If LvAssociations.ListItems.Item(Cont).Selected = True Then
+                    LvAssociations.ListItems.Remove (Cont)
+                    Salva
+                    Exit Sub
+                End If
+            Next
+        Else
+            MsgBox "Selecione um documento para excluir", vbExclamation, "GeoSan"
+        End If
+    Else
+        MsgBox "Este ponto não possui documento(s) para exclusão", vbExclamation, "GeoSan"
+    End If
 
-     
-   
-   
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   
-   PrintErro CStr(Me.Name), "Private Sub cmdRemoverDoc_Click", CStr(Err.Number), CStr(Err.Description), True
-   
-End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Private Sub cmdRemoverDoc_Click", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Sub
 
 Private Sub Command1_Click()
-cmdSalvarPonto_Click
+    cmdSalvarPonto_Click
 End Sub
 
 Private Sub Form_Load()
-   'LoozeXP1.InitSubClassing
+    'LoozeXP1.InitSubClassing
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-On Error GoTo Trata_Erro
-
-   
-   'LoozeXP1.EndWinXPCSubClassing
+    On Error GoTo Trata_Erro
+    'LoozeXP1.EndWinXPCSubClassing
 
 Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   MsgBox Err.Description & " - " & Err.Number
-End If
-
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        MsgBox Err.Description & " - " & Err.Number
+    End If
 End Sub
-
 
