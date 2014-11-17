@@ -405,9 +405,10 @@ Private Sub cmdInserirDoc_Click()
     cdlOFNHideReadOnly + _
     cdlOFNLongNames + _
     cdlOFNExplorer
-    Dialog.ShowOpen
-    ' If frmCanvas.TipoConexao <> 4 Then
-    If Dialog.FileName <> "" Then
+    Dialog.CancelError = True                                           'ativa para ser sensível ao cancelamento da caixa de seleção de arquivos
+    Dialog.ShowOpen                                                     'abrea a caixa de diálogo para o usuário selecionar um documento
+    'If frmCanvas.TipoConexao <> 4 Then
+    If Dialog.FileName <> "" Then                                       'se o usuário selecionou um documento
         'guarda caminho diretório
         'path = fso.GetParentFolderName(Dialog.fileName)
         path = Left(Dialog.FileName, InStrRev(Dialog.FileName, "\") - 1)
@@ -421,7 +422,7 @@ Private Sub cmdInserirDoc_Click()
         Lv.SubItems(1) = file
         Lv.SubItems(2) = extension
         'Lv.Tag = LvAssociations.ListItems.count
-    Else
+    Else                                                                'se o usuário não selecionou um documento
         path = ""
         file = ""
         extension = ""
@@ -452,14 +453,21 @@ Private Sub cmdInserirDoc_Click()
     'FrmCanvas.NewAssociationPoint = False
     '    End If
     '  End If
-    If frmCanvas.TipoConexao <> 4 Then
-        Conn.execute ("DELETE  from X_Files where object_id_ = '" & object_id & "' ")
-    Else
-        Conn.execute ("DELETE  from " + """" + "X_FILES" + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' ")
-    End If
+'    If frmCanvas.TipoConexao <> 4 Then
+'        Conn.execute ("DELETE  from X_Files where object_id_ = '" & object_id & "' ")
+'    Else
+'        Conn.execute ("DELETE  from " + """" + "X_FILES" + """" + " where " + """" + "OBJECT_ID_" + """" + " = '" & object_id & "' ")
+'    End If
     Salva
 
 Trata_Erro:
+    Select Case Err
+    Case 32755 '  Cancelou a caixa de diálogo de seleção de arquivos
+        Exit Sub
+    Case Else
+        MsgBox "Erro não esperado FrmAssociation. Err " & Err & " : " & Error
+    End Select
+    
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else

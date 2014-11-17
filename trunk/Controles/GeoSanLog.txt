@@ -20,3 +20,14 @@ DESCRIÇÃO      Object variable or With block variable not set
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           17/11/2014 16:38:20 
+USUÁRIO        pinheiro
+VERSÃO         07.00.12
+MÓDULO         FrmAssociation
+EVENTO         Private Sub cmdInserirDoc_Click
+LINHA          0
+MOTIVO         32755
+DESCRIÇÃO      Cancel was selected.
+
+-----------------------------------------------------------------------------------------------------
+
