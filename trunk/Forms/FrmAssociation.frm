@@ -7,13 +7,13 @@ Begin VB.Form FrmAssociation
    ClientHeight    =   3930
    ClientLeft      =   45
    ClientTop       =   285
-   ClientWidth     =   4965
+   ClientWidth     =   9135
    Icon            =   "FrmAssociation.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   3930
-   ScaleWidth      =   4965
+   ScaleWidth      =   9135
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin MSComDlg.CommonDialog Dialog 
@@ -28,7 +28,7 @@ Begin VB.Form FrmAssociation
       Left            =   30
       TabIndex        =   1
       Top             =   0
-      Width           =   4755
+      Width           =   8955
       Begin VB.CommandButton cmdAbrirDoc 
          Height          =   360
          Left            =   660
@@ -75,14 +75,14 @@ Begin VB.Form FrmAssociation
       Left            =   30
       TabIndex        =   0
       Top             =   630
-      Width           =   4755
+      Width           =   8955
       Begin MSComctlLib.ListView LvAssociations 
          Height          =   2745
          Left            =   120
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   240
-         Width           =   4545
-         _ExtentX        =   8017
+         Width           =   8745
+         _ExtentX        =   15425
          _ExtentY        =   4842
          View            =   3
          LabelWrap       =   -1  'True
@@ -123,52 +123,6 @@ Begin VB.Form FrmAssociation
          EndProperty
       End
    End
-   Begin MSComctlLib.ListView ListView1 
-      Height          =   2145
-      Left            =   0
-      TabIndex        =   5
-      Top             =   0
-      Width           =   4545
-      _ExtentX        =   8017
-      _ExtentY        =   3784
-      View            =   3
-      LabelWrap       =   -1  'True
-      HideSelection   =   0   'False
-      HideColumnHeaders=   -1  'True
-      FullRowSelect   =   -1  'True
-      GridLines       =   -1  'True
-      HotTracking     =   -1  'True
-      HoverSelection  =   -1  'True
-      _Version        =   393217
-      ForeColor       =   -2147483640
-      BackColor       =   -2147483643
-      BorderStyle     =   1
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "MS Sans Serif"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      NumItems        =   3
-      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Key             =   "Diretório"
-         Object.Width           =   2540
-      EndProperty
-      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         SubItemIndex    =   1
-         Key             =   "Documento"
-         Object.Width           =   2540
-      EndProperty
-      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         SubItemIndex    =   2
-         Key             =   "Extenção"
-         Object.Width           =   2540
-      EndProperty
-   End
 End
 Attribute VB_Name = "FrmAssociation"
 Attribute VB_GlobalNameSpace = False
@@ -196,9 +150,9 @@ Public Function init(ObjectID_ As String, mtcs As TeCanvas, mtdb As TeDatabase, 
     X = mx
     Y = my
     LvAssociations.ListItems.Clear
-    'LvAssociations.ColumnHeaders(1).Width = 2100
-    'LvAssociations.ColumnHeaders(2).Width = LvAssociations.Width - 2600
-    'LvAssociations.ColumnHeaders(3).Width = LvAssociations.Width - 3550
+    LvAssociations.ColumnHeaders(1).Width = 1500
+    LvAssociations.ColumnHeaders(2).Width = LvAssociations.Width - 2600
+    LvAssociations.ColumnHeaders(3).Width = LvAssociations.Width - 3000
     object_id = ObjectID_
     af = "PATH_"
     ag = "FILE_"
@@ -464,8 +418,8 @@ Trata_Erro:
     Select Case Err
     Case 32755 '  Cancelou a caixa de diálogo de seleção de arquivos
         Exit Sub
-    Case Else
-        MsgBox "Erro não esperado FrmAssociation. Err " & Err & " : " & Error
+'    Case Else
+'        MsgBox "Erro não esperado FrmAssociation. Err " & Err & " : " & Error
     End Select
     
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -476,6 +430,7 @@ Trata_Erro:
 End Sub
 
 Public Function Salva()
+    On Error GoTo Trata_Erro
     Dim Cont As Integer, geom_id As Long, cgeo As New clsGeoReference
     Dim a As String
     Dim b As String
@@ -566,6 +521,13 @@ Public Function Salva()
             ' Me.Hide
         End If
         Set cgeo = Nothing
+    End If
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro CStr(Me.Name), "Private Sub Salva", CStr(Err.Number), CStr(Err.Description), True
     End If
 End Function
 
