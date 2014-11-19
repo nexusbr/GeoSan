@@ -31,3 +31,58 @@ DESCRIÇÃO      Cancel was selected.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           19/11/2014 10:37:25 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:37:49 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:39:34 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:41:07 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:44:26 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+

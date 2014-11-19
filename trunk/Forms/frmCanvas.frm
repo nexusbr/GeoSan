@@ -830,6 +830,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
                                 MsgBox "A conexão com o banco de dados comercial não foi configurada para realizar esta operação.", vbInformation, "Conexão Comercial"
                             End If
                         Case "kdelete"
+                            Tr.TerraEvent = tg_SelectObject             'insere um evento de seleção para que ao apagar ele saber que foi selecionado um ponto com link para um documento o qual será apagado
                             Tr.Delete
                         Case "ksearchinnetwork" ''obtem a quantidade de poligonos selecionados em memória
                             If .getSelectCount(lines) = 1 Then
@@ -1317,6 +1318,7 @@ On Error GoTo Trata_Erro
                   If LastDocument <> TCanvas.getSelectObjectId(0, points) Then
                      LastDocument = TCanvas.getSelectObjectId(0, points)
                      frm.init TCanvas.getSelectObjectId(0, points), TCanvas, TeDatabase1
+                     LastDocument = ""
                   Else
                     LastDocument = ""
                   End If
