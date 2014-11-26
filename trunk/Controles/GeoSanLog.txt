@@ -86,3 +86,36 @@ DESCRIÇÃO      Sintaxe incorreta próxima a '='.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           26/11/2014 15:18:01 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           26/11/2014 15:19:25 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           26/11/2014 15:24:56 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
