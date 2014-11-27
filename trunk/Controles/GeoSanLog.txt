@@ -119,3 +119,146 @@ DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           27/11/2014 02:36:46 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:46:40 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:49:12 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:50:11 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217913
+DESCRIÇÃO      Error converting data type varchar to numeric.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:58:00 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217913
+DESCRIÇÃO      Error converting data type varchar to numeric.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:04:28 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:06:50 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:10:14 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:18:29 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:19:54 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:23:41 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near ','.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:42:24 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:42:55 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
+
+-----------------------------------------------------------------------------------------------------
+

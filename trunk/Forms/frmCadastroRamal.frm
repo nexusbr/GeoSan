@@ -1492,8 +1492,11 @@ Private Sub cmdConfirmar_Click()
             rsRamal.Fields("Comprimento_Ramal").value = IIf(IsNumeric(txtComprimentoRamal), txtComprimentoRamal, 0)
             For i = 1 To lvLigacoes.ListItems.count
                 If lvLigacoes.ListItems(i).Checked = True Then
-                    'MsgBox lvLigacoes.ListItems(1).Tag
-                    rsRamal!COD_LOGRAD = Val(lvLigacoes.ListItems(1).Tag) 'PEGA O PRIMEIRO LOGRADOURO SELECIONADO NA LISTA
+                    If lvLigacoes.ListItems(1).Tag <> "" Then
+                        rsRamal!COD_LOGRAD = Val(lvLigacoes.ListItems(1).Tag)       'PEGA O PRIMEIRO LOGRADOURO SELECIONADO NA LISTA
+                    Else                                                            'não existe e é nulo, deveria estar preenchido pela empresa de saneamento, mas não foi
+                        rsRamal!COD_LOGRAD = 0                                      'coloca zero no código do logradouro, pois não existe cadastrado, deveria existir no banco comercial
+                    End If
                     Exit For
                 End If
             Next
@@ -1563,23 +1566,20 @@ Private Sub cmdConfirmar_Click()
                     If rs!tipo <> "" Then
                         strTipo = Trim(rs!tipo)
                     Else
-                        strTipo = ""           'TIPO DA LIGACAO
+                        strTipo = "0"           'TIPO DA LIGACAO
                     End If
                     If rs!ECONOMIAS <> "" Then
                         strEcon = Trim(rs!ECONOMIAS)
                     Else
-                        strEcon = ""  'QUANTIDADE DE ECONOMIAS NA LIGAÇÃO
+                        strEcon = "0"  'QUANTIDADE DE ECONOMIAS NA LIGAÇÃO
                     End If
                     If UCase(rs!HIDROMETRADO) = "SIM" Or UCase(rs!HIDROMETRADO) = "NAO" Then
                         strHidr = LCase(rs!HIDROMETRADO)
                     Else
-                        strHidr = "" 'ARMAZENA EM LETRA MINÚSCULA
+                        strHidr = "0" 'ARMAZENA EM LETRA MINÚSCULA
                     End If
                     If frmCanvas.TipoConexao <> 4 Then
                         str = "INSERT INTO " & TB_Ligacoes & " (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
-                        If strTipo = "" Then
-                            strTipo = 0
-                        End If
                         str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "'," & strEcon & ",0)"
                         ' MsgBox str
                     Else
@@ -1730,7 +1730,7 @@ Private Sub cmdConfirmar_Click()
                     If rs!ECONOMIAS <> "" Then
                         strEcon = Trim(rs!ECONOMIAS)
                     Else
-                        strEcon = ""  'QUANTIDADE DE ECONOMIAS NA LIGAÇÃO
+                        strEcon = "1"  'QUANTIDADE DE ECONOMIAS NA LIGAÇÃO
                     End If
                     If UCase(rs!HIDROMETRADO) = "SIM" Or UCase(rs!HIDROMETRADO) = "NAO" Then
                         strHidr = LCase(rs!HIDROMETRADO)
