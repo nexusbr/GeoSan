@@ -6,13 +6,13 @@ Begin VB.Form FrmCadastroRamal
    ClientHeight    =   8295
    ClientLeft      =   45
    ClientTop       =   315
-   ClientWidth     =   9270
+   ClientWidth     =   12930
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   8295
-   ScaleWidth      =   9270
+   ScaleWidth      =   12930
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CheckBox chkExecFiltroPorLote 
@@ -103,7 +103,7 @@ Begin VB.Form FrmCadastroRamal
    Begin VB.CommandButton cmdConsultarLigacoes 
       Caption         =   "Consultar consumo"
       Height          =   390
-      Left            =   5130
+      Left            =   8850
       TabIndex        =   31
       Top             =   7740
       Width           =   1740
@@ -111,7 +111,7 @@ Begin VB.Form FrmCadastroRamal
    Begin VB.CommandButton cmdFechar 
       Caption         =   "Fechar"
       Height          =   390
-      Left            =   6930
+      Left            =   10650
       TabIndex        =   30
       Top             =   7740
       Width           =   1065
@@ -119,7 +119,7 @@ Begin VB.Form FrmCadastroRamal
    Begin VB.CommandButton cmdConfirmar 
       Caption         =   "Salvar"
       Height          =   390
-      Left            =   8040
+      Left            =   11760
       TabIndex        =   29
       Top             =   7740
       Width           =   1035
@@ -130,11 +130,11 @@ Begin VB.Form FrmCadastroRamal
       Left            =   150
       TabIndex        =   25
       Top             =   150
-      Width           =   8925
+      Width           =   12645
       Begin VB.OptionButton optConsumidor 
          Caption         =   "Consumidor"
          Height          =   225
-         Left            =   6255
+         Left            =   9120
          TabIndex        =   6
          Top             =   360
          Width           =   2085
@@ -142,7 +142,7 @@ Begin VB.Form FrmCadastroRamal
       Begin VB.OptionButton optEndereço 
          Caption         =   "Endereço"
          Height          =   225
-         Left            =   3945
+         Left            =   6105
          TabIndex        =   4
          Top             =   360
          Width           =   2220
@@ -159,7 +159,7 @@ Begin VB.Form FrmCadastroRamal
          Caption         =   ">>"
          Default         =   -1  'True
          Height          =   360
-         Left            =   8415
+         Left            =   12015
          TabIndex        =   8
          Top             =   600
          Width           =   405
@@ -167,7 +167,7 @@ Begin VB.Form FrmCadastroRamal
       Begin VB.OptionButton optInscricao 
          Caption         =   "Ligação / Matrícula"
          Height          =   210
-         Left            =   1995
+         Left            =   3120
          TabIndex        =   2
          Top             =   360
          Width           =   1740
@@ -183,10 +183,10 @@ Begin VB.Form FrmCadastroRamal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         Left            =   6270
+         Left            =   9150
          TabIndex        =   7
          Top             =   600
-         Width           =   2085
+         Width           =   2805
       End
       Begin VB.TextBox txtEndereco 
          BeginProperty Font 
@@ -199,10 +199,10 @@ Begin VB.Form FrmCadastroRamal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         Left            =   3930
+         Left            =   6090
          TabIndex        =   5
          Top             =   600
-         Width           =   2265
+         Width           =   2865
       End
       Begin VB.TextBox txtNumLigacao 
          BeginProperty Font 
@@ -218,7 +218,7 @@ Begin VB.Form FrmCadastroRamal
          Left            =   90
          TabIndex        =   1
          Top             =   600
-         Width           =   1845
+         Width           =   2925
       End
       Begin VB.TextBox txtInscricao 
          BeginProperty Font 
@@ -231,10 +231,10 @@ Begin VB.Form FrmCadastroRamal
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         Left            =   2010
+         Left            =   3120
          TabIndex        =   3
          Top             =   600
-         Width           =   1845
+         Width           =   2805
       End
    End
    Begin VB.Frame Frame4 
@@ -243,14 +243,14 @@ Begin VB.Form FrmCadastroRamal
       Left            =   150
       TabIndex        =   17
       Top             =   1620
-      Width           =   8925
+      Width           =   12645
       Begin MSComctlLib.ListView lvLigacoes 
          Height          =   2055
          Left            =   240
          TabIndex        =   45
          Top             =   240
-         Width           =   8295
-         _ExtentX        =   14631
+         Width           =   12135
+         _ExtentX        =   21405
          _ExtentY        =   3625
          View            =   3
          LabelEdit       =   1
@@ -270,7 +270,7 @@ Begin VB.Form FrmCadastroRamal
          BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
             Key             =   "LigMat"
             Text            =   "Inscrição"
-            Object.Width           =   3529
+            Object.Width           =   4586
          EndProperty
          BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
             SubItemIndex    =   1
@@ -282,13 +282,13 @@ Begin VB.Form FrmCadastroRamal
             SubItemIndex    =   2
             Key             =   "Ende"
             Text            =   "Endereço"
-            Object.Width           =   3351
+            Object.Width           =   6174
          EndProperty
          BeginProperty ColumnHeader(4) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
             SubItemIndex    =   3
             Key             =   "Cons"
             Text            =   "Consumidor"
-            Object.Width           =   3528
+            Object.Width           =   6174
          EndProperty
          BeginProperty ColumnHeader(5) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
             SubItemIndex    =   4
