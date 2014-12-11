@@ -1078,304 +1078,11 @@ Trata_Erro:
     End If
 
 End Function
-
-'Private Sub CARREGA_GRID(ByVal rs As Recordset)
-'On Error GoTo Trata_Erro
+' Subrotina para salvar o ramal e ligação(ões)
+' esta subrotina tem duas fazes distintas uma para quando o usuário está desenhando
+' um novo ramal e outra para quando o usuário está selecionando um ramal que já é existente
 '
-'   Do While Not rs.EOF And blnCancelar = False
-'      DoEvents
 '
-'      'Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("NRO_LIGACAO").value)
-'      Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("CLASSIFICACAO_FISCAL").value)
-'
-'      itmx.SubItems(1) = IIf(IsNull(rs.Fields("NRO_LIGACAO").value), "", rs.Fields("NRO_LIGACAO").value)
-'
-'      itmx.SubItems(2) = IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
-'      itmx.SubItems(3) = IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value)
-'
-'      'incluído para mostrar o tipo da ligação
-'      itmx.SubItems(4) = IIf(IsNull(rs.Fields("TIPO").value), "", rs.Fields("TIPO").value)
-'
-'      itmx.Tag = rs.Fields("codlograd").value
-'      i = i + 1
-'      Me.lblResultado.Caption = "Mostrando " & i & " de " & i & " referencias encontradas"
-'      If i >= 500 Then
-'         j = i
-'         Do While Not rs.EOF And blnCancelar = False
-'             rs.MoveNext
-'             j = j + 1
-'         Loop
-'         Me.lblResultado.Caption = "Mostrando " & i & " referencias de " & j & " encontradas"
-'         Exit Do
-'      End If
-'
-'      rs.MoveNext
-'   Loop
-'Trata_Erro:
-'
-'   If Err.Number = 0 Or Err.Number = 20 Then
-'      Resume Next
-'   Else
-'
-'      PrintErro CStr(Me.Name), "Private Sub CARREGA_GRID", CStr(Err.Number), CStr(Err.Description), True
-'
-'   End If
-'End Sub
-
-
-'''Private Sub cmdConfirmar_Click()
-'''
-'''   On Error GoTo Trata_Erro
-'''   Dim intlocalerro As Integer
-'''   Dim rsCria As ADODB.Recordset
-'''   Dim a As Integer
-'''   Dim cgeo As New clsGeoReference
-'''   Dim x As Double
-'''   Dim y As Double
-'''   Dim str As String
-'''
-'''   Dim strNroL As String 'NÚMERO DA LIGACAO
-'''   Dim strInsc As String 'NUMERO DA INSCRIÇÃO
-'''   Dim strTipo As String 'TIPO DA LIGACAO
-'''   Dim strCons As String 'CONSUMO DA LIGACAO
-'''   Dim strEcon As String 'QUANTIDADE DE ECONOMIAS NA LIGAÇÃO
-'''   Dim strHidr As String
-'''
-'''   Set rsCria = New ADODB.Recordset 'recordset utilizado para criar o regitro na tabela
-'''   Dim strNroLigaSel As String
-'''   'Conn.BeginTrans
-'''
-'''   Conn.Close
-'''   Conn.Open
-'''
-'''   If object_id_ramal = "" Then 'NOVO RAMAL
-'''
-'''        str = strUser & Now
-'''
-'''        'O CAMPO ID DA TABELA É POPULADA COM A AUTO NUMERAÇÃO DA TABELA
-'''
-'''        'Set rsCria = Conn.execute("SELECT ID FROM RAMAIS_AGUA WHERE OBJECT_ID_ = '" & str & "'")
-'''
-'''        rsCria.Open "RAMAIS_AGUA", Conn, adOpenKeyset, adLockOptimistic, adCmdTable
-'''
-'''        'CRIA O RAMAL NA TABELA DE ATRIBUTOS
-'''        rsCria.AddNew
-'''        rsCria.Fields("OBJECT_ID_").value = str
-'''        rsCria.Fields("OBJECT_ID_TRECHO").value = "0"
-'''        rsCria.Update
-'''
-'''        object_id_ramal = rsCria.Fields("ID").value
-'''        rsCria.Close
-'''
-'''        tcs.object_id = object_id_ramal
-'''        tcs.saveOnMemory
-'''        tcs.SaveInDatabase
-'''
-'''        'LOCALIZA A COORDENADA DO FINAL DA LINHA DO RAMAL
-'''        tdbramais.getPointOfLine 0, object_id_ramal, 1, x, y
-'''
-'''        'INSERE PONTO NO FINAL DA LINHA DO RAMAL
-'''        tdbramais.addPoint object_id_ramal, x, y
-'''
-'''        tdbramais.getPointOfLine 0, object_id_ramal, 0, x, y
-'''        'tdb.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
-'''
-'''        Object_id_trecho = ramal_Object_id_trecho 'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK
-'''
-'''   Else
-'''
-'''      'O RAMAL JA EXISTE, RESETA AS INFORMAÇÕES DE CONSUMIDORES ASSOCIADOS A ELE
-'''      Conn.execute "DELETE FROM RAMAIS_AGUA_LIGACAO WHERE OBJECT_ID_ = '" & object_id_ramal & "'"
-'''
-'''   End If
-'''
-'''   Dim rsRamal As ADODB.Recordset
-'''   Set rsRamal = New ADODB.Recordset
-'''
-'''   rsRamal.Open "SELECT * FROM RAMAIS_AGUA WHERE ID = " & "'" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic
-'''
-'''   If rsRamal.EOF = False Then
-'''
-'''       'ATUALIZA A TABELA DE RAMAIS COMPLEMENTANDO AS INFORMAÇÕES
-'''
-'''       rsRamal.Fields("Distancia_Lado").value = IIf(IsNumeric(txtDistanciaLado), txtDistanciaLado, 0)
-'''       rsRamal.Fields("Distancia_Testada").value = IIf(IsNumeric(txtDistanciaTestada), txtDistanciaTestada, 0)
-'''       rsRamal.Fields("Profundidade_RAMAL").value = IIf(IsNumeric(txtProfundidade), txtProfundidade, 0)
-'''       rsRamal.Fields("Comprimento_Ramal").value = IIf(IsNumeric(txtComprimentoRamal), txtComprimentoRamal, 0)
-'''
-'''       For i = 1 To lvLigacoes.ListItems.Count
-'''          If lvLigacoes.ListItems(i).Checked = True Then
-'''              rsRamal!cod_lograd = lvLigacoes.ListItems(1).Tag 'PEGA O PRIMEIRO LOGRADOURO SELECIONADO NA LISTA
-'''              Exit For
-'''          End If
-'''       Next
-'''
-'''      If optDesconhecido Then rsRamal.Fields("posicionamento_lote").value = 1
-'''      If optEsquerdo Then rsRamal.Fields("posicionamento_lote").value = 2
-'''      If optCentro Then rsRamal.Fields("posicionamento_lote").value = 3
-'''      If optDireito Then rsRamal.Fields("posicionamento_lote").value = 4
-'''
-'''      rsRamal!Object_id_ = object_id_ramal
-'''      rsRamal!Object_id_trecho = Object_id_trecho
-'''      rsRamal!usuario_log = strUser
-'''      rsRamal!DATA_LOG = Format(Now, "DD/MM/YY HH:MM")
-'''
-'''      rsRamal.Update
-'''
-'''   End If
-'''   rsRamal.Close
-'''
-'''
-'''   'RE-ASSOCIA AS LIGAÇÕES AO RAMAL
-'''   strNroLigaSel = ""
-'''
-'''   For a = 1 To lvLigacoes.ListItems.Count
-'''       If lvLigacoes.ListItems(a).Checked Then 'PARA CADA ITEM SELECIONADO NA LISTA
-'''          If strNroLigaSel <> "" Then
-'''             strNroLigaSel = strNroLigaSel & ",'" & lvLigacoes.ListItems(a).SubItems(1) & "'"
-'''          Else
-'''             strNroLigaSel = "'" & lvLigacoes.ListItems(a).SubItems(1) & "'"
-'''          End If
-'''       End If
-'''   Next
-'''
-'''
-'''   If strNroLigaSel <> "" Then
-'''
-'''      'SELECIONA AS INFORMAÇÕES DOS CONSUMIDORES NA NXGS_V_LIG_COMERCIAL
-'''
-'''      str = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, COD_LOGRADOURO, "
-'''      str = str & "TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL WHERE NRO_LIGACAO IN (" & strNroLigaSel & ")"
-'''
-'''      Set rs = New ADODB.Recordset
-'''      rs.Open str, Conn, adOpenDynamic, adLockReadOnly, adCmdText
-'''
-'''       If rs.EOF = False Then
-'''         Do While Not rs.EOF
-'''
-'''            strNroL = Trim(rs!NRO_LIGACAO)                 'NÚMERO DA LIGACAO
-'''
-'''            If Len(rs!CLASSIFICACAO_FISCAL) > 0 Then
-'''               strInsc = Trim(rs!CLASSIFICACAO_FISCAL)
-'''            Else
-'''               strInsc = ""  'NUMERO DA INSCRIÇÃO
-'''            End If
-'''
-'''            If Len(rs!tipo) > 0 Then
-'''               strTipo = Trim(mid(rs!tipo, 1, 20))
-'''            Else
-'''               strTipo = ""  'TIPO DA LIGACAO
-'''            End If
-'''
-'''            If Len(rs!ECONOMIAS) > 0 Then
-'''               strEcon = Trim(rs!ECONOMIAS)
-'''            Else
-'''               strEcon = 1  'QUANTIDADE DE ECONOMIAS NA LIGAÇÃO
-'''            End If
-'''
-'''            If UCase(rs!HIDROMETRADO) = "SIM" Then 'IDENTIFICA E ARMAZENA EM LETRA MINÚSCULA
-'''               strHidr = "sim"
-'''            ElseIf UCase(rs!HIDROMETRADO) = "NAO" Or UCase(rs!HIDROMETRADO) = "NÃO" Then
-'''               strHidr = "nao"
-'''            Else
-'''               strHidr = ""
-'''            End If
-'''
-'''            str = "INSERT INTO RAMAIS_AGUA_LIGACAO (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
-'''            str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "','" & strEcon & "','0')"
-'''
-'''            Conn.execute (str)
-'''            rs.MoveNext
-'''
-'''         Loop
-'''      End If
-'''      rs.Close
-'''
-'''   End If
-'''
-'''   'INSERINDO RAMAL FICTÍCIO SE ESTE FOI SELECIONADO
-'''   If CInt(Me.txtQtd.Text) > 0 Then
-'''
-'''      'CAPTURA O CONSUMO DIGITADO E CONVERTE SE NECESSÁRIO
-'''      If CDbl(Me.txtConsumoFicticia.Text) > 0 Then
-'''         If Me.optMetroCubico.value = True Then
-'''             'SE FOR METRO CUBICO, CONVERTE PARA LITROS POR SEGUNDO
-'''             strCons = Replace(Me.txtConsumoFicticia.Text, ".", ",") * 0.00038580246
-'''         Else
-'''             strCons = Replace(Me.txtConsumoFicticia.Text, ".", ",")
-'''         End If
-'''      Else
-'''         strCons = 0
-'''      End If
-'''
-'''      strCons = Replace(strCons, ",", ".") 'troca a vírgula pelo ponto
-'''
-'''      For i = 0 To CInt(Me.txtQtd.Text) - 1
-'''
-'''         str = "INSERT INTO RAMAIS_AGUA_LIGACAO (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
-'''         str = str & "VALUES ('" & object_id_ramal & "','999" & object_id_ramal & i & "','999" & object_id_ramal & i & "','FICTÍCIA','nao','1','" & strCons & "')"
-'''
-'''         Conn.execute (str)
-'''
-'''      Next
-'''
-'''   End If
-'''
-'''
-'''   tcs.plotView
-'''   Unload Me
-'''
-'''
-'''Trata_Erro:
-'''    If Err.Number = 0 Or Err.Number = 20 Then
-'''        Resume Next
-'''    ElseIf Err.Number = -2147418113 Then ' Erro geral de rede
-'''        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência. Reinicie o sistema.", vbInformation
-'''        Open App.path & "\Controles\GeoSanLog.txt" For Append As #1
-'''        Print #1, Now & " " & strUser & " " & Versao_Geo & " - frmCadastroRamalAgua - Private Sub cmdConfirmar_Click() - Local Num: " & intlocalerro & " - Erro Num: " & Err.Number & " - " & Err.Description & " Erro Geral de Rede - Programa foi fechado."
-'''        Close #1
-'''        End
-'''
-'''    ElseIf Err.Number = -2147417848 Then ' automation error
-'''        'Conn.RollbackTrans
-'''        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência. Reinicie o sistema.", vbInformation
-'''        Open App.path & "\Controles\GeoSanLog.txt" For Append As #1
-'''        Print #1, Now & " " & strUser & " " & Versao_Geo & " - frmCadastroRamalAgua - Private Sub cmdConfirmar_Click() - Local Num: " & intlocalerro & " - Erro Num: " & Err.Number & " - " & Err.Description & " - Programa foi fechado."
-'''        Close #1
-'''        End
-'''
-'''    ElseIf Err.Number = -2147467259 Or mid(Err.Description, 1, 9) = "ORA-03114" Then 'PERDA DE CONEXÃO BANCO SQL OU ORACLE
-'''       'Conn.RollbackTrans
-'''       MsgBox "Não há conexão ativa com o banco de dados. Contate o Administrador de Rede." & Chr(13) & Chr(13) & "O Geosan será fechado.", vbinformation, "Falha de rede"
-'''       Open App.path & "\Controles\GeoSanLog.txt" For Append As #1
-'''       Print #1, Now & " " & strUser & " " & Versao_Geo & " - frmCadastroRamalAgua - Private Sub cmdConfirmar_Click() - Não há conexão ativa com a rede. Programa foi fechado."
-'''       Close #1
-'''       End
-'''    ElseIf Err.Number = -2147168227 Then ' MAX TRANSACTIONS EXCEDIDA. FECHAR E REABRIR A CONEXÃO
-'''        'MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
-'''        Conn.Close
-'''        Conn.Open
-'''        Resume
-'''    Else
-''''        If RS Is Nothing Then
-''''           If RS.State = 1 Then
-''''              RS.Close
-''''           End If
-''''        End If
-'''        tcs.Normal
-'''        tcs.Select
-'''        'Conn.RollbackTrans
-'''
-'''        Open App.path & "\Controles\GeoSanLog.txt" For Append As #1
-'''        Print #1, Now & " " & strUser & " " & Versao_Geo & " - frmCadastroRamalAgua - Private Sub cmdConfirmar_Click() - Local Num: " & intlocalerro & " - Erro Num: " & Err.Number & " - " & Err.Description
-'''        Close #1
-'''
-'''        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
-'''        Unload Me
-'''
-'''    End If
-'''End Sub
-
 Private Sub cmdConfirmar_Click()
     On Error GoTo Trata_Erro
     Dim intlocalerro As Integer
@@ -1394,9 +1101,9 @@ Private Sub cmdConfirmar_Click()
     Dim strNroLigaSel As String
 
     Set rsCria = New ADODB.Recordset 'recordset utilizado para criar o regitro na tabela
-    'Conn.BeginTrans
     Conn.Close
     Conn.Open
+    Conn.BeginTrans
     va = "NRO_LIGACAO"
     ve = "CLASSIFICACAO_FISCAL"
     vi = "COD_LOGRADOURO"
@@ -1406,11 +1113,11 @@ Private Sub cmdConfirmar_Click()
     vd = "OBJECT_ID_"
     vf = "CONSUMO_LPS"
     ve = "INSCRICAO_LOTE"
-    If object_id_ramal = "" Then 'NOVO RAMAL
+    If object_id_ramal = "" Then
+        ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FASE 1 - É UM NOVO RAMAL
         str = strUser & Now
         'O CAMPO ID DA TABELA É POPULADA COM A AUTO NUMERAÇÃO DA TABELA (TRIGGER NO ORACLE)
         Set rsCria = New ADODB.Recordset
-        '  rsCria.Open TB_Ramais, Conn, adOpenDynamic, adLockOptimistic
         If frmCanvas.TipoConexao = 1 Then
             rsCria.Open TB_Ramais, Conn, adOpenKeyset, adLockOptimistic
         ElseIf frmCanvas.TipoConexao = 2 Then
@@ -1447,11 +1154,8 @@ Private Sub cmdConfirmar_Click()
             rsCria.Fields("OBJECT_ID_").value = str
             rsCria.Fields("OBJECT_ID_TRECHO").value = "0"
         Else
-            ' rsCria.Fields("OBJECT_ID_").value = str
             rsCria.Fields("DATA_LOG").value = str
             rsCria.Fields("OBJECT_ID_TRECHO").value = "0"
-            '  rsCria.Fields("OBJECT_ID_").value = "'aaa'"
-            ' rsCria.Fields("OBJECT_ID_TRECHO").value = "'ss'"
         End If
         rsCria.Update
         If frmCanvas.TipoConexao = 4 Then
@@ -1466,14 +1170,12 @@ Private Sub cmdConfirmar_Click()
         tcs.object_id = object_id_ramal
         tcs.saveOnMemory
         tcs.SaveInDatabase
-        'MsgBox tcs.getCurrentLayer
         tdbramais.setCurrentLayer TB_Ramais '"RAMAIS_AGUA"
         'RETORNA EM X E Y A COORDENADA DO FINAL DA LINHA
         tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y
         'INSERE PONTO NO FINAL DA LINHA
         tdbramais.addPoint object_id_ramal, X, Y
         tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y
-        'tdb.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
         Object_id_trecho = ramal_Object_id_trecho 'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK
         Dim rsRamal As ADODB.Recordset
         Set rsRamal = New ADODB.Recordset
@@ -1553,8 +1255,6 @@ Private Sub cmdConfirmar_Click()
                 str = str & "" + """" + vo + """" + ", " + """" + vu + """" + ", " + """" + vc + """" + " FROM " + """" + TB_comercial + """" + " WHERE " + """" + va + """" + " IN (" & strNroLigaSel & ")"
                 rs.Open str, conexao, adOpenDynamic, adLockOptimistic
             End If
-            'WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-            '  rs.Open str, Conn, adOpenDynamic, adLockOptimistic
             If rs.EOF = False Then
                 Do While Not rs.EOF
                     strNroL = Trim(rs!NRO_LIGACAO)                 'NÚMERO DA LIGACAO
@@ -1609,7 +1309,8 @@ Private Sub cmdConfirmar_Click()
         If TB_Ligacoes = "RAMAIS_AGUA_LIGACAO" Then
             SubInsereFicticios
         End If
-    Else ' RAMAL EXISTENTE
+    Else
+        ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FASE 2 - É UM RAMAL QUE JÁ EXISTE E O USUÁRIO SELECIONOU
         If frmCanvas.TipoConexao = 4 Then
             If count3 <> 10 Then
                 Dim conexao2 As New ADODB.connection
@@ -1626,8 +1327,6 @@ Private Sub cmdConfirmar_Click()
             End If
         End If
         Set rs = New ADODB.Recordset
-        ' ve = "TB_RAMAIS"
-        'vi = "ID"
         If frmCanvas.TipoConexao <> 4 Then 'SQL
             rs.Open "SELECT * FROM  " & TB_Ramais & "  WHERE OBJECT_ID_ ='" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic
         Else
@@ -1700,7 +1399,7 @@ Private Sub cmdConfirmar_Click()
                 Set rs = New ADODB.Recordset
             End If
             If frmCanvas.TipoConexao <> 4 Then
-                'rs.Open str, Conn, adOpenDynamic, adLockReadOnly, adCmdText 'RECORDSET OBTEM INFORMAÇÕES PARA O INSERT
+                'RECORDSET OBTEM INFORMAÇÕES PARA O INSERT
                 rs.Open str, Conn, adOpenDynamic, adLockOptimistic
             Else
                 rs.Open str, conexao2, adOpenDynamic, adLockOptimistic
@@ -1764,22 +1463,30 @@ Private Sub cmdConfirmar_Click()
         End If
     End If
     Set rs = Nothing
+    Conn.CommitTrans
     tcs.plotView
     Unload Me
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     ElseIf Err.Number = -2147418113 Then ' Erro geral de rede
+        Conn.RollbackTrans
+        Conn.Close
         PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
         End
     ElseIf Err.Number = -2147417848 Then ' automation error
         PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
+        Conn.RollbackTrans
+        Conn.Close
         End
     ElseIf Err.Number = -2147467259 Or mid(Err.Description, 1, 9) = "ORA-03114" Then 'PERDA DE CONEXÃO BANCO SQL OU ORACLE
         PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
+        Conn.RollbackTrans
+        Conn.Close
         'End
     ElseIf Err.Number = -2147168227 Then ' MAX TRANSACTIONS EXCEDIDA. FECHAR E REABRIR A CONEXÃO
         'MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
+        Conn.RollbackTrans
         Conn.Close
         Conn.Open
         Resume
@@ -1789,7 +1496,6 @@ Trata_Erro:
         PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
         Unload Me
     End If
-    ' MsgBox Err.Description
 End Sub
 
 Private Sub SubInsereFicticios()
