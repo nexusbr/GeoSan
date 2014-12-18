@@ -1018,6 +1018,11 @@ On Error GoTo Trata_Erro
 'APOS ISSO, INSERIR OS OBJECT_ID_ DAS LINHAS QUE ESTÃO DENTRO OU NA BORDA DO POLÍGONO E O NOME DO
 'USUÁRIO QUE FEZ A SELEÇÃO EM UMA TABELA CHAMADA POLIGONO_SELEAO
 
+   If Tr.TerraEvent = tg_DrawRamal Then 'SE ESTA DESENHANDO RAMAL e selecionou duplo click, sai pois não tem que entrar aqui nunca. Este if foi colocado pois foi verificado um bug quando o mouse está quebrado e entrando muito clicks quando o usuário pressiona apenas uma vez ele entra nesta rotina e trava o GeoSan
+        Exit Sub
+   End If
+
+
    Me.MousePointer = vbHourglass
 
    Dim i As Long
