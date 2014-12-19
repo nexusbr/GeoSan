@@ -977,12 +977,13 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
                 i = i + 1
                 Me.lblResultado.Caption = "Mostrando " & i & " de " & i & " referencias encontradas"
                 If i >= 500 Then
-                    j = i
-                    Do While Not rs.EOF And blnCancelar = False
-                        rs.MoveNext
-                        j = j + 1
-                    Loop
-                    Me.lblResultado.Caption = "Mostrando " & i & " referencias de " & j & " encontradas"
+'                    estas linhas abaixo foram retiradas pois demorava muito para retornar se o usuário selecionasse uma pesquisa que mostrasse muitas ligações, por exemplo todas palavras que possuem o texto RUA e dava a impressão que o GeoSan tinha travado
+'                    j = i
+'                    Do While Not rs.EOF And blnCancelar = False
+'                        rs.MoveNext
+'                        j = j + 1
+'                    Loop
+                    Me.lblResultado.Caption = "Mostrando " & i & " referencias de muitas encontradas " ' & j & " encontradas"
                     Exit Do
                 End If
                 rs.MoveNext
