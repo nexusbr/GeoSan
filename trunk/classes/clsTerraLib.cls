@@ -531,67 +531,39 @@ Trata_Erro:
    
 End Function
 ' Entra nesta função quando está desenhando ou selecionando o ramal
+' Ela é chamada quando entro o segundo click do ramal
 '
 '
 Public Function OnRamal(X As Double, Y As Double, object_id_ramal As String) As Boolean
-On Error GoTo Trata_Erro
-    
+    On Error GoTo Trata_Erro
     Dim frm As New FrmCadastroRamal, Qtde As Long, a As Long
-    
-    'Dim frmRamalEsgoto As New FrmCadastroRamalEsgoto
-        
     Dim object_id_lote As String
+    
     tdbconref.setCurrentLayer cgeo.GetLayerOperation(tcs.getCurrentLayer, 1)
-    
-         If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
-            
-            Dim TBP As String
-            TBP = ReadINI("RAMAISFILTROLOTES", "TABELA_PLANO", App.path & "\CONTROLES\GEOSAN.INI")
-            If TBP <> "" Then
+    'Verifica se existe um filtro anterior de ramais e chama se já houver filtro anterior
+    If ReadINI("RAMAISFILTROLOTES", "ATIVADO", App.path & "\CONTROLES\GEOSAN.INI") = "SIM" Then
+        Dim TBP As String
+        TBP = ReadINI("RAMAISFILTROLOTES", "TABELA_PLANO", App.path & "\CONTROLES\GEOSAN.INI")
+        If TBP <> "" Then
             tdbconref.setCurrentLayer TBP
-            End If
-         End If
-    
-    
-        object_id_lote = ""    ' zera apenas para aparecer na caixa de diálogo
-' Esta parte do código foi retirada, pois era do GeoSan inicial implementado em Votuporanga em que a ligação era associada ao lote da Prefeitura
-'    With tcs
-'       Qtde = tdbconref.locateGeometryXY(X, Y, 1)
-'       For a = 0 To Qtde - 1
-'          If object_id_lote = "" Then
-'             object_id_lote = "'" & tdbconref.objectIds(a) & "'"
-'          Else
-'             object_id_lote = object_id_lote & "," & "'" & tdbconref.objectIds(a) & "'"
-'          End If
-'       Next
-'    End With
-    
-    If UCase(tcs.getCurrentLayer) = "RAMAIS_AGUA" Then
-         'ORIGINAL
-         frm.init "AGUA", object_id_ramal, tcs, tdb, tdbcon, object_id_lote, ""
-         
-         'frm.init "AGUA", object_id_ramal, tcs, tdb, tdbcon, "", ""
-    Else
-         frm.init "ESGOTO", object_id_ramal, tcs, tdb, tdbcon, object_id_lote, ""
+        End If
     End If
-    
-    
-
+    'Chama a caixa de diálogo de cadastro de ramais
+    object_id_lote = ""    ' zera apenas para aparecer na caixa de diálogo
+    If UCase(tcs.getCurrentLayer) = "RAMAIS_AGUA" Then
+        'ORIGINAL
+        frm.init "AGUA", object_id_ramal, tcs, tdb, tdbcon, object_id_lote, ""
+    Else
+        frm.init "ESGOTO", object_id_ramal, tcs, tdb, tdbcon, object_id_lote, ""
+    End If
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
-       Resume Next
+        Resume Next
     ElseIf Err.Number = -2147467259 Then
-       
-       PrintErro "clsTerraLib", "Public Function OnRamal", CStr(Err.Number), CStr(Err.Description), True
-
-    
+        PrintErro "clsTerraLib", "Public Function OnRamal", CStr(Err.Number), CStr(Err.Description), True
     Else
-    
-       PrintErro "clsTerraLib", "Public Function OnRamal", CStr(Err.Number), CStr(Err.Description), True
-    
+        PrintErro "clsTerraLib", "Public Function OnRamal", CStr(Err.Number), CStr(Err.Description), True
     End If
-
-      
 End Function
 ' Função chamada para salvar no banco de dados
 '

@@ -22,6 +22,17 @@ Private objIdNoMovendo As String
 Private moveVertice As Boolean                          'indica se está ou não movendo um vértice de uma rede
 Private podeRealizarCommit As Boolean                   'tem objetivo de informar se é para realizar um Commit ou Rollback, pois houve falha
 Private calcularOZNo As Boolean                         'para saber se a cota Z do nó deve ser calculada no momento em que estou desenhando a rede
+Private numVertRamal As Integer                         'número do vértice do ramal que está sendo cadastrado pelo usuário, 1 = primeiro, 2 = segundo, ....
+' Retorna qual o número do vértice do ramal que está sendo entrado pelo usuário
+'
+Property Get numeroVerticeDoRamal() As Integer
+    numeroVerticeDoRamal = numVertRamal
+End Property
+' Recebe qual o número do vértice do ramal que está sendo entrado pelo usuário
+'
+Property Let numeroVerticeDoRamal(ByVal numVRamal As Integer)
+    numVertRamal = numVRamal
+End Property
 ' Retorna se pode ou não realizar um Commit no banco de dados
 '
 Property Get deveCalcularZNo() As Boolean

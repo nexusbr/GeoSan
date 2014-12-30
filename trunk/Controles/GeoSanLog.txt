@@ -262,3 +262,69 @@ DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           19/12/2014 15:11:44 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3246
+DESCRIÇÃO      Um objeto de conexão não pode ser fechado explicitamente durante uma transação.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:13:21 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:14:19 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147217871
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:15:25 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 10:22:52 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Public Sub Init
+LINHA          0
+MOTIVO         400
+DESCRIÇÃO      Form already displayed; can't show modally
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 10:23:51 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Public Sub Init
+LINHA          0
+MOTIVO         400
+DESCRIÇÃO      Form already displayed; can't show modally
+
+-----------------------------------------------------------------------------------------------------
+

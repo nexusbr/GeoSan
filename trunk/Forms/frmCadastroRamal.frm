@@ -570,7 +570,8 @@ Dim count2, count3 As Integer
 Public Sub init(TipoRamal As String, m_object_id_ramal As String, m_tcs As TeCanvas, m_tdbramais As TeDatabase, m_tdbtrecho As TeDatabase, m_object_id_lote As String, m_object_id_trecho As String)
 
 On Error GoTo Trata_Erro
-
+    Me.MousePointer = vbHourglass
+    Me.Show                                     'Mostra a caixa de diálogo de cadastrar ramais, pois caso a pesquisa anterior seja muito ampla ele fica no comando de desenhar ramal e se o usuário seleciona um terceiro ponto, ocorrerá um erro de cadastro de ramal. Mostra simplesmente para fornecer um feedback para o usuário
     'Verifica se os ramais estão associados aos polígonos dos lotes. Antigamente o GeoSan tinha as ligações associadas aos lotes
     If ReadINI("RamaisFiltroLotes", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
         'Não, as ligações não estão associadas ao polígono do lote
@@ -735,14 +736,16 @@ On Error GoTo Trata_Erro
         End If
                 
         'CARREGA OS TEXTOS COM O FILTRO PRÉ DETERMINADO
+        Me.MousePointer = vbHourglass
         If Me.chkExecFiltroPorLote.value = 0 Then
             Carrega_PreFiltro (False)
         Else
             Carrega_PreFiltro (True)
         End If
     End If
-    Me.Show vbModal
-    'LoozeXP1.EndWinXPCSubClassing
+    Me.MousePointer = vbDefault
+    Me.Hide                                     'Esconde a caixa de diálogo pois já forneceu o feedback para o usuário
+    Me.Show vbModal                             'Mostra novamente, mas como modal agora para que o usuário selecione os hidrômetros ligados ao ramal
     Exit Sub
     
 Trata_Erro:
@@ -750,9 +753,11 @@ If Err.Number = 0 Or Err.Number = 20 Then
     Resume Next
 ElseIf Err.Number = -2147467259 Then
     PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
+    Me.MousePointer = vbDefault
     End
 Else
     PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
+    Me.MousePointer = vbDefault
 End If
 End Sub
 
@@ -1082,6 +1087,7 @@ End Function
 ' Subrotina para salvar o ramal e ligação(ões)
 ' esta subrotina tem duas fazes distintas uma para quando o usuário está desenhando
 ' um novo ramal e outra para quando o usuário está selecionando um ramal que já é existente
+' Esta rotina foi modificada para funcionar somente com o banco de dados SQLServer (TipoConexao = 1)
 '
 '
 Private Sub cmdConfirmar_Click()
@@ -1104,7 +1110,6 @@ Private Sub cmdConfirmar_Click()
     Set rsCria = New ADODB.Recordset 'recordset utilizado para criar o regitro na tabela
     Conn.Close
     Conn.Open
-    Conn.BeginTrans
     va = "NRO_LIGACAO"
     ve = "CLASSIFICACAO_FISCAL"
     vi = "COD_LOGRADOURO"
@@ -1116,91 +1121,63 @@ Private Sub cmdConfirmar_Click()
     ve = "INSCRICAO_LOTE"
     If object_id_ramal = "" Then
         ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FASE 1 - É UM NOVO RAMAL
+        ' Sequência de operações
+        ' 1 - Insere linha em RAMAIS_AGUA
+        ' 2 - Insere a geometria de linha do ramal em LINES7
+        ' 3 - Insere a geometria do ponto da ligação em POINTS7
+        ' 4 - Atualiza os dados de RAMAIS_AGUA inclusive com o OBJECT_ID do trecho de rede e OBJECT_ID do ramal
+        ' 5 - Cria uma string com os números das ligações selecionadas pelo usuário
+        ' 6 - Insere em RAMAIS_AGUA_LIGACAO as ligações selecionadas pelo usuário
+        
+        ' 1 - Insere linha em RAMAIS_AGUA
+        Conn.BeginTrans                                     'Adiciona uma linha na tabela RAMAIS_AGUA com um OBJECT_ID_ temporário e sem o OBJECT_ID (0) do trecho do ramal (linha)
         str = strUser & Now
-        'O CAMPO ID DA TABELA É POPULADA COM A AUTO NUMERAÇÃO DA TABELA (TRIGGER NO ORACLE)
         Set rsCria = New ADODB.Recordset
-        If frmCanvas.TipoConexao = 1 Then
-            rsCria.Open TB_Ramais, Conn, adOpenKeyset, adLockOptimistic
-        ElseIf frmCanvas.TipoConexao = 2 Then
-            rsCria.Open "Select * from " + TB_Ramais + "", Conn, adOpenKeyset, adLockOptimistic
-        Else
-            If count2 <> 10 Then
-                Dim mPROVEDOR As String
-                Dim mSERVIDOR As String
-                Dim mPORTA As String
-                Dim mBANCO As String
-                Dim mUSUARIO As String
-                Dim Senha As String
-                Dim decriptada As String
-                Dim conexao As New ADODB.connection
-                Dim strConn As String
-                Dim nStr As String
-                
-                mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
-                mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-                mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-                mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
-                Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
-                nStr = frmCanvas.FunDecripta(Senha)
-                decriptada = frmCanvas.Senha
-                strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + nStr + "; ByteaAsLongVarBinary=1;"
-                conexao.Open strConn
-                count2 = 10
-            End If
-            Set rsCria = New ADODB.Recordset
-            rsCria.Open "Select * from " + """" + TB_Ramais + """", conexao, adOpenDynamic, adLockOptimistic
-        End If
-        rsCria.AddNew
-        If frmCanvas.TipoConexao <> 4 Then
-            rsCria.Fields("OBJECT_ID_").value = str
-            rsCria.Fields("OBJECT_ID_TRECHO").value = "0"
-        Else
-            rsCria.Fields("DATA_LOG").value = str
-            rsCria.Fields("OBJECT_ID_TRECHO").value = "0"
-        End If
-        rsCria.Update
-        If frmCanvas.TipoConexao = 4 Then
-            rsCria.Close
-            Set rsCria = New ADODB.Recordset
-            Dim strin As String
-            strin = "Select " + """" + "ID" + """" + "from " + """" + TB_Ramais + """" + " WHERE " + """" + "DATA_LOG" + """" + " ='" + str + "'"
-            rsCria.Open strin, Conn, adOpenDynamic, adLockOptimistic
-        End If
-        object_id_ramal = rsCria.Fields("ID").value
-        rsCria.Close
-        tcs.object_id = object_id_ramal
+        rsCria.Open TB_Ramais, Conn, adOpenKeyset, adLockOptimistic
+        rsCria.AddNew                                       'Cria uma nova linha na tabela RAMAIS_AGUA
+        rsCria.Fields("OBJECT_ID_").value = str             'Atualiza o OBJECT_ID_ da tabela RAMAIS_AGUA com o nome do usuário, data e hora (temporáriamente)
+        rsCria.Fields("OBJECT_ID_TRECHO").value = "0"       'Atualiza o OBJECT_ID do trecho de rede de água em RAMAIS_AGUA com zero (temporariamente)
+        rsCria.Fields("DATA_LOG").value = str
+        rsCria.Update                                       'Atualiza no banco de dados a tabela RAMAIS_AGUA
+        'FINALIZA RAMAIS_AGUA
+        object_id_ramal = rsCria.Fields("ID").value         'Obtem o ID da nova linha inserida em RAMAIS_AGUA (que foi gerado automaticamente, para poder depois localizar este ramal e colocar os demais dados na tabela de atributos dele
+        rsCria.Close                                        'Termina de adicionar a linha do ramal de água com os dados temporários da mesma
+        Conn.CommitTrans
+        tcs.object_id = object_id_ramal                     'Aqui é crucial, pois é onde ele fala para o Canvas qual é o número o OBJECT_ID, para quando ele criar as geometrias, criar com este OBJECT_ID
+        ' 2 - Insere a geometria de linha do ramal em LINES7
+        'SALVA LINES7 que contem o trecho do ramal e POINTS7 que contem o nó do ramal, que representa o hidrômetro, com o OBJECT_ID informado ao Canvas anteriormente
         tcs.saveOnMemory
-        tcs.SaveInDatabase
+        tcs.SaveInDatabase                                  'Maravilha! Finalizo criando uma linha uma na tabela LINES7, com um geom_id criado automaticamente e um OBJECT_ID informado anteriormente, o qual é igual a linha recem adicionada na tabela RAMAIS_AGUA
+        ' 3 - Insere a geometria do ponto da ligação em POINTS7
         tdbramais.setCurrentLayer TB_Ramais '"RAMAIS_AGUA"
         'RETORNA EM X E Y A COORDENADA DO FINAL DA LINHA
-        tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y
+        tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y    'retorna a coordenada do segundo ponto (1)da linha (object_id_ramal)
         'INSERE PONTO NO FINAL DA LINHA
-        tdbramais.addPoint object_id_ramal, X, Y
-        tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y
-        Object_id_trecho = ramal_Object_id_trecho 'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK
+        tdbramais.addPoint object_id_ramal, X, Y                'Pronto! Agora falta adicionar o ponto no final do ramal que indica o(s) hidrômetro(s). Adiciona um ponto na coordenada x, y e com o object_id_ramal informado (enviado)
+        tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y    'retorna a coordenada do ponto inicial (segundo 0) da linha (object_id_ramal)
+        Object_id_trecho = ramal_Object_id_trecho               'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK - vem lá do canvas quando ele desenhou o ramal
+        ' 4 - Atualiza os dados de RAMAIS_AGUA inclusive com o OBJECT_ID do trecho de rede e OBJECT_ID do ramal
         Dim rsRamal As ADODB.Recordset
         Set rsRamal = New ADODB.Recordset
         ve = "TB_RAMAIS"
         vi = "ID"
         intlocalerro = 4
-        If frmCanvas.TipoConexao <> 4 Then
-            rsRamal.Open "SELECT * FROM  " & TB_Ramais & "  WHERE ID = " & "'" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic, adCmdText
-        Else
-            rsRamal.Open "SELECT * FROM  " + """" + TB_Ramais + """" + " WHERE " + """" + "ID" + """" + " = " & "'" & object_id_ramal & "'", conexao, adOpenDynamic, adLockOptimistic, adCmdText
-        End If
-        If rsRamal.EOF = False Then
+        'BOM, até agora ele criou uma linha em RAMAIS_AGUA, e inseriu as geometrias de linha (LINES7) e ponto (POINTS7) do ramal. Então tem agora que atualizar a linha recem inserida em RAMAIS_AGUA com os dados da caixa de diálogo que o usuário entrou
+        rsRamal.Open "SELECT * FROM  " & TB_Ramais & "  WHERE ID = " & "'" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic, adCmdText
+        'Inicia a atualização de RAMAIS_AGUA com todos os dados
+        If rsRamal.EOF = False Then                         'Tem que encontrar a linha em RAMAIS_AGUA que acabou de ser inserida
             rsRamal.Fields("Distancia_Lado").value = IIf(IsNumeric(txtDistanciaLado), txtDistanciaLado, 0)
             rsRamal.Fields("Distancia_Testada").value = IIf(IsNumeric(txtDistanciaTestada), txtDistanciaTestada, 0)
             rsRamal.Fields("Profundidade_RAMAL").value = IIf(IsNumeric(txtProfundidade), txtProfundidade, 0)
             rsRamal.Fields("Comprimento_Ramal").value = IIf(IsNumeric(txtComprimentoRamal), txtComprimentoRamal, 0)
-            For i = 1 To lvLigacoes.ListItems.count
+            For i = 1 To lvLigacoes.ListItems.count                                 'Obtem o código do logradouro - só tem que pegar o primeiro, pois se houverem mais ligações selecionadas elas são do mesmo ramal, portanto do mesmo logradouro
                 If lvLigacoes.ListItems(i).Checked = True Then
                     If lvLigacoes.ListItems(1).Tag <> "" Then
-                        rsRamal!COD_LOGRAD = Val(lvLigacoes.ListItems(1).Tag)       'PEGA O PRIMEIRO LOGRADOURO SELECIONADO NA LISTA
+                        rsRamal!COD_LOGRAD = Val(lvLigacoes.ListItems(1).Tag)       'Pega o primeiro logradouro selecionado na lista, pelo usuário
                     Else                                                            'não existe e é nulo, deveria estar preenchido pela empresa de saneamento, mas não foi
                         rsRamal!COD_LOGRAD = 0                                      'coloca zero no código do logradouro, pois não existe cadastrado, deveria existir no banco comercial
                     End If
-                    Exit For
+                    Exit For                                                        'Sai, pois um só é suficiente
                 End If
             Next
             If optDesconhecido Then
@@ -1215,16 +1192,17 @@ Private Sub cmdConfirmar_Click()
             If optDireito Then
                 rsRamal.Fields("posicionamento_lote").value = 4
             End If
-            rsRamal!Object_id_ = object_id_ramal
-            rsRamal!Object_id_trecho = Object_id_trecho
-            rsRamal!USUARIO_LOG = strUser
-            rsRamal!DATA_LOG = Format(Now, "DD/MM/YY HH:MM")
+            rsRamal!Object_id_ = object_id_ramal                                    'Agora coloca o OBJECT_ID do ramal correto, o anterior tinha o nome do usuário-data-hora
+            rsRamal!Object_id_trecho = Object_id_trecho                             'Salva o OBJECT_ID do trecho de rede
+            rsRamal!USUARIO_LOG = strUser                                           'Salva o nome do usuário
+            rsRamal!DATA_LOG = Format(Now, "DD/MM/YY HH:MM")                        'Salva a data e hora de cadastro
             rsRamal.Update
         Else
             Exit Sub
             'Conn.execute "DELETE FROM RAMAIS_AGUA WHERE object_id_ = '" & str & "'"
         End If
         rsRamal.Close
+        ' 5 - Cria uma string com os números das ligações selecionadas pelo usuário
         strNroLigaSel = ""
         For a = 1 To lvLigacoes.ListItems.count
             If lvLigacoes.ListItems(a).Checked Then 'PARA CADA ITEM SELECIONADO NA LISTA
@@ -1235,28 +1213,14 @@ Private Sub cmdConfirmar_Click()
                 End If
             End If
         Next
+        ' 6 - Insere em RAMAIS_AGUA_LIGACAO as ligações selecionadas pelo usuário
         If strNroLigaSel <> "" Then
-            If frmCanvas.TipoConexao <> 4 Then 'SQL
-                Set rs = New ADODB.Recordset
-                str = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, COD_LOGRADOURO, "
-                str = str & "TIPO, ECONOMIAS, HIDROMETRADO FROM " & TB_comercial & " WHERE NRO_LIGACAO IN (" & strNroLigaSel & ")"
-                rs.Open str, Conn, adOpenDynamic, adLockOptimistic
-            Else 'Postgres
-                va = "NRO_LIGACAO"
-                ve = "CLASSIFICACAO_FISCAL"
-                vi = "COD_LOGRADOURO"
-                vo = "TIPO"
-                vu = "ECONOMIAS"
-                vc = "HIDROMETRADO"
-                vd = "OBJECT_ID_"
-                vf = "CONSUMO_LPS"
-                ' ve = "INSCRICAO_LOTE"
-                Set rs = New ADODB.Recordset
-                str = "SELECT " + """" + va + """" + ", " + """" + ve + """" + ", " + """" + vi + """" + ", "
-                str = str & "" + """" + vo + """" + ", " + """" + vu + """" + ", " + """" + vc + """" + " FROM " + """" + TB_comercial + """" + " WHERE " + """" + va + """" + " IN (" & strNroLigaSel & ")"
-                rs.Open str, conexao, adOpenDynamic, adLockOptimistic
-            End If
+            Set rs = New ADODB.Recordset
+            str = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, COD_LOGRADOURO, "
+            str = str & "TIPO, ECONOMIAS, HIDROMETRADO FROM " & TB_comercial & " WHERE NRO_LIGACAO IN (" & strNroLigaSel & ")"
+            rs.Open str, Conn, adOpenDynamic, adLockOptimistic
             If rs.EOF = False Then
+                'Conn.BeginTrans
                 Do While Not rs.EOF
                     strNroL = Trim(rs!NRO_LIGACAO)                 'NÚMERO DA LIGACAO
                     If Trim(rs!CLASSIFICACAO_FISCAL) <> "" Then
@@ -1279,28 +1243,8 @@ Private Sub cmdConfirmar_Click()
                     Else
                         strHidr = "0" 'ARMAZENA EM LETRA MINÚSCULA
                     End If
-                    If frmCanvas.TipoConexao <> 4 Then
-                        str = "INSERT INTO " & TB_Ligacoes & " (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
-                        str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "'," & strEcon & ",0)"
-                        ' MsgBox str
-                    Else
-                        va = "NRO_LIGACAO"
-                        ve = "INSCRICAO_LOTE"
-                        vi = "COD_LOGRADOURO"
-                        vo = "TIPO"
-                        vu = "ECONOMIAS"
-                        vc = "HIDROMETRADO"
-                        vd = "OBJECT_ID_"
-                        vf = "CONSUMO_LPS"
-                        If strTipo = "" Then
-                            strTipo = 0
-                        End If
-                        If strHidr = "" Then
-                            strHidr = 0
-                        End If
-                        str = "INSERT INTO " + """" + TB_Ligacoes + """" + " (" + """" + vd + """" + "," + """" + va + """" + "," + """" + ve + """" + "," + """" + vo + """" + "," + """" + vc + """" + "," + """" + vu + """" + "," + """" + vf + """" + ") "
-                        str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "','" & strEcon & "','0')"
-                    End If
+                    str = "INSERT INTO " & TB_Ligacoes & " (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
+                    str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "'," & strEcon & ",0)"
                     Conn.execute (str)
                     rs.MoveNext
                 Loop
@@ -1310,29 +1254,11 @@ Private Sub cmdConfirmar_Click()
         If TB_Ligacoes = "RAMAIS_AGUA_LIGACAO" Then
             SubInsereFicticios
         End If
+        
     Else
         ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FASE 2 - É UM RAMAL QUE JÁ EXISTE E O USUÁRIO SELECIONOU
-        If frmCanvas.TipoConexao = 4 Then
-            If count3 <> 10 Then
-                Dim conexao2 As New ADODB.connection
-                mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.path & "\CONTROLES\GEOSAN.ini")
-                mPORTA = ReadINI("CONEXAO", "PORTA", App.path & "\CONTROLES\GEOSAN.ini")
-                mBANCO = ReadINI("CONEXAO", "BANCO", App.path & "\CONTROLES\GEOSAN.ini")
-                mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.path & "\CONTROLES\GEOSAN.ini")
-                Senha = ReadINI("CONEXAO", "SENHA", App.path & "\CONTROLES\GEOSAN.ini")
-                nStr = frmCanvas.FunDecripta(Senha)
-                decriptada = frmCanvas.Senha
-                strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + nStr + "; ByteaAsLongVarBinary=1;"
-                conexao2.Open strConn
-                count3 = 10
-            End If
-        End If
         Set rs = New ADODB.Recordset
-        If frmCanvas.TipoConexao <> 4 Then 'SQL
-            rs.Open "SELECT * FROM  " & TB_Ramais & "  WHERE OBJECT_ID_ ='" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic
-        Else
-            rs.Open "SELECT * FROM  " + """" + TB_Ramais + """" + "  WHERE " + """" + vd + """" + " ='" & object_id_ramal & "'", conexao2, adOpenDynamic, adLockOptimistic
-        End If
+        rs.Open "SELECT * FROM  " & TB_Ramais & "  WHERE OBJECT_ID_ ='" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic
         If rs.EOF = False Then
             rs.Fields("Distancia_Lado").value = IIf(IsNumeric(txtDistanciaLado), txtDistanciaLado, 0)
             rs.Fields("Distancia_Testada").value = IIf(IsNumeric(txtDistanciaTestada), txtDistanciaTestada, 0)
@@ -1362,11 +1288,7 @@ Private Sub cmdConfirmar_Click()
                 rs.Close
             End If
             intlocalerro = 6
-            If frmCanvas.TipoConexao <> 4 Then 'SQL
-                Conn.execute "DELETE FROM " & TB_Ligacoes & " WHERE OBJECT_ID_ = '" & object_id_ramal & "'"
-            Else
-                Conn.execute "DELETE FROM " + """" + TB_Ligacoes + """" + " WHERE " + """" + vd + """" + " = '" & object_id_ramal & "'"
-            End If
+            Conn.execute "DELETE FROM " & TB_Ligacoes & " WHERE OBJECT_ID_ = '" & object_id_ramal & "'"
             strNroLigaSel = ""
             For a = 1 To lvLigacoes.ListItems.count
                 If lvLigacoes.ListItems(a).Checked Then 'PARA CADA ITEM SELECIONADO NA LISTA
@@ -1380,31 +1302,10 @@ Private Sub cmdConfirmar_Click()
                 End If
             Next
         If strNroLigaSel <> "" Then
-            If frmCanvas.TipoConexao <> 4 Then
-                str = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, COD_LOGRADOURO, "
-                str = str & "TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL WHERE NRO_LIGACAO IN (" & strNroLigaSel & ")"
-            Else
-                Dim fg, fh As String
-                fg = "COD_LOGRADOURO"
-                fh = "NXGS_V_LIG_COMERCIAL"
-                va = "NRO_LIGACAO"
-                vm = "CLASSIFICACAO_FISCAL"
-                vi = "COD_LOGRADOURO"
-                vo = "TIPO"
-                vu = "ECONOMIAS"
-                vc = "HIDROMETRADO"
-                vd = "OBJECT_ID_"
-                vf = "CONSUMO_LPS"
-                str = "SELECT " + """" + va + """" + ", " + """" + vm + """" + ", " + """" + vi + """" + ", "
-                str = str & """" + vo + """" + ", " + """" + vu + """" + ", " + """" + vc + """" + " FROM " + """" + fh + """" + " WHERE " + """" + va + """" + " IN (" & strNroLigaSel & ")"
-                Set rs = New ADODB.Recordset
-            End If
-            If frmCanvas.TipoConexao <> 4 Then
-                'RECORDSET OBTEM INFORMAÇÕES PARA O INSERT
-                rs.Open str, Conn, adOpenDynamic, adLockOptimistic
-            Else
-                rs.Open str, conexao2, adOpenDynamic, adLockOptimistic
-            End If
+            str = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, COD_LOGRADOURO, "
+            str = str & "TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL WHERE NRO_LIGACAO IN (" & strNroLigaSel & ")"
+            'RECORDSET OBTEM INFORMAÇÕES PARA O INSERT
+            rs.Open str, Conn, adOpenDynamic, adLockOptimistic
             va = "NRO_LIGACAO"
             ve = "CLASSIFICACAO_FISCAL"
             vi = "COD_LOGRADOURO"
@@ -1437,22 +1338,8 @@ Private Sub cmdConfirmar_Click()
                     Else
                         strHidr = "" 'ARMAZENA EM LETRA MINÚSCULA
                     End If
-                    If frmCanvas.TipoConexao <> 4 Then
-                        str = "INSERT INTO " & TB_Ligacoes & " (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
-                        str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "','" & strEcon & "','0')"
-                    Else
-                        If strTipo = "" Then
-                            strTipo = 0
-                        End If
-                        If strHidr = "" Then
-                            strHidr = 0
-                        End If
-                        If strInsc = "" Then
-                            strInsc = 0
-                        End If
-                        str = "INSERT INTO " + """" + TB_Ligacoes + """" + " (" + """" + vd + """" + "," + """" + va + """" + "," + """" + ve + """" + "," + """" + vo + """" + "," + """" + vc + """" + "," + """" + vu + """" + "," + """" + vf + """" + ") "
-                        str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "','" & strEcon & "','0')"
-                    End If
+                    str = "INSERT INTO " & TB_Ligacoes & " (OBJECT_ID_,NRO_LIGACAO,INSCRICAO_LOTE,TIPO,HIDROMETRADO,ECONOMIAS,CONSUMO_LPS) "
+                    str = str & "VALUES ('" & object_id_ramal & "','" & strNroL & "','" & strInsc & "','" & strTipo & "','" & strHidr & "','" & strEcon & "','0')"
                     Conn.execute (str)
                     rs.MoveNext
                 Loop
@@ -1464,8 +1351,6 @@ Private Sub cmdConfirmar_Click()
         End If
     End If
     Set rs = Nothing
-    Conn.CommitTrans
-    tcs.plotView
     Unload Me
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -1826,10 +1711,6 @@ Private Sub Form_Activate()
    Me.lvLigacoes.SetFocus
    
 End Sub
-
-
-
-
 
 Private Sub Label4_Click()
    frmCadastroRamalAutoLote.Show 1
