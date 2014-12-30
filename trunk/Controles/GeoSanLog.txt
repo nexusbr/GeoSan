@@ -328,3 +328,135 @@ DESCRIÇÃO      Form already displayed; can't show modally
 
 -----------------------------------------------------------------------------------------------------
 
+DATA           30/12/2014 13:06:53 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      The request for procedure 'RAMAIS_AGUA' failed because 'RAMAIS_AGUA' is a table object.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:07:02 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Snapshot isolation transaction failed accessing database 'ArturNogueira-B' because snapshot isolation is not allowed in this database. Use ALTER DATABASE to allow snapshot isolation.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:46:46 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      The request for procedure 'RAMAIS_AGUA' failed because 'RAMAIS_AGUA' is a table object.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:48:55 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:49:34 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:51:29 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:54:45 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217893
+DESCRIÇÃO      A identidade não pode ser determinada para novas linhas inseridas.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:55:17 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3246
+DESCRIÇÃO      Um objeto de conexão não pode ser fechado explicitamente durante uma transação.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:57:40 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      The request for procedure 'RAMAIS_AGUA' failed because 'RAMAIS_AGUA' is a table object.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:58:01 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         3709
+DESCRIÇÃO      A conexão não pode ser usada para realizar esta operação. Ela está fechada ou é inválida neste contexto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 14:01:02 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217893
+DESCRIÇÃO      A identidade não pode ser determinada para novas linhas inseridas.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 14:09:03 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         3709
+DESCRIÇÃO      A conexão não pode ser usada para realizar esta operação. Ela está fechada ou é inválida neste contexto.
+
+-----------------------------------------------------------------------------------------------------
+

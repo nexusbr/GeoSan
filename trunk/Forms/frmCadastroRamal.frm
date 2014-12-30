@@ -1154,6 +1154,7 @@ Private Sub cmdConfirmar_Click()
         tdbramais.getPointOfLine 0, object_id_ramal, 1, X, Y    'retorna a coordenada do segundo ponto (1)da linha (object_id_ramal)
         'INSERE PONTO NO FINAL DA LINHA
         tdbramais.addPoint object_id_ramal, X, Y                'Pronto! Agora falta adicionar o ponto no final do ramal que indica o(s) hidrômetro(s). Adiciona um ponto na coordenada x, y e com o object_id_ramal informado (enviado)
+        tcs.plotView
         tdbramais.getPointOfLine 0, object_id_ramal, 0, X, Y    'retorna a coordenada do ponto inicial (segundo 0) da linha (object_id_ramal)
         Object_id_trecho = ramal_Object_id_trecho               'VARIÁVEL RAMAL_OBJECT_ID_TRECHO CARREGADA NO TCANVAS ON_CLICK - vem lá do canvas quando ele desenhou o ramal
         ' 4 - Atualiza os dados de RAMAIS_AGUA inclusive com o OBJECT_ID do trecho de rede e OBJECT_ID do ramal
@@ -1163,6 +1164,7 @@ Private Sub cmdConfirmar_Click()
         vi = "ID"
         intlocalerro = 4
         'BOM, até agora ele criou uma linha em RAMAIS_AGUA, e inseriu as geometrias de linha (LINES7) e ponto (POINTS7) do ramal. Então tem agora que atualizar a linha recem inserida em RAMAIS_AGUA com os dados da caixa de diálogo que o usuário entrou
+        Conn.BeginTrans
         rsRamal.Open "SELECT * FROM  " & TB_Ramais & "  WHERE ID = " & "'" & object_id_ramal & "'", Conn, adOpenKeyset, adLockOptimistic, adCmdText
         'Inicia a atualização de RAMAIS_AGUA com todos os dados
         If rsRamal.EOF = False Then                         'Tem que encontrar a linha em RAMAIS_AGUA que acabou de ser inserida
@@ -1202,6 +1204,7 @@ Private Sub cmdConfirmar_Click()
             'Conn.execute "DELETE FROM RAMAIS_AGUA WHERE object_id_ = '" & str & "'"
         End If
         rsRamal.Close
+        Conn.CommitTrans
         ' 5 - Cria uma string com os números das ligações selecionadas pelo usuário
         strNroLigaSel = ""
         For a = 1 To lvLigacoes.ListItems.count
@@ -1218,9 +1221,9 @@ Private Sub cmdConfirmar_Click()
             Set rs = New ADODB.Recordset
             str = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, COD_LOGRADOURO, "
             str = str & "TIPO, ECONOMIAS, HIDROMETRADO FROM " & TB_comercial & " WHERE NRO_LIGACAO IN (" & strNroLigaSel & ")"
+            Conn.BeginTrans
             rs.Open str, Conn, adOpenDynamic, adLockOptimistic
             If rs.EOF = False Then
-                'Conn.BeginTrans
                 Do While Not rs.EOF
                     strNroL = Trim(rs!NRO_LIGACAO)                 'NÚMERO DA LIGACAO
                     If Trim(rs!CLASSIFICACAO_FISCAL) <> "" Then
@@ -1250,11 +1253,12 @@ Private Sub cmdConfirmar_Click()
                 Loop
             End If
             rs.Close
+            Conn.CommitTrans
         End If
         If TB_Ligacoes = "RAMAIS_AGUA_LIGACAO" Then
             SubInsereFicticios
         End If
-        
+        'Conn.Close
     Else
         ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX FASE 2 - É UM RAMAL QUE JÁ EXISTE E O USUÁRIO SELECIONOU
         Set rs = New ADODB.Recordset
@@ -1379,6 +1383,8 @@ Trata_Erro:
     Else
         tcs.Normal
         tcs.Select
+'        Conn.RollbackTrans
+'        Conn.Close
         PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
         Unload Me
     End If
@@ -1711,6 +1717,7 @@ Private Sub Form_Activate()
    Me.lvLigacoes.SetFocus
    
 End Sub
+
 
 Private Sub Label4_Click()
    frmCadastroRamalAutoLote.Show 1
