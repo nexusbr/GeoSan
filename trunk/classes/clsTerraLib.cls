@@ -579,12 +579,12 @@ Public Function SaveInDatabase() As Boolean
             Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys
                 tcs.saveOnMemory
                 varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
-                Conn.BeginTrans
+                'Conn.BeginTrans
                 tcs.SaveInDatabase
                 If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
-                    Conn.CommitTrans
+                    'Conn.CommitTrans - foram retiradas estas linhas pois estava dando erro na primeira vez que movia o nó
                 Else
-                    Conn.RollbackTrans
+                    'Conn.RollbackTrans
                 End If
                 Screen.MousePointer = vbHourglass
                 'Conn.BeginTrans
