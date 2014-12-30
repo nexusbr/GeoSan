@@ -1887,8 +1887,8 @@ On Error GoTo Trata_Erro
       'PopupMenu
    ElseIf Button = 1 Then
       Dim Lh As Double
-      TCanvas.getLengthOfLastSegmentOfLine Lh
-      frmNetWorkLegth.txtLength.Text = Lh
+'      TCanvas.getLengthOfLastSegmentOfLine Lh 'aqui dá erro qd não tenho o segmento de uma linha
+'      frmNetWorkLegth.txtLength.Text = Lh
    End If
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
