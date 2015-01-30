@@ -817,6 +817,7 @@ reinicia:
 End Function
 ' Carrega na caixa de diálogo de cadastro de ramais as ligações de água que ainda não estão associadas ao ramal
 ' e conforme o filtro definido pelo usuário
+' Esta rotina foi modificada para funcionar apenas com o SQLServer
 '
 ' ComLotes - se é para considerar a inscrição do lote ou não (polígono). Isto não mais está sendo utilizado
 '
@@ -859,80 +860,27 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
         'SELECIONA A TABELA OU VIEW QUE POSSUI DADOS DOS CONSUMIDORES DE AGUA
         TIPO_R = "AGUA"
         TB_Ligacoes = "RAMAIS_AGUA_LIGACAO"
-        If frmCanvas.TipoConexao <> 4 Then
-            'é Oracle ou SQLServer
-            strIni = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL"
-        Else
-            'é Postgres
-            strIni = "SELECT " + """" + ma + """" + ", " + """" + mi + """" + ", " + """" + mo + """" + ", " + """" + mu + """" + ", " + """" + mb + """" + " as " + """" + "CODLOGRAD" + """" + ", " + """" + mc + """" + ", " + """" + md + """" + ", " + """" + mf + """" + " FROM " + """" + mg + """" + ""
-        End If
+        strIni = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL"
     Else
         'SELECIONA A TABELA OU VIEW QUE POSSUI DADOS DOS CONSUMIDORES DE ESGOTO
         TIPO_R = "ESGOTO"
         TB_Ligacoes = "RAMAIS_ESGOTO_LIGACAO"
-        If frmCanvas.TipoConexao <> 4 Then
-            strIni = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL_E"
-        Else
-            strIni = "SELECT " + """" + ma + """" + ", " + """" + mi + """" + ", " + """" + mo + """" + ", " + """" + mu + """" + ", " + """" + mb + """" + " as " + """" + "CODLOGRAD" + """" + ", " + """" + mc + """" + ", " + """" + md + """" + ", " + """" + mf + """" + " FROM " + """" + mh + """" + ""
-        End If
+        strIni = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL_E"
     End If
     str = "" 'LIMPA A STRING DE COMANDO
     If Me.optNumLigacao.value = True And Trim(Me.txtNumLigacao) <> "" Then
-        ' If Me.optInscricao.value = True And Trim(Me.txtInscricao) <> "" Then
         'Me.lvLigacoes.SortKey = 0 'SETA O SORT PARA A PRIMEIRA COLUNA E TIRA O ORDER BY DO SELECT
-        If frmCanvas.TipoConexao = 1 Then 'SQL
-            str = strIni & " WHERE CLASSIFICACAO_FISCAL LIKE '%" & Me.txtNumLigacao.Text & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
-            ElseIf frmCanvas.TipoConexao = 2 Then
-                str = strIni & " A WHERE CLASSIFICACAO_FISCAL LIKE '%" & Me.txtNumLigacao.Text & "%' AND NOT EXISTS (SELECT s.NRO_LIGACAO FROM " & TB_Ligacoes & " ss  INNER JOIN NXGS_V_LIG_COMERCIAL s ON s.NRO_LIGACAO = ss.NRO_LIGACAO)"
-        Else
-            str = strIni & " A WHERE " + """" + "CLASSIFICACAO_FISCAL" + """" + " LIKE '%" & UCase(Me.txtNumLigacao.Text) & "%' AND NOT EXISTS (SELECT s." + """" + "NRO_LIGACAO" + """" + " FROM " & """" + TB_Ligacoes + """" & " ss  INNER JOIN " + """" + "NXGS_V_LIG_COMERCIAL" + """" + " s ON s." + """" + "NRO_LIGACAO" + """" + " = ss." + """" + "NRO_LIGACAO" + """" + ")"
-            'WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-        End If
+        str = strIni & " WHERE CLASSIFICACAO_FISCAL LIKE '%" & Me.txtNumLigacao.Text & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
         ElseIf Me.optInscricao.value = True And Trim(Me.txtInscricao) <> "" Then        'Aqui vai procurar para a segunda coluna
             'Me.lvLigacoes.SortKey = 1 'SETA O SORT PARA A SEGUNDA COLUNA E TIRA O ORDER BY DO SELECT
-            If frmCanvas.TipoConexao = 1 Then
-                'para SQLServer
-                'tem que testar ainda para ver se fica mais rápido str = strIni & " WHERE NRO_LIGACAO/10 LIKE '%" & Left$(Me.txtInscricao.Text, Len(Me.txtInscricao.Text) - 1) & "%' AND NRO_LIGACAO/10 NOT IN (SELECT NRO_LIGACAO/10 FROM " & TB_Ligacoes & ")"
-                str = strIni & " WHERE NRO_LIGACAO LIKE '%" & Me.txtInscricao.Text & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
-                ElseIf frmCanvas.TipoConexao = 2 Then
-                    'para Oracle. NÃO TESTADO AINDA falta tirar o último dígito verificador
-                    'em txtInscrição ele retira o dígito veficicador para a pesquisa ir mais rápida
-                    str = strIni & " A WHERE NRO_LIGACAO LIKE '%" & Me.txtInscricao.Text & "%' AND NOT EXISTS (SELECT s.NRO_LIGACAO FROM " & TB_Ligacoes & " ss  INNER JOIN NXGS_V_LIG_COMERCIAL s ON s.NRO_LIGACAO = ss.NRO_LIGACAO)"
-            Else
-                'para Postgres NÃO TESTADO AINDA falta tirar o último dígito verificador
-                str = strIni & " WHERE " + """" + ma + """" + " LIKE '%" & Val(UCase(Me.txtInscricao.Text)) & "%' AND " + """" + ma + """" + " NOT IN (SELECT " + """" + ma + """" + " FROM " + """" + TB_Ligacoes + """" + ")"
-                ' MsgBox "ARQUIVO DEBUG SALVO"
-                ' WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-            End If
+            'tem que testar ainda para ver se fica mais rápido str = strIni & " WHERE NRO_LIGACAO/10 LIKE '%" & Left$(Me.txtInscricao.Text, Len(Me.txtInscricao.Text) - 1) & "%' AND NRO_LIGACAO/10 NOT IN (SELECT NRO_LIGACAO/10 FROM " & TB_Ligacoes & ")"
+            str = strIni & " WHERE NRO_LIGACAO LIKE '%" & Me.txtInscricao.Text & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
             ElseIf Me.optEndereço.value = True And Trim(Me.txtEndereco) <> "" Then
                 'Me.lvLigacoes.SortKey = 2 'SETA O SORT PARA A TERCEIRA COLUNA E TIRA O ORDER BY DO SELECT
-                If frmCanvas.TipoConexao = 1 Then 'SQL
-                    str = strIni & " WHERE upper(ENDERECO) LIKE '%" & (Me.txtEndereco.Text) & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")" ' ORDER BY TAM ASC, ENDERECO ASC"
-                    ElseIf frmCanvas.TipoConexao = 2 Then ' ORACLE ' ORACLE
-                        'NA CONSULTA ORACLE COM LIKE É NECESSÁRIO COLOCAR O SINAL % NO LUGAR DO ESPAÇO ENTRE PALAVRAS
-                        criterio = "%" & Replace(Trim(Me.txtEndereco.Text), " ", "%") & "%"
-                        str = strIni & " A WHERE upper(ENDERECO) LIKE '" & criterio & "' AND NOT EXISTS (SELECT s.NRO_LIGACAO FROM " & TB_Ligacoes & " ss  INNER JOIN NXGS_V_LIG_COMERCIAL s ON s.NRO_LIGACAO = ss.NRO_LIGACAO)"
-                Else
-                    Dim za As String
-                    za = UCase("ENDERECO")
-                    str = strIni & " WHERE " + """" + za + """" + " LIKE '%" & Me.txtEndereco.Text & "%' AND " + """" + ma + """" + " NOT IN (SELECT " + """" + ma + """" + " FROM " + """" + TB_Ligacoes + """" + ")" ' ORDER BY TAM ASC, ENDERECO ASC"
-                End If
+                str = strIni & " WHERE upper(ENDERECO) LIKE '%" & (Me.txtEndereco.Text) & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")" ' ORDER BY TAM ASC, ENDERECO ASC"
                 ElseIf Me.optConsumidor.value = True And Trim(Me.txtConsumidor.Text) <> "" Then
                     ' Me.lvLigacoes.SortKey = 3 'SETA O SORT PARA A QUARTA COLUNA E TIRA O ORDER BY DO SELECT
-                    If frmCanvas.TipoConexao = 1 Then 'SQL
-                        str = strIni & " WHERE (CONSUMIDOR) LIKE '%" & (Me.txtConsumidor.Text) & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
-                        ElseIf frmCanvas.TipoConexao = 2 Then ' ' ORACLE
-                            'NA CONSULTA ORACLE COM LIKE É NECESSÁRIO COLOCAR O SINAL % NO LUGAR DO ESPAÇO ENTRE PALAVRAS
-                            criterio = "" & Replace(Trim(Me.txtConsumidor.Text), " ", "%") & "%"
-                            '  str = strIni & " A WHERE upper(CONSUMIDOR) LIKE '%" & criterio & "' AND NOT EXISTS (SELECT s.NRO_LIGACAO FROM " & TB_Ligacoes & " ss  INNER JOIN NXGS_V_LIG_COMERCIAL s ON s.NRO_LIGACAO = ss.NRO_LIGACAO)"
-                            str = strIni & " A WHERE upper(CONSUMIDOR) LIKE '%" & criterio & "'  AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
-                    Else
-                        Dim ze As String
-                        ze = UCase("CONSUMIDOR")
-                        str = strIni & " WHERE " + """" + ze + """" + " LIKE '%" & Me.txtConsumidor.Text & "%' AND " + """" + ma + """" + " NOT IN (SELECT " + """" + ma + """" + " FROM " + """" + TB_Ligacoes + """" + ")"
-                    End If
-                    ' MsgBox "ARQUIVO DEBUG SALVO"
-                    'WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
+                    str = strIni & " WHERE (CONSUMIDOR) LIKE '%" & (Me.txtConsumidor.Text) & "%' AND NRO_LIGACAO NOT IN (SELECT NRO_LIGACAO FROM " & TB_Ligacoes & ")"
     End If
     If Me.optNumLigacao.value = True Then
         PESQUISA = "NUM_LIGAÇÃO"
@@ -947,11 +895,6 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
                 PESQUISA = "ENDEREÇO"
                 VALOR = Me.txtEndereco.Text
     End If
-    'MsgBox "ARQUIVO DEBUG SALVO"
-    'WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-    ' MsgBox "ARQUIVO DEBUG SALVO"
-    'WritePrivateProfileString "A", "A", str, App.path & "\DEBUG.INI"
-    'GRAVA NO ARQUIVO INI AS ULTIMAS CONFIGURAÇÕES DO FILTRO
     Call WriteINI("RAMAISFILTRO", "PESQUISA", PESQUISA, App.path & "\CONTROLES\GEOSAN.INI")
     Call WriteINI("RAMAISFILTRO", "VALOR", VALOR, App.path & "\CONTROLES\GEOSAN.INI")
     'FAZ SELECT COM BASE NOS CAMPOS CRIADOS
@@ -959,13 +902,7 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
     Me.lblResultado.Caption = "Localizadas " & i & " referencias"
     If str <> "" Then
         Set rs = New ADODB.Recordset
-        '  If frmCanvas.TipoConexao <> 4 Then
         rs.Open str, Conn, adOpenForwardOnly, adLockOptimistic
-        ' Else
-        '     rs.Open str, Conn, adOpenForwardOnly, adLockOptimistic
-        ' End If
-        ' Imprima (str)
-        'Set RS = ConnSec.execute(str)
         If rs.EOF = False Then
             'CARREGA NO FORM TODAS AS LIGAÇÕES DISPONIVEIS COM BASE NO PRÉ FILTRO
             'CARREGA_GRID (RS) 'CHAMA A FUNCAO PASSANDO O RECORDSET
@@ -982,12 +919,6 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
                 i = i + 1
                 Me.lblResultado.Caption = "Mostrando " & i & " de " & i & " referencias encontradas"
                 If i >= 500 Then
-'                    estas linhas abaixo foram retiradas pois demorava muito para retornar se o usuário selecionasse uma pesquisa que mostrasse muitas ligações, por exemplo todas palavras que possuem o texto RUA e dava a impressão que o GeoSan tinha travado
-'                    j = i
-'                    Do While Not rs.EOF And blnCancelar = False
-'                        rs.MoveNext
-'                        j = j + 1
-'                    Loop
                     Me.lblResultado.Caption = "Mostrando " & i & " referencias de muitas encontradas " ' & j & " encontradas"
                     Exit Do
                 End If
@@ -1013,15 +944,8 @@ saida:
                 MsgBox "A pesquisa automatica por lote precisa ser configurada.", vbInformation, ""
             Else
                 'PESQUISAR QUAIS NUMEROS DE LIGACAO ESTAO NO LOTE
-                If frmCanvas.TipoConexao <> 4 Then
-                    str = "SELECT " & iniREF_NROLIGACAO & " AS " + """" + "NRO_LIGACAO" + """" + " FROM " & iniTabela
-                    str = str & " WHERE LOTE_ID = '" & idAutoLote & "' AND " & iniREF_NROLIGACAO & " <> '0'"
-                Else
-                    Dim qa As String
-                    qa = "LOTE_ID"
-                    str = "SELECT " + """" + iniREF_NROLIGACAO + """" + " AS " + """" + "NRO_LIGACAO" + """" + " FROM '" & iniTabela & "'"
-                    str = str & " WHERE " + """" + qa + """" + " = '" & idAutoLote & "' AND " + """" + iniREF_NROLIGACAO + """" + " <> '0'"
-                End If
+                str = "SELECT " & iniREF_NROLIGACAO & " AS " + """" + "NRO_LIGACAO" + """" + " FROM " & iniTabela
+                str = str & " WHERE LOTE_ID = '" & idAutoLote & "' AND " & iniREF_NROLIGACAO & " <> '0'"
                 Set rs = New ADODB.Recordset
                 rs.Open str, Conn, adOpenKeyset, adLockOptimistic
                 str = ""
@@ -1362,20 +1286,21 @@ Trata_Erro:
     ElseIf Err.Number = -2147418113 Then ' Erro geral de rede
         Conn.RollbackTrans
         Conn.Close
-        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()-1", CStr(Err.Number), CStr(Err.Description), True
         End
     ElseIf Err.Number = -2147417848 Then ' automation error
-        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()-2", CStr(Err.Number), CStr(Err.Description), True
         Conn.RollbackTrans
         Conn.Close
         End
     ElseIf Err.Number = -2147467259 Or mid(Err.Description, 1, 9) = "ORA-03114" Then 'PERDA DE CONEXÃO BANCO SQL OU ORACLE
-        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()-3", CStr(Err.Number), CStr(Err.Description), True
         Conn.RollbackTrans
         Conn.Close
         'End
     ElseIf Err.Number = -2147168227 Then ' MAX TRANSACTIONS EXCEDIDA. FECHAR E REABRIR A CONEXÃO
         'MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
+        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()-4", CStr(Err.Number), CStr(Err.Description), True
         Conn.RollbackTrans
         Conn.Close
         Conn.Open
@@ -1385,7 +1310,7 @@ Trata_Erro:
         tcs.Select
 '        Conn.RollbackTrans
 '        Conn.Close
-        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()", CStr(Err.Number), CStr(Err.Description), True
+        PrintErro CStr(Me.Name), "Private Sub cmdConfirmar_Click()-5", CStr(Err.Number), CStr(Err.Description), True
         Unload Me
     End If
 End Sub
