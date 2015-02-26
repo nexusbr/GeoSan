@@ -1,11 +1,11 @@
-Global = 107, 93, 1226, 825, 
+Global = 107, 93, 1226, 825, C
 calcDetecta = 0, 0, 0, 0, C
 FrmCreatTextForLayer = 0, 0, 0, 0, C, 132, 132, 1251, 864, C
 frmAbout = 0, 0, 0, 0, C, 154, 154, 1273, 886, C
 FrmTypes = 0, 0, 0, 0, C, 176, 176, 1295, 908, C
 FrmMain = -413, 169, 817, 787, C, 44, 44, 1163, 776, C
 FrmAssociation = 0, 0, 0, 0, C, 220, 220, 1339, 952, C
-FrmCadastroRamal = 63, 27, 1182, 759, I, 45, 39, 1164, 771, C
+FrmCadastroRamal = 17, 110, 1407, 1020, , 45, 39, 1164, 771, C
 frmCadastroRamalFiltro = 0, 0, 0, 0, C, 264, 264, 1383, 996, C
 frmCanvas = -569, 198, 550, 930, C, 110, 110, 1229, 842, C
 frmConsumidoresDesabastecidos = 110, 110, 1229, 842, C, 308, 308, 1427, 1040, C
