@@ -1,0 +1,1 @@
+Para testar uma conexao sqlserver basta criar um arquivo com a extensão xx.udl e selecionar duas vezes sobre o mesmo e preencher os dados de conexão

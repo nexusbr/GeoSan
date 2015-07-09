@@ -1,0 +1,3 @@
+Versão do Banco de dados: Banco SQLServer2005
+
+Modelo de Dados Compatível com Versao Geosan 6.0.0

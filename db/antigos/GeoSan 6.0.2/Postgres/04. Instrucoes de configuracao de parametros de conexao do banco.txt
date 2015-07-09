@@ -1,0 +1,5 @@
+Após a importação do banco de dados do GeoSan, atualizar a tabela GS_PARAMETERS como a string de conexão com o banco de dados configurado.
+
+Exemplo modelo:
+
+DRIVER={PostgreSQL Unicode}; DATABASE=banco_modelo_postgres; SERVER=localhost; PORT=5432; UID=postgres; PWD=gustavo; ByteaAsLongVarBinary=1

@@ -1,0 +1,1 @@
+Estas dlls são compatíveis com a versão 4.2.2 do Terraview.

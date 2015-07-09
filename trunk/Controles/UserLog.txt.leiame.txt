@@ -1,0 +1,1 @@
+Administrador			' Nome do usuário ativo na última utilização. Sepre é alterado quando o último usuário carrega um polígono de seleção (export Epanet, etc.) para saber a qual usuário pertence o polígono selecionado

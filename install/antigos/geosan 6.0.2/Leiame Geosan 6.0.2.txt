@@ -1,0 +1,143 @@
+Geosan - Notas de Liberação
+Versão para Windows
+
+25/08/2011
+
+
+1. PRÉ-REQUISITOS DE INSTALAÇãO
+
+Você deve atender os seguintes requisitos para realizar a instalação do GeoSan:
+
+1.1. Sistema operacional Windows XP Professional (SP3)
+
+1.2. Fechar todos os programas e desabilitar o software antivirus que estejam em funcionamento, antes de começar a instalação, habilitando-os novamente somente após o término da instalação.
+
+1.3. Possuir privilégios administrativos no sistema operacional da máquina cliente onde instalará o GeoSan.
+
+2. PROCEDIMENTOS PARA INSTALAÇÃO
+
+
+Instale os componentes e softwares na seguinte ordem:
+
+	1 - Instalar o aplicativo: - WindowsInstaller 3.1-v2-x86.exe (Caso o computador já tenha uma versão mais recente
+deste aplicativo, é lançado uma mensagem de erro que é normal.)
+
+        2 - Instalar o aplicativo: - Vcredist_x86.exe
+
+	3 - Instalar o aplicativo: - Componente C++ Geosan.exe
+
+	4 - Desinstalar todas as versoções do Terracomponents (Painel de controle), caso ja exista. 
+	    Instalar o aplicativo: - TerraComponents 3.3.1.13.msi
+
+        5 - Instalar o aplicativo: - MDAC_TYP.EXE
+
+
+	6 - Instalar o aplicativo: - Instalador Geosan 6.0.5.exe 
+
+       
+
+	7 - Configurar permissões totais de Escrita/Leitura/Gravação na pasta do Geosan (C:\Arquivos de Programas\Geosan) para todos usuários logados.
+
+
+
+
+3. EXECUÇÃO DO GEOSAN
+
+	1 - Iniciar o GeoSan pelo atalho da área de trabalho.	
+
+	2 - Caso seja a primeira instalação do Geosan no computador, aparecerá uma mensagem informando que não 
+	    encontrou o banco de dados. Selecione Ok.
+
+	2.1 - Aparecerá uma caixa de diálogo perguntando onde está o banco de dados.
+		a. Selecionar tipo de conexão como: SQLServer
+		b. Digitar o nome do banco
+		c. Digitar o nome do servidor
+		d. Digitar o nome do usuário
+		e. Digitar a senha
+
+	3. Entre com o nome do usuário administrador e senha do GeoSan:
+	Usuário: Administrador
+	Senha: Senha
+
+	4. O sistema irá abrir. Consulte o Manual do Usuário para obter detalhes da operação do sistema.
+
+	
+Correções e alterações incluídas de acordo com a versão:
+
+
+6.0.0   Compatibilidade com o banco de dados Postgresql.
+
+5.9.8   a.) Correção da funcionalidade Localizar Consumidores (Nome), 
+	b.) Correção da funcionalidadeEncontrar Válvulas, 
+	c.) Correção da funcionalidade Carregar Polígono e Apresentar Consumidores
+
+5.9.7   a.) Correção da funcionalidade de cadastro de redes de drenagem
+
+
+5.9.6	a.) Corrigida funcionalidade Localizar Válvulas
+	
+	b.) Habilitada a funcionalidade Localizar Válvulas para o usuário tipo visitante
+
+5.9.5   a.) O uso arquivo Geosan.cfg foi descontinuado. As informações de conexão com o banco de dados são agora lidas do arquivo Geosan.ini.
+
+	b.) A ferramenta Polígono de seleção copia também os OBJECT_ID dos nós de redes de água para a tabela POLIGINO_SELEÇÃO.
+
+
+
+5.9.4	a.) Pesquisa de consumidores/ramais pelo número de ligação ou pelo nome do consumidor
+	
+	b.) Novo relatório de Ramais de Água permitindo que o cliente defina as informações do relatório 
+
+	c.) Filtro no tema de Ramais de Água por Tipo, Hidrometrado, Economias, Consumo LPS, Distância Testada, 
+	    Distância Lado, Comprimento Ramal, Profunfidade Ramal ou Usuário
+
+	d.) Definição da escala do mapa através do menu: Mapa > Definir Escala ou digitando a escala diretamente no campo Escala
+
+	e.) Pesquisa automática pelo numreo de IPTU da Geometria do Lote para cadastramento de consumidores
+	
+	f.) Incorporado o uso de arquivo tipo .ini para salvamento de parâmetros do usuário na máquina
+
+	g.) Usuário tipo visitante pode inserir e consultar documentos
+
+	h.) Cálculo da área formada por 3 ou mais pontos criados através de polígono. Mapa > Calcular Área (m²)
+	
+	i.) Painel de Status com novas informações:
+		Mostra o comprimento da rede ao desenhar
+		Mostra o código identificador da rede ao salvar a rede
+		Mostra o código identificador do componente ao inserir componente na rede
+		Mostra valor da área em m² quando a ferramenta de medição de área é selecionada
+
+	j.) Módulo de Impressão: Correção para permitir ajuste de escala
+
+	k.) Módulo de Impressão: Correção para exibir temas com limite de exibição maior que zero
+
+
+
+5.9.3	a.) Reabilitada a função de exportar imagens;
+	
+	b.) Reabilitada a função de localização de textos;
+	
+	c.) Modificado código incluindo tratamento de erro diferenciado na função de atualização automática da base de dados.
+
+
+
+5.9.2	a.) Cadastramento de Ramais de Esgoto;
+
+	b.) Possibilidade de salvar o mapa ativo como figura nos formatos BMP, GIF, JPG, PNG ou TIF;
+	
+	c.) Módulo de impressão:
+	    Possibilidade de impressão de mapas e figuras nos formatos A0, A1, A2, A3, A4 e A5.
+
+
+
+5.9.0	a.) Novo relatório indicador de produtividade de Rede de Esgoto
+	
+	b.) Peças de Redes de Esgoto:
+	    Modificada a quantidade de campos utilizada no cálculo da diferença de Cota Terreno e Cota Profundidade PV
+	    Agora está limitada a 3 casas depois do ponto decimal e após esse valor ocorre arredendamento do valor.
+
+	c.) Nova funcionalidade no desenho de redes de água e esgoto para não permitir o desenho de uma rede sobre 
+	    outra rede com mesma peça inicial e mesma peça final.
+
+
+

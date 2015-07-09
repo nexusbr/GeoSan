@@ -1,0 +1,1230 @@
+11/11/2010 14:56:22 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+11/11/2010 14:56:24 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:06:11 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+11/11/2010 15:06:12 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:25:53 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 15:28:04 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 15:29:33 - PManager4.DLL - Manager - Public Sub GridEnabled - 440 - Automation error
+11/11/2010 15:29:59 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+11/11/2010 15:30:00 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:31:03 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+11/11/2010 15:31:05 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:32:29 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+11/11/2010 15:32:30 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:34:08 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+11/11/2010 15:34:09 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:36:46 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 15:38:07 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "+id_Type+" at character 255
+
+11/11/2010 15:38:08 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:39:28 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: " + id_Type + " at character 254
+
+11/11/2010 15:39:28 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:40:16 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: " + id_Type + " at character 254
+
+11/11/2010 15:40:17 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:40:23 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: " + id_Type + " at character 254
+
+11/11/2010 15:40:33 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:43:03 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: " + id_Type + " at character 254
+
+11/11/2010 15:43:14 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+11/11/2010 15:44:12 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 16:29:38 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 16:32:21 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 16:39:28 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 16:55:48 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 16:58:24 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+11/11/2010 16:59:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+12/11/2010 08:46:26 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "WATERLINESSUBTYPES" at character 330
+
+12/11/2010 11:28:32 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  coluna "line_id" n√£o existe at character 951
+
+12/11/2010 11:45:54 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  coluna "line_id" n√£o existe at character 951
+
+12/11/2010 11:45:57 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  coluna "line_id" n√£o existe at character 951
+
+12/11/2010 11:46:00 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+12/11/2010 11:47:44 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  coluna "line_id" n√£o existe at character 951
+
+12/11/2010 11:47:47 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+12/11/2010 11:53:43 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  coluna "line_id" n√£o existe at character 951
+
+12/11/2010 11:56:30 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+12/11/2010 11:56:32 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+12/11/2010 11:58:10 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+12/11/2010 11:58:11 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+12/11/2010 12:01:09 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+12/11/2010 14:04:12 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+17/11/2010 09:30:15 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 09:30:28 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 09:32:46 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 09:34:45 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 09:38:53 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 09:42:30 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 09:43:05 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 12:54:40 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 15:11:53 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 15:23:48 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 15:23:57 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+17/11/2010 15:24:10 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 15:58:41 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 15:58:44 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 15:59:17 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 15:59:19 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:11:20 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:11:22 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:13:34 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:13:35 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:13:46 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:13:47 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:15:31 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:15:33 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:16:19 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:16:20 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:18:19 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:18:20 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:18:40 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:18:42 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:23:43 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:23:46 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:27:27 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:27:28 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:28:28 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:28:30 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:30:40 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:30:41 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:31:29 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:31:30 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:32:41 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:32:42 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:32:44 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:32:45 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:33:07 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:33:08 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:34:07 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:34:08 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:34:11 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:34:12 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:35:34 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:35:35 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:36:52 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:36:52 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:37:09 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:37:10 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:38:36 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:38:37 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:38:38 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:38:39 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:39:02 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:39:03 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:39:05 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:39:05 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:40:03 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:40:05 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:40:49 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:40:50 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:41:59 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:42:00 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:42:01 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:42:02 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:42:03 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:42:03 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:44:13 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:44:14 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:44:14 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:44:15 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:45:34 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+17/11/2010 16:45:51 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:45:52 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:45:53 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:45:53 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:46:00 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "waterlinestypes" n„o existe;
+Error while executing the query
+17/11/2010 16:46:04 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+17/11/2010 16:46:06 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+17/11/2010 16:46:09 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+17/11/2010 16:46:10 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+17/11/2010 16:46:24 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+17/11/2010 16:46:39 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:46:43 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:46:45 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+17/11/2010 16:46:46 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+17/11/2010 16:46:53 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+17/11/2010 16:46:54 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 08:30:41 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+18/11/2010 08:30:43 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 08:30:57 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+18/11/2010 08:30:59 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 08:48:01 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+18/11/2010 08:48:03 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 08:49:42 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+18/11/2010 08:49:43 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 08:50:06 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+18/11/2010 08:50:07 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 09:25:10 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 09:25:12 - PManager4.DLL - Manager - Public Function SaveProperties - 91 - Object variable or With block variable not set
+18/11/2010 09:26:35 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 09:26:36 - PManager4.DLL - Manager - Public Function SaveProperties - 91 - Object variable or With block variable not set
+18/11/2010 09:27:55 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 09:27:57 - PManager4.DLL - Manager - Public Function SaveProperties - 91 - Object variable or With block variable not set
+18/11/2010 11:06:18 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "0" n„o existe;
+Error while executing the query
+18/11/2010 11:16:10 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: relaÁ„o "WATERLINESSelections" n„o existe;
+Error while executing the query
+18/11/2010 11:16:11 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:16:12 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:16:19 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:16:43 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: relaÁ„o "WATERLINESSelections" n„o existe;
+Error while executing the query
+18/11/2010 11:16:47 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:16:48 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:17:02 - PManager4.DLL - Manager - Private Sub VisibledObjectsSelect - 340 - Control array element '26' doesn't exist
+18/11/2010 11:17:09 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:18:21 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: relaÁ„o "WATERLINESSelections" n„o existe;
+Error while executing the query
+18/11/2010 11:18:23 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:18:23 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:18:26 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:18:28 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:18:34 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:09 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:11 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:15 - PManager4.DLL - Manager - Private Sub ClearObjects - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:19 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:19 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:20 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:20 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:20 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:20 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:21 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:21 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:21 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:21 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:22 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:22 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:22 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:22 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:22 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:22 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:23 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:23 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+18/11/2010 11:23:23 - PManager4.DLL - Manager - Private Sub ClearObjectsSpecifics - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:27 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:28 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:28 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:29 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:29 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:29 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:30 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:23:36 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:25:38 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:25:39 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:25:44 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:28:36 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:28:46 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:29:19 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+18/11/2010 11:56:10 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: coluna WATERLINESSUBTYPES.ID_TYPE n„o existe;
+Error while executing the query
+18/11/2010 11:56:16 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 11:59:47 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: relaÁ„o "WATERLINESData" n„o existe;
+Table not found
+18/11/2010 11:59:52 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 12:00:16 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: relaÁ„o "WATERLINESSubTypes" n„o existe;
+Table not found
+18/11/2010 12:08:25 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: coluna WATERLINESSUBTYPES.ID_TYPE n„o existe;
+Error while executing the query
+18/11/2010 12:08:28 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 12:10:22 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: coluna WATERLINESSUBTYPES.ID_TYPE n„o existe;
+Error while executing the query
+18/11/2010 12:11:27 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 12:14:51 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: coluna WATERLINESSUBTYPES.ID_TYPE n„o existe;
+Error while executing the query
+18/11/2010 12:14:58 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 12:18:33 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO: coluna WATERLINESDATA.Id_Type n„o existe;
+Error while executing the query
+18/11/2010 12:32:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "SELECTION" n„o existe;
+Error while executing the query
+18/11/2010 12:32:55 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 12:33:07 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 12:41:43 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "SELECTION" n„o existe;
+Error while executing the query
+18/11/2010 12:41:53 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 12:42:01 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 12:50:36 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "SELECTION" n„o existe;
+Error while executing the query
+18/11/2010 12:57:13 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "SELECTION" n„o existe;
+Error while executing the query
+18/11/2010 13:29:43 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "SELECTION" n„o existe;
+Error while executing the query
+18/11/2010 13:31:57 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "SELECTION" n„o existe;
+Error while executing the query
+18/11/2010 13:33:20 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna "MAX" n„o existe;
+Error while executing the query
+18/11/2010 13:35:15 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 13:35:27 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "WaterLinesTypes" n„o existe;
+Error while executing the query
+18/11/2010 13:35:30 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 13:35:31 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 13:35:34 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 13:35:35 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ",,,";
+Error while executing the query
+18/11/2010 13:54:13 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 13:54:19 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "WaterLinesTypes" n„o existe;
+Error while executing the query
+18/11/2010 13:54:23 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 13:54:24 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 13:58:59 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:04:41 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "WaterLinesTypes" n„o existe;
+Error while executing the query
+18/11/2010 14:04:52 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 14:04:53 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 14:06:24 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:06:30 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "WaterLinesTypes" n„o existe;
+Error while executing the query
+18/11/2010 14:06:37 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 14:06:38 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 14:14:23 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:14:30 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "waterlinestypes" n„o existe;
+Error while executing the query
+18/11/2010 14:14:37 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 14:14:38 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 14:14:40 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 14:14:42 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 14:14:43 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 14:14:44 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 14:24:48 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "waterlinestypes" n„o existe;
+Error while executing the query
+18/11/2010 14:24:50 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+18/11/2010 14:24:51 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+18/11/2010 14:29:00 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO: relaÁ„o "WaterLinesTypes" n„o existe;
+Error while executing the query
+18/11/2010 14:37:43 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:38:08 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:38:10 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:38:22 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:38:34 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:41:10 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 14:45:15 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 13 - Type mismatch
+18/11/2010 14:45:17 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+18/11/2010 14:57:12 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 15:02:34 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 15:05:24 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 15:23:08 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 15:25:38 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 15:26:13 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "0";
+Error while executing the query
+18/11/2010 15:29:20 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 15:30:25 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 15:30:44 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 15:42:37 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 15:48:44 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+18/11/2010 16:07:48 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+18/11/2010 16:10:38 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+18/11/2010 16:15:47 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+18/11/2010 16:17:20 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: atribuiÁıes m˙ltiplas para mesma coluna "INITIALCOMPONENT";
+Error while executing the query
+18/11/2010 16:25:00 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "167,118";
+Error while executing the query
+18/11/2010 16:27:40 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 16:27:41 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ",,,,,,,,,,,,,,,107,,,132,,,,,108,65,66,109,129,,74,,,,110,,,131,,75,130,67,,97,98,,,63,87,76,,105,,111,69,83,68,,,120,133,59,92,106,127,93,128,61,71,,,,70,,,104,,78,,,,86,,,,,46,85,,,,82,,91,89,,101,,121,57,96,95,102,99,80,,,124,72,77,123,79,119,126,125,103,122,81";
+Error while executing the query
+18/11/2010 16:28:10 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 16:28:34 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+18/11/2010 16:28:40 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+18/11/2010 16:31:36 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+18/11/2010 16:35:50 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+18/11/2010 16:38:15 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+18/11/2010 16:38:18 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: erro de sintaxe em ou prÛximo a "DATEINSTALLATION";
+Error while executing the query
+18/11/2010 16:48:09 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: """";
+Error while executing the query
+18/11/2010 16:50:49 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: """";
+Error while executing the query
+18/11/2010 16:52:15 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: """";
+Error while executing the query
+18/11/2010 16:54:46 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+18/11/2010 16:54:47 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+19/11/2010 08:20:12 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+19/11/2010 08:24:54 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+19/11/2010 08:24:55 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+19/11/2010 08:24:57 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "181,";
+Error while executing the query
+19/11/2010 08:24:59 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "181,";
+Error while executing the query
+19/11/2010 08:25:28 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "183,";
+Error while executing the query
+19/11/2010 08:30:28 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "186,";
+Error while executing the query
+19/11/2010 10:12:23 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "246,251";
+Error while executing the query
+19/11/2010 10:29:00 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""357"";
+Error while executing the query
+19/11/2010 10:37:07 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""357"";
+Error while executing the query
+19/11/2010 15:12:30 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "265,264";
+Error while executing the query
+19/11/2010 15:12:32 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "275,274";
+Error while executing the query
+19/11/2010 15:12:34 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "258,259";
+Error while executing the query
+19/11/2010 15:12:36 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "273,272";
+Error while executing the query
+19/11/2010 15:20:08 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "278,279";
+Error while executing the query
+19/11/2010 16:04:23 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""437"";
+Error while executing the query
+19/11/2010 16:29:32 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""440"";
+Error while executing the query
+19/11/2010 16:31:58 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""443"";
+Error while executing the query
+19/11/2010 16:32:47 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""443"";
+Error while executing the query
+19/11/2010 16:35:48 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ""443"";
+Error while executing the query
+19/11/2010 16:38:46 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna WATERCOMPONENTSSUBTYPES.DESCRIPTION_ n„o existe;
+Error while executing the query
+19/11/2010 16:41:35 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+19/11/2010 16:43:14 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+19/11/2010 16:49:28 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+22/11/2010 10:45:36 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna WATERLINESSUBTYPES.DESCRIPTION n„o existe;
+Error while executing the query
+22/11/2010 10:46:14 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+22/11/2010 10:49:57 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna WATERCOMPONENTSSUBTYPES.DESCRIPTION_ n„o existe;
+Error while executing the query
+22/11/2010 10:50:02 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna WATERCOMPONENTSSUBTYPES.DESCRIPTION_ n„o existe;
+Error while executing the query
+22/11/2010 10:50:26 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO: coluna WATERCOMPONENTSSUBTYPES.DESCRIPTION_ n„o existe;
+Error while executing the query
+22/11/2010 12:07:08 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "227,226";
+Error while executing the query
+22/11/2010 14:45:50 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "303,304";
+Error while executing the query
+22/11/2010 15:49:19 - PManager4.DLL - Manager - Public Sub GridEnabled - 440 - Automation error
+22/11/2010 15:53:29 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "316,315";
+Error while executing the query
+22/11/2010 16:10:59 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "299,300";
+Error while executing the query
+22/11/2010 16:13:22 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "213,212";
+Error while executing the query
+22/11/2010 16:15:03 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "233,232";
+Error while executing the query
+22/11/2010 16:22:45 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "262,263";
+Error while executing the query
+23/11/2010 14:04:51 - PManager4.DLL - Manager - Public Sub GridVisibled - 440 - Automation error
+24/11/2010 14:35:14 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "333,368";
+Error while executing the query
+24/11/2010 14:35:18 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "333,368";
+Error while executing the query
+24/11/2010 14:56:02 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "";
+Error while executing the query
+24/11/2010 14:56:03 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: ",";
+Error while executing the query
+24/11/2010 14:57:57 - PManager4.DLL - Manager - Public Sub GridVisibled - 440 - Automation error
+25/11/2010 08:42:18 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+25/11/2010 08:42:20 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+25/11/2010 08:44:20 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+25/11/2010 08:44:21 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+25/11/2010 08:44:31 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+25/11/2010 08:44:32 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+25/11/2010 15:49:18 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "370,371";
+Error while executing the query
+26/11/2010 09:08:12 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "193,192";
+Error while executing the query
+26/11/2010 10:25:19 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "222,223";
+Error while executing the query
+30/11/2010 12:54:42 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+30/11/2010 12:54:44 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+30/11/2010 12:54:53 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+30/11/2010 12:54:55 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+30/11/2010 12:55:28 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+30/11/2010 12:55:30 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:19:13 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:19:14 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:19:23 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:19:24 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:19:42 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:19:44 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+2/12/2010 16:21:30 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:21:31 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:21:40 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:21:40 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:22:10 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:22:12 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='22', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='10'
+2/12/2010 16:22:24 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='55', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='10'
+2/12/2010 16:24:19 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:25:02 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:25:03 - PManager4.DLL - Manager - Public Function SaveProperties - -2147467259 - ERRO: coluna "MANUFACTURER" da relaÁ„o "DRAINLINES" n„o existe;
+Error while executing the query
+2/12/2010 16:26:18 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:26:18 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - ERRO: valor do campo date/time est· fora do intervalo: "0";
+Error while executing the query
+2/12/2010 16:28:42 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:30:19 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+2/12/2010 16:30:28 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='88', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='10'
+2/12/2010 16:30:51 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:30:52 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:31:00 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:31:01 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:31:27 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:31:28 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:34:03 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:34:04 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:34:51 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:34:52 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:35:03 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+2/12/2010 16:35:05 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+2/12/2010 16:36:48 - PManager4.DLL - mdlQuerys - Public Function getWaterLines - 9 - Subscript out of range
+3/12/2010 08:26:56 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 08:27:21 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 08:36:10 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 08:37:18 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 08:37:50 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 08:38:44 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 08:44:20 - PManager4.DLL - mdlQuerys - Public Function getSewerDrainLines - 0 - 
+3/12/2010 09:52:47 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 09:52:48 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='9', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='39'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='999', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='41'
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='9', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='31'
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='222', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='32'
+3/12/2010 11:21:50 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:21:51 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:21:57 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:21:58 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:29:25 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:29:27 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:50:01 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:50:03 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:50:53 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:50:54 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:56:03 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:56:04 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:56:17 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:56:18 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='25', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='77'
+3/12/2010 11:57:50 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:57:51 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+3/12/2010 11:57:58 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:57:59 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='80'
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0                                                 ', "DATEINSTALLATION"='0', "PATTERN"='0                                                 ', "SECTOR"='0' Where "COMPONENT_ID"='80'
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='25', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0                                                 ', "DATEINSTALLATION"='0', "PATTERN"='0                                                 ', "SECTOR"='0' Where "COMPONENT_ID"='80'
+3/12/2010 11:59:51 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+3/12/2010 11:59:52 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='44'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='25', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='44'
+7/12/2010 11:47:22 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+7/12/2010 11:47:23 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+7/12/2010 11:47:24 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+7/12/2010 11:47:29 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+7/12/2010 11:47:39 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "" at character 965
+
+7/12/2010 11:51:38 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+7/12/2010 11:51:54 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+7/12/2010 11:51:55 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:51:56 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:52:04 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:52:05 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:52:14 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+7/12/2010 11:52:29 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:52:30 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:52:32 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+7/12/2010 11:52:34 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:52:35 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:52:51 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:52:52 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:52:54 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:52:55 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:54:12 - PManager4.DLL - Manager - Private Sub ClearObjects - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:13 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:14 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:14 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:15 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:15 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:15 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:16 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:17 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:18 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:19 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:19 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:20 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:20 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:20 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:20 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:22 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:28 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:30 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:33 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:40 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:40 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:41 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:54:42 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:54:45 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:54:46 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:54:52 - PManager4.DLL - Manager - Private Sub ClearObjects - 340 - Control array element '26' doesn't exist
+7/12/2010 11:54:58 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:58 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:59 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:54:59 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:00 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:00 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:00 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:00 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:01 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:01 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:01 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:01 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:01 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:02 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:02 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:02 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:03 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:03 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:03 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:03 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:03 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:04 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:07 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:08 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:08 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:08 - PManager4.DLL - CItens - Public Function Add - 457 - This key is already associated with an element of this collection
+7/12/2010 11:55:08 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:55:08 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:55:09 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:55:17 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+7/12/2010 11:55:19 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+7/12/2010 11:55:20 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+7/12/2010 11:55:22 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+7/12/2010 13:32:26 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+7/12/2010 13:32:27 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+8/12/2010 09:39:18 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+8/12/2010 09:39:19 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+8/12/2010 16:22:32 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147467259 - ERRO: sintaxe de entrada È inv·lida para integer: "739,740";
+Error while executing the query
+Update SewerComponents Set Id_Type=8, YearOfConstruction=0, State=0, Location=3, Supplier=0, Manufacturer=0, GroundHeight=710, GroundHeightFinal=708, InformationValidity=0, Notes='0', TROUBLE=0, DATEINSTALLATION=NULL, PATTERN=0, SECTOR=0 Where Component_id=100
+16/12/2010 10:32:41 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:33:14 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 10:33:14 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 10:33:16 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 10:33:17 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 10:35:43 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:35:44 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 10:35:45 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 10:36:59 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:37:00 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 10:37:00 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 10:37:11 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:37:12 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:37:13 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:37:15 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:38:27 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:38:29 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:38:42 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:38:45 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:38:47 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+16/12/2010 10:43:10 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:44:18 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:45:14 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:45:54 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:46:30 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:46:46 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 10:46:47 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 10:46:52 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 10:46:53 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 10:48:37 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:57:13 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 10:59:54 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 11:00:01 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 94 - Invalid use of Null
+16/12/2010 11:02:03 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '16' doesn't exist
+16/12/2010 11:02:07 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '16' doesn't exist
+16/12/2010 11:02:08 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '16' doesn't exist
+16/12/2010 11:02:09 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+16/12/2010 11:02:09 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+16/12/2010 11:02:10 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '16' doesn't exist
+16/12/2010 11:02:13 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '16' doesn't exist
+16/12/2010 11:02:15 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '16' doesn't exist
+4/1/2011 14:21:43 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:28:45 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "LOCATION_ID" n√£o existe at character 8
+
+4/1/2011 14:33:12 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "LOCATION_ID" n√£o existe at character 8
+
+4/1/2011 14:38:50 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "LOCATION_ID" n√£o existe at character 8
+
+4/1/2011 14:39:02 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "STATE_ID" n√£o existe at character 8
+
+4/1/2011 14:39:39 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "STATE_ID" n√£o existe at character 8
+
+4/1/2011 14:39:42 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:39:44 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:39:48 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "STATE_ID" n√£o existe at character 8
+
+4/1/2011 14:41:53 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+4/1/2011 14:41:54 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+4/1/2011 14:41:57 - PManager4.DLL - Manager - Private Sub PicVisibled - 340 - Control array element '26' doesn't exist
+4/1/2011 14:42:02 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:42:03 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:42:06 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:42:07 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:42:08 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+4/1/2011 14:52:41 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:52:46 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:52:47 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:54:26 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:54:28 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:54:28 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:54:34 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:54:35 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:54:36 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:55:04 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:55:06 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:55:07 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:56:38 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:56:40 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:56:41 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:57:31 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "DESCRIPTION_" n√£o existe at character 32
+
+4/1/2011 14:57:33 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:57:34 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:58:53 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:58:55 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:58:57 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:58:58 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:59:07 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/1/2011 14:59:08 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/1/2011 14:59:54 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna WATERLINESSUBTYPES.DESCRIPTION n√£o existe at character 51
+
+4/1/2011 15:00:13 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna WATERLINESSUBTYPES.DESCRIPTION n√£o existe at character 53
+
+4/1/2011 15:00:19 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna WATERCOMPONENTSSUBTYPES.DESCRIPTION n√£o existe at character 53
+
+4/1/2011 15:00:47 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:01:09 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:01:18 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:02:14 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:04:06 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:08:36 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 6 - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:10:19 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:26:25 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  faltando entrada para tabela "WATERLINESDATA" na cl√°usula FROM at character 51
+
+4/1/2011 15:33:07 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna "SUBTYPES" n√£o existe at character 40
+
+4/1/2011 15:35:23 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Query returned unhandled type 48465
+4/1/2011 15:38:59 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  faltando entrada para tabela "DATATYPE"WATERLINESSUBTYPES" na cl√°usula FROM at character 40
+
+4/1/2011 15:40:54 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:41:31 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:41:44 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+4/1/2011 15:42:30 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+4/1/2011 15:42:32 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+4/1/2011 15:42:34 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+4/1/2011 15:44:39 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna WATERCOMPONENTSSUBTYPES.DESCRIPTION n√£o existe at character 53
+
+14/1/2011 11:08:38 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "SUPPIERID" n√£o existe at character 8
+
+14/1/2011 11:08:41 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+14/1/2011 11:08:41 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+14/1/2011 11:08:55 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+14/1/2011 11:08:56 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+14/1/2011 11:10:00 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "SUPPIERID" n√£o existe at character 8
+
+14/1/2011 11:10:06 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+14/1/2011 11:10:07 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+14/1/2011 11:10:12 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+14/1/2011 11:10:13 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+14/1/2011 11:10:22 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "SUPPIERID" n√£o existe at character 8
+
+14/1/2011 11:10:30 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+14/1/2011 11:10:30 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+19/1/2011 15:43:19 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217908 - FillParams failed at parsing the command
+19/1/2011 15:45:22 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217908 - FillParams failed at parsing the command
+19/1/2011 15:48:17 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217908 - FillParams failed at parsing the command
+19/1/2011 15:56:57 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  coluna "Object_id_" da rela√ß√£o "WATERLINES" n√£o existe at character 27
+
+19/1/2011 16:21:12 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - connction string lacks some options
+19/1/2011 16:31:13 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:31:14 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:31:19 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:31:20 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:31:45 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:31:46 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:32:09 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:32:10 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:32:16 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:32:17 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:34:44 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:34:45 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:34:49 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:34:51 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:34:56 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:34:57 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:35:02 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:35:03 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:35:15 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:35:16 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:36:16 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:36:17 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:36:21 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+19/1/2011 16:36:22 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+19/1/2011 16:38:02 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "DESCRIPTION" at character 65
+
+19/1/2011 16:42:06 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "+" at character 169
+
+19/1/2011 16:46:40 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "VALUE_" at character 433
+
+20/1/2011 11:30:11 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+20/1/2011 11:30:13 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+20/1/2011 11:30:15 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+20/1/2011 11:30:17 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+20/1/2011 16:30:29 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+20/1/2011 16:30:30 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+20/1/2011 16:30:33 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+20/1/2011 16:30:34 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+21/1/2011 08:13:41 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+21/1/2011 08:13:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+21/1/2011 08:17:17 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+21/1/2011 08:17:18 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+21/1/2011 08:17:19 - PManager4.DLL - mdlQuerys - Public Function getPmssp - 13 - Type mismatch
+21/1/2011 08:17:21 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+21/1/2011 09:38:12 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "=" at character 32
+
+21/1/2011 09:40:04 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  coluna "OBJECT_ID" n√£o existe at character 45
+
+21/1/2011 09:40:14 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  coluna "OBJECT_ID" n√£o existe at character 45
+
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='1', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='63'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='68'
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='ooo', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='82'
+2/2/2011 12:54:47 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147467259 - ERRO:  coluna "SUPPLIERID" n√£o existe at character 8
+
+2/2/2011 12:54:50 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+2/2/2011 12:54:51 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+2/2/2011 12:54:55 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+2/2/2011 12:54:56 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+2/2/2011 13:01:26 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+2/2/2011 13:01:27 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+2/2/2011 13:01:30 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+2/2/2011 13:01:31 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+2/2/2011 13:01:44 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+2/2/2011 13:01:46 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+3/2/2011 09:12:55 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna WATERLINESSUBTYPES.DESCRIPTION n√£o existe at character 51
+
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='50', "FINALGROUNDHEIGHT"='50', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='14'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='80', "FINALGROUNDHEIGHT"='80', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='13'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='100', "FINALGROUNDHEIGHT"='98', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='19'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='80', "FINALGROUNDHEIGHT"='78', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='20'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='60', "FINALGROUNDHEIGHT"='58', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='21'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='0', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='40', "FINALGROUNDHEIGHT"='38', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='22'
+4/2/2011 09:07:05 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+4/2/2011 09:07:06 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+4/2/2011 09:09:16 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+4/2/2011 09:09:17 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+4/2/2011 10:30:45 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - connction string lacks some options
+4/2/2011 14:52:04 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - Invalid column name 'DESCRIPTION_'.
+4/2/2011 14:52:32 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/2/2011 14:52:49 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/2/2011 14:52:51 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/2/2011 14:52:52 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/2/2011 14:52:56 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - Invalid column name 'DESCRIPTION_'.
+4/2/2011 14:59:45 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - Invalid column name 'DESCRIPTION_'.
+4/2/2011 15:01:14 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/2/2011 15:01:15 - PManager4.DLL - Manager - Private Sub Grid_EnterCell - 91 - Object variable or With block variable not set
+4/2/2011 15:08:51 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/2/2011 15:08:52 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/2/2011 15:08:54 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+4/2/2011 15:09:01 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+4/2/2011 15:09:19 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+4/2/2011 15:09:20 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+4/2/2011 15:09:24 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+7/2/2011 09:44:04 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+7/2/2011 09:44:05 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+7/2/2011 09:44:09 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+7/2/2011 09:44:11 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+7/2/2011 09:49:29 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna SEWERLINESSUBTYPES.DESCRIPTION n√£o existe at character 52
+
+7/2/2011 09:52:38 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna SEWERLINESSUBTYPES.DESCRIPTION n√£o existe at character 52
+
+7/2/2011 09:52:46 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna SEWERLINESSUBTYPES.DESCRIPTION n√£o existe at character 52
+
+7/2/2011 09:58:07 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+7/2/2011 09:58:09 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+7/2/2011 09:58:18 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+7/2/2011 09:58:22 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+7/2/2011 09:58:53 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+7/2/2011 09:58:55 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+7/2/2011 10:00:25 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+7/2/2011 10:00:26 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+7/2/2011 10:00:36 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+7/2/2011 10:00:37 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+7/2/2011 10:04:24 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  tipos no UNION integer e character varying n√£o podem corresponder at character 551
+
+7/2/2011 10:14:16 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  tipos no UNION integer e character varying n√£o podem corresponder at character 551
+
+7/2/2011 10:24:35 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "," at character 605
+
+7/2/2011 10:24:39 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "," at character 605
+
+7/2/2011 10:24:49 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  erro de sintaxe em ou pr√≥ximo a "," at character 602
+
+7/2/2011 10:25:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  tipos no UNION character varying e integer n√£o podem corresponder at character 557
+
+7/2/2011 10:25:49 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  tipos no UNION character varying e integer n√£o podem corresponder at character 554
+
+7/2/2011 11:21:51 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+7/2/2011 11:21:53 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+7/2/2011 11:24:04 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+7/2/2011 11:24:05 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+7/2/2011 11:26:35 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+7/2/2011 11:26:36 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+7/2/2011 11:26:39 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+7/2/2011 11:26:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+7/2/2011 11:28:09 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+7/2/2011 11:28:10 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+7/2/2011 11:36:51 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217913 - Conversion failed when converting the varchar value 'PARTICULAR' to data type int.
+7/2/2011 11:37:10 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217913 - Conversion failed when converting the varchar value 'PARTICULAR' to data type int.
+7/2/2011 11:37:43 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217913 - Conversion failed when converting the varchar value 'PARTICULAR' to data type int.
+7/2/2011 11:41:02 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217913 - Conversion failed when converting the varchar value 'PARTICULAR' to data type int.
+7/2/2011 15:00:42 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00923: palavra-chave FROM n„o localizada onde esperada
+9/2/2011 10:08:15 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+9/2/2011 10:08:17 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+9/2/2011 10:08:19 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+9/2/2011 10:08:22 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+9/2/2011 10:08:35 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+9/2/2011 10:08:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+9/2/2011 10:11:42 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+9/2/2011 10:11:45 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+9/2/2011 10:11:54 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+9/2/2011 10:11:55 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+9/2/2011 10:12:02 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147467259 - ERRO:  coluna "OBJECT_ID_" n√£o existe at character 15
+
+9/2/2011 10:12:03 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - FillParams failed at parsing the command
+9/2/2011 10:16:15 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna DRAINCOMPONENTSSUBTYPES.DEFAULTVALUE n√£o existe at character 637
+
+9/2/2011 10:16:22 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - ERRO:  coluna DRAINCOMPONENTSSUBTYPES.DEFAULTVALUE n√£o existe at character 637
+
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='1', "YEAROFCONSTRUCTION"='1988', "STATE"='3', "LOCATION"='44', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='50', "FINALGROUNDHEIGHT"='83', "INFORMATIONVALIDITY"='155', "NOTES"='ghjg', "TROUBLE"='12', "DATEINSTALLATION"='1874', "PATTERN"='12', "SECTOR"='2' Where "COMPONENT_ID"='31'
+Update "SEWERCOMPONENTS" Set "ID_TYPE"='1', "YEAROFCONSTRUCTION"='1800', "STATE"='1', "LOCATION"='44', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='45', "FINALGROUNDHEIGHT"='55', "INFORMATIONVALIDITY"='45', "NOTES"='45', "TROUBLE"='45', "DATEINSTALLATION"='54', "PATTERN"='45', "SECTOR"='4' Where "COMPONENT_ID"='26'
+9/2/2011 13:52:34 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+9/2/2011 13:52:35 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+10/2/2011 16:49:41 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - Conversion failed when converting datetime from character string.
+10/2/2011 16:58:29 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - Conversion failed when converting datetime from character string.
+Update SewerComponents Set Id_Type=2, YearOfConstruction=12, State=2, Location=1, Supplier=0, Manufacturer=0, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='pp', TROUBLE=45, DATEINSTALLATION='19600211', PATTERN=5, SECTOR=5 Where Component_id=25
+11/2/2011 09:38:39 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - Invalid column name 'DESCRIPTION_'.
+11/2/2011 09:38:42 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+11/2/2011 09:38:44 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+11/2/2011 09:39:08 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+11/2/2011 09:39:10 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - Invalid column name 'DESCRIPTION_'.
+11/2/2011 09:39:12 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+11/2/2011 09:39:13 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+11/2/2011 09:39:30 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+11/2/2011 09:39:34 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+11/2/2011 09:39:35 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+11/2/2011 09:39:35 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+11/2/2011 09:40:54 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:40:56 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:40:57 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:40:59 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:41:02 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:41:06 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:41:07 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:41:07 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+11/2/2011 09:41:08 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+11/2/2011 09:41:10 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+11/2/2011 09:41:53 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+11/2/2011 09:42:00 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+11/2/2011 09:47:16 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+11/2/2011 09:47:17 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+11/2/2011 09:47:48 - PManager4.DLL - mdlQuerys - Public Function getPmssp - -2147217900 - Invalid column name 'Object_id_'.
+11/2/2011 09:47:50 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217908 - O comando de texto n„o foi definido para o objeto de comando.
+11/2/2011 09:48:42 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - Invalid column name 'DefaultValue'.
+Update DrainComponents Set Id_Type=1, YearOfConstruction=5, State=2, Location=1, Supplier=0, Manufacturer=4, GroundHeight=4, GroundHeightFinal=4, InformationValidity=4, Notes='kkk', TROUBLE='4', DATEINSTALLATION='15411122', PATTERN='5', SECTOR=4 Where Component_id=8
+11/2/2011 09:56:31 - PManager4.DLL - Manager - Public Function SaveProperties - -2147217913 - The conversion of a char data type to a datetime data type resulted in an out-of-range datetime value.
+Update DrainComponents Set Id_Type=1, YearOfConstruction=5, State=1, Location=3, Supplier=0, Manufacturer=5, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='ooo', TROUBLE='4', DATEINSTALLATION='19800211', PATTERN='5', SECTOR=4 Where Component_id=8
+11/2/2011 14:46:17 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+11/2/2011 14:46:19 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+11/2/2011 14:56:06 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+14/2/2011 08:22:38 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+14/2/2011 08:22:52 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+14/2/2011 08:23:13 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+14/2/2011 08:33:24 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+14/2/2011 08:33:26 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+14/2/2011 08:33:28 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+14/2/2011 08:33:29 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+Update "DRAINCOMPONENTS" Set "ID_TYPE"='1', "YEAROFCONSTRUCTION"='0', "STATE"='0', "LOCATION"='0', "SUPPLIER"='0', "MANUFACTURER"='0', "INITIALGROUNDHEIGHT"='0', "FINALGROUNDHEIGHT"='0', "INFORMATIONVALIDITY"='0', "NOTES"='0', "TROUBLE"='0', "DATEINSTALLATION"='0', "PATTERN"='0', "SECTOR"='0' Where "COMPONENT_ID"='43'
+Update SewerComponents Set Id_Type=0, YearOfConstruction=0, State=1, Location=2, Supplier=12, Manufacturer=14, GroundHeight=0, GroundHeightFinal=0, InformationValidity=0, Notes='0', TROUBLE=0, DATEINSTALLATION='18991230', PATTERN=0, SECTOR=0 Where Component_id=33
+Update DrainComponents Set Id_Type=1, YearOfConstruction=0, State=2, Location=0, Supplier=0, Manufacturer=0, GroundHeight=0, GroundHeightFinal=0, InformationValidity=0, Notes='0', TROUBLE='0', DATEINSTALLATION='18991230', PATTERN='0', SECTOR=0 Where Component_id=49
+18/2/2011 11:26:05 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+18/2/2011 13:00:22 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+18/2/2011 13:26:45 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00936: express„o ausente
+18/2/2011 13:26:49 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00936: express„o ausente
+18/2/2011 13:30:37 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00936: express„o ausente
+18/2/2011 13:31:04 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00936: express„o ausente
+18/2/2011 13:31:31 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00936: express„o ausente
+18/2/2011 13:32:10 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 3 - -2147217900 - ORA-00936: express„o ausente
+21/2/2011 09:02:27 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00932: tipos de dados inconsistentes: esperava CHAR obteve NUMBER
+21/2/2011 09:13:26 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+21/2/2011 09:14:00 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+21/2/2011 09:23:41 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+21/2/2011 09:33:52 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:33:54 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:33:55 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:34:30 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:34:32 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:34:33 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:37:32 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217865 - ORA-00942: a tabela ou view n„o existe
+21/2/2011 09:37:35 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:37:35 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:37:54 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:37:55 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:37:58 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:38:00 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:38:40 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217865 - ORA-00942: a tabela ou view n„o existe
+21/2/2011 09:38:42 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:38:43 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:40:14 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:40:15 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:40:15 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:41:05 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 5 - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:41:06 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:41:06 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:42:16 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:42:17 - PManager4.DLL - CItens - Public Property Get Item - 9 - Subscript out of range
+21/2/2011 09:42:18 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 91 - Object variable or With block variable not set
+21/2/2011 09:42:28 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:42:29 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:42:31 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '26' doesn't exist
+21/2/2011 09:43:27 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:45:44 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 09:51:37 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 10:05:23 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 4 - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+21/2/2011 10:05:38 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 4 - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+21/2/2011 10:06:00 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha = 4 - 3265 - O item n„o pode ser encontrado na coleÁ„o correspondente ao nome ou ao ordinal solicitado.
+21/2/2011 12:56:07 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+21/2/2011 12:59:32 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01790: a express„o deve ter o mesmo tipo de dados da express„o correspondente
+21/2/2011 12:59:47 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01790: a express„o deve ter o mesmo tipo de dados da express„o correspondente
+21/2/2011 13:00:01 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01790: a express„o deve ter o mesmo tipo de dados da express„o correspondente
+21/2/2011 13:15:09 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01790: a express„o deve ter o mesmo tipo de dados da express„o correspondente
+21/2/2011 13:15:15 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01790: a express„o deve ter o mesmo tipo de dados da express„o correspondente
+21/2/2011 13:15:38 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01790: a express„o deve ter o mesmo tipo de dados da express„o correspondente
+21/2/2011 14:58:49 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00907: parÍntese direito ausente
+21/2/2011 14:59:41 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00933: comando SQL n„o encerrado adequadamente
+21/2/2011 15:38:20 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-12704: incompatibilidade de conjunto de caracteres
+21/2/2011 16:13:56 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 16:14:45 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+21/2/2011 16:15:01 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 10:45:03 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 10:47:09 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 10:47:50 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 10:50:53 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 10:52:06 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 11:00:11 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 11:42:58 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 11:45:18 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 11:46:27 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Administrador'.
+23/2/2011 11:46:40 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near '09'.
+23/2/2011 13:37:17 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:37:20 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:37:36 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:37:37 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:37:43 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:37:48 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:40:44 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 13:43:06 - PManager4.DLL - Manager - Public Function LoadDefaultProperties - Linha =  - 91 - Object variable or With block variable not set
+23/2/2011 14:00:51 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+23/2/2011 14:02:26 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - ORA-00904: nome inv·lido de coluna
+Update SewerComponents Set Id_Type=1, YearOfConstruction=5, State=2, Location=2, Supplier=22, Manufacturer=23, GroundHeight=5, GroundHeightFinal=0, InformationValidity=0, Notes='8', TROUBLE=8, DATEINSTALLATION='19821211', PATTERN=5, SECTOR=5 Where Component_id=218
+Update SewerComponents Set Id_Type=1, YearOfConstruction=5, State=2, Location=2, Supplier=22, Manufacturer=23, GroundHeight=5, GroundHeightFinal=44, InformationValidity=44, Notes='8', TROUBLE=8, DATEINSTALLATION='19821211', PATTERN=5, SECTOR=5 Where Component_id=218
+Update DrainComponents Set Id_Type=1, YearOfConstruction=5, State=2, Location=1, Supplier=22, Manufacturer=5, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='5', TROUBLE='5', DATEINSTALLATION='19801211', PATTERN='5', SECTOR=5 Where Component_id=306
+23/2/2011 15:36:56 - PManager4.DLL - Manager - Private Sub PicVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:37:03 - PManager4.DLL - Manager - Private Sub PicVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:37:06 - PManager4.DLL - Manager - Private Sub PicVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:37:09 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:38:05 - PManager4.DLL - Manager - Private Sub PicVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:38:21 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:38:23 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:38:24 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:39:47 - PManager4.DLL - Manager - Private Sub PicVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:40:08 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '17' doesn't exist
+23/2/2011 15:43:29 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 340 - Control array element '17' doesn't exist
+23/2/2011 15:43:39 - PManager4.DLL - Manager - Public Sub Resize - 0 - 0 - 340 - Control array element '17' doesn't exist
+23/2/2011 15:43:41 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '17' doesn't exist
+24/2/2011 10:41:46 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near the keyword 'Where'.
+24/2/2011 10:42:00 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near the keyword 'Where'.
+24/2/2011 10:42:05 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near the keyword 'Where'.
+24/2/2011 10:43:50 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near the keyword 'Where'.
+24/2/2011 10:57:22 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near '10'.
+24/2/2011 11:00:11 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near '09'.
+24/2/2011 11:03:24 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near '11'.
+24/2/2011 11:04:23 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Incorrect syntax near '10'.
+24/2/2011 13:06:13 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:06:57 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:07:07 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:07:35 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:08:46 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:15:55 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:18:50 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:19:46 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147467259 - Subquery returned more than 1 value. This is not permitted when the subquery follows =, !=, <, <= , >, >= or when the subquery is used as an expression.
+24/2/2011 13:57:33 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01427: a subconsulta de uma ˙nica linha retorna mais de uma linha
+24/2/2011 14:01:22 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-01427: a subconsulta de uma ˙nica linha retorna mais de uma linha
+24/2/2011 14:03:58 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00923: palavra-chave FROM n„o localizada onde esperada
+24/2/2011 14:04:01 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00923: palavra-chave FROM n„o localizada onde esperada
+24/2/2011 14:04:24 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00923: palavra-chave FROM n„o localizada onde esperada
+24/2/2011 14:04:27 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - -2147217900 - ORA-00923: palavra-chave FROM n„o localizada onde esperada
+24/2/2011 14:53:02 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 13 - Type mismatch
+24/2/2011 14:53:44 - PManager4.DLL - Manager - Private Function LoadSpecificProperties - 13 - Type mismatch
+24/2/2011 14:55:29 - PManager4.DLL - Manager - Public Sub GridEnabled - 340 - Control array element '16' doesn't exist
+24/2/2011 14:55:31 - PManager4.DLL - Manager - Public Sub GridVisibled - 340 - Control array element '16' doesn't exist
+24/2/2011 15:58:16 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'ooo'.
+Update SewerComponents Set Id_Type=2, YearOfConstruction=5, State=2, Location=2, Supplier=12, Manufacturer=14, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='hgjhgjh', TROUBLE=54, DATEINSTALLATION='19901222', PATTERN=5, SECTOR=5 Where Component_id=35
+Update DrainComponents Set Id_Type=1, YearOfConstruction=55, State=3, Location=3, Supplier=12, Manufacturer=5, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='0', TROUBLE='0', DATEINSTALLATION='19961212', PATTERN='5', SECTOR=5 Where Component_id=51
+24/2/2011 16:08:55 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:01 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:02 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:02 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:02 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:02 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:02 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:03 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:03 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:03 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:03 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:04 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:04 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:09:04 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+Update DrainComponents Set Id_Type=1, YearOfConstruction=55, State=3, Location=3, Supplier=12, Manufacturer=5, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='0', TROUBLE='5', DATEINSTALLATION='19961212', PATTERN='5', SECTOR=5 Where Component_id=51
+24/2/2011 16:09:59 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:10:27 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:10:59 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+24/2/2011 16:13:21 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147217900 - Invalid column name 'Value_'.
+Update DrainComponents Set Id_Type=1, YearOfConstruction=55, State=3, Location=3, Supplier=12, Manufacturer=5, GroundHeight=5, GroundHeightFinal=5, InformationValidity=5, Notes='fdgdfgfdg', TROUBLE='77', DATEINSTALLATION='19961212', PATTERN='5', SECTOR=5 Where Component_id=51
+24/2/2011 16:25:05 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "Administrador" at character 35
+
+24/2/2011 16:25:10 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "24/02/11 16:24" at character 35
+
+24/2/2011 16:25:12 - PManager4.DLL - mdlQuerys - Public Function getPmsdp - 13 - Type mismatch
+24/2/2011 16:25:13 - PManager4.DLL - Manager - Public Function LoadComunsObjects - -2147217908 - FillParams failed at parsing the command
+24/2/2011 16:26:52 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "Administrador" at character 35
+
+24/2/2011 16:26:57 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "24/02/11 16:26" at character 35
+
+24/2/2011 16:28:07 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "Administrador" at character 35
+
+24/2/2011 16:28:21 - PManager4.DLL - mdlQuerys - Public Function getPMIAS - -2147467259 - ERRO:  sintaxe de entrada √© inv√°lida para integer: "24/02/11 16:26" at character 35
+
+17/05/2013 17:23:53 - PManager4.DLL - Manager - Public Function LoadComunsObjects - 3021 - Either BOF or EOF is True, or the current record has been deleted. Requested operation requires a current record.

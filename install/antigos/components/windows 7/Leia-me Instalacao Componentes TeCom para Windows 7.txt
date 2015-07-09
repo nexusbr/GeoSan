@@ -1,0 +1,6 @@
+﻿Nesta pasta estão as componentes necessárias para permitir o desenvolvimento de aplicações GIS/SIG com o Terralib.
+
+
+Requisitos do Sistema:
+Windows 7
+Visual Studio 2010 - Pode ser a versão Express (gratuita)

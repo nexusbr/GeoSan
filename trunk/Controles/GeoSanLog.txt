@@ -1,0 +1,462 @@
+DATA           22/08/2014 12:49:00 
+USUÁRIO        nexus
+VERSÃO         07.00.03
+MÓDULO         clsTerraLib
+EVENTO         Public Function OnRamal
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      O plano corrente não possui a representação geométrica especificada!
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           22/08/2014 17:18:02 
+USUÁRIO        nexus
+VERSÃO         07.00.04
+MÓDULO         clsGeoReference - Local Erro:2
+EVENTO         Public Function DeleteRede
+LINHA          0
+MOTIVO         91
+DESCRIÇÃO      Object variable or With block variable not set
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           17/11/2014 16:38:20 
+USUÁRIO        pinheiro
+VERSÃO         07.00.12
+MÓDULO         FrmAssociation
+EVENTO         Private Sub cmdInserirDoc_Click
+LINHA          0
+MOTIVO         32755
+DESCRIÇÃO      Cancel was selected.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:37:25 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:37:49 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:39:34 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:41:07 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/11/2014 10:44:26 
+USUÁRIO        pinheiro
+VERSÃO         07.00.18
+MÓDULO         FrmAssociation
+EVENTO         Private Sub Salva
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Sintaxe incorreta próxima a '='.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           26/11/2014 15:18:01 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           26/11/2014 15:19:25 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           26/11/2014 15:24:56 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:36:46 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:46:40 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:49:12 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3705
+DESCRIÇÃO      Operação não permitida quando o objeto está aberto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:50:11 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217913
+DESCRIÇÃO      Error converting data type varchar to numeric.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 02:58:00 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217913
+DESCRIÇÃO      Error converting data type varchar to numeric.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:04:28 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:06:50 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:10:14 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:18:29 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:19:54 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         94
+DESCRIÇÃO      Invalid use of Null
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:23:41 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near ','.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:42:24 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           27/11/2014 03:42:55 
+USUÁRIO        pinheiro
+VERSÃO         07.00.19
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:11:44 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3246
+DESCRIÇÃO      Um objeto de conexão não pode ser fechado explicitamente durante uma transação.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:13:21 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:14:19 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147217871
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           19/12/2014 15:15:25 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 10:22:52 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Public Sub Init
+LINHA          0
+MOTIVO         400
+DESCRIÇÃO      Form already displayed; can't show modally
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 10:23:51 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Public Sub Init
+LINHA          0
+MOTIVO         400
+DESCRIÇÃO      Form already displayed; can't show modally
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:06:53 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      The request for procedure 'RAMAIS_AGUA' failed because 'RAMAIS_AGUA' is a table object.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:07:02 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Snapshot isolation transaction failed accessing database 'ArturNogueira-B' because snapshot isolation is not allowed in this database. Use ALTER DATABASE to allow snapshot isolation.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:46:46 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      The request for procedure 'RAMAIS_AGUA' failed because 'RAMAIS_AGUA' is a table object.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:48:55 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:49:34 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function GetWorldByUser
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      Tempo limite de consulta excedido
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:51:29 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operação não permitida quando o objeto está fechado.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:54:45 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217893
+DESCRIÇÃO      A identidade não pode ser determinada para novas linhas inseridas.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:55:17 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         3246
+DESCRIÇÃO      Um objeto de conexão não pode ser fechado explicitamente durante uma transação.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:57:40 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      The request for procedure 'RAMAIS_AGUA' failed because 'RAMAIS_AGUA' is a table object.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 13:58:01 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         3709
+DESCRIÇÃO      A conexão não pode ser usada para realizar esta operação. Ela está fechada ou é inválida neste contexto.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 14:01:02 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         FrmCadastroRamal
+EVENTO         Private Sub cmdConfirmar_Click()
+LINHA          0
+MOTIVO         -2147217893
+DESCRIÇÃO      A identidade não pode ser determinada para novas linhas inseridas.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           30/12/2014 14:09:03 
+USUÁRIO        nexus
+VERSÃO         07.00.25
+MÓDULO         clsTerraConfig
+EVENTO         Public Function SetWorldByUser
+LINHA          0
+MOTIVO         3709
+DESCRIÇÃO      A conexão não pode ser usada para realizar esta operação. Ela está fechada ou é inválida neste contexto.
+
+-----------------------------------------------------------------------------------------------------
+

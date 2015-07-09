@@ -1,0 +1,126 @@
+12/11/2010 09:11:46 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+12/11/2010 09:13:41 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+12/11/2010 09:13:57 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+12/11/2010 11:06:50 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+17/11/2010 09:06:53 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+17/11/2010 10:40:41 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+17/11/2010 12:52:45 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 09:20:56 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 09:50:43 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 09:50:50 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 09:54:23 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 10:03:50 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 10:48:49 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+18/11/2010 10:59:35 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+23/11/2010 11:00:32 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+23/11/2010 15:36:12 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+24/11/2010 16:29:16 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+8/12/2010 09:43:41 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+8/12/2010 10:48:07 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+9/12/2010 09:17:53 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+9/12/2010 10:07:00 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+9/12/2010 10:31:58 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+9/12/2010 11:56:18 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+9/12/2010 11:58:22 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+10/12/2010 09:38:35 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 13 - Type mismatch
+10/12/2010 09:39:24 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147417848 - Method 'open' of object 'ITeAcXConnection' failed
+10/12/2010 09:46:50 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147417848 - Method 'open' of object 'ITeAcXConnection' failed
+10/12/2010 10:11:42 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - Erro ao carregar vista!
+10/12/2010 10:12:33 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - Erro ao carregar vista!
+10/12/2010 10:18:02 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - Erro ao carregar vista!
+14/12/2010 14:19:17 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 91 - Object variable or With block variable not set
+17/12/2010 11:35:29 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+17/12/2010 11:43:18 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+4/1/2011 12:13:43 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+4/1/2011 12:16:00 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+4/1/2011 16:54:34 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+4/1/2011 16:56:20 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+4/1/2011 16:59:13 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+5/1/2011 11:56:33 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+5/1/2011 11:57:17 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+5/1/2011 11:57:35 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+5/1/2011 12:00:28 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+5/1/2011 12:33:50 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+5/1/2011 12:39:59 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 08:25:14 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147417848 - Method '~' of object '~' failed
+6/1/2011 09:39:13 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - StartTransaction failed
+6/1/2011 09:39:15 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - StartTransaction failed
+6/1/2011 09:39:20 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - StartTransaction failed
+6/1/2011 09:42:23 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 09:42:30 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 09:42:37 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 09:42:46 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 10:10:45 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 11:38:58 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 11:39:56 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 11:43:31 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 11:43:45 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 12:46:58 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 12:47:15 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 12:47:43 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 12:48:54 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 12:52:08 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:20:53 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:36:00 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:37:59 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:47:10 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:47:52 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:50:50 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:51:25 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:52:30 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 13:56:06 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:05:52 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:06:30 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:06:36 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:08:51 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:09:06 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:10:52 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:11:41 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:12:03 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:15:18 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:17:48 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:18:03 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:18:31 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:20:49 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:21:17 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:22:05 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:23:00 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:23:10 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:23:35 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:24:59 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:25:46 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:26:08 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:26:44 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:45:46 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:47:04 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:48:57 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:52:20 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 14:53:36 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+6/1/2011 15:03:14 - NxViewManager - frmTheme - Private Sub cmdOK_Click() - -2147467259 - connction string lacks some options
+7/1/2011 08:46:50 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+7/1/2011 08:52:31 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+7/1/2011 09:55:53 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3251 - O conjunto de registros atual não oferece suporte para atualização. Isso pode ser uma limitação do provedor ou do tipo de bloqueio selecionado.
+7/1/2011 10:03:32 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3705 - Operação não permitida quando o objeto está aberto.
+7/1/2011 15:35:48 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3705 - Operação não permitida quando o objeto está aberto.
+7/1/2011 15:35:54 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3705 - Operação não permitida quando o objeto está aberto.
+7/1/2011 16:22:45 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - A cláusula where não pode ser nula!
+10/1/2011 11:06:28 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3704 - Operação não permitida quando o objeto está fechado.
+10/1/2011 11:07:18 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3704 - Operação não permitida quando o objeto está fechado.
+10/1/2011 11:10:03 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3704 - Operação não permitida quando o objeto está fechado.
+10/1/2011 11:11:34 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - 3704 - Operação não permitida quando o objeto está fechado.
+13/1/2011 12:05:37 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - ERRO:  identificador delimitado tem tamanho zero em ou prÃ³ximo a """" at character 15
+
+13/1/2011 12:05:45 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - ERRO:  identificador delimitado tem tamanho zero em ou prÃ³ximo a """" at character 15
+
+13/1/2011 15:53:41 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - ERRO:  identificador delimitado tem tamanho zero em ou prÃ³ximo a """" at character 15
+
+13/1/2011 16:18:42 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - FATAL: desculpe, muitos clientes conectados
+13/1/2011 16:18:47 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - FATAL: desculpe, muitos clientes conectados
+13/1/2011 16:19:12 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147467259 - FATAL: desculpe, muitos clientes conectados
+8/4/2011 16:09:12 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217865 - Invalid object name 'tabela'.
+8/4/2011 16:10:50 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217865 - Invalid object name 'tabela'.
+8/7/2011 09:25:39 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217900 - Incorrect syntax near 'fromX_MATERIAL'.
+8/7/2011 09:30:18 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217900 - Incorrect syntax near 'fromX_MATERIAL'.
+8/7/2011 09:30:23 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217900 - Incorrect syntax near 'fromX_MATERIAL'.
+8/7/2011 09:30:34 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217900 - Incorrect syntax near 'fromX_MATERIAL'.
+8/7/2011 09:31:34 - NxViewManager - frmTheme - Private Sub cmdModificar_Click() - -2147217900 - Incorrect syntax near 'fromX_MATERIAL'.
