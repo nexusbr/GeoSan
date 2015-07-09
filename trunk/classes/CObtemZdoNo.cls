@@ -51,7 +51,7 @@ Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As 
     Dim teNexusDatabase As New CDatabaseNexus                       'classe que acessa as tabelas Terralib
     
     nomeColunaObjIdMdt = teNexusDatabase.GetNomeColunaObjectId("MDT")
-    distanciaMinima = 7.071
+    distanciaMinima = 7.071                                         'distância da diagonal (5x5metros)
     mensagemDeErro = ""
     retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo, distanciaMinima, idGeomPonto, idObjPonto)                  'obtem o ponto do mdt que está mais perto do nó da rede a uma distância de até 5 metros
     cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xMdt, yMdt                                                                'obtem as coordenadas x e y do elemento tipo ponto (4) do geometry_id fornecido
@@ -61,10 +61,19 @@ Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As 
         yInt1 = yMdt
         idObjPonto1 = idObjPonto
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo + 10#, yNo, distanciaMinima, idGeomPonto, idObjPonto2)
+        If retorno = False Then
+            mensagemDeErro = "O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (2A). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt2, yInt2
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo - 10#, distanciaMinima, idGeomPonto, idObjPonto3)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (3A). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt3, yInt3
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo + 10#, yNo - 10#, distanciaMinima, idGeomPonto, idObjPonto4)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (4A). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt4, yInt4
     ElseIf xNo > xMdt And yNo > yMdt Then   'está no Quadrante 2
         quad = 2
@@ -72,10 +81,19 @@ Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As 
         yInt3 = yMdt
         idObjPonto3 = idObjPonto
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo + 10#, yNo, distanciaMinima, idGeomPonto, idObjPonto4)
+        If retorno = False Then
+            mensagemDeErro = "O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (2B). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt4, yInt4
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo + 10#, distanciaMinima, idGeomPonto, idObjPonto1)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (3B). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt1, yInt1
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo + 10#, yNo + 10#, distanciaMinima, idGeomPonto, idObjPonto2)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (4B). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt2, yInt2
     ElseIf xNo < xMdt And yNo < yMdt Then   'está no Quadrante 3
         quad = 3
@@ -83,10 +101,19 @@ Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As 
         yInt2 = yMdt
         idObjPonto2 = idObjPonto
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo - 10#, yNo, distanciaMinima, idGeomPonto, idObjPonto1)
+        If retorno = False Then
+            mensagemDeErro = "O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (2C). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt1, yInt1
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo - 10#, distanciaMinima, idGeomPonto, idObjPonto4)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (3C). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt4, yInt4
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo - 10#, yNo - 10#, distanciaMinima, idGeomPonto, idObjPonto3)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (4C). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt3, yInt3
     ElseIf xNo < xMdt And yNo > yMdt Then   'está no Quadrante 1
         quad = 1
@@ -94,10 +121,19 @@ Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As 
         yInt4 = yMdt
         idObjPonto4 = idObjPonto
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo - 10#, yNo, distanciaMinima, idGeomPonto, idObjPonto3)
+        If retorno = False Then
+            mensagemDeErro = "O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (2D). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt3, yInt3
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo, yNo + 10#, distanciaMinima, idGeomPonto, idObjPonto2)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (3D). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt2, yInt2
         retorno = cGeoDatabase.geoDatabase.locateNearestGeometry(tpPOINTS, xNo - 10#, yNo + 10#, distanciaMinima, idGeomPonto, idObjPonto1)
+        If retorno = False Then
+            mensagemDeErro = mensagemDeErro + " O nó da malha do MDT não está sendo localizado, não consegue atríbuir a cota ao nó (4D). "
+        End If
         cGeoDatabase.geoDatabase.getCenterGeometry idGeomPonto, 0, 4, xInt1, yInt1
     End If
     
