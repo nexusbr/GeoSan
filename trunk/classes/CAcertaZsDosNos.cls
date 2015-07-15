@@ -32,7 +32,8 @@ Public Sub AtribuiZs()
     Dim diretorio As String                                                 'Diretório onde será salva a exportação das cotas calculadas para conferir a anterior com a nova
     Dim retorno As Boolean
     Dim arquivoExportacao As String                                         'nome do arquivo junto com o diretório onde serão exportadas as cotas para conferência
-
+    Dim zNoStr As String                                                    'coordenada Z do no convertida para string. Isso para tratar a virgula que o SQL nao permite no UPDATE
+    
     diretorio = arquivo.SelecionaDiretorio
     If diretorio = "falhou" Then
         Screen.MousePointer = vbNormal
@@ -69,10 +70,12 @@ Public Sub AtribuiZs()
         Close #10
         FrmMain.sbStatusBar.Panels(2).Text = "Z nó " & objIdNo & " calculado = " & zNo
         rsAtributoNos.Close
-        'Conn.execute "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & CStr(zNo) & " WHERE OBJECT_ID_ = " & objIdNo
+        zNoStr = CStr(zNo)                          'converte a cota do no para string para poder atualizar no SQL como ponto
+        zNoStr = Replace(zNoStr, ",", ".")          'troca a vírgula por ponto
+        Conn.execute "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & zNoStr & " WHERE OBJECT_ID_ = " & objIdNo
     Loop
     Close #10
-    Screen.MousePointer = vbNormal
+    Screen.MousePointer = vbNormalObtemZ
     Exit Sub
     
 Trata_Erro:

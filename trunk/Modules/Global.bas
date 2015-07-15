@@ -280,6 +280,7 @@ Public Sub Main()
             FrmMain.mnuChangePassword.Visible = False 'desabilita a troca de senha pelo menu arquivo, pois o admin. pode fazer isso por outro menu
             FrmMain.mnuAutoLogin.Visible = False
             FrmMain.mnuCalculaZNo = True                                        'Exibe a opção de o usuário selecionar se deseja ou não que as cotas sejam calculadas enquanto ele desenha uma rede
+            FrmMain.mnuAtualizaCotas.Visible = True                             'Permite atualizar todas as cotas de todos os nós das redes da cidade toda
         ElseIf rs!UsrFun = 2 Then                                               'USUÁRIO
             FrmMain.mnuUsers.Enabled = False                                    'NÃO PERMITE QUE SEJAM EDITADOS USUÁRIOS
             FrmMain.mnuProdutividade.Enabled = False                            'NÃO PERMITE GERAR RELATORIO DE PRODUTIVIDADE
