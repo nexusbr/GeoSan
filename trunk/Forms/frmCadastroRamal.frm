@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form FrmCadastroRamal 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Cadastro de Ramal de Água"
@@ -244,62 +243,16 @@ Begin VB.Form FrmCadastroRamal
       TabIndex        =   17
       Top             =   1620
       Width           =   12645
-      Begin MSComctlLib.ListView lvLigacoes 
+      Begin VB.PictureBox lvLigacoes 
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   2055
          Left            =   240
+         ScaleHeight     =   1995
+         ScaleWidth      =   12075
          TabIndex        =   45
          Top             =   240
          Width           =   12135
-         _ExtentX        =   21405
-         _ExtentY        =   3625
-         View            =   3
-         LabelEdit       =   1
-         Sorted          =   -1  'True
-         MultiSelect     =   -1  'True
-         LabelWrap       =   -1  'True
-         HideSelection   =   -1  'True
-         Checkboxes      =   -1  'True
-         FullRowSelect   =   -1  'True
-         GridLines       =   -1  'True
-         _Version        =   393217
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483643
-         BorderStyle     =   1
-         Appearance      =   1
-         NumItems        =   6
-         BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            Key             =   "LigMat"
-            Text            =   "Inscrição"
-            Object.Width           =   4586
-         EndProperty
-         BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            SubItemIndex    =   1
-            Key             =   "Insc"
-            Text            =   "Ligação / Matricula"
-            Object.Width           =   2117
-         EndProperty
-         BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            SubItemIndex    =   2
-            Key             =   "Ende"
-            Text            =   "Endereço"
-            Object.Width           =   6174
-         EndProperty
-         BeginProperty ColumnHeader(4) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            SubItemIndex    =   3
-            Key             =   "Cons"
-            Text            =   "Consumidor"
-            Object.Width           =   6174
-         EndProperty
-         BeginProperty ColumnHeader(5) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            SubItemIndex    =   4
-            Key             =   "Tpo"
-            Text            =   "Tipo"
-            Object.Width           =   2646
-         EndProperty
-         BeginProperty ColumnHeader(6) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-            SubItemIndex    =   5
-            Object.Width           =   2540
-         EndProperty
       End
       Begin VB.CommandButton cmdPesquisaLigacoes 
          Caption         =   "Pesquisar Ligações"
