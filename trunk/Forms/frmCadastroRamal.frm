@@ -14,6 +14,13 @@ Begin VB.Form FrmCadastroRamal
    ScaleWidth      =   12930
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.ListBox List1 
+      Height          =   1035
+      Left            =   9360
+      TabIndex        =   46
+      Top             =   5520
+      Width           =   2535
+   End
    Begin VB.CheckBox chkExecFiltroPorLote 
       Caption         =   "Executar Filtro por Lote"
       Height          =   285
@@ -663,7 +670,7 @@ On Error GoTo Trata_Erro
         Me.lblRede.Caption = ramal_Object_id_trecho
         optDesconhecido = True
     End If
-   
+    
     If Me.lvLigacoes.ListItems.count > 0 Then
         'Me.cmdConsultarLigacoes.Enabled = True 'DESATIVADO PARA CORRECÇÃO DAS QUERYS DO SQL SERVER
     Else
