@@ -54,8 +54,9 @@ Sub Main()
         If Not nc.appNewRegistry("Exporte_EPANET", conn, Provider) Then End
     End If
     Set banco.Conexao = conn
-    banco.IniciaLeituraTrechosRede
-    banco.ObtemNomeUsuario
+    banco.ObtemNomeUsuario                                          'obtem o nome do usuário que exportou as redes
+    banco.IniciaLeituraTrechosRede                                  'preparar o cursor para ler os trechos de rede que foram selecionados pelo usuário.
+
     
     logExportacao.AbrePrimeiraVez
     logExportacao.GravaTexto "ExportEpanet;*************************************************************************************************"
