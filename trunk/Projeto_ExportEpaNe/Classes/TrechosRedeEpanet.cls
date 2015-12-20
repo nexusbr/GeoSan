@@ -38,10 +38,6 @@ Private rsNos2 As Recordset
 'Private rs_globalExportados As New ADODB.Recordset '?????? verificar
 
 
-
-
-
-
 'Objeto Utilizado para retornar a posicao
 'em que seja colocado o nó virtual e os vétices das rede(linhas)
 Private tb As New TeDatabase
@@ -67,14 +63,11 @@ Function Exporta()
     '                TIPO = 1 - Redes
     '                TIPO = 2 - Ramais
 
-    banco.AtualizaAsRugosidades
-    banco.ZeraMateriais
-    
+    banco.AtualizaAsRugosidades                 'realiza a atualização, no banco geográfico do GeoSan, de todas as rugosidades a partir do material de cada rede de água
+    banco.ZeraMateriais                         'Zera todos os materiais de tubulações quando o mesmo não estiver cadastrado
+    banco.AbrirEstruturaExporteRede
     usuario_global = trechos.ObtemUsuario
     
-    Dim rugosidade As New rugosidade
-    rugosidade.AtualizaAsRugosidades conn       'realiza a atualização, no banco geográfico do GeoSan, de todas as rugosidades a partir do material de cada rede de água
-    rugosidade.ZeraMateriais conn               'Zera todos os materiais de tubulações quando o mesmo não estiver cadastrado
     trechos.AbreConexaoComTrechosAExportar      'para poder começar a ler os trechos que serão exportados
     
     
@@ -155,7 +148,7 @@ End Function
 '
 '
 Function ExportaParaEpanet()
-    Dim NO As String                                'Vaviavel que guadará o nó a ser processado
+    Dim no As String                                'Vaviavel que guadará o nó a ser processado
     Dim contadorTrechos As Integer          'para contar quantos trechos está exportando
     Dim mPROVEDOR As String
     Dim mSERVIDOR As String
@@ -194,7 +187,7 @@ Function ExportaParaEpanet()
     Dim teNet As New TECOMNETWORKLib.TeNetwork
     'Variáveis da biblioteca
     Dim geom_id As Long, rightside As Long, adjust As Long
-    Dim object_id As String
+    Dim Object_id As String
     Dim xpinter As Double, ypinter As Double, metricValue As Double
     Dim verticeInicial_x As Double, verticeInicial_y As Double, vertice_Y As Double, vertice_X As Double
     teNet.Provider = 1
@@ -217,17 +210,13 @@ Function ExportaParaEpanet()
         blnRsWaterCompTypes = False
     End If
     intLinhaCod = 2
-'    Close #5            'fecha o arquivo de log pois será reaberto na subrotina CarregaRsNosTMP
-    'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
-    trechos.CarregaRsNosTMP
-'    Open arquivoLog For Append As #5                                'continua a realizar o log do sistema para esta rotina
+   
+    banco.CarregaRsNosTMP                                                        'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
     intLinhaCod = 3
-    
-    
-    
+        
     'Percorre todos os trechos da tabela waterlines com a clausura where (setor e tipo de rede)
     'ativada e cursor iniciando no primeiro registro
-    Do While Not rs_global.EOF = True
+    Do While Not banco.TerminouLerTrechosRede = True
         intLinhaCod = 161
         DoEvents
         If Cancelar = True Then
@@ -235,39 +224,38 @@ Function ExportaParaEpanet()
         End If
         intLinhaCod = 4
         contadorTrechos = contadorTrechos + 1                                   'Incrementa o contador de trechos lidos
-        'Imprime o trecho de rede que ele está lendo para exportar para o Epanet
-        'Print #5, "ExportaEPANet;" & Now & " - " & contadorTrechos & " - Trecho lido: " & rs_global!Object_id_
         'Percorre os dois nós do Trecho
         For conta_no = 1 To 2
             'Verifica a variável conta_no e atribui a variavel NO o valor do nó inicial ou final
             If conta_no = 1 Then 'refere-se ao nó inicial
-                'Print #5, "ExportaEPANet;" & Now & " - " & contadorTrechos & " - Trecho lido: " & rs_global!Object_id_ & " - Nó inicial: " & rs_global!InitialComponent
-                NO = rs_global.Fields("InitialComponent").Value
+                no = banco.NumeroDoNoInicialDoTrecho
+                'NO = rs_global.Fields("InitialComponent").Value
             Else 'refere-se ao no final
-                'Print #5, "ExportaEPANet;" & Now & " - " & contadorTrechos & " - Trecho lido: " & rs_global!Object_id_ & " - Nó final: " & rs_global!FinalComponent
-                NO = rs_global.Fields("FinalComponent").Value
+                'NO = rs_global.Fields("FinalComponent").Value
+                no = banco.NumeroDoNoFinalDoTrecho
             End If
             intLinhaCod = 5
             'Verifica se o trecho não foi cadastrado
-            If Not TrechoCadastrado(rs_global.Fields("object_id_").Value) Then 'se não foi exportado, vamos processar
+            If Not banco.TrechoCadastrado(banco.ObjectIdDoTrecho) Then 'se não foi exportado, vamos processar
                 Dim idLinha As String
                 Dim idNo As String
-                idLinha = rs_global.Fields("object_id_").Value
-                idNo = NO
+                'idLinha = rs_global.Fields("object_id_").Value
+                idLinha = banco.ObjectIdDoTrecho
+                idNo = no
                 '###########################################################
                 'Atribui a variável NoI ou NoF com o valor NO para ser usado na inserção do trecho
                 'no procedimento inserção de Trecho
                 If conta_no = 1 Then
-                   NoI = NO
+                   NoI = no
                 Else
-                   NoF = NO
+                   NoF = no
                 End If
                 '######################
                 'Verifica se o nó não foi cadastrado
                 intLinhaCod = 6
-                If Not NoCadastrada(NO) Then 'se o nó não foi cadastrado
+                If Not banco.VerificaSeNoFoiCadastrado(no) Then 'se o nó não foi cadastrado
                     'Seleciona no Cursor rsNosTmp o nó igual o valor de NO
-                    rsNosTmp.Filter = "id='" & NO & "'"
+                    rsNosTmp.Filter = "id='" & no & "'"
                     'Seleciona do processo a ser usado para o tipo do nó
                     intLinhaCod = 7
                     If rsNosTmp.EOF = False Then
@@ -282,6 +270,8 @@ Function ExportaParaEpanet()
                                 rsWaterCompTypes.MoveNext
                             Loop
                         End If
+                            'Seleciona do processo a ser usado para o tipo do nó
+
                         'Neste primeiro select case ele vai dividir uma válvula, registro, etc, que é representado por um nó, em dois nós.
                         Select Case strTipoComp
                             'Case No_Bombas, No_Valvulas, No_Valvulas_99 'Especial nó
@@ -351,21 +341,21 @@ Function ExportaParaEpanet()
                                 End If
                                 intLinhaCod = 9
                                 rsJunctions.AddNew
-                                rsJunctions.Fields("id").Value = NO & "A"
+                                rsJunctions.Fields("id").Value = no & "A"
                                 rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
                                 rsJunctions.Fields("demand").Value = 0
                                 rsJunctions.Fields("pattern").Value = ""
                                 rsCoordinates.AddNew
-                                rsCoordinates.Fields("id").Value = NO & "A"
+                                rsCoordinates.Fields("id").Value = no & "A"
                                 rsCoordinates.Fields("x").Value = X_NO_VIRT
                                 rsCoordinates.Fields("y").Value = Y_NO_VIRT
                                 '###########################################################
                                 'Alterar a variável NoI ou NoF com o valor NO & "A" para ser usado na inserção do trecho
                                 'indicando que o trecho a ser inserido usará um nó virtual
                                 If conta_no = 1 Then
-                                   NoI = NO & "A"
+                                   NoI = no & "A"
                                 Else
-                                   NoF = NO & "A"
+                                   NoF = no & "A"
                                 End If
                                 '######################
                                 'Cria o Componente do tipo entre o nó virtual e o nó processado
@@ -375,29 +365,29 @@ Function ExportaParaEpanet()
                             Select Case strTipoComp
                                 Case "PUMP"
                                     rsPumps.AddNew
-                                    rsPumps.Fields("id").Value = NO
+                                    rsPumps.Fields("id").Value = no
                                     If conta_no = 1 Then
-                                       rsPumps.Fields("Node1").Value = NO          'NESTE TRECHO É DEFINIDO O SENTIDO DA BOMBA
-                                       rsPumps.Fields("Node2").Value = NO & "A"    'A ORDEM DE NO E NOA INFLUENCIA NO SENTIDO
+                                       rsPumps.Fields("Node1").Value = no          'NESTE TRECHO É DEFINIDO O SENTIDO DA BOMBA
+                                       rsPumps.Fields("Node2").Value = no & "A"    'A ORDEM DE NO E NOA INFLUENCIA NO SENTIDO
                                     Else
-                                       rsPumps.Fields("Node1").Value = NO & "A"
-                                       rsPumps.Fields("Node2").Value = NO
+                                       rsPumps.Fields("Node1").Value = no & "A"
+                                       rsPumps.Fields("Node2").Value = no
                                        rsPumps.Fields("potencia").Value = "10"
                                     End If
-                                    AddSubItemPumps NO  'Adiciona os sub itens para a bomba (curva)
+                                    AddSubItemPumps no  'Adiciona os sub itens para a bomba (curva)
                                 Case "VALVE"
                                     rsValves.AddNew
-                                    rsValves.Fields("ID").Value = "V" & NO
-                                    rsValves.Fields("Node1").Value = NO & "A"
-                                    rsValves.Fields("Node2").Value = NO
+                                    rsValves.Fields("ID").Value = "V" & no
+                                    rsValves.Fields("Node1").Value = no & "A"
+                                    rsValves.Fields("Node2").Value = no
                                     rsValves.Fields("Diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".") 'adiciona o diâmetro do trecho da tubulação a válvula
                                     'A próxima rotina foi retirada e substituída pela linha acima, uma vez que ela não estava operante. Não houve entendimento do por que ela foi criada 2013-04-27
                                     'AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
                                 Case "VALVE2"
                                     rsPipes.AddNew
-                                    rsPipes.Fields("id").Value = NO & "A"
-                                    rsPipes.Fields("node1").Value = NO & "A"
-                                    rsPipes.Fields("node2").Value = NO
+                                    rsPipes.Fields("id").Value = no & "A"
+                                    rsPipes.Fields("node1").Value = no & "A"
+                                    rsPipes.Fields("node2").Value = no
                                     rsPipes.Fields("length").Value = 0.1
                                     rsPipes.Fields("diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
                                     rsPipes.Fields("roughness").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
@@ -409,9 +399,9 @@ Function ExportaParaEpanet()
                                     End If
                                 Case "REGISTER"
                                     rsPipes.AddNew
-                                    rsPipes.Fields("ID").Value = NO & "A"
-                                    rsPipes.Fields("NODE1").Value = NO & "A"
-                                    rsPipes.Fields("NODE2").Value = NO
+                                    rsPipes.Fields("ID").Value = no & "A"
+                                    rsPipes.Fields("NODE1").Value = no & "A"
+                                    rsPipes.Fields("NODE2").Value = no
                                     rsPipes.Fields("LENGTH").Value = 1
                                     rsPipes.Fields("DIAMETER").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
                                     rsPipes.Fields("ROUGHNESS").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
@@ -426,31 +416,31 @@ Function ExportaParaEpanet()
                     Select Case strTipoComp
                         Case "RNV" 'No_Tanques
                             rsTanks.AddNew
-                            rsTanks.Fields("ID").Value = NO
+                            rsTanks.Fields("ID").Value = no
                             rsTanks.Fields("Elevation").Value = Format(rsNosTmp("cota").Value, ".0")
-                            AddSubItemTank NO
+                            AddSubItemTank no
                         Case "RNF" 'No_Reservatorios
                             rsReservoirs.AddNew
-                            rsReservoirs.Fields("ID").Value = NO
+                            rsReservoirs.Fields("ID").Value = no
                             rsReservoirs.Fields("Head").Value = Format(rsNosTmp("cota").Value, ".0")
                             rsReservoirs.Fields("Pattern").Value = ""
                         Case Else
                             rsJunctions.AddNew
-                            rsJunctions.Fields("id").Value = NO
+                            rsJunctions.Fields("id").Value = no
                             rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
                             rsJunctions.Fields("demand").Value = rsNosTmp("demanda").Value
                             rsJunctions.Fields("pattern").Value = IIf(rsNosTmp("padrao").Value = 0, "", rsNosTmp("padrao").Value)
                     End Select
                     intLinhaCod = 12
                     rsCoordinates.AddNew
-                    rsCoordinates.Fields("id").Value = NO
+                    rsCoordinates.Fields("id").Value = no
                     rsCoordinates.Fields("x").Value = rsNosTmp("x").Value
                     rsCoordinates.Fields("y").Value = rsNosTmp("y").Value
                 End If
                 intLinhaCod = 13
                 'Insere o NO no cursor temporário rsNosExportados
                 rsNosExportados.AddNew
-                rsNosExportados.Fields("id").Value = NO
+                rsNosExportados.Fields("id").Value = no
             End If
         Next
         'Insere o trecho no cursor temporário rsPipes
