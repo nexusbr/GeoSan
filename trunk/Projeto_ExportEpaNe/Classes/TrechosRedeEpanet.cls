@@ -20,26 +20,12 @@ Private trechos As New TrechosRedeEpanet
 Private usuario_global As String
 Private conn_global As ADODB.Connection
 Private rs_global As ADODB.Recordset
-
-
 Private az As Integer
-'RecordSet de referencia para consulta do tipo de componente
-Private rsWaterCompTypes As New ADODB.Recordset
-Private blnRsWaterCompTypes As Boolean 'Indicador para informar se a tabela RsWaterCompTypes foi carregada com registros
-Private strTipoComp As String 'Variável que receberá o tipo de componente (Junction, valve,pump...)
-
-'Cursor Temporário que retonará todos os nos da Rede
-'para abastecer o RsNosTMP
-Private rsNos As ADODB.Recordset
+Private rsWaterCompTypes As New ADODB.Recordset         'RecordSet de referencia para consulta do tipo de componente
+Private blnRsWaterCompTypes As Boolean                  'Indicador para informar se a tabela RsWaterCompTypes foi carregada com registros
+Private strTipoComp As String                           'Variável que receberá o tipo de componente (Junction, valve,pump...)
+Private rsNos As ADODB.Recordset                        'Cursor Temporário que retonará todos os nos da Rede para abastecer o RsNosTMP
 Private rsNos2 As Recordset
-
-
-
-'Private rs_globalExportados As New ADODB.Recordset '?????? verificar
-
-
-'Objeto Utilizado para retornar a posicao
-'em que seja colocado o nó virtual e os vétices das rede(linhas)
 Private tb As New TeDatabase
 
 'Realiza toda a exportação para o EPANET
@@ -63,24 +49,18 @@ Function Exporta()
     '                TIPO = 1 - Redes
     '                TIPO = 2 - Ramais
 
-    banco.AtualizaAsRugosidades                 'realiza a atualização, no banco geográfico do GeoSan, de todas as rugosidades a partir do material de cada rede de água
-    banco.ZeraMateriais                         'Zera todos os materiais de tubulações quando o mesmo não estiver cadastrado
+    banco.AtualizaAsRugosidades                         'realiza a atualização, no banco geográfico do GeoSan, de todas as rugosidades a partir do material de cada rede de água
+    banco.ZeraMateriais                                 'Zera todos os materiais de tubulações quando o mesmo não estiver cadastrado
     banco.AbrirEstruturaExporteRede
     usuario_global = trechos.ObtemUsuario
     
-    trechos.AbreConexaoComTrechosAExportar      'para poder começar a ler os trechos que serão exportados
+    banco.RsGlobal_abreconexaoComTrechosAExportar       'para poder começar a ler os trechos que serão exportados
+      
+    trechos.ExportaParaEpanet                           'inicia a exportação para o EPANET
     
-    
-    
-    'ExportaEPANet
-    
-    trechos.ExportaParaEpanet                          'inicia a exportação para o EPANET
-    
-    'Gera o arquivo .INP de saída para o Epanet
-    trechos.GeraArquivo_de_Saida
-    intLinhaCod = 19
+    trechos.GeraArquivo_de_Saida                        'Gera o arquivo .INP de saída para o Epanet
+
     Screen.MousePointer = vbNormal
-    
 End Function
 
 
@@ -102,22 +82,6 @@ Function ObtemNumeroTrechosQueSeraoExportados() As Integer
     Rs.Close
     Set Rs = Nothing
     ObtemNumeroTrechosQueSeraoExportados = totalTrechosExportar
-End Function
-
-'Abre a conexão com o banco de dados para obter os trechos de rede que serão exportados para o EPANET
-'
-'
-Function AbreConexaoComTrechosAExportar()
-    Dim str As String
-    
-    'Agora temos que descobrir todos os trechos de rede (TIPO=1 na tabela POLIGONO_SELECAO) que serão exportados para o Epanet, do usuário ativo
-    str = "SELECT * FROM WATERLINES INNER JOIN X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID"
-    str = str & " WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & usuario_global & "' AND TIPO = 1)"
-    
-    'Agora que temos trechos a serem exportados, vamos exportar para o Epanet
-    Set rs_global = New ADODB.Recordset
-    rs_global.Open str, conn, adOpenDynamic, adLockReadOnly
-    conn.CommandTimeout = 300
 End Function
 
 'Obtem o nome do usuário que está exportando para o EPANET
@@ -148,8 +112,8 @@ End Function
 '
 '
 Function ExportaParaEpanet()
-    Dim no As String                                'Vaviavel que guadará o nó a ser processado
-    Dim contadorTrechos As Integer          'para contar quantos trechos está exportando
+    Dim no As String                                                    'Vaviavel que guadará o nó a ser processado
+    Dim contadorTrechos As Integer                                      'para contar quantos trechos está exportando
     Dim mPROVEDOR As String
     Dim mSERVIDOR As String
     Dim mPORTA As String
@@ -158,10 +122,23 @@ Function ExportaParaEpanet()
     Dim Senha As String
     Dim decriptada As String
     Dim prov As String
-    Dim numeroErro As String                'para auxiliar a identificar onde ocorreu o erro
+    Dim numeroErro As String                                            'para auxiliar a identificar onde ocorreu o erro
+    Dim conta_no As Integer                                             'Variável contador para repetição do processo para o no inicial e final de cada trecho
+    Dim Lin_len As Double, x As Double, y As Double                     'Variáveis que retornarão a posição do ponto virtual
+    Dim NoI As String, NoF As String                                    'Variáveis que guardarão os nós para inserção do trecho
+    Dim retorno As Double, distancia As Double, novoLinLen As Double
+    Dim numTotalVerticesNaLinha As Integer
+    Dim i As Integer
+    Dim teNet As New TECOMNETWORKLib.TeNetwork
+    Dim geom_id As Long, rightside As Long, adjust As Long               'Variáveis da biblioteca
+    Dim Object_id As String
+    Dim xpinter As Double, ypinter As Double, metricValue As Double
+    Dim verticeInicial_x As Double, verticeInicial_y As Double, vertice_Y As Double, vertice_X As Double
+    Dim idLinha As String
+    Dim idNo As String
     
-    'Informa que o contador de trechos exportados é zero
-    contadorTrechos = 0
+    
+    contadorTrechos = 0                                                 'Informa que o contador de trechos exportados é zero
     If (az <> 10) Then
         mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\CONTROLES\GEOSAN.ini")
         mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\CONTROLES\GEOSAN.ini")
@@ -172,340 +149,174 @@ Function ExportaParaEpanet()
         decriptada = FunDecripta(Senha)
         az = 10
     End If
-    Dim conta_no As Integer                         'Variável contador para repetição do processo para o no inicial e final de cada trecho
-    Dim Lin_len As Double, x As Double, y As Double 'Variáveis que retornarão a posição do ponto virtual
-    Dim NoI As String, NoF As String                'Variáveis que guardarão os nós para inserção do trecho
-   
-    'Configura o objeto tb(Tecomdatabase) que será usado para retornar para as variáveis lin_len, x e y
-    'seus valores para cada trecho
-    tb.Provider = Provider
+    tb.Provider = Provider                                              'Configura o objeto tb(Tecomdatabase) que será usado para retornar para as variáveis lin_len, x e y seus valores para cada trecho
     tb.Connection = conn
     tb.setCurrentLayer "WATERLINES"
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    Dim retorno As Double, distancia As Double, novoLinLen As Double
-    Dim numTotalVerticesNaLinha, i As Integer
-    Dim teNet As New TECOMNETWORKLib.TeNetwork
-    'Variáveis da biblioteca
-    Dim geom_id As Long, rightside As Long, adjust As Long
-    Dim Object_id As String
-    Dim xpinter As Double, ypinter As Double, metricValue As Double
-    Dim verticeInicial_x As Double, verticeInicial_y As Double, vertice_Y As Double, vertice_X As Double
     teNet.Provider = 1
-    'configura o componente para conexao com o banco de dados
-    teNet.Connection = conn
-    'seta o plano "WATERLINES" como corrente
-    teNet.setCurrentLayer "WATERLINES"
-    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    intLinhaCod = 1
-    'Abre os cursores que guardarão os objectos do rede(nos,trechos,etc) em memoria
-    'para serem gerados em arquivo txt
-    trechos.AbrirEstruturaExporteRede
-
-    'RECORDSET COM OS TIPOS DE REDES EXISTENTES
-    Set rsWaterCompTypes = conn.Execute("SELECT * FROM WATERCOMPONENTSTYPES ORDER BY ID_TYPE")
-    If rsWaterCompTypes.EOF = False Then
-        blnRsWaterCompTypes = True
-    Else
-        MsgBox "Não será possivel identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia.", vbExclamation, ""
-        blnRsWaterCompTypes = False
-    End If
-    intLinhaCod = 2
-   
-    banco.CarregaRsNosTMP                                                        'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
-    intLinhaCod = 3
+    teNet.Connection = conn                                             'configura o componente para conexao com o banco de dados
+    teNet.setCurrentLayer "WATERLINES"                                  'seta o plano "WATERLINES" como corrente
+    trechos.AbrirEstruturaExporteRede                                   'Abre os cursores que guardarão os objectos do rede(nos,trechos,etc) em memoria para serem gerados em arquivo txt
+    banco.RsWaterCompTypes_Inicializa                                   'para ver quais os tipos de parâmetros para redes, bombas, válvulas, etc. e cria um vetor com todos eles
+    banco.CarregaRsNosTMP                                               'Carrega RsNosTMP em memoria, tranferes os dados do cursor no servidor para a maquina rsNosTmp = rsNos
         
-    'Percorre todos os trechos da tabela waterlines com a clausura where (setor e tipo de rede)
-    'ativada e cursor iniciando no primeiro registro
-    Do While Not banco.TerminouLerTrechosRede = True
-        intLinhaCod = 161
+    Do While Not banco.Rs_trechosDeRede_terminouDeLer = True            'Percorre todos os trechos da tabela waterlines com a clausura where (setor e tipo de rede) ativada e cursor iniciando no primeiro registro
         DoEvents
         If Cancelar = True Then
            Return
         End If
-        intLinhaCod = 4
         contadorTrechos = contadorTrechos + 1                                   'Incrementa o contador de trechos lidos
-        'Percorre os dois nós do Trecho
-        For conta_no = 1 To 2
-            'Verifica a variável conta_no e atribui a variavel NO o valor do nó inicial ou final
-            If conta_no = 1 Then 'refere-se ao nó inicial
-                no = banco.NumeroDoNoInicialDoTrecho
-                'NO = rs_global.Fields("InitialComponent").Value
-            Else 'refere-se ao no final
-                'NO = rs_global.Fields("FinalComponent").Value
-                no = banco.NumeroDoNoFinalDoTrecho
+        For conta_no = 1 To 2                                                   'para cada um dos nós do trecho d rede, atribui o ID do nó ao nó inicial ou final. Percorre os dois nós do Trecho
+            If conta_no = 1 Then                                                'se estamos com o nó inicial do trecho, primeira passagem do FOR
+                no = banco.rs_trechosDeRede_numeroNoInicial
+            Else                                                                'se estamos com o nó final do trecho, segunda passagem do FOR
+                no = banco.rs_trechosDeRede_numeroNoFinal
             End If
-            intLinhaCod = 5
-            'Verifica se o trecho não foi cadastrado
-            If Not banco.TrechoCadastrado(banco.ObjectIdDoTrecho) Then 'se não foi exportado, vamos processar
-                Dim idLinha As String
-                Dim idNo As String
-                'idLinha = rs_global.Fields("object_id_").Value
-                idLinha = banco.ObjectIdDoTrecho
+            If Not banco.RsTrechosExportados_verificaSeFoiExportado(banco.rs_trechosDeRede_ObjectIdDoTrecho) Then           'verifica se o trecho (selecionado pela cerca do GeoSan) não foi exportado, se não foi exportado, vamos processar
+                idLinha = banco.rs_trechosDeRede_ObjectIdDoTrecho               'obtem o OBJECT_ID do trecho de rede (selecionado pela cerca) que estamos exportando para o EPANET
                 idNo = no
-                '###########################################################
-                'Atribui a variável NoI ou NoF com o valor NO para ser usado na inserção do trecho
-                'no procedimento inserção de Trecho
-                If conta_no = 1 Then
+                If conta_no = 1 Then                                            'é o nó inicial do trecho de rede (primeira passagem), atribui ao nó inicial
                    NoI = no
-                Else
+                Else                                                            'é o nó final do trecho de rede (primeira passagem), atribui ao nó final
                    NoF = no
                 End If
-                '######################
-                'Verifica se o nó não foi cadastrado
-                intLinhaCod = 6
-                If Not banco.VerificaSeNoFoiCadastrado(no) Then 'se o nó não foi cadastrado
-                    'Seleciona no Cursor rsNosTmp o nó igual o valor de NO
-                    rsNosTmp.Filter = "id='" & no & "'"
-                    'Seleciona do processo a ser usado para o tipo do nó
-                    intLinhaCod = 7
-                    If rsNosTmp.EOF = False Then
-                        strTipoComp = ""
-                        If blnRsWaterCompTypes = True Then
-                            rsWaterCompTypes.MoveFirst
-                            Do While Not rsWaterCompTypes.EOF = True
-                                If rsNosTmp.Fields("Tipo").Value = rsWaterCompTypes!id_type Then
-                                    strTipoComp = rsWaterCompTypes!SPECIFICATION_
-                                    Exit Do
-                                End If
-                                rsWaterCompTypes.MoveNext
-                            Loop
-                        End If
-                            'Seleciona do processo a ser usado para o tipo do nó
-
-                        'Neste primeiro select case ele vai dividir uma válvula, registro, etc, que é representado por um nó, em dois nós.
-                        Select Case strTipoComp
+                If Not banco.RsNosExportados_verificaSeNoFoiExportado(no) Then  'se o nó não foi exportado ainda
+                    banco.RsNosTmp_filtraPorNo (no)                             'filtra para pegar os dados somente do nó que está sendo lido
+                    strTipoComp = banco.RsWaterCompTypes_tipoDeEspecificacao    'Obter a especificação para poder processar a exportação conforme o tipo de nó
+                    If banco.RsWaterCompTypes_ExitemParametros = True Then
+                        Select Case strTipoComp                                 'Seleciona do processo a ser usado para o tipo do nó
                             'Case No_Bombas, No_Valvulas, No_Valvulas_99 'Especial nó
                             'É uma verificação realizada na coluna Specification_ da tabela WaterComponentsTypes
                             'Mudando nesta tabela o valor de Specification_ muda se o nó será exportado como válvula (pequeno trecho) ou não
-                            Case "PUMP", "VALVE", "VALVE2", "REGISTER"
-                                'Verifica a Direção da Tubulação e recupera um ponto X_NO_VIRT, Y_NO_VIRT a 1/3 da distancia
-                                ' e insere o no virtual em RsJuntions e RsCoordinates
-                                tb.getLengthOfLine 0, idLinha, Lin_len
-                                'carrega em Lin_len o comprimento total da linha
-                                intLinhaCod = 8
-                                Dim X_Componente As Double 'COORDENADA X DO VERTICE
-                                Dim Y_Componente As Double 'COORDENADA Y DO VERTICE
-                                Dim X_Vertice As Double    'COORDENADA X DO VERTICE
-                                Dim Y_Vertice As Double    'COORDENADA Y DO VERTICE
-                                Dim VERTICE_LEN As Double  'ARMAZENA O COMPRIMENTO DO VERTICE ANALIZADO
-                                Dim X_NO_VIRT As Double    'ARMAZENA A COORDENADA X DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
-                                Dim Y_NO_VIRT As Double    'ARMAZENA A COORDENADA Y DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
-                                If conta_no = 2 Then ' se for o ponto final pega a distância de 2/3 do comprimento da linha
-                                    numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha) 'retorna número de pontos que compõem a linha. se maior que 2 significa que tem vertices
-                                    If numTotalVerticesNaLinha > 2 Then 'existem vértices na linha
-                                        'Pegar o penultimo ponto(vertice)
-                                        'RETORNA A COORDENADA DO ÚLTIMO VERTICE
-                                        retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha - 2), X_Vertice, Y_Vertice)
-                                        'RETORNA A COORDENADA DO ÚLTIMO NÓ
-                                        retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha - 1), X_Componente, Y_Componente)
-                                        'RETORNA A DISTANCIA ENTRE O ULTIMO NÓ E O ULTIMO VERTICE
-                                        VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
-                                        'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
-                                        '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
-                                        distancia = (Lin_len - VERTICE_LEN) + (VERTICE_LEN * 0.666666)
-                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                                        'VIRTUAL QUE DEVERÁ SER CRIADO
-                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-                                    Else
-                                        'DISTANCIA = 2 TERÇOS DO COMPRIMENTO TOTAL DA LINHA
-                                        distancia = Lin_len * 0.666666
-                                        
-                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                                        'VIRTUAL QUE DEVERÁ SER CRIADO
-                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-                                    End If
-                                Else ' se o ponto for o inicial, pega a distãncia de 1/3 do comprimento da linha
-                                    numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)
-                                    If numTotalVerticesNaLinha > 2 Then 'existem vértices na linha
-                                        'RETORNA A COORDENADA DO PRIMEIRO VERTICE
-                                        retorno = tb.getPointOfLine(0, idLinha, 1, X_Vertice, Y_Vertice)
-                                        'RETORNA A COORDENADA DO PRIMEIRO NÓ
-                                        retorno = tb.getPointOfLine(0, idLinha, 0, X_Componente, Y_Componente)
-                                        'RETORNA EM VERTICE_LEN A DISTANCIA ENTRE O PRIMEIRO VERTICE E O PRIMEIRO NÓ
-                                        VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
-                                        'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
-                                        '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
-                                        distancia = VERTICE_LEN * 0.33333
-                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                                        'VIRTUAL QUE DEVERÁ SER CRIADO
-                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-                                    Else
-                                        'DISTANCIA = 1 TERÇO DO COMPRIMENTO TOTAL DA LINHA
-                                        distancia = Lin_len * 0.333333
-                                        'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
-                                        'VIRTUAL QUE DEVERÁ SER CRIADO
-                                        tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
-                                    End If
-                                    ' retorna em x, y a coordenada do ponto inicial que fica a 1/3 do início da linha
-                                    'tb.getPerpendicularPoint 0, .Fields("object_id_").Value, (Lin_len / 3) * 2, 0, X_Componente, Y_Componente ' colocou zero antes de x, y para retornar o ponto na própria linha
-                                End If
-                                intLinhaCod = 9
-                                rsJunctions.AddNew
-                                rsJunctions.Fields("id").Value = no & "A"
-                                rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
-                                rsJunctions.Fields("demand").Value = 0
-                                rsJunctions.Fields("pattern").Value = ""
-                                rsCoordinates.AddNew
-                                rsCoordinates.Fields("id").Value = no & "A"
-                                rsCoordinates.Fields("x").Value = X_NO_VIRT
-                                rsCoordinates.Fields("y").Value = Y_NO_VIRT
-                                '###########################################################
-                                'Alterar a variável NoI ou NoF com o valor NO & "A" para ser usado na inserção do trecho
-                                'indicando que o trecho a ser inserido usará um nó virtual
-                                If conta_no = 1 Then
-                                   NoI = no & "A"
-                                Else
-                                   NoF = no & "A"
-                                End If
-                                '######################
-                                'Cria o Componente do tipo entre o nó virtual e o nó processado
-                                 intLinhaCod = 10
-                            'Select Case rsNosTmp.Fields("Tipo").Value
-                            'Agora adiciona aos recosets
+                            Case "PUMP", "VALVE", "VALVE2", "REGISTER"          'vai dividir uma válvula, registro, etc, que é representado por um nó, em dois nós e um trecho
+                                Call ConverteNoEmTrecho(idLinha, Lin_len, conta_no, numTotalVerticesNaLinha, distancia)
                             Select Case strTipoComp
                                 Case "PUMP"
-                                    rsPumps.AddNew
-                                    rsPumps.Fields("id").Value = no
-                                    If conta_no = 1 Then
-                                       rsPumps.Fields("Node1").Value = no          'NESTE TRECHO É DEFINIDO O SENTIDO DA BOMBA
-                                       rsPumps.Fields("Node2").Value = no & "A"    'A ORDEM DE NO E NOA INFLUENCIA NO SENTIDO
-                                    Else
-                                       rsPumps.Fields("Node1").Value = no & "A"
-                                       rsPumps.Fields("Node2").Value = no
-                                       rsPumps.Fields("potencia").Value = "10"
-                                    End If
-                                    AddSubItemPumps no  'Adiciona os sub itens para a bomba (curva)
+                                    Call banco.RsPumps_adicionaBomba(no)        'adiciona os dados da bomba para poder exportar depois para o EPANET
+                                    AddSubItemPumps no                          'Adiciona os sub itens para a bomba (curva)
                                 Case "VALVE"
-                                    rsValves.AddNew
-                                    rsValves.Fields("ID").Value = "V" & no
-                                    rsValves.Fields("Node1").Value = no & "A"
-                                    rsValves.Fields("Node2").Value = no
-                                    rsValves.Fields("Diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".") 'adiciona o diâmetro do trecho da tubulação a válvula
-                                    'A próxima rotina foi retirada e substituída pela linha acima, uma vez que ela não estava operante. Não houve entendimento do por que ela foi criada 2013-04-27
-                                    'AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
+                                    Call banco.RsValves_adicionaValvula(no)     'adiciona os dados da válvula para poder exportar depois para o EPANET
                                 Case "VALVE2"
-                                    rsPipes.AddNew
-                                    rsPipes.Fields("id").Value = no & "A"
-                                    rsPipes.Fields("node1").Value = no & "A"
-                                    rsPipes.Fields("node2").Value = no
-                                    rsPipes.Fields("length").Value = 0.1
-                                    rsPipes.Fields("diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
-                                    rsPipes.Fields("roughness").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
-                                    rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
-                                    If rs_global.Fields("MATERIALNAME").Value <> "" Then
-                                       rsPipes.Fields("Description").Value = rs_global.Fields("MATERIALNAME").Value
-                                    Else
-                                       rsPipes.Fields("Description").Value = ""
-                                    End If
+                                    Call banco.RsValves2_adicionaValvula(no)    'adiciona os dados da válvula2 para poder exportar depois para o EPANET
                                 Case "REGISTER"
-                                    rsPipes.AddNew
-                                    rsPipes.Fields("ID").Value = no & "A"
-                                    rsPipes.Fields("NODE1").Value = no & "A"
-                                    rsPipes.Fields("NODE2").Value = no
-                                    rsPipes.Fields("LENGTH").Value = 1
-                                    rsPipes.Fields("DIAMETER").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
-                                    rsPipes.Fields("ROUGHNESS").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
-                                    rsPipes.Fields("STATUS").Value = IIf(rsNosTmp("ESTADO").Value = 0, " ", rsNosTmp("ESTADO").Value)
-                                    rsPipes.Fields("DESCRIPTION").Value = "REGISTRO"
+                                    Call banco.RsPipes_adicionaRegistro(no)     'adiciona os dados do registro, na verdade um registro é um trecho de rede, para poder depois exportar para o EPANET
                             End Select
                         End Select
-                    End If 'rsNosTmp.EOF = true
-                    'Insere o nó processado
-                    intLinhaCod = 11
-                    'Select Case rsNosTmp.Fields("Tipo").Value
-                    Select Case strTipoComp
+                    End If
+                    Select Case strTipoComp                                     'Insere o nó processado
                         Case "RNV" 'No_Tanques
-                            rsTanks.AddNew
-                            rsTanks.Fields("ID").Value = no
-                            rsTanks.Fields("Elevation").Value = Format(rsNosTmp("cota").Value, ".0")
-                            AddSubItemTank no
+                            Call banco.RsTanks_adicionaReservatorioNivelVariavel(no)    'Adiciona os dados do RNV (Reservatório de Nível Variável) para poder exportar para o EPANET
                         Case "RNF" 'No_Reservatorios
-                            rsReservoirs.AddNew
-                            rsReservoirs.Fields("ID").Value = no
-                            rsReservoirs.Fields("Head").Value = Format(rsNosTmp("cota").Value, ".0")
-                            rsReservoirs.Fields("Pattern").Value = ""
+                            Call banco.RsReservois_adicionaReservatorio(no)             'Adiciona os dados do reservatório para poder exportar para o EPANET
                         Case Else
-                            rsJunctions.AddNew
-                            rsJunctions.Fields("id").Value = no
-                            rsJunctions.Fields("elev").Value = Format(rsNosTmp("cota").Value, ".0")
-                            rsJunctions.Fields("demand").Value = rsNosTmp("demanda").Value
-                            rsJunctions.Fields("pattern").Value = IIf(rsNosTmp("padrao").Value = 0, "", rsNosTmp("padrao").Value)
+                            Call banco.RsJunctions_adicionaJuncao(no, banco.RsNosTmp_obtemDemandaDoNo)  'Adiciona os dados da junção para poder exportar depois para o EPANET
                     End Select
-                    intLinhaCod = 12
-                    rsCoordinates.AddNew
-                    rsCoordinates.Fields("id").Value = no
-                    rsCoordinates.Fields("x").Value = rsNosTmp("x").Value
-                    rsCoordinates.Fields("y").Value = rsNosTmp("y").Value
+                    Call banco.RsCoordinates_adicionaCoordenadas(no, banco.RsNosTmp_coordX(no), banco.RsNosTmp_coordY(no))  'Adiciona as coordenadas geográficas de um nó, para o mesmo poder exportar para o EPANET
                 End If
-                intLinhaCod = 13
-                'Insere o NO no cursor temporário rsNosExportados
-                rsNosExportados.AddNew
-                rsNosExportados.Fields("id").Value = no
+                banco.RsNosExportados_insereNoExportado (no)                    'Insere o NO no cursor temporário rsNosExportados
             End If
         Next
         'Insere o trecho no cursor temporário rsPipes
-        intLinhaCod = 14
-        rsPipes.AddNew
-        rsPipes.Fields("id").Value = idLinha
-        rsPipes.Fields("node1").Value = NoI
-        rsPipes.Fields("node2").Value = NoF
-        If rs_global.Fields("Length").Value > 0 Then
-            rsPipes.Fields("length").Value = Replace(rs_global.Fields("Length").Value, ",", ".")
-        Else
-            rsPipes.Fields("Length").Value = Replace(rs_global.Fields("LengthCalculated").Value, ",", ".")
-        End If
-        rsPipes.Fields("diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
-        rsPipes.Fields("roughness").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
-        'rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
-        rsPipes.Fields("status").Value = "Open"
-        If rs_global.Fields("MATERIALNAME").Value <> "" Then
-            rsPipes.Fields("Description").Value = rs_global.Fields("MATERIALNAME").Value
-        Else
-            rsPipes.Fields("Description").Value = ""
-        End If
-        'rsPipes.Fields("Description").Value = IIf(rs_global.Fields("MATERIAL").Value <> Null, "", rs_global.Fields("MATERIAL").Value)
-        ' INICIO DA ROTINA DE INSERIR OS VÉRTICES CASO NECESSÁRIO
-        numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)
-        If numTotalVerticesNaLinha > 2 Then ' existem vértice intermediários na linha que necessitam ser considerados no Epanet
-            For i = 1 To numTotalVerticesNaLinha - 2 'DO PRIMEIRO AO ULTIMO VÉRTICE, FAÇA
-                If tb.getPointOfLine(0, idLinha, i, vertice_X, vertice_Y) Then
-                    rsVertices.AddNew
-                    rsVertices.Fields("ID").Value = idLinha
-                    rsVertices.Fields("X-Coord").Value = vertice_X
-                    rsVertices.Fields("Y-Coord").Value = vertice_Y
+        Call banco.RsPipes_adicionaTrechoRede(idLinha, NoI, NoF)
+        
+        numTotalVerticesNaLinha = tb.getQuantityPointsLine(0, idLinha)                                  'obtem o número de vértices existentes no trecho de rede que foi inserido
+        If numTotalVerticesNaLinha > 2 Then                                                             'existem vértice intermediários na linha que necessitam ser considerados no Epanet, pois 2 já existem, o inícial e final
+            For i = 1 To numTotalVerticesNaLinha - 2                                                    'percorra do primeiro ao último vértice do trecho de rede
+                If tb.getPointOfLine(0, idLinha, i, vertice_X, vertice_Y) Then                          'obtem as coordenadas do vértice
+                    Call banco.RsVertices_adicionaVerticesDosTrechosRede(idLinha, vertice_X, vertice_Y)      'insere o vértice
                 End If
             Next
         End If
-        ' FIM DA ROTINA DE INSERIR VERTICES
-        intLinhaCod = 15
-        'AddVertices id
-        'Insere no cursor de trechos exportados o trecho processado
-        rsTrechos.AddNew
-        intLinhaCod = 151
-        rsTrechos.Fields("id").Value = idLinha 'rs_global.Fields("object_id_").Value
-        'Atualiza o formulario frmOdometro
-        intLinhaCod = 152
-        If FrmEPANET.ProgressBar1.Value < FrmEPANET.ProgressBar1.Max Then
+
+        banco.RsTrechos_adicionaIdDoTrecho                                                              'Adiciona o Id do trecho de rede que já foi exportado para o vetor de trechos exportados
+        
+        If FrmEPANET.ProgressBar1.Value < FrmEPANET.ProgressBar1.Max Then                               'Atualiza o formulario frmOdometro, para que o usuário saiba que o processamento está andando
             FrmEPANET.ProgressBar1.Value = FrmEPANET.ProgressBar1.Value + 1
         End If
-        'frmOdometro.Caption = FrmEPANET.ProgressBar1.Value & " até " & frmOdometro.ProgressBar1.Max
-        intLinhaCod = 153
-        'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
-        intLinhaCod = 16
-        numeroErro = "Penuntimo trecho lido: " & rs_global!Object_id_
-        'Print #5, "ExportaEPANet;Querie rs_global: " & rs_global.Source
-        rs_global.MoveNext
-        'numeroErro = numeroErro + " Ultimo trecho lido: " & rs_global!Object_id_
+        rs_global.MoveNext                                                                              'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
     Loop
- intLinhaCod = 17
-    Set rsNosTmp = Nothing
-    rsTrechos.Close
-    Set rsTrechos = Nothing
-    rsTrechosExportados.Close
-    Set rsTrechosExportados = Nothing
-    Set rsNos = Nothing
-    intLinhaCod = 18
 End Function
+
+'Converte um ponto (nó) em trecho.
+'Isto é realizado quando tempos bomba, válvulas ou registros, pois no EPANET estes elementos são trechos de rede e não nós
+'
+'
+'
+Private Function ConverteNoEmTrecho(idLinha As String, Lin_len As Double, conta_no As Integer, numTotalVerticesNaLinha_ As Integer, distancia As Double)
+    'Verifica a Direção da Tubulação e recupera um ponto X_NO_VIRT, Y_NO_VIRT a 1/3 da distancia
+    ' e insere o no virtual em RsJuntions e RsCoordinates
+    tb.getLengthOfLine 0, idLinha, Lin_len
+    'carrega em Lin_len o comprimento total da linha
+    Dim retorno As Double
+    Dim X_Componente As Double 'COORDENADA X DO VERTICE
+    Dim Y_Componente As Double 'COORDENADA Y DO VERTICE
+    Dim X_Vertice As Double    'COORDENADA X DO VERTICE
+    Dim Y_Vertice As Double    'COORDENADA Y DO VERTICE
+    Dim VERTICE_LEN As Double  'ARMAZENA O COMPRIMENTO DO VERTICE ANALIZADO
+    Dim X_NO_VIRT As Double    'ARMAZENA A COORDENADA X DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
+    Dim Y_NO_VIRT As Double    'ARMAZENA A COORDENADA Y DO NÓ VIRTUAL CASO SEJA NECESSÁRIO
+    If conta_no = 2 Then ' se for o ponto final pega a distância de 2/3 do comprimento da linha
+        numTotalVerticesNaLinha_ = tb.getQuantityPointsLine(0, idLinha) 'retorna número de pontos que compõem a linha. se maior que 2 significa que tem vertices
+        If numTotalVerticesNaLinha_ > 2 Then 'existem vértices na linha
+            'Pegar o penultimo ponto(vertice)
+            'RETORNA A COORDENADA DO ÚLTIMO VERTICE
+            retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha_ - 2), X_Vertice, Y_Vertice)
+            'RETORNA A COORDENADA DO ÚLTIMO NÓ
+            retorno = tb.getPointOfLine(0, idLinha, (numTotalVerticesNaLinha_ - 1), X_Componente, Y_Componente)
+            'RETORNA A DISTANCIA ENTRE O ULTIMO NÓ E O ULTIMO VERTICE
+            VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
+            'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
+            '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
+            distancia = (Lin_len - VERTICE_LEN) + (VERTICE_LEN * 0.666666)
+            'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+            'VIRTUAL QUE DEVERÁ SER CRIADO
+            tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+        Else
+            'DISTANCIA = 2 TERÇOS DO COMPRIMENTO TOTAL DA LINHA
+            distancia = Lin_len * 0.666666
+            
+            'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+            'VIRTUAL QUE DEVERÁ SER CRIADO
+            tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+        End If
+    Else ' se o ponto for o inicial, pega a distãncia de 1/3 do comprimento da linha
+        numTotalVerticesNaLinha_ = tb.getQuantityPointsLine(0, idLinha)
+        If numTotalVerticesNaLinha_ > 2 Then 'existem vértices na linha
+            'RETORNA A COORDENADA DO PRIMEIRO VERTICE
+            retorno = tb.getPointOfLine(0, idLinha, 1, X_Vertice, Y_Vertice)
+            'RETORNA A COORDENADA DO PRIMEIRO NÓ
+            retorno = tb.getPointOfLine(0, idLinha, 0, X_Componente, Y_Componente)
+            'RETORNA EM VERTICE_LEN A DISTANCIA ENTRE O PRIMEIRO VERTICE E O PRIMEIRO NÓ
+            VERTICE_LEN = DistanceBetween(X_Vertice, Y_Vertice, X_Componente, Y_Componente)
+            'DISTANCIA = COMPRIMENTO TOTAL DA LINHA - COMPRIMENTO DO ULTIMO VERTICE +
+            '2 TERÇOS DA DISTANCIA DO ULTIMO VERTICE
+            distancia = VERTICE_LEN * 0.33333
+            'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+            'VIRTUAL QUE DEVERÁ SER CRIADO
+            tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+        Else
+            'DISTANCIA = 1 TERÇO DO COMPRIMENTO TOTAL DA LINHA
+            distancia = Lin_len * 0.333333
+            'CARREGA EM X_NO_VIRT E Y_NO_VIRT AS COORDENADAS DE LOCALIZAÇÃO DO PONTO
+            'VIRTUAL QUE DEVERÁ SER CRIADO
+            tb.getPerpendicularPoint 0, idLinha, distancia, 0, X_NO_VIRT, Y_NO_VIRT
+        End If
+        ' retorna em x, y a coordenada do ponto inicial que fica a 1/3 do início da linha
+        'tb.getPerpendicularPoint 0, .Fields("object_id_").Value, (Lin_len / 3) * 2, 0, X_Componente, Y_Componente ' colocou zero antes de x, y para retornar o ponto na própria linha
+    End If
+    Call banco.RsJunctions_adicionaJuncao(no, 0#)                                   'adiciona o nó ao vetor de junções para depois poder exportá-lo para o EPANET - coloca a demanda como zero, pois é um nó convertido em trecho por ser válvula, bomba ou registro
+    Call banco.RsCoordinates_adicionaCoordenadas(no & "A", X_NO_VIRT, Y_NO_VIRT)    'Adiciona as coordenadas geográficas de um nó, para o mesmo poder exportar para o EPANET - soma a letra A ao numero do nó, pois converteu o mesmo em dois, para representar um trecho, como o EPANET exige
+    '###########################################################
+    'Alterar a variável NoI ou NoF com o valor NO & "A" para ser usado na inserção do trecho
+    'indicando que o trecho a ser inserido usará um nó virtual
+    If conta_no = 1 Then
+       NoI = no & "A"
+    Else
+       NoF = no & "A"
+    End If
+    '######################
+    'Cria o Componente do tipo entre o nó virtual e o nó processado
+End Function
+
 
 Function NoCadastrada(Object_id_ As String) As Boolean
    'Verifica se o nó já foi cadastrado
@@ -607,8 +418,8 @@ Sub AbrirEstruturaExporteRede()
     rsTrechosExportados.Fields.Append "id", adVarChar, 255
     rsTrechosExportados.Open
     
-    rsTrechos.Fields.Append "id", adVarChar, 255
-    rsTrechos.Open
+    RsTrechos.Fields.Append "id", adVarChar, 255
+    RsTrechos.Open
     
     'lista de nós exportados
     rsNosExportados.Fields.Append "id", adVarChar, 255
