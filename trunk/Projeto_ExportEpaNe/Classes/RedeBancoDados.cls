@@ -25,25 +25,45 @@ Private rsVertices As New ADODB.Recordset                           'Vertices da
 Private rsNosTmp As New ADODB.Recordset                             'Criado para armazenar todos os dados de todos nos - Copia do Watercomponenstes/Points
 Private rsTrechosExportados As New ADODB.Recordset                  'Criado para armazenar os trechos que já foram exportados
 Private RsTrechos As New ADODB.Recordset
-Private rsNosExportados As New ADODB.Recordset                       'Criado para armazenar os Nós que já foram exportados
-Private rsWaterCompTypes As New ADODB.Recordset                      'RecordSet de referencia para consulta do tipo de componente
-Private rs_global As ADODB.Recordset
+Private rsNosExportados As New ADODB.Recordset                      'Criado para armazenar os Nós que já foram exportados
+Private rsWaterCompTypes As New ADODB.Recordset                     'RecordSet de referencia para consulta do tipo de componente
+Private rs_global As ADODB.Recordset                                'Lista de trechos de redes que foram selecionados pela cerca no GeoSan, para serem exportados para o EPANET
 
 'Abre a conexão com o banco de dados para obter os trechos de rede que serão exportados para o EPANET
 '
 '
 '
-Public Function RsGlobal_abreconexaoComTrechosAExportar()
+Public Function RsGlobal_abreconexaoComTrechosAExportar(nomeUsuario As String)
     Dim str As String
     
     'Agora temos que descobrir todos os trechos de rede (TIPO=1 na tabela POLIGONO_SELECAO) que serão exportados para o Epanet, do usuário ativo
     str = "SELECT * FROM WATERLINES INNER JOIN X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID"
-    str = str & " WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & usuario_global & "' AND TIPO = 1)"
+    str = str & " WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & nomeUsuario & "' AND TIPO = 1)"
     
     'Agora que temos trechos a serem exportados, vamos exportar para o Epanet
     Set rs_global = New ADODB.Recordset
     rs_global.Open str, conn, adOpenDynamic, adLockReadOnly
     conn.CommandTimeout = 300
+End Function
+
+'Move para o próximo trecho de rede selecionado pela cerca no GeoSan
+'
+'
+'
+Public Function RsGlobal_moveParaProximo()
+    rs_global.MoveNext                                              'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
+End Function
+
+'Verifica se terminou de ler todos os trechos de rede selecionados pelo usuário
+'
+'
+'
+Public Function RsGlobal_terminouDeLer() As Boolean
+    If rs_global.EOF = True Then
+        RsGlobal_terminouDeLer = True
+    Else
+        RsGlobal_terminouDeLer = False
+    End If
 End Function
 
 
@@ -92,6 +112,13 @@ Function IniciaLeituraTrechosRede()
     conn.CommandTimeout = 300
 End Function
 
+'Move para o próximo trecho de rede selecionado pela cerca no GeoSan
+'
+'
+'
+Public Function Rs_trechosDeRede_moveParaProximo()
+    rs_trechosDeRede.MoveNext                                              'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
+End Function
 'Verifica se terminou de ler todos os trechos de rede selecionados pelo usuário
 '
 ' Rs_trechosDeRede_terminouDeLer - True = Terminou; False = Não terminou de ler todos os trechos
@@ -744,3 +771,442 @@ Public Function FechaAcessosAosVetores()
     
     Set rsNos = Nothing
 End Function
+
+'Gera o arquivo de saída .INP que o Epanet lê
+'Recupera os dados do cursor em memoria e cria o arquivo .INP
+'#########################################################################
+'SEQUENCIA DA ESTRUTURA QUE DEVE SER GRAVADA PARA O ARQUIVO .INP DO EPANET
+'#########################################################################
+   ' "TITLE"
+   ' "JUNCTIONS"
+   ' "RESERVOIRS"
+   ' "TANKS"
+   ' "PUMPS"
+   ' "VALVES"
+   ' "PIPES"
+   ' "TAGS"
+   ' "DEMANDS"
+   ' "STATUS"
+   ' "PATTERNS"
+   ' "CURVES"
+   ' "CONTROLS"
+   ' "RULES"
+   ' "ENERGY"
+   ' "EMITTERS"
+   ' "SOURCES"
+   ' "REACTIONS"
+   ' "MIXING"
+   ' "REACTIONS"
+   ' "TIMES"
+   ' "REPORT"
+   ' "OPTIONS"
+   ' "COORDINATES"
+   ' "VERTICES"
+   ' "BACKDROP"
+   ' "END"
+'#########################################################################
+'
+Public Function GeraArquivo_de_Saida()
+        On Error GoTo Trata_Erro
+    Dim A As Long
+    Dim str As String
+
+    intLinhaCod = 1
+    Open FrmEPANET.txtArquivo.Text For Output As #1
+    intLinhaCod = 2
+    'grava no arquivo as Junctions
+    Print #1, "[JUNCTIONS]"
+    'CARREGA EM STR O CABEÇALHO
+    str = "ID" & Chr(vbKeyTab) & Chr(vbKeyTab)
+    str = str & "ELEV" & Chr(vbKeyTab) & Chr(vbKeyTab)
+    str = str & "DEMAND" & Chr(vbKeyTab) & Chr(vbKeyTab)
+    str = str & "PATTERN" & Chr(vbKeyTab) & Chr(vbKeyTab)
+    Print #1, ";" & str
+    str = ""
+    ' "id", adVarChar, 255
+    ' "elev", adVarChar, 255
+    ' "demand", adDouble, 255
+    ' "pattern", adVarChar, 255
+    Dim Cota As String
+    Dim pos As Integer
+
+    With rsJunctions
+        .Filter = ""
+        While Not .EOF
+            If IsNumeric(.Fields("ID").Value) = True Then
+                str = .Fields("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Cota = Replace(.Fields("ELEV").Value, ",", ".")  ' recebe o valor do banco troca a virgula por ponto
+                pos = InStr(1, Cota, ".", vbBinaryCompare) + 1   ' localiza a posição do ponto na string e adiciona 1
+                Cota = Mid(Cota, 1, pos)                         ' pega 1 casa apos a virgula
+                str = str & Cota & Chr(vbKeyTab) & Chr(vbKeyTab)
+                str = str & Replace(.Fields("DEMAND").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
+                str = str & Replace(.Fields("PATTERN").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Else
+                str = .Fields("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+                str = str & Replace(.Fields("ELEV").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
+                str = str & "0" & Chr(vbKeyTab) & Chr(vbKeyTab)
+                str = str & Replace(.Fields("PATTERN").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
+            End If
+            Print #1, str & ";"
+            str = ""
+            .MoveNext
+        Wend
+    End With
+
+    'grava no arquivo as Reservoirs
+    With rsReservoirs
+        .Filter = ""
+        intLinhaCod = 8
+        If .RecordCount > 0 Then
+            .MoveFirst
+            intLinhaCod = 9
+            For A = 0 To .Fields.Count - 1
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            Print #1, ""
+            Print #1, "[RESERVOIRS]"
+            Print #1, ";" & str
+            str = ""
+            intLinhaCod = 10
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Next
+                Print #1, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 11
+        End If
+    End With
+
+    'grava no arquivo as Tanks
+    With rsTanks
+        .Filter = ""
+        intLinhaCod = 12
+        If .RecordCount > 0 Then
+            .MoveFirst
+            intLinhaCod = 13
+            For A = 0 To .Fields.Count - 1
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            Print #1, ""
+            Print #1, "[TANKS]"
+            Print #1, ";" & str
+            str = ""
+            intLinhaCod = 14
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Next
+                Print #1, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 15
+        End If
+    End With
+
+    'grava no arquivo as Pumps
+    With rsPumps
+        .Filter = ""
+        intLinhaCod = 16
+        If .RecordCount > 0 Then
+            .MoveFirst
+            intLinhaCod = 17
+            For A = 0 To .Fields.Count - 1
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            Print #1, ""
+            Print #1, "[PUMPS]"
+            Print #1, ";" & str
+            str = ""
+            intLinhaCod = 18
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Next
+                Print #1, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 19
+        End If
+    End With
+
+    'grava no arquivo as Valves
+    With rsValves
+        .Filter = ""
+        If .RecordCount > 0 Then
+            .MoveFirst
+            intLinhaCod = 20
+            For A = 0 To .Fields.Count - 1
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            Print #1, ""
+            Print #1, "[VALVES]"
+            Print #1, ";" & str
+            str = ""
+            intLinhaCod = 21
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Next
+                Print #1, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 22
+        End If
+    End With
+
+    'grava no arquivo as Status
+    'esta gravação é realizada para facilitar a simulação hidráulica no Epanet, evitando que o usuário tenha que abrir manualmente os registros para iniciar uma simulação completa. Depois ele fecha os registros que achar necessário
+    With rsValves
+        .Filter = ""
+        If .RecordCount > 0 Then
+            .MoveFirst                     'pula o primeiro registro que é o cabeçalho
+            intLinhaCod = 200
+            'imprime o cabeçalho
+            Print #1, ""
+            Print #1, "[STATUS]"
+            Print #1, ";ID                 Status/Setting"
+            str = ""
+            intLinhaCod = 210
+            While Not .EOF
+                str = .Fields(0).Value & Chr(vbKeyTab) & Chr(vbKeyTab) & "Open"     'prepara para impressão somente o número da válvula e o status da mesma que está aberta
+                Print #1, str & ";"
+                str = ""
+                .MoveNext                   'vai para a próxima válvula
+            Wend
+            intLinhaCod = 220
+        End If
+    End With
+
+    With rsPipes
+        .Filter = ""
+        intLinhaCod = 23
+        If .RecordCount > 0 Then
+            .MoveFirst
+            intLinhaCod = 24
+            For A = 0 To .Fields.Count - 2 'NÃO IMPRIME O NOME DO CAMPO DESCRIPTION
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            Print #1, ""
+            Print #1, "[PIPES]"
+            Print #1, ";" & str
+            str = ""
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1 '
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                    If A = 7 Then
+                        str = str & ";" & .Fields(8).Value
+                        Exit For
+                    End If
+                Next
+                Print #1, str
+                'Print #1, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 25
+        End If
+    End With
+
+    intLinhaCod = 26
+    Dim MyArray() As String
+    Dim rsPatterns As ADODB.Recordset
+    If conn.Provider <> "PostgreSQL.1" Then
+        Set rsPatterns = conn.Execute("Select * from x_patterns")
+    Else
+        Set rsPatterns = conn.Execute("Select * from " + """" + "X_PATTERNS" + """" + "")
+    End If
+    
+    'grava no arquivo as Patterns
+    intLinhaCod = 26
+    If rsPatterns.EOF = False Then
+        With rsPatterns
+            Print #1, "[PATTERNS]"
+            Print #1, ";ID" & Chr(vbKeyTab) & Chr(vbKeyTab) & "Multipliers"
+            Print #1, ";" & rsPatterns("descricao").Value
+            intLinhaCod = 27
+            While Not .EOF
+                MyArray = Split(rsPatterns("Padrao").Value, ";", 25)
+                Print #1, rsPatterns("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(0), ",", ".") & _
+                    Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(1), ",", ".") & _
+                    Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(2), ",", ".") & _
+                    Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(3), ",", ".") & _
+                    Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(4), ",", ".") & _
+                    Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(5), ",", ".")
+                If MyArray(6) <> "" Then
+                    Print #1, rsPatterns("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(6), ",", ".") & _
+                        Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(7), ",", ".") & _
+                        Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(8), ",", ".") & _
+                        Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(9), ",", ".") & _
+                        Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(10), ",", ".") & _
+                        Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(11), ",", ".")
+                    If MyArray(12) <> "" Then
+                        Print #1, rsPatterns("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(12), ",", ".") & _
+                            Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(13), ",", ".") & _
+                            Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(14), ",", ".") & _
+                            Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(15), ",", ".") & _
+                            Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(16), ",", ".") & _
+                            Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(17), ",", ".")
+                        If MyArray(18) <> "" Then
+                            Print #1, rsPatterns("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(18), ",", ".") & _
+                                Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(19), ",", ".") & _
+                                Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(20), ",", ".") & _
+                                Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(21), ",", ".") & _
+                                Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(22), ",", ".") & _
+                                Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(23), ",", ".")
+                     End If
+                  End If
+                End If
+                rsPatterns.MoveNext
+            Wend
+            intLinhaCod = 28
+        End With
+    End If
+
+    intLinhaCod = 29
+    rsPatterns.Close
+    Set rsPatterns = Nothing
+    Dim b As Integer
+    Dim MyArray_x() As String
+    Dim MyArray_y() As String
+    Dim rsCurves As ADODB.Recordset
+    If conn.Provider <> "PostgreSQL.1" Then
+        Set rsCurves = conn.Execute("Select * from x_Curves order by tipo")
+    Else
+        Set rsCurves = conn.Execute("Select * from " + """" + "X_CURVES" + """" + "")
+    End If
+    intLinhaCod = 30
+
+    'grava no arquivo as Curves
+    If rsCurves.EOF = False Then
+        intLinhaCod = 31
+        With rsCurves
+            Print #1, "[CURVES]"
+            Print #1, ";ID" & Chr(vbKeyTab) & Chr(vbKeyTab) & "X-Value" & Chr(vbKeyTab) & Chr(vbKeyTab) & "Y-Value"
+            intLinhaCod = 32
+            For b = 1 To 4
+                If b = 1 Then
+                    rsCurves.Filter = "Tipo = 'Bomba'"
+                    If Not rsCurves.EOF Then Print #1, ";PUMPS:" & rsCurves.Fields("descricao").Value
+                ElseIf b = 2 Then
+                    rsCurves.Filter = "Tipo = 'Rendimento'"
+                    If Not rsCurves.EOF Then Print #1, ";EFFICIENCY:" & rsCurves.Fields("descicao").Value
+                ElseIf b = 3 Then
+                    rsCurves.Filter = "Tipo = 'Volume'"
+                    If Not rsCurves.EOF Then Print #1, ";VOLUME:" & rsCurves.Fields("descicao").Value
+                ElseIf b = 4 Then
+                    rsCurves.Filter = "Tipo = 'Perda de Carga'"
+                    If Not rsCurves.EOF Then Print #1, ";HEADLOSS:" & rsCurves.Fields("descicao").Value
+                End If
+                intLinhaCod = 33
+                While Not .EOF
+                    MyArray_x = Split(rsCurves("Coordenada_x").Value, ";", 50)
+                    MyArray_y = Split(rsCurves("Coordenada_y").Value, ";", 50)
+                    For A = 0 To 49
+                        If MyArray_x(A) = "" Then
+                            Exit For
+                        Else
+                            Print #1, .Fields("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray_x(A), ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray_y(A), ",", ".")
+                        End If
+                    Next
+                    rsCurves.MoveNext
+                Wend
+            Next
+            intLinhaCod = 34
+        End With
+    End If
+    rsCurves.Close
+    Set rsCurves = Nothing
+
+    'grava no arquivo as Coordinates
+    Open App.Path & "\LogErroExportEPANET-histórico.txt" For Append As #4
+    intLinhaCod = 35
+    With rsCoordinates
+        .Filter = ""
+        If .RecordCount > 0 Then
+            .MoveFirst
+            For A = 0 To .Fields.Count - 1
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            intLinhaCod = 36
+            Print #1, ""
+            Print #1, "[COORDINATES]"
+            Print #1, ";" & str
+            str = ""
+            intLinhaCod = 37
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Next
+                Print #1, str & ";"
+                Print #4, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 38
+        End If
+    End With
+    Close #4
+    
+    'grava no arquivo as Vertices
+    intLinhaCod = 39
+    With rsVertices
+        .Filter = ""
+        intLinhaCod = 40
+        If .RecordCount > 0 Then
+            .MoveFirst
+            intLinhaCod = 41
+            For A = 0 To .Fields.Count - 1
+                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+            Next
+            intLinhaCod = 42
+            Print #1, ""
+            Print #1, "[VERTICES]"
+            Print #1, ";" & str
+            str = ""
+            intLinhaCod = 43
+            While Not .EOF
+                For A = 0 To .Fields.Count - 1
+                    str = str & IIf(IsNumeric(.Fields(A).Value), _
+                        Replace(.Fields(A).Value, ",", "."), _
+                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Next
+                Print #1, str & ";"
+                str = ""
+                .MoveNext
+            Wend
+            intLinhaCod = 44
+        End If
+    End With
+    Close #1
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Close #1
+        Close #2
+        Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
+        Print #2, Now & "  - Sub GeraArquivo_de_Saida() - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
+        Close #2
+        MsgBox "Um posssível erro foi identificado na rotina 'GeraArquivo_de_Saida()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+    End If
+End Function
+
