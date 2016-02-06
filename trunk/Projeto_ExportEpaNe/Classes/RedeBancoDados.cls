@@ -419,9 +419,13 @@ End Function
 'retorna true se foi exportado, false se não foi cadastrado
 '
 '
-Public Function RsNosExportados_verificaSeNoFoiExportado(Object_id_no As String) As Boolean
-   rsNosExportados.Filter = "id='" & Object_id_no & "'"
-   VerificaSeNoFoiExportado = Not rsNosExportados.EOF
+Public Function RsNosExportados_esteNoJaFoiExportado(Object_id_no As String) As Boolean
+    rsNosExportados.Filter = "id='" & Object_id_no & "'"
+    If rsNosExportados.EOF = True Then
+        RsNosExportados_esteNoJaFoiExportado = False
+    Else
+        RsNosExportados_esteNoJaFoiExportado = True
+    End If
 End Function
 
 'Obtem o tipo de nó que estamos lendo (specification), para saber se é:
@@ -610,7 +614,7 @@ Public Function RsValves_adicionaValvula(no As String)
     rsValves.Fields("ID").Value = "V" & no
     rsValves.Fields("Node1").Value = no & "A"
     rsValves.Fields("Node2").Value = no
-    rsValves.Fields("Diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".") 'adiciona o diâmetro do trecho da tubulação a válvula
+    rsValves.Fields("Diameter").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".") 'adiciona o diâmetro do trecho da tubulação a válvula
     'A próxima rotina foi retirada e substituída pela linha acima, uma vez que ela não estava operante. Não houve entendimento do por que ela foi criada 2013-04-27
     'AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
 End Function
@@ -625,11 +629,11 @@ Public Function RsValves2_adicionaValvula(no As String)
     rsPipes.Fields("node1").Value = no & "A"
     rsPipes.Fields("node2").Value = no
     rsPipes.Fields("length").Value = 0.1
-    rsPipes.Fields("diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
-    rsPipes.Fields("roughness").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
+    rsPipes.Fields("diameter").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".")
+    rsPipes.Fields("roughness").Value = Replace(rs_trechosDeRede.Fields("roughness").Value, ",", ".")
     rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
-    If rs_global.Fields("MATERIALNAME").Value <> "" Then
-       rsPipes.Fields("Description").Value = rs_global.Fields("MATERIALNAME").Value
+    If rs_trechosDeRede.Fields("MATERIALNAME").Value <> "" Then
+       rsPipes.Fields("Description").Value = rs_trechosDeRede.Fields("MATERIALNAME").Value
     Else
        rsPipes.Fields("Description").Value = ""
     End If
@@ -645,8 +649,8 @@ Public Function RsPipes_adicionaRegistro(no As String)
     rsPipes.Fields("NODE1").Value = no & "A"
     rsPipes.Fields("NODE2").Value = no
     rsPipes.Fields("LENGTH").Value = 1
-    rsPipes.Fields("DIAMETER").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
-    rsPipes.Fields("ROUGHNESS").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
+    rsPipes.Fields("DIAMETER").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".")
+    rsPipes.Fields("ROUGHNESS").Value = Replace(rs_trechosDeRede.Fields("roughness").Value, ",", ".")
     rsPipes.Fields("STATUS").Value = IIf(rsNosTmp("ESTADO").Value = 0, " ", rsNosTmp("ESTADO").Value)
     rsPipes.Fields("DESCRIPTION").Value = "REGISTRO"
 End Function
@@ -660,17 +664,17 @@ Public Function RsPipes_adicionaTrechoRede(idTrechoRede As String, idNoInicial A
     rsPipes.Fields("id").Value = idTrechoRede
     rsPipes.Fields("node1").Value = idNoInicial
     rsPipes.Fields("node2").Value = idNoFinal
-    If rs_global.Fields("Length").Value > 0 Then
-        rsPipes.Fields("length").Value = Replace(rs_global.Fields("Length").Value, ",", ".")
+    If rs_trechosDeRede.Fields("Length").Value > 0 Then
+        rsPipes.Fields("length").Value = Replace(rs_trechosDeRede.Fields("Length").Value, ",", ".")
     Else
-        rsPipes.Fields("Length").Value = Replace(rs_global.Fields("LengthCalculated").Value, ",", ".")
+        rsPipes.Fields("Length").Value = Replace(rs_trechosDeRede.Fields("LengthCalculated").Value, ",", ".")
     End If
-    rsPipes.Fields("diameter").Value = Replace(rs_global.Fields("internaldiameter").Value, ",", ".")
-    rsPipes.Fields("roughness").Value = Replace(rs_global.Fields("roughness").Value, ",", ".")
+    rsPipes.Fields("diameter").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".")
+    rsPipes.Fields("roughness").Value = Replace(rs_trechosDeRede.Fields("roughness").Value, ",", ".")
     'rsPipes.Fields("status").Value = IIf(rsNosTmp("estado").Value = 0, " ", rsNosTmp("estado").Value)
     rsPipes.Fields("status").Value = "Open"
-    If rs_global.Fields("MATERIALNAME").Value <> "" Then
-        rsPipes.Fields("Description").Value = rs_global.Fields("MATERIALNAME").Value
+    If rs_trechosDeRede.Fields("MATERIALNAME").Value <> "" Then
+        rsPipes.Fields("Description").Value = rs_trechosDeRede.Fields("MATERIALNAME").Value
     Else
         rsPipes.Fields("Description").Value = ""
     End If
@@ -1208,5 +1212,107 @@ Trata_Erro:
         Close #2
         MsgBox "Um posssível erro foi identificado na rotina 'GeraArquivo_de_Saida()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
     End If
+End Function
+
+'
+'
+'
+Private Sub AddSubItemTank(id As String)
+   Dim Rs As ADODB.Recordset
+   Dim CURVE As String
+
+   Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+                         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "where object_id_ = '" & id & "'")
+   rsTanks.Fields("MaxLevel").Value = 0
+   rsTanks.Fields("MinLevel").Value = 0
+   rsTanks.Fields("InitLevel").Value = 0
+   rsTanks.Fields("Diameter").Value = 0
+   rsTanks.Fields("MinVol").Value = 0
+   rsTanks.Fields("VolCurve").Value = " "
+   
+   While Not Rs.EOF
+      Select Case Rs.Fields("EPAREF").Value
+      
+         Case "NMAXIMO"
+            rsTanks.Fields("MaxLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+         Case "NMINIMO"
+            rsTanks.Fields("MinLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+         Case "NINICIAL"
+            rsTanks.Fields("InitLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+         Case "DIAMETER"
+            rsTanks.Fields("Diameter").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+         Case "VOLUME"
+            rsTanks.Fields("MinVol").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+         Case "VOLCURVE"
+            rsTanks.Fields("VolCurve").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+      End Select
+      Rs.MoveNext
+   Wend
+   Rs.Close
+   Set Rs = Nothing
+End Sub
+
+'Atribui o valor de curva para bomba
+'
+'
+Public Function AddSubItemPumps(id As String)
+   Dim Rs As ADODB.Recordset
+   Dim CURVE As String
+   Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+                         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "where object_id_ = '" & id & "'")
+                         
+   While Not Rs.EOF
+      Select Case Rs.Fields("EPAREF").Value
+         Case "CURVE"
+            rsPumps.Fields("Parameters").Value = " HEAD " & Rs.Fields("VALUE_").Value
+      End Select
+      Rs.MoveNext
+   Wend
+   Rs.Close
+   Set Rs = Nothing
+End Function
+
+'Adiciona as outras componentes de uma válvula, como diametro, tipo, etc.
+'
+' id - número do nó
+'
+' Esta rotina não está funcionando a querie abaixo está com colunas não existentes e pelo
+' que foi verificado não retorna linhas. Em nosso entendimento ela não tem função 2013-04-27
+'
+'
+Public Function AddSubItemValves(id As String)
+'Atribui os valores especificos para valvula
+    Dim Rs As ADODB.Recordset
+    Dim PumpDiameter As Double, PumpType As String, PumpSetting As String, PumpMinorLoss As String
+    If conn.Provider <> "PostgreSQL.1" Then
+        Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+                                "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
+                                "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                                "where object_id_ = '" & id & "'")
+    Else
+        Set Rs = conn.Execute("Select " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "EPAREF" + """" + "," + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "VALUE_" + """" + "," + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "DESCRIPTION_" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" & _
+                                "INNER JOIN " + """" + "WATERCOMPONENTSSUBTYPES" + """" + " on " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "ID_SUBTYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_SUBTYPE" + """" + " and " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_TYPE" + """" & _
+                                "LEFT JOIN " + """" + "WATERCOMPONENTSSELECTIONS" + """" + " on " + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "ID_SUBTYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_SUBTYPE" + """" + " and " + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_TYPE" + """" + " and cast(" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "VALUE_" + """" + " as INT) =" + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "VALUE_" + """" & _
+                                "where " + """" + "OBJECT_ID_" + """" + " = '" & id & "'")
+    End If
+    While Not Rs.EOF
+        Select Case Rs.Fields("EPAREF").Value
+            Case "TYPE"
+                rsValves.Fields("Type").Value = Rs.Fields("DESCRIPTION_").Value
+            Case "SETTING"
+                rsValves.Fields("Setting").Value = Rs.Fields("VALUE_").Value
+            Case "DIAMETER"
+                rsValves.Fields("Diameter").Value = Rs.Fields("VALUE_").Value
+            Case "NINORLOSS"
+                rsValves.Fields("MinorLoss").Value = 0 'implementar
+        End Select
+        Rs.MoveNext
+    Wend
+    Rs.Close
+    Set Rs = Nothing
 End Function
 
