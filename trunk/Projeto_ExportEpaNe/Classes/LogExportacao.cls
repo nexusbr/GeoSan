@@ -13,10 +13,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Private arquivoLog As String                        'nome do arquivo de log com todas as operações ao exportar para o Epanet
 
-Property Get NomeArquivoLog() As String
-    Set NomeArquivoLog = arquivoLog
-End Property
-
 'Definie a localização/diretório onde vai ficar o arquivo de log de exportação do EPANET
 '
 '
