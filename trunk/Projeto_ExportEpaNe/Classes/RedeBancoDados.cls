@@ -592,7 +592,7 @@ End Function
 '
 '
 '
-Public Function RsPumps_adicionaBomba(no As String)
+Public Function RsPumps_adicionaBomba(no As String, conta_no As Integer)
     rsPumps.AddNew
     rsPumps.Fields("id").Value = no
     If conta_no = 1 Then
