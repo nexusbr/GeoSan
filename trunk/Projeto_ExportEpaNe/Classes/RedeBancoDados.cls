@@ -27,45 +27,6 @@ Private rsTrechosExportados As New ADODB.Recordset                  'Criado para
 Private RsTrechos As New ADODB.Recordset
 Private rsNosExportados As New ADODB.Recordset                      'Criado para armazenar os Nós que já foram exportados
 Private rsWaterCompTypes As New ADODB.Recordset                     'RecordSet de referencia para consulta do tipo de componente
-Private rs_global As ADODB.Recordset                                'Lista de trechos de redes que foram selecionados pela cerca no GeoSan, para serem exportados para o EPANET
-
-'Abre a conexão com o banco de dados para obter os trechos de rede que serão exportados para o EPANET
-'
-'
-'
-Public Function RsGlobal_abreconexaoComTrechosAExportar(nomeUsuario As String)
-    Dim str As String
-    
-    'Agora temos que descobrir todos os trechos de rede (TIPO=1 na tabela POLIGONO_SELECAO) que serão exportados para o Epanet, do usuário ativo
-    str = "SELECT * FROM WATERLINES INNER JOIN X_MATERIAL ON WATERLINES.MATERIAL = X_MATERIAL.MATERIALID"
-    str = str & " WHERE WATERLINES.OBJECT_ID_ IN (SELECT OBJECT_ID_ FROM POLIGONO_SELECAO WHERE USUARIO = '" & nomeUsuario & "' AND TIPO = 1)"
-    
-    'Agora que temos trechos a serem exportados, vamos exportar para o Epanet
-    Set rs_global = New ADODB.Recordset
-    rs_global.Open str, conn, adOpenDynamic, adLockReadOnly
-    conn.CommandTimeout = 300
-End Function
-
-'Move para o próximo trecho de rede selecionado pela cerca no GeoSan
-'
-'
-'
-Public Function RsGlobal_moveParaProximo()
-    rs_global.MoveNext                                              'Move o ponteiro do cursor de trechos a serem processados para a próxima tupla
-End Function
-
-'Verifica se terminou de ler todos os trechos de rede selecionados pelo usuário
-'
-'
-'
-Public Function RsGlobal_terminouDeLer() As Boolean
-    If rs_global.EOF = True Then
-        RsGlobal_terminouDeLer = True
-    Else
-        RsGlobal_terminouDeLer = False
-    End If
-End Function
-
 
 'Recebe a conexão com o banco de dados a partir de instanciada a classe e passada a conexão para a mesma, armazenando a conexão até o final da aplicação
 'Isto permitirá todas as operações com banco de dados
@@ -252,6 +213,7 @@ Sub AbrirEstruturaExporteRede()
     rsValves.Fields.Append "type", adVarChar, 255
     rsValves.Fields.Append "setting", adVarChar, 255
     rsValves.Fields.Append "minorloss", adVarChar, 255
+    rsValves.Fields.Append "paramControle", adVarChar, 255
     rsValves.Open
     
     'reservatórios
@@ -615,8 +577,7 @@ Public Function RsValves_adicionaValvula(no As String)
     rsValves.Fields("Node1").Value = no & "A"
     rsValves.Fields("Node2").Value = no
     rsValves.Fields("Diameter").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".") 'adiciona o diâmetro do trecho da tubulação a válvula
-    'A próxima rotina foi retirada e substituída pela linha acima, uma vez que ela não estava operante. Não houve entendimento do por que ela foi criada 2013-04-27
-    'AddSubItemValves NO 'Adiciona os sub itens para a valvula (setting,type,diameter)
+    AddSubItemValves no                                             'Adiciona os sub itens para a valvula (setting,type,diameter)
 End Function
 
 'Adiciona os dados da valvula2 para poder exportar depois para o EPANET
@@ -1214,6 +1175,7 @@ Trata_Erro:
     End If
 End Function
 
+'Adiciona os parâmetros entrados em um reservatório
 '
 '
 '
@@ -1221,11 +1183,12 @@ Private Sub AddSubItemTank(id As String)
    Dim Rs As ADODB.Recordset
    Dim CURVE As String
 
-   Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+   Set Rs = conn.Execute("Select b.eparef, w.value_, b.Description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
                          "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
                          "where object_id_ = '" & id & "'")
-   rsTanks.Fields("MaxLevel").Value = 0
+   
+   rsTanks.Fields("MaxLevel").Value = 0                                                         'inicializa com zero ou nulo, caso não existem valores preenchidos
    rsTanks.Fields("MinLevel").Value = 0
    rsTanks.Fields("InitLevel").Value = 0
    rsTanks.Fields("Diameter").Value = 0
@@ -1288,17 +1251,11 @@ Public Function AddSubItemValves(id As String)
 'Atribui os valores especificos para valvula
     Dim Rs As ADODB.Recordset
     Dim PumpDiameter As Double, PumpType As String, PumpSetting As String, PumpMinorLoss As String
-    If conn.Provider <> "PostgreSQL.1" Then
-        Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
-                                "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                                "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
-                                "where object_id_ = '" & id & "'")
-    Else
-        Set Rs = conn.Execute("Select " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "EPAREF" + """" + "," + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "VALUE_" + """" + "," + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "DESCRIPTION_" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" & _
-                                "INNER JOIN " + """" + "WATERCOMPONENTSSUBTYPES" + """" + " on " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "ID_SUBTYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_SUBTYPE" + """" + " and " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_TYPE" + """" & _
-                                "LEFT JOIN " + """" + "WATERCOMPONENTSSELECTIONS" + """" + " on " + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "ID_SUBTYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_SUBTYPE" + """" + " and " + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_TYPE" + """" + " and cast(" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "VALUE_" + """" + " as INT) =" + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "VALUE_" + """" & _
-                                "where " + """" + "OBJECT_ID_" + """" + " = '" & id & "'")
-    End If
+    
+    Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+        "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
+        "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+        "where object_id_ = '" & id & "'")
     While Not Rs.EOF
         Select Case Rs.Fields("EPAREF").Value
             Case "TYPE"
@@ -1309,6 +1266,8 @@ Public Function AddSubItemValves(id As String)
                 rsValves.Fields("Diameter").Value = Rs.Fields("VALUE_").Value
             Case "NINORLOSS"
                 rsValves.Fields("MinorLoss").Value = 0 'implementar
+            Case "PARCONT"
+                rsValves.Fields("paramControle").Value = Rs.Fields("VALUE_").Value
         End Select
         Rs.MoveNext
     Wend
