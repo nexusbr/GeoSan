@@ -178,7 +178,7 @@ Function ExportaParaEpanet()
                 Else                                                            'é o nó final do trecho de rede (primeira passagem), atribui ao nó final
                    NoF = no
                 End If
-                If Not banco.RsNosExportados_verificaSeNoFoiExportado(no) Then  'se o nó não foi exportado ainda
+                If banco.RsNosExportados_esteNoJaFoiExportado(no) = False Then  'se o nó não foi exportado ainda
                     banco.RsNosTmp_filtraPorNo (no)                             'filtra para pegar os dados somente do nó que está sendo lido
                     strTipoComp = banco.RsWaterCompTypes_tipoDeEspecificacao    'Obter a especificação para poder processar a exportação conforme o tipo de nó
                     If banco.RsWaterCompTypes_ExitemParametros = True Then
@@ -187,11 +187,11 @@ Function ExportaParaEpanet()
                             'É uma verificação realizada na coluna Specification_ da tabela WaterComponentsTypes
                             'Mudando nesta tabela o valor de Specification_ muda se o nó será exportado como válvula (pequeno trecho) ou não
                             Case "PUMP", "VALVE", "VALVE2", "REGISTER"          'vai dividir uma válvula, registro, etc, que é representado por um nó, em dois nós e um trecho
-                                Call ConverteNoEmTrecho(idLinha, Lin_len, conta_no, numTotalVerticesNaLinha, distancia)
+                                Call ConverteNoEmTrecho(idLinha, Lin_len, conta_no, numTotalVerticesNaLinha, distancia, no, NoI, NoF)
                             Select Case strTipoComp
                                 Case "PUMP"
                                     Call banco.RsPumps_adicionaBomba(no)        'adiciona os dados da bomba para poder exportar depois para o EPANET
-                                    AddSubItemPumps no                          'Adiciona os sub itens para a bomba (curva)
+                                    Call banco.AddSubItemPumps(no)              'Adiciona os sub itens para a bomba (curva)
                                 Case "VALVE"
                                     Call banco.RsValves_adicionaValvula(no)     'adiciona os dados da válvula para poder exportar depois para o EPANET
                                 Case "VALVE2"
@@ -241,7 +241,7 @@ End Function
 '
 '
 '
-Private Function ConverteNoEmTrecho(idLinha As String, Lin_len As Double, conta_no As Integer, numTotalVerticesNaLinha_ As Integer, distancia As Double)
+Private Function ConverteNoEmTrecho(idLinha As String, Lin_len As Double, conta_no As Integer, numTotalVerticesNaLinha_ As Integer, distancia As Double, no As String, NoI As String, NoF As String)
     'Verifica a Direção da Tubulação e recupera um ponto X_NO_VIRT, Y_NO_VIRT a 1/3 da distancia
     ' e insere o no virtual em RsJuntions e RsCoordinates
     tb.getLengthOfLine 0, idLinha, Lin_len
@@ -303,7 +303,7 @@ Private Function ConverteNoEmTrecho(idLinha As String, Lin_len As Double, conta_
         ' retorna em x, y a coordenada do ponto inicial que fica a 1/3 do início da linha
         'tb.getPerpendicularPoint 0, .Fields("object_id_").Value, (Lin_len / 3) * 2, 0, X_Componente, Y_Componente ' colocou zero antes de x, y para retornar o ponto na própria linha
     End If
-    Call banco.RsJunctions_adicionaJuncao(no, 0#)                                   'adiciona o nó ao vetor de junções para depois poder exportá-lo para o EPANET - coloca a demanda como zero, pois é um nó convertido em trecho por ser válvula, bomba ou registro
+    Call banco.RsJunctions_adicionaJuncao(no & "A", 0#)                                   'adiciona o nó ao vetor de junções para depois poder exportá-lo para o EPANET - coloca a demanda como zero, pois é um nó convertido em trecho por ser válvula, bomba ou registro
     Call banco.RsCoordinates_adicionaCoordenadas(no & "A", X_NO_VIRT, Y_NO_VIRT)    'Adiciona as coordenadas geográficas de um nó, para o mesmo poder exportar para o EPANET - soma a letra A ao numero do nó, pois converteu o mesmo em dois, para representar um trecho, como o EPANET exige
     '###########################################################
     'Alterar a variável NoI ou NoF com o valor NO & "A" para ser usado na inserção do trecho
@@ -526,107 +526,6 @@ Trata_Erro:
         'Resume
     End If
 End Function
-
-'
-'
-'
-Private Sub AddSubItemTank(id As String)
-   Dim Rs As ADODB.Recordset
-   Dim CURVE As String
-
-   Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
-                         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
-                         "where object_id_ = '" & id & "'")
-   rsTanks.Fields("MaxLevel").Value = 0
-   rsTanks.Fields("MinLevel").Value = 0
-   rsTanks.Fields("InitLevel").Value = 0
-   rsTanks.Fields("Diameter").Value = 0
-   rsTanks.Fields("MinVol").Value = 0
-   rsTanks.Fields("VolCurve").Value = " "
-   
-   While Not Rs.EOF
-      Select Case Rs.Fields("EPAREF").Value
-      
-         Case "NMAXIMO"
-            rsTanks.Fields("MaxLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
-         Case "NMINIMO"
-            rsTanks.Fields("MinLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
-         Case "NINICIAL"
-            rsTanks.Fields("InitLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
-         Case "DIAMETER"
-            rsTanks.Fields("Diameter").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
-         Case "VOLUME"
-            rsTanks.Fields("MinVol").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
-         Case "VOLCURVE"
-            rsTanks.Fields("VolCurve").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
-      End Select
-      Rs.MoveNext
-   Wend
-   Rs.Close
-   Set Rs = Nothing
-End Sub
-
-'Atribui o valor de curva para bomba
-'
-'
-Private Sub AddSubItemPumps(id As String)
-   Dim Rs As ADODB.Recordset
-   Dim CURVE As String
-   Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
-                         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
-                         "where object_id_ = '" & id & "'")
-                         
-   While Not Rs.EOF
-      Select Case Rs.Fields("EPAREF").Value
-         Case "CURVE"
-            rsPumps.Fields("Parameters").Value = " HEAD " & Rs.Fields("VALUE_").Value
-      End Select
-      Rs.MoveNext
-   Wend
-   Rs.Close
-   Set Rs = Nothing
-End Sub
-'Adiciona as outras componentes de uma válvula, como diametro, tipo, etc.
-'
-' id - número do nó
-'
-' Esta rotina não está funcionando a querie abaixo está com colunas não existentes e pelo
-' que foi verificado não retorna linhas. Em nosso entendimento ela não tem função 2013-04-27
-'
-'
-Private Sub AddSubItemValves(id As String)
-'Atribui os valores especificos para valvula
-    Dim Rs As ADODB.Recordset
-    Dim PumpDiameter As Double, PumpType As String, PumpSetting As String, PumpMinorLoss As String
-    If conn.Provider <> "PostgreSQL.1" Then
-        Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
-                                "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                                "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
-                                "where object_id_ = '" & id & "'")
-    Else
-        Set Rs = conn.Execute("Select " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "EPAREF" + """" + "," + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "VALUE_" + """" + "," + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "DESCRIPTION_" + """" + " from " + """" + "WATERCOMPONENTSDATA" + """" & _
-                                "INNER JOIN " + """" + "WATERCOMPONENTSSUBTYPES" + """" + " on " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "ID_SUBTYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_SUBTYPE" + """" + " and " + """" + "WATERCOMPONENTSSUBTYPES" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_TYPE" + """" & _
-                                "LEFT JOIN " + """" + "WATERCOMPONENTSSELECTIONS" + """" + " on " + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "ID_SUBTYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_SUBTYPE" + """" + " and " + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "ID_TYPE" + """" + " and cast(" + """" + "WATERCOMPONENTSDATA" + """" + "." + """" + "VALUE_" + """" + " as INT) =" + """" + "WATERCOMPONENTSSELECTIONS" + """" + "." + """" + "VALUE_" + """" & _
-                                "where " + """" + "OBJECT_ID_" + """" + " = '" & id & "'")
-    End If
-    While Not Rs.EOF
-        Select Case Rs.Fields("EPAREF").Value
-            Case "TYPE"
-                rsValves.Fields("Type").Value = Rs.Fields("DESCRIPTION_").Value
-            Case "SETTING"
-                rsValves.Fields("Setting").Value = Rs.Fields("VALUE_").Value
-            Case "DIAMETER"
-                rsValves.Fields("Diameter").Value = Rs.Fields("VALUE_").Value
-            Case "NINORLOSS"
-                rsValves.Fields("MinorLoss").Value = 0 'implementar
-        End Select
-        Rs.MoveNext
-    Wend
-    Rs.Close
-    Set Rs = Nothing
-End Sub
 
 'Verifica se um trecho de rede já foi cadastrado, pois se já foi, não precisa exportar mais o mesmo
 '
