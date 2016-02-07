@@ -187,7 +187,7 @@ Sub AbrirEstruturaExporteRede()
     rsPipes.Fields.Append "roughness", adDouble, 255
     rsPipes.Fields.Append "minorloss", adVarChar, 255
     rsPipes.Fields.Append "status", adVarChar, 255
-    rsPipes.Fields.Append "Description", adVarChar, 255         'incluido em 13/05/2009 Jonathas
+    rsPipes.Fields.Append "Description", adVarChar, 255
     rsPipes.Open
     
     'junções
@@ -220,6 +220,7 @@ Sub AbrirEstruturaExporteRede()
     rsReservoirs.Fields.Append "ID", adVarChar, 255
     rsReservoirs.Fields.Append "Head", adVarChar, 255           'nível da água
     rsReservoirs.Fields.Append "Pattern", adVarChar, 255        'padrão de nível
+    rsReservoirs.Fields.Append "Description", adVarChar, 255    'para armazenar o nome do reservatório
     rsReservoirs.Open
     
     'Reservatório de Nível Variável - RNV
@@ -231,6 +232,7 @@ Sub AbrirEstruturaExporteRede()
     rsTanks.Fields.Append "Diameter", adVarChar, 255            'diâmetro deo reservatório
     rsTanks.Fields.Append "MinVol", adVarChar, 255              'volume mínimo (não está sendo exportado, não utilizado)
     rsTanks.Fields.Append "VolCurve", adVarChar, 255            'curva de volume
+    rsTanks.Fields.Append "Description", adVarChar, 255    'para armazenar o nome do reservatório
     rsTanks.Open
     
     'vértices de linhas de tubulações
@@ -1193,6 +1195,7 @@ Private Sub AdicionaSubItensReservatorioNivelVariavel(id As String)
    rsTanks.Fields("Diameter").Value = FormataStringNumerica("0")
    rsTanks.Fields("MinVol").Value = FormataStringNumerica("0")
    rsTanks.Fields("VolCurve").Value = " "
+   rsTanks.Fields("Description").Value = " "
    
    While Not Rs.EOF
       Select Case Rs.Fields("EPAREF").Value
@@ -1209,6 +1212,8 @@ Private Sub AdicionaSubItensReservatorioNivelVariavel(id As String)
             rsTanks.Fields("MinVol").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
          Case "VOLCURVE"
             rsTanks.Fields("VolCurve").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+         Case "DESC"
+            rsTanks.Fields("Description").Value = Rs.Fields("VALUE_").Value
       End Select
       Rs.MoveNext
    Wend
@@ -1231,6 +1236,7 @@ Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
    
    rsReservoirs.Fields("Head").Value = FormataStringNumerica(rsNosTmp("cota").Value)          'inicializa com a cota caso não existem valores preenchidos em head
    rsReservoirs.Fields("Pattern").Value = " "
+   rsReservoirs.Fields("Description").Value = " "
    
    While Not Rs.EOF
       Select Case Rs.Fields("EPAREF").Value
@@ -1239,13 +1245,14 @@ Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
             rsReservoirs.Fields("Head").Value = FormataStringNumerica(CStr(cota))
          Case "PATTERN"
             rsReservoirs.Fields("Pattern").Value = Rs.Fields("VALUE_").Value
+         Case "DESC"
+            rsReservoirs.Fields("Description").Value = Rs.Fields("VALUE_").Value
       End Select
       Rs.MoveNext
    Wend
    Rs.Close
    Set Rs = Nothing
 End Sub
-
 
 'Atribui o valor de curva para bomba
 '
