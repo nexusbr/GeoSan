@@ -19,8 +19,8 @@ Private rsPipes As New ADODB.Recordset
 Private rsJunctions As New ADODB.Recordset                          'vetor com todas as junções (nós de conexão) que é utilizado depois de completo para exportar para o EPANET
 Private rsPumps As New ADODB.Recordset
 Private rsValves As New ADODB.Recordset
-Private rsReservoirs As New ADODB.Recordset
-Private rsTanks As New ADODB.Recordset
+Private rsReservoirs As New ADODB.Recordset                         'São os Reservatórios de Nível Fixo - RNF
+Private rsTanks As New ADODB.Recordset                              'São os Reservatórios de Nível Variável - RNV
 Private rsVertices As New ADODB.Recordset                           'Vertices da linha com exceção do inicial e final
 Private rsNosTmp As New ADODB.Recordset                             'Criado para armazenar todos os dados de todos nos - Copia do Watercomponenstes/Points
 Private rsTrechosExportados As New ADODB.Recordset                  'Criado para armazenar os trechos que já foram exportados
@@ -216,21 +216,21 @@ Sub AbrirEstruturaExporteRede()
     rsValves.Fields.Append "paramControle", adVarChar, 255
     rsValves.Open
     
-    'reservatórios
+    'Reservatório de Nível Fixo - RNF
     rsReservoirs.Fields.Append "ID", adVarChar, 255
-    rsReservoirs.Fields.Append "Head", adVarChar, 255
-    rsReservoirs.Fields.Append "Pattern", adVarChar, 255
+    rsReservoirs.Fields.Append "Head", adVarChar, 255           'nível da água
+    rsReservoirs.Fields.Append "Pattern", adVarChar, 255        'padrão de nível
     rsReservoirs.Open
     
-    'tanques
+    'Reservatório de Nível Variável - RNV
     rsTanks.Fields.Append "ID", adVarChar, 255
-    rsTanks.Fields.Append "Elevation", adVarChar, 255
-    rsTanks.Fields.Append "InitLevel", adVarChar, 255
-    rsTanks.Fields.Append "MinLevel", adVarChar, 255
-    rsTanks.Fields.Append "MaxLevel", adVarChar, 255
-    rsTanks.Fields.Append "Diameter", adVarChar, 255
-    rsTanks.Fields.Append "MinVol", adVarChar, 255
-    rsTanks.Fields.Append "VolCurve", adVarChar, 255
+    rsTanks.Fields.Append "Elevation", adVarChar, 255           'cota
+    rsTanks.Fields.Append "InitLevel", adVarChar, 255           'altura inicial da água
+    rsTanks.Fields.Append "MinLevel", adVarChar, 255            'altura mínima da água
+    rsTanks.Fields.Append "MaxLevel", adVarChar, 255            'altura máxima da água
+    rsTanks.Fields.Append "Diameter", adVarChar, 255            'diâmetro deo reservatório
+    rsTanks.Fields.Append "MinVol", adVarChar, 255              'volume mínimo (não está sendo exportado, não utilizado)
+    rsTanks.Fields.Append "VolCurve", adVarChar, 255            'curva de volume
     rsTanks.Open
     
     'vértices de linhas de tubulações
@@ -661,19 +661,18 @@ End Function
 Public Function RsTanks_adicionaReservatorioNivelVariavel(no As String)
     rsTanks.AddNew
     rsTanks.Fields("ID").Value = no
-    rsTanks.Fields("Elevation").Value = Format(rsNosTmp("cota").Value, ".0")
-    AddSubItemTank no
+    rsTanks.Fields("Elevation").Value = FormataStringNumerica(rsNosTmp("cota").Value)
+    AdicionaSubItensReservatorioNivelVariavel no
 End Function
 
 'Adiciona os dados do reservatório para poder exportar para o EPANET
 '
 '
 '
-Public Function RsReservois_adicionaReservatorio(no As String)
+Public Function RsReservois_adicionaReservatorioNivelFixo(no As String)
     rsReservoirs.AddNew
     rsReservoirs.Fields("ID").Value = no
-    rsReservoirs.Fields("Head").Value = Format(rsNosTmp("cota").Value, ".0")
-    rsReservoirs.Fields("Pattern").Value = ""
+    AdicionaSubItensReservatorioNivelFixo no
 End Function
 
 'Adiciona as coordenadas geográficas de um nó, para o mesmo poder exportar para o EPANET
@@ -792,7 +791,7 @@ Public Function GeraArquivo_de_Saida()
     ' "elev", adVarChar, 255
     ' "demand", adDouble, 255
     ' "pattern", adVarChar, 255
-    Dim Cota As String
+    Dim cota As String
     Dim pos As Integer
 
     With rsJunctions
@@ -800,10 +799,10 @@ Public Function GeraArquivo_de_Saida()
         While Not .EOF
             If IsNumeric(.Fields("ID").Value) = True Then
                 str = .Fields("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Cota = Replace(.Fields("ELEV").Value, ",", ".")  ' recebe o valor do banco troca a virgula por ponto
-                pos = InStr(1, Cota, ".", vbBinaryCompare) + 1   ' localiza a posição do ponto na string e adiciona 1
-                Cota = Mid(Cota, 1, pos)                         ' pega 1 casa apos a virgula
-                str = str & Cota & Chr(vbKeyTab) & Chr(vbKeyTab)
+                cota = Replace(.Fields("ELEV").Value, ",", ".")  ' recebe o valor do banco troca a virgula por ponto
+                pos = InStr(1, cota, ".", vbBinaryCompare) + 1   ' localiza a posição do ponto na string e adiciona 1
+                cota = Mid(cota, 1, pos)                         ' pega 1 casa apos a virgula
+                str = str & cota & Chr(vbKeyTab) & Chr(vbKeyTab)
                 str = str & Replace(.Fields("DEMAND").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
                 str = str & Replace(.Fields("PATTERN").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
             Else
@@ -1175,11 +1174,11 @@ Trata_Erro:
     End If
 End Function
 
-'Adiciona os parâmetros entrados em um reservatório
+'Adiciona os parâmetros entrados em um reservatório de nível variável RNV
 '
 '
 '
-Private Sub AddSubItemTank(id As String)
+Private Sub AdicionaSubItensReservatorioNivelVariavel(id As String)
    Dim Rs As ADODB.Recordset
    Dim CURVE As String
 
@@ -1188,34 +1187,65 @@ Private Sub AddSubItemTank(id As String)
                          "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
                          "where object_id_ = '" & id & "'")
    
-   rsTanks.Fields("MaxLevel").Value = 0                                                         'inicializa com zero ou nulo, caso não existem valores preenchidos
-   rsTanks.Fields("MinLevel").Value = 0
-   rsTanks.Fields("InitLevel").Value = 0
-   rsTanks.Fields("Diameter").Value = 0
-   rsTanks.Fields("MinVol").Value = 0
+   rsTanks.Fields("MaxLevel").Value = FormataStringNumerica("0")                                                         'inicializa com zero ou nulo, caso não existem valores preenchidos
+   rsTanks.Fields("MinLevel").Value = FormataStringNumerica("0")
+   rsTanks.Fields("InitLevel").Value = FormataStringNumerica("0")
+   rsTanks.Fields("Diameter").Value = FormataStringNumerica("0")
+   rsTanks.Fields("MinVol").Value = FormataStringNumerica("0")
    rsTanks.Fields("VolCurve").Value = " "
    
    While Not Rs.EOF
       Select Case Rs.Fields("EPAREF").Value
       
          Case "NMAXIMO"
-            rsTanks.Fields("MaxLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+            rsTanks.Fields("MaxLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
          Case "NMINIMO"
-            rsTanks.Fields("MinLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+            rsTanks.Fields("MinLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
          Case "NINICIAL"
-            rsTanks.Fields("InitLevel").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+            rsTanks.Fields("InitLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
          Case "DIAMETER"
-            rsTanks.Fields("Diameter").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+            rsTanks.Fields("Diameter").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
          Case "VOLUME"
-            rsTanks.Fields("MinVol").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+            rsTanks.Fields("MinVol").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
          Case "VOLCURVE"
-            rsTanks.Fields("VolCurve").Value = Replace(Rs.Fields("VALUE_").Value, ",", ".")
+            rsTanks.Fields("VolCurve").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
       End Select
       Rs.MoveNext
    Wend
    Rs.Close
    Set Rs = Nothing
 End Sub
+
+'Adiciona os parâmetros entrados em um reservatório de nível fixo RNF
+'
+'
+'
+Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
+   Dim Rs As ADODB.Recordset
+   Dim cota As Double
+
+   Set Rs = conn.Execute("Select b.eparef, w.value_, b.Description_ from watercomponentsdata w " & _
+                         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "where object_id_ = '" & id & "'")
+   
+   rsReservoirs.Fields("Head").Value = FormataStringNumerica(rsNosTmp("cota").Value)          'inicializa com a cota caso não existem valores preenchidos em head
+   rsReservoirs.Fields("Pattern").Value = " "
+   
+   While Not Rs.EOF
+      Select Case Rs.Fields("EPAREF").Value
+         Case "HEAD"
+            cota = CDbl(rsNosTmp("cota").Value) + CDbl(Rs.Fields("VALUE_").Value)
+            rsReservoirs.Fields("Head").Value = FormataStringNumerica(CStr(cota))
+         Case "PATTERN"
+            rsReservoirs.Fields("Pattern").Value = Rs.Fields("VALUE_").Value
+      End Select
+      Rs.MoveNext
+   Wend
+   Rs.Close
+   Set Rs = Nothing
+End Sub
+
 
 'Atribui o valor de curva para bomba
 '
@@ -1275,3 +1305,18 @@ Public Function AddSubItemValves(id As String)
     Set Rs = Nothing
 End Function
 
+'Formata uma string numérica para poder ser salva no banco de dados
+' "0" -> "0.0"
+' "645,84" -> "645.8"
+'
+'
+'
+Private Function FormataStringNumerica(valor As String) As String
+   Dim val As Double
+   Dim valStr As String
+   
+   val = CDbl(valor)
+   valStr = CStr(val)
+   valStr = Format(valStr, "0.0")
+   FormataStringNumerica = Replace(valStr, ",", ".")
+End Function

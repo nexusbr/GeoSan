@@ -170,10 +170,10 @@ Function ExportaParaEpanet()
                         End Select
                     End If
                     Select Case strTipoComp                                                             'Insere o nó processado
-                        Case "RNV" 'No_Tanques
+                        Case "RNV"
                             Call banco.RsTanks_adicionaReservatorioNivelVariavel(no)                    'Adiciona os dados do RNV (Reservatório de Nível Variável) para poder exportar para o EPANET
-                        Case "RNF" 'No_Reservatorios
-                            Call banco.RsReservois_adicionaReservatorio(no)                             'Adiciona os dados do reservatório para poder exportar para o EPANET
+                        Case "RNF"
+                            Call banco.RsReservois_adicionaReservatorioNivelFixo(no)                    'Adiciona os dados do RNF (Reservatório de Nível Fixo) para poder exportar para o EPANET
                         Case Else
                             Call banco.RsJunctions_adicionaJuncao(no, banco.RsNosTmp_obtemDemandaDoNo)  'Adiciona os dados da junção para poder exportar depois para o EPANET
                     End Select
