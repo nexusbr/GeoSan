@@ -213,14 +213,19 @@ Sub AbrirEstruturaExporteRede()
     rsPumps.Open
     
     'válvulas
+    'PRV (válvula redutora de pressão) Pressão, m (psi)
+    'PSV (Válvula Sustentadora de Pressão) Pressão, m (psi)
+    'PBV (Válvula de perda de carga fixa) Pressão, m (psi)
+    'FCV (válvula reguladora de vazão) Vazão (unidades de vazão)
+    'TCV (válvula de controle de perda de carga) Coeficiente de perda de carga singular
+    'GPV (válvula genérica) ID da curva de perda de carga
     rsValves.Fields.Append "id", adVarChar, 255
     rsValves.Fields.Append "node1", adVarChar, 255
     rsValves.Fields.Append "node2", adVarChar, 255
     rsValves.Fields.Append "diameter", adVarChar, 255
-    rsValves.Fields.Append "type", adVarChar, 255
-    rsValves.Fields.Append "setting", adVarChar, 255
-    rsValves.Fields.Append "minorloss", adVarChar, 255
-    rsValves.Fields.Append "paramControle", adVarChar, 255
+    rsValves.Fields.Append "type", adVarChar, 255               'tipo de válvula - PRV, PSV, PBV, FCV, TCV, GPV
+    rsValves.Fields.Append "setting", adVarChar, 255            'parâmetro de controle na válvula
+    rsValves.Fields.Append "minorloss", adVarChar, 255          'Coeficiente de perda de carga singular
     rsValves.Open
     
     'Reservatório de Nível Fixo - RNF
@@ -229,7 +234,7 @@ Sub AbrirEstruturaExporteRede()
     rsReservoirs.Fields.Append "Pattern", adVarChar, 255        'padrão de nível
     rsReservoirs.Fields.Append "Description", adVarChar, 255    'para armazenar o nome do reservatório
     rsReservoirs.Open
-    
+
     'Reservatório de Nível Variável - RNV
     rsTanks.Fields.Append "ID", adVarChar, 255
     rsTanks.Fields.Append "Elevation", adVarChar, 255           'cota
@@ -591,8 +596,8 @@ Public Function RsValves_adicionaValvula(no As String)
     rsValves.Fields("ID").Value = "V" & no
     rsValves.Fields("Node1").Value = no & "A"
     rsValves.Fields("Node2").Value = no
-    rsValves.Fields("Diameter").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".") 'adiciona o diâmetro do trecho da tubulação a válvula
-    AddSubItemValves no                                             'Adiciona os sub itens para a valvula (setting,type,diameter)
+    rsValves.Fields("Diameter").Value = Replace(rs_trechosDeRede.Fields("internaldiameter").Value, ",", ".")    'adiciona o diâmetro do trecho da tubulação a válvula
+    AddSubItemValves no, rsValves.Fields("Diameter").Value                                                      'Adiciona os sub itens para a valvula (setting,type,diameter)
 End Function
 
 'Adiciona os dados da valvula2 para poder exportar depois para o EPANET
@@ -1110,7 +1115,7 @@ Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
    While Not Rs.EOF
       Select Case Rs.Fields("EPAREF").Value
          Case "HEAD"
-            cota = CDbl(rsNosTmp("cota").Value) + CDbl(Rs.Fields("VALUE_").Value)
+            cota = CDbl(rsNosTmp("cota").Value) * CDbl(Rs.Fields("VALUE_").Value)
             rsReservoirs.Fields("Head").Value = FormataStringNumerica(CStr(cota))
          Case "PATTERN"
             rsReservoirs.Fields("Pattern").Value = Rs.Fields("VALUE_").Value
@@ -1235,7 +1240,7 @@ End Function
 ' que foi verificado não retorna linhas. Em nosso entendimento ela não tem função 2013-04-27
 '
 '
-Public Function AddSubItemValves(id As String)
+Public Function AddSubItemValves(id As String, diametro As String)
 'Atribui os valores especificos para valvula
     Dim Rs As ADODB.Recordset
     Dim PumpDiameter As Double, PumpType As String, PumpSetting As String, PumpMinorLoss As String
@@ -1246,22 +1251,46 @@ Public Function AddSubItemValves(id As String)
         "where object_id_ = '" & id & "'")
     While Not Rs.EOF
         Select Case Rs.Fields("EPAREF").Value
-            Case "TYPE"
-                rsValves.Fields("Type").Value = Rs.Fields("DESCRIPTION_").Value
-            Case "SETTING"
+            Case "TYPE"                                                             'tipo de válvula - PRV, PSV, PBV, FCV, TCV, GPV
+                rsValves.Fields("Type").Value = ObtemTipoDeValvula(Rs.Fields("VALUE_").Value)
+            Case "SETTING"                                                          'parametro de controle
                 rsValves.Fields("Setting").Value = Rs.Fields("VALUE_").Value
-            Case "DIAMETER"
-                rsValves.Fields("Diameter").Value = Rs.Fields("VALUE_").Value
-            Case "NINORLOSS"
-                rsValves.Fields("MinorLoss").Value = 0 'implementar
-            Case "PARCONT"
-                rsValves.Fields("paramControle").Value = Rs.Fields("VALUE_").Value
+            Case "DIAMETER"                                                         'diametro
+                If CDbl(Rs.Fields("VALUE_").Value) <> 0 Then                              'caso o diâmetro da válvula não tenha sido preenchido, então coloque o diâmetro da tubulação
+                    rsValves.Fields("Diameter").Value = Rs.Fields("VALUE_").Value
+                Else
+                    rsValves.Fields("Diameter").Value = diametro
+                End If
+            Case "MINORLOSS"                                                        'coeficiente de perda de carga na válvula
+                rsValves.Fields("MinorLoss").Value = Rs.Fields("VALUE_").Value
         End Select
         Rs.MoveNext
     Wend
     Rs.Close
     Set Rs = Nothing
 End Function
+
+'Obtem o tipo de válvula a partir do número da mesma
+'
+'
+'
+Private Function ObtemTipoDeValvula(tipo As String) As String
+    Select Case tipo
+        Case "1"
+            ObtemTipoDeValvula = "PRV"      'PRV (válvula redutora de pressão) Pressão, m (psi)
+        Case "2"
+            ObtemTipoDeValvula = "PSV"      'PSV (Válvula Sustentadora de Pressão) Pressão, m (psi)
+        Case "3"
+            ObtemTipoDeValvula = "PBV"      'PBV (Válvula de perda de carga fixa) Pressão, m (psi)
+        Case "4"
+            ObtemTipoDeValvula = "FCV"      'FCV (válvula reguladora de vazão) Vazão (unidades de vazão)
+        Case "5"
+            ObtemTipoDeValvula = "TCV"      'TCV (válvula de controle de perda de carga) Coeficiente de perda de carga singular
+        Case "6"
+            ObtemTipoDeValvula = "GPV"      'GPV (válvula genérica) ID da curva de perda de carga
+    End Select
+End Function
+
 
 'Formata uma string numérica para poder ser salva no banco de dados
 ' "0" -> "0.0"
