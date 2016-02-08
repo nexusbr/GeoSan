@@ -18,6 +18,7 @@ Private rsCoordinates As New ADODB.Recordset
 Private rsPipes As New ADODB.Recordset
 Private rsJunctions As New ADODB.Recordset                          'vetor com todas as junções (nós de conexão) que é utilizado depois de completo para exportar para o EPANET
 Private rsPumps As New ADODB.Recordset
+Private rsCurves As New ADODB.Recordset                             'parêmetros das curvas de bomba
 Private rsValves As New ADODB.Recordset
 Private rsReservoirs As New ADODB.Recordset                         'São os Reservatórios de Nível Fixo - RNF
 Private rsTanks As New ADODB.Recordset                              'São os Reservatórios de Nível Variável - RNV
@@ -203,6 +204,12 @@ Sub AbrirEstruturaExporteRede()
     rsPumps.Fields.Append "node2", adVarChar, 255
     rsPumps.Fields.Append "parameters", adVarChar, 255
     rsPumps.Fields.Append "potencia", adVarChar, 255
+    rsPumps.Fields.Append "carga", adVarChar, 255
+    rsPumps.Fields.Append "vazao", adVarChar, 255
+    rsPumps.Fields.Append "curvaRendimento1", adVarChar, 255
+    rsPumps.Fields.Append "curvaBomba", adVarChar, 255
+    rsPumps.Fields.Append "curvaRendimento2", adVarChar, 255
+    rsPumps.Fields.Append "Description", adVarChar, 255
     rsPumps.Open
     
     'válvulas
@@ -234,6 +241,12 @@ Sub AbrirEstruturaExporteRede()
     rsTanks.Fields.Append "VolCurve", adVarChar, 255            'curva de volume
     rsTanks.Fields.Append "Description", adVarChar, 255    'para armazenar o nome do reservatório
     rsTanks.Open
+    
+    'Curvas
+    rsCurves.Fields.Append "ID", adVarChar, 255
+    rsCurves.Fields.Append "X-Value", adVarChar, 255           'nível da água
+    rsCurves.Fields.Append "Y-Value", adVarChar, 255        'padrão de nível
+    rsCurves.Open
     
     'vértices de linhas de tubulações
     rsVertices.Fields.Append "ID", adVarChar, 255               'número da tubulação
@@ -738,6 +751,65 @@ Public Function FechaAcessosAosVetores()
     Set rsNos = Nothing
 End Function
 
+'Gera automaticamente o cabeçalho da componente ou trecho a ser exportado para o EPANET
+'
+'
+'
+Private Function GeraCabecalhoComPosicaoColunaDescricao(rsGenerico As ADODB.Recordset, stringCabecalho As String) As Integer
+    Dim posicaoDaDescricao As Integer
+    
+    posicaoDaDescricao = 100                                                                                'coloca um valor alto para informar que não foi localizada a descrição
+    rsGenerico.MoveFirst
+    stringCabecalho = ""
+    For A = 0 To rsGenerico.Fields.Count - 1
+        If rsGenerico.Fields(A).Name = "Description" Then
+            posicaoDaDescricao = A                                                                          'lê a posição onde está a descrição da bomba para colocá-la depois do ; no final
+            stringCabecalho = stringCabecalho & rsGenerico.Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+        Else
+            stringCabecalho = stringCabecalho & rsGenerico.Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+        End If
+    Next
+    GeraCabecalhoComPosicaoColunaDescricao = posicaoDaDescricao
+End Function
+
+'Imprime o cabeçalho da componente ou trecho a ser exportado, no arquivo de exportação do EPANET
+'
+'
+'
+Private Function ImprimeCabecalho(titulo As String, cabacalho As String)
+    Open FrmEPANET.txtArquivo.Text For Append As #1
+    Print #1, ""
+    Print #1, "[RESERVOIRS]"
+    Print #1, ";" & cabacalho
+    Close #1
+End Function
+
+'Imprime os dados da componente ou trecho a ser exportado, no arquivo de exportação do EPANET
+'
+'
+'
+Private Function GravaDadosDoNoOuTrecho(rsGenerico As ADODB.Recordset, posicaoDaDescricao As Integer)
+    Dim str As String
+    
+    Open FrmEPANET.txtArquivo.Text For Append As #1
+    While Not rsGenerico.EOF
+        For A = 0 To rsGenerico.Fields.Count - 1
+            If A <> posicaoDaDescricao Then                                         'pula a descrição para colocá-la somente depois do ;
+                str = str & IIf(IsNumeric(rsGenerico.Fields(A).Value), Replace(rsGenerico.Fields(A).Value, ",", "."), rsGenerico.Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+            End If
+        Next
+        If posicaDaDescricao <> 100 Then                                            'existe uma descrição válida
+            Print #1, str & ";" & rsGenerico.Fields(posicaoDaDescricao).Value       'coloca a string com os dados da bomba, seguidos da descrição da mesma
+        Else
+            Print #1, str & ";"
+        End If
+        str = ""
+        rsGenerico.MoveNext
+    Wend
+    Close #1
+End Function
+
+
 'Gera o arquivo de saída .INP que o Epanet lê
 'Recupera os dados do cursor em memoria e cria o arquivo .INP
 '#########################################################################
@@ -773,9 +845,10 @@ End Function
 '#########################################################################
 '
 Public Function GeraArquivo_de_Saida()
-        On Error GoTo Trata_Erro
+    On Error GoTo Trata_Erro
     Dim A As Long
     Dim str As String
+    Dim posicaoDaDescricao As Integer                                               'posição no vetor, da coluna descrição
 
     intLinhaCod = 1
     Open FrmEPANET.txtArquivo.Text For Output As #1
@@ -819,64 +892,29 @@ Public Function GeraArquivo_de_Saida()
         Wend
     End With
 
-    'grava no arquivo as Reservoirs
-    With rsReservoirs
-        .Filter = ""
-        intLinhaCod = 8
-        If .RecordCount > 0 Then
-            .MoveFirst
-            intLinhaCod = 9
-            For A = 0 To .Fields.Count - 1
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Next
-            Print #1, ""
-            Print #1, "[RESERVOIRS]"
-            Print #1, ";" & str
-            str = ""
-            intLinhaCod = 10
-            While Not .EOF
-                For A = 0 To .Fields.Count - 1
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Next
-                Print #1, str & ";"
-                str = ""
-                .MoveNext
-            Wend
-            intLinhaCod = 11
-        End If
-    End With
-
+    'grava no arquivo as Reservoirs - RNF
+    rsReservoirs.Filter = ""
+    If rsReservoirs.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsReservoirs, str)
+        Close #1 'retira quando finalizada a rotina totalmente
+        Call ImprimeCabecalho("[RESERVOIRS]", str)
+        'str = ""
+        Call GravaDadosDoNoOuTrecho(rsReservoirs, posicaoDaDescricao)
+    End If
+    Open FrmEPANET.txtArquivo.Text For Append As #1
+    
     'grava no arquivo as Tanks
-    With rsTanks
-        .Filter = ""
-        intLinhaCod = 12
-        If .RecordCount > 0 Then
-            .MoveFirst
-            intLinhaCod = 13
-            For A = 0 To .Fields.Count - 1
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Next
-            Print #1, ""
-            Print #1, "[TANKS]"
-            Print #1, ";" & str
-            str = ""
-            intLinhaCod = 14
-            While Not .EOF
-                For A = 0 To .Fields.Count - 1
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Next
-                Print #1, str & ";"
-                str = ""
-                .MoveNext
-            Wend
-            intLinhaCod = 15
-        End If
-    End With
-
+    rsTanks.Filter = ""
+    intLinhaCod = 12
+    If rsTanks.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsTanks, str)
+        Close #1 'retira quando finalizada a rotina totalmente
+        Call ImprimeCabecalho("[TANKS]", str)
+        'str = ""
+        Call GravaDadosDoNoOuTrecho(rsTanks, posicaoDaDescricao)
+    End If
+    Open FrmEPANET.txtArquivo.Text For Append As #1
+    
     'grava no arquivo as Pumps
     With rsPumps
         .Filter = ""
@@ -885,7 +923,12 @@ Public Function GeraArquivo_de_Saida()
             .MoveFirst
             intLinhaCod = 17
             For A = 0 To .Fields.Count - 1
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+                If .Fields(A).Name = "Description" Then
+                    posicaoDaDescricao = A                                                'lê a posição onde está a descrição da bomba para colocá-la depois do ; no final
+                    str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+                Else
+                    str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
+                End If
             Next
             Print #1, ""
             Print #1, "[PUMPS]"
@@ -894,11 +937,11 @@ Public Function GeraArquivo_de_Saida()
             intLinhaCod = 18
             While Not .EOF
                 For A = 0 To .Fields.Count - 1
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                    If A <> posicaoDaDescricao Then                                       'pula a descrição para colocá-la somente depois do ;
+                        str = str & IIf(IsNumeric(.Fields(A).Value), Replace(.Fields(A).Value, ",", "."), .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
+                    End If
                 Next
-                Print #1, str & ";"
+                Print #1, str & ";" & .Fields(posicaoDaDescricao).Value                   'coloca a string com os dados da bomba, seguidos da descrição da mesma
                 str = ""
                 .MoveNext
             Wend
@@ -1226,8 +1269,9 @@ End Sub
 '
 '
 Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
-   Dim Rs As ADODB.Recordset
-   Dim cota As Double
+    Dim Rs As ADODB.Recordset
+    Dim cota As Double
+    Dim parametrosPreenchidos As String
 
    Set Rs = conn.Execute("Select b.eparef, w.value_, b.Description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
@@ -1259,21 +1303,103 @@ End Sub
 '
 Public Function AddSubItemPumps(id As String)
    Dim Rs As ADODB.Recordset
-   Dim CURVE As String
-   Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+   
+   Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
                          "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
-                         "where object_id_ = '" & id & "'")
+                         "where object_id_ = '" & id & "'" & _
+                         "order by b.eparef")
                          
-   While Not Rs.EOF
-      Select Case Rs.Fields("EPAREF").Value
-         Case "CURVE"
-            rsPumps.Fields("Parameters").Value = " HEAD " & Rs.Fields("VALUE_").Value
-      End Select
-      Rs.MoveNext
-   Wend
-   Rs.Close
-   Set Rs = Nothing
+    rsPumps.Fields("potencia").Value = FormataStringNumerica("0")                                   'inicializa com zero ou nulo, caso não existem valores preenchidos
+    rsPumps.Fields("carga").Value = FormataStringNumerica("0")
+    rsPumps.Fields("vazao").Value = FormataStringNumerica("0")
+    rsPumps.Fields("curvaRendimento1").Value = " "
+    rsPumps.Fields("curvaBomba").Value = " "
+    rsPumps.Fields("curvaRendimento2").Value = " "
+                         
+    parametrosPreenchidos = ""
+    If AddSubItemPumps_possuiParametroPreenchido("POWER", id) = True Then
+        parametrosPreenchidos = "POWER"
+    ElseIf AddSubItemPumps_possuiParametroPreenchido("CARGA", id) = True And AddSubItemPumps_possuiParametroPreenchido("VAZAO", id) = True Then
+        parametrosPreenchidos = "CARGA"
+    ElseIf AddSubItemPumps_possuiParametroPreenchido("CURBOMBA", id) = True Then
+        parametrosPreenchidos = "CURBOMBA"
+    End If
+    
+    If parametrosPreenchidos <> "" Then
+        Select Case parametrosPreenchidos
+            Case "POWER"                                                                             'Usuário só tem a potência da bomba
+                Do While Not Rs.EOF
+                    Select Case Rs.Fields("EPAREF").Value
+                       Case "POWER"
+                          rsPumps.Fields("potencia").Value = " POWER " & Rs.Fields("VALUE_").Value
+                        Case "DESC"
+                          rsPumps.Fields("Description").Value = Rs.Fields("VALUE_").Value
+                    End Select
+                    Rs.MoveNext
+                Loop
+            Case "CARGA"                                                                          'Usuário só tem a carga (altura) e vazão da bomba, podendo ter a curva de rendimento
+                Do While Not Rs.EOF
+                    Select Case Rs.Fields("EPAREF").Value
+                        Case "CARGA"
+                           rsCurves.Fields("X-Value").Value = Rs.Fields("VALUE_").Value
+                        Case "VAZAO"
+                           rsCurves.Fields("Y-Value").Value = Rs.Fields("VALUE_").Value
+                           AddCurve "C" & str(id), rsCurves.Fields("X-Value").Value, rsCurves.Fields("Y-Value").Value
+                        Case "RENDIM"
+                           rsPumps.Fields("curvaRendimento1").Value = " HEAD " & Rs.Fields("VALUE_").Value
+                           
+                    End Select
+                    Rs.MoveNext
+                Loop
+            Case "CURBOMBA"                                                                           'Usuário tem a curva da bomba, podendo ter a curva de rendimento da bomba também
+                Do While Not Rs.EOF
+                    Select Case Rs.Fields("EPAREF").Value
+                        Case "CURBOMBA"
+                           rsPumps.Fields("curvaBomba").Value = Rs.Fields("VALUE_").Value
+                        Case "CURREND"
+                           rsPumps.Fields("curvaRendimento2").Value = Rs.Fields("VALUE_").Value
+                    End Select
+                    Rs.MoveNext
+                Loop
+        End Select
+    End If
+    Rs.Close
+    Set Rs = Nothing
+End Function
+
+'Verifica quais os parâmetros que foram preenchidos para a bomba
+'Opção 1 - Potência (POWER)
+'Opção 2 - Altura e Vazão (CARGA, VAZAO, RENDIM)
+'Opção 3 - Curva da Bolba (CURBOMBA, CURREND)
+'Parâmetro pode receber: POWER, CARGA ou CURBOMBA, correspontentes as opções 1, 2 e 3 respectivamente
+'
+'
+Private Function AddSubItemPumps_possuiParametroPreenchido(parametro As String, id As String) As String
+    Dim Rs As ADODB.Recordset
+
+    Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
+                         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "where object_id_ = '" & id & "'" & _
+                         "order by b.eparef")
+
+    Do While Not Rs.EOF
+        Select Case Rs.Fields("EPAREF").Value
+            Case parametro
+                AddSubItemPumps_possuiParametroPreenchido = True
+                Exit Function
+        End Select
+        Rs.MoveNext
+    Loop
+    AddSubItemPumps_possuiParametroPreenchido = False
+End Function
+
+Private Function AddCurve(id As String, x As Double, y As Double)
+    rsCurves.AddNew
+    rsCurves.Fields("ID").Value = id
+    rsCurves.Fields("X-Value").Value = x
+    rsCurves.Fields("Y-Value").Value = y
 End Function
 
 'Adiciona as outras componentes de uma válvula, como diametro, tipo, etc.
@@ -1289,7 +1415,7 @@ Public Function AddSubItemValves(id As String)
     Dim Rs As ADODB.Recordset
     Dim PumpDiameter As Double, PumpType As String, PumpSetting As String, PumpMinorLoss As String
     
-    Set Rs = conn.Execute("Select b.eparef, w.value_, s.description_ from watercomponentsdata w " & _
+    Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
         "where object_id_ = '" & id & "'")
