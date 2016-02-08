@@ -779,7 +779,7 @@ End Function
 Private Function ImprimeCabecalho(titulo As String, cabacalho As String)
     Open FrmEPANET.txtArquivo.Text For Append As #1
     Print #1, ""
-    Print #1, "[RESERVOIRS]"
+    Print #1, titulo
     Print #1, ";" & cabacalho
     Close #1
 End Function
@@ -791,6 +791,7 @@ End Function
 Private Function GravaDadosDoNoOuTrecho(rsGenerico As ADODB.Recordset, posicaoDaDescricao As Integer)
     Dim str As String
     
+    str = ""
     Open FrmEPANET.txtArquivo.Text For Append As #1
     While Not rsGenerico.EOF
         For A = 0 To rsGenerico.Fields.Count - 1
@@ -798,7 +799,7 @@ Private Function GravaDadosDoNoOuTrecho(rsGenerico As ADODB.Recordset, posicaoDa
                 str = str & IIf(IsNumeric(rsGenerico.Fields(A).Value), Replace(rsGenerico.Fields(A).Value, ",", "."), rsGenerico.Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
             End If
         Next
-        If posicaDaDescricao <> 100 Then                                            'existe uma descrição válida
+        If posicaoDaDescricao <> 100 Then                                            'existe uma descrição válida
             Print #1, str & ";" & rsGenerico.Fields(posicaoDaDescricao).Value       'coloca a string com os dados da bomba, seguidos da descrição da mesma
         Else
             Print #1, str & ";"
@@ -808,7 +809,6 @@ Private Function GravaDadosDoNoOuTrecho(rsGenerico As ADODB.Recordset, posicaoDa
     Wend
     Close #1
 End Function
-
 
 'Gera o arquivo de saída .INP que o Epanet lê
 'Recupera os dados do cursor em memoria e cria o arquivo .INP
@@ -848,191 +848,71 @@ Public Function GeraArquivo_de_Saida()
     On Error GoTo Trata_Erro
     Dim A As Long
     Dim str As String
-    Dim posicaoDaDescricao As Integer                                               'posição no vetor, da coluna descrição
+    Dim posicaoDaDescricao As Integer                                                   'posição no vetor, da coluna descrição
 
-    intLinhaCod = 1
     Open FrmEPANET.txtArquivo.Text For Output As #1
-    intLinhaCod = 2
-    'grava no arquivo as Junctions
-    Print #1, "[JUNCTIONS]"
-    'CARREGA EM STR O CABEÇALHO
-    str = "ID" & Chr(vbKeyTab) & Chr(vbKeyTab)
-    str = str & "ELEV" & Chr(vbKeyTab) & Chr(vbKeyTab)
-    str = str & "DEMAND" & Chr(vbKeyTab) & Chr(vbKeyTab)
-    str = str & "PATTERN" & Chr(vbKeyTab) & Chr(vbKeyTab)
-    Print #1, ";" & str
-    str = ""
-    ' "id", adVarChar, 255
-    ' "elev", adVarChar, 255
-    ' "demand", adDouble, 255
-    ' "pattern", adVarChar, 255
-    Dim cota As String
-    Dim pos As Integer
+    Close #1
 
-    With rsJunctions
-        .Filter = ""
-        While Not .EOF
-            If IsNumeric(.Fields("ID").Value) = True Then
-                str = .Fields("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
-                cota = Replace(.Fields("ELEV").Value, ",", ".")  ' recebe o valor do banco troca a virgula por ponto
-                pos = InStr(1, cota, ".", vbBinaryCompare) + 1   ' localiza a posição do ponto na string e adiciona 1
-                cota = Mid(cota, 1, pos)                         ' pega 1 casa apos a virgula
-                str = str & cota & Chr(vbKeyTab) & Chr(vbKeyTab)
-                str = str & Replace(.Fields("DEMAND").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
-                str = str & Replace(.Fields("PATTERN").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Else
-                str = .Fields("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
-                str = str & Replace(.Fields("ELEV").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
-                str = str & "0" & Chr(vbKeyTab) & Chr(vbKeyTab)
-                str = str & Replace(.Fields("PATTERN").Value, ",", ".") & Chr(vbKeyTab) & Chr(vbKeyTab)
-            End If
-            Print #1, str & ";"
-            str = ""
-            .MoveNext
-        Wend
-    End With
+    rsJunctions.Filter = ""                                                             'grava no arquivo as Junctions
+    If rsJunctions.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsJunctions, str)
+        Call ImprimeCabecalho("[JUNCTIONS]", str)
+        Call GravaDadosDoNoOuTrecho(rsJunctions, posicaoDaDescricao)
+    End If
 
-    'grava no arquivo as Reservoirs - RNF
-    rsReservoirs.Filter = ""
+    rsReservoirs.Filter = ""                                                            'grava no arquivo as Reservoirs - RNF
     If rsReservoirs.RecordCount > 0 Then
         posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsReservoirs, str)
-        Close #1 'retira quando finalizada a rotina totalmente
         Call ImprimeCabecalho("[RESERVOIRS]", str)
-        'str = ""
         Call GravaDadosDoNoOuTrecho(rsReservoirs, posicaoDaDescricao)
     End If
-    Open FrmEPANET.txtArquivo.Text For Append As #1
     
-    'grava no arquivo as Tanks
-    rsTanks.Filter = ""
-    intLinhaCod = 12
+    rsTanks.Filter = ""                                                                 'grava no arquivo as Tanks
     If rsTanks.RecordCount > 0 Then
         posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsTanks, str)
-        Close #1 'retira quando finalizada a rotina totalmente
         Call ImprimeCabecalho("[TANKS]", str)
-        'str = ""
         Call GravaDadosDoNoOuTrecho(rsTanks, posicaoDaDescricao)
     End If
-    Open FrmEPANET.txtArquivo.Text For Append As #1
     
-    'grava no arquivo as Pumps
-    With rsPumps
-        .Filter = ""
-        intLinhaCod = 16
-        If .RecordCount > 0 Then
-            .MoveFirst
-            intLinhaCod = 17
-            For A = 0 To .Fields.Count - 1
-                If .Fields(A).Name = "Description" Then
-                    posicaoDaDescricao = A                                                'lê a posição onde está a descrição da bomba para colocá-la depois do ; no final
-                    str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Else
-                    str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-                End If
-            Next
-            Print #1, ""
-            Print #1, "[PUMPS]"
-            Print #1, ";" & str
-            str = ""
-            intLinhaCod = 18
-            While Not .EOF
-                For A = 0 To .Fields.Count - 1
-                    If A <> posicaoDaDescricao Then                                       'pula a descrição para colocá-la somente depois do ;
-                        str = str & IIf(IsNumeric(.Fields(A).Value), Replace(.Fields(A).Value, ",", "."), .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                    End If
-                Next
-                Print #1, str & ";" & .Fields(posicaoDaDescricao).Value                   'coloca a string com os dados da bomba, seguidos da descrição da mesma
-                str = ""
-                .MoveNext
-            Wend
-            intLinhaCod = 19
-        End If
-    End With
+    rsPumps.Filter = ""                                                                 'grava no arquivo as Pumps
+    If rsPumps.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsPumps, str)
+        Call ImprimeCabecalho("[PUMPS]", str)
+        Call GravaDadosDoNoOuTrecho(rsPumps, posicaoDaDescricao)
+    End If
 
-    'grava no arquivo as Valves
-    With rsValves
+    rsValves.Filter = ""                                                                'grava no arquivo as Valves
+    If rsPumps.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsValves, str)
+        Call ImprimeCabecalho("[VALVES]", str)
+        Call GravaDadosDoNoOuTrecho(rsValves, posicaoDaDescricao)
+    End If
+
+    With rsValves                                                                       'grava no arquivo os status das válvulas, esta gravação é realizada para facilitar a simulação hidráulica no Epanet, evitando que o usuário tenha que abrir manualmente os registros para iniciar uma simulação completa. Depois ele fecha os registros que achar necessário
         .Filter = ""
         If .RecordCount > 0 Then
-            .MoveFirst
-            intLinhaCod = 20
-            For A = 0 To .Fields.Count - 1
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Next
-            Print #1, ""
-            Print #1, "[VALVES]"
-            Print #1, ";" & str
-            str = ""
-            intLinhaCod = 21
+            .MoveFirst                                                                  'pula o primeiro registro que é o cabeçalho
+            str = "ID                 Status/Setting"
+            Call ImprimeCabecalho("[STATUS]", str)
+            Open FrmEPANET.txtArquivo.Text For Append As #1
             While Not .EOF
-                For A = 0 To .Fields.Count - 1
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Next
+                str = .Fields(0).Value & Chr(vbKeyTab) & Chr(vbKeyTab) & "Open"         'prepara para impressão somente o número da válvula e o status da mesma que está aberta
                 Print #1, str & ";"
                 str = ""
-                .MoveNext
+                .MoveNext                                                               'vai para a próxima válvula
             Wend
-            intLinhaCod = 22
+            Close #1
         End If
     End With
 
-    'grava no arquivo as Status
-    'esta gravação é realizada para facilitar a simulação hidráulica no Epanet, evitando que o usuário tenha que abrir manualmente os registros para iniciar uma simulação completa. Depois ele fecha os registros que achar necessário
-    With rsValves
-        .Filter = ""
-        If .RecordCount > 0 Then
-            .MoveFirst                     'pula o primeiro registro que é o cabeçalho
-            intLinhaCod = 200
-            'imprime o cabeçalho
-            Print #1, ""
-            Print #1, "[STATUS]"
-            Print #1, ";ID                 Status/Setting"
-            str = ""
-            intLinhaCod = 210
-            While Not .EOF
-                str = .Fields(0).Value & Chr(vbKeyTab) & Chr(vbKeyTab) & "Open"     'prepara para impressão somente o número da válvula e o status da mesma que está aberta
-                Print #1, str & ";"
-                str = ""
-                .MoveNext                   'vai para a próxima válvula
-            Wend
-            intLinhaCod = 220
-        End If
-    End With
+    rsPipes.Filter = ""                                                                 'exporta tubulações
+    If rsPipes.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsPipes, str)
+        Call ImprimeCabecalho("[PIPES]", str)
+        Call GravaDadosDoNoOuTrecho(rsPipes, posicaoDaDescricao)
+    End If
 
-    With rsPipes
-        .Filter = ""
-        intLinhaCod = 23
-        If .RecordCount > 0 Then
-            .MoveFirst
-            intLinhaCod = 24
-            For A = 0 To .Fields.Count - 2 'NÃO IMPRIME O NOME DO CAMPO DESCRIPTION
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Next
-            Print #1, ""
-            Print #1, "[PIPES]"
-            Print #1, ";" & str
-            str = ""
-            While Not .EOF
-                For A = 0 To .Fields.Count - 1 '
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                    If A = 7 Then
-                        str = str & ";" & .Fields(8).Value
-                        Exit For
-                    End If
-                Next
-                Print #1, str
-                'Print #1, str & ";"
-                str = ""
-                .MoveNext
-            Wend
-            intLinhaCod = 25
-        End If
-    End With
-
-    intLinhaCod = 26
+    'X_PATTERNS
     Dim MyArray() As String
     Dim rsPatterns As ADODB.Recordset
     If conn.Provider <> "PostgreSQL.1" Then
@@ -1041,14 +921,16 @@ Public Function GeraArquivo_de_Saida()
         Set rsPatterns = conn.Execute("Select * from " + """" + "X_PATTERNS" + """" + "")
     End If
     
-    'grava no arquivo as Patterns
-    intLinhaCod = 26
-    If rsPatterns.EOF = False Then
+    If rsPatterns.EOF = False Then                                                      'grava no arquivo as Patterns
         With rsPatterns
-            Print #1, "[PATTERNS]"
-            Print #1, ";ID" & Chr(vbKeyTab) & Chr(vbKeyTab) & "Multipliers"
+            str = "ID       Multipliers"
+            Call ImprimeCabecalho("[PATTERNS]", str)
+'            Print #1, "[PATTERNS]"
+'            Print #1, ";ID" & Chr(vbKeyTab) & Chr(vbKeyTab) & "Multipliers"
+            Open FrmEPANET.txtArquivo.Text For Append As #1
             Print #1, ";" & rsPatterns("descricao").Value
-            intLinhaCod = 27
+            Close #1
+            Open FrmEPANET.txtArquivo.Text For Append As #1
             While Not .EOF
                 MyArray = Split(rsPatterns("Padrao").Value, ";", 25)
                 Print #1, rsPatterns("ID").Value & Chr(vbKeyTab) & Chr(vbKeyTab) & Replace(MyArray(0), ",", ".") & _
@@ -1083,31 +965,24 @@ Public Function GeraArquivo_de_Saida()
                 End If
                 rsPatterns.MoveNext
             Wend
-            intLinhaCod = 28
+            Close #1
         End With
     End If
-
-    intLinhaCod = 29
     rsPatterns.Close
     Set rsPatterns = Nothing
     Dim b As Integer
     Dim MyArray_x() As String
     Dim MyArray_y() As String
     Dim rsCurves As ADODB.Recordset
-    If conn.Provider <> "PostgreSQL.1" Then
-        Set rsCurves = conn.Execute("Select * from x_Curves order by tipo")
-    Else
-        Set rsCurves = conn.Execute("Select * from " + """" + "X_CURVES" + """" + "")
-    End If
-    intLinhaCod = 30
+    
+    Set rsCurves = conn.Execute("Select * from x_Curves order by tipo")
 
     'grava no arquivo as Curves
     If rsCurves.EOF = False Then
-        intLinhaCod = 31
         With rsCurves
-            Print #1, "[CURVES]"
-            Print #1, ";ID" & Chr(vbKeyTab) & Chr(vbKeyTab) & "X-Value" & Chr(vbKeyTab) & Chr(vbKeyTab) & "Y-Value"
-            intLinhaCod = 32
+            str = "ID       X-Value     Y-Value"
+            Call ImprimeCabecalho("[CURVES]", str)
+            Open FrmEPANET.txtArquivo.Text For Append As #1
             For b = 1 To 4
                 If b = 1 Then
                     rsCurves.Filter = "Tipo = 'Bomba'"
@@ -1136,75 +1011,25 @@ Public Function GeraArquivo_de_Saida()
                     rsCurves.MoveNext
                 Wend
             Next
-            intLinhaCod = 34
+            Close #1
         End With
     End If
     rsCurves.Close
     Set rsCurves = Nothing
 
-    'grava no arquivo as Coordinates
-    Open App.Path & "\LogErroExportEPANET-histórico.txt" For Append As #4
-    intLinhaCod = 35
-    With rsCoordinates
-        .Filter = ""
-        If .RecordCount > 0 Then
-            .MoveFirst
-            For A = 0 To .Fields.Count - 1
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Next
-            intLinhaCod = 36
-            Print #1, ""
-            Print #1, "[COORDINATES]"
-            Print #1, ";" & str
-            str = ""
-            intLinhaCod = 37
-            While Not .EOF
-                For A = 0 To .Fields.Count - 1
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Next
-                Print #1, str & ";"
-                Print #4, str & ";"
-                str = ""
-                .MoveNext
-            Wend
-            intLinhaCod = 38
-        End If
-    End With
-    Close #4
-    
-    'grava no arquivo as Vertices
-    intLinhaCod = 39
-    With rsVertices
-        .Filter = ""
-        intLinhaCod = 40
-        If .RecordCount > 0 Then
-            .MoveFirst
-            intLinhaCod = 41
-            For A = 0 To .Fields.Count - 1
-                str = str & .Fields(A).Name & Chr(vbKeyTab) & Chr(vbKeyTab)
-            Next
-            intLinhaCod = 42
-            Print #1, ""
-            Print #1, "[VERTICES]"
-            Print #1, ";" & str
-            str = ""
-            intLinhaCod = 43
-            While Not .EOF
-                For A = 0 To .Fields.Count - 1
-                    str = str & IIf(IsNumeric(.Fields(A).Value), _
-                        Replace(.Fields(A).Value, ",", "."), _
-                        .Fields(A).Value) & Chr(vbKeyTab) & Chr(vbKeyTab)
-                Next
-                Print #1, str & ";"
-                str = ""
-                .MoveNext
-            Wend
-            intLinhaCod = 44
-        End If
-    End With
-    Close #1
+    rsCoordinates.Filter = ""                                                               'grava no arquivo as Coordinates
+    If rsCoordinates.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsCoordinates, str)
+        Call ImprimeCabecalho("[COORDINATES]", str)
+        Call GravaDadosDoNoOuTrecho(rsCoordinates, posicaoDaDescricao)
+    End If
+
+    rsVertices.Filter = ""                                                                  'grava no arquivo as Vertices
+    If rsVertices.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsVertices, str)
+        Call ImprimeCabecalho("[VERTICES]", str)
+        Call GravaDadosDoNoOuTrecho(rsVertices, posicaoDaDescricao)
+    End If
 
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
