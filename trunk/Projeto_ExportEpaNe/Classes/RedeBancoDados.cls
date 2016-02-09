@@ -25,7 +25,7 @@ Private rsTanks As New ADODB.Recordset                              'São os Rese
 Private rsVertices As New ADODB.Recordset                           'Vertices da linha com exceção do inicial e final
 Private rsNosTmp As New ADODB.Recordset                             'Criado para armazenar todos os dados de todos nos - Copia do Watercomponenstes/Points
 Private rsTrechosExportados As New ADODB.Recordset                  'Criado para armazenar os trechos que já foram exportados
-Private RsTrechos As New ADODB.Recordset
+Private rsTrechos As New ADODB.Recordset
 Private rsNosExportados As New ADODB.Recordset                      'Criado para armazenar os Nós que já foram exportados
 Private rsWaterCompTypes As New ADODB.Recordset                     'RecordSet de referencia para consulta do tipo de componente
 
@@ -286,8 +286,8 @@ Sub AbrirEstruturaExporteRede()
     rsTrechosExportados.Fields.Append "id", adVarChar, 255
     rsTrechosExportados.Open
     
-    RsTrechos.Fields.Append "id", adVarChar, 255
-    RsTrechos.Open
+    rsTrechos.Fields.Append "id", adVarChar, 255
+    rsTrechos.Open
     
     'lista de nós exportados
     rsNosExportados.Fields.Append "id", adVarChar, 255
@@ -395,8 +395,8 @@ End Function
 '
 '
 Public Function RsTrechos_adicionaIdDoTrecho()
-    RsTrechos.AddNew                                'Insere no vetor de trechos exportados o trecho processado
-    RsTrechos.Fields("id").Value = idLinha
+    rsTrechos.AddNew                                'Insere no vetor de trechos exportados o trecho processado
+    rsTrechos.Fields("id").Value = idLinha
 End Function
 
 'Verifica se o nó da rede já foi exportado na lista de nós a serem exportados para o EPANET
@@ -749,8 +749,8 @@ End Function
 Public Function FechaAcessosAosVetores()
     Set rsNosTmp = Nothing
     
-    RsTrechos.Close
-    Set RsTrechos = Nothing
+    rsTrechos.Close
+    Set rsTrechos = Nothing
     
     rsTrechosExportados.Close
     Set rsTrechosExportados = Nothing
@@ -1100,7 +1100,7 @@ Private Sub AdicionaSubItensReservatorioNivelVariavel(id As String)
 
    Set Rs = conn.Execute("Select b.eparef, w.value_, b.Description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
                          "where object_id_ = '" & id & "'")
    
    rsTanks.Fields("MaxLevel").Value = FormataStringNumerica("0")                                                         'inicializa com zero ou nulo, caso não existem valores preenchidos
@@ -1146,7 +1146,7 @@ Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
 
    Set Rs = conn.Execute("Select b.eparef, w.value_, b.Description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
                          "where object_id_ = '" & id & "'")
    
    rsReservoirs.Fields("Head").Value = FormataStringNumerica(rsNosTmp("cota").Value)          'inicializa com a cota caso não existem valores preenchidos em head
@@ -1184,7 +1184,7 @@ Public Function AddSubItemPumps(id As String)
    
    Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
                          "where object_id_ = '" & id & "'" & _
                          "order by b.eparef")
                                         
@@ -1279,7 +1279,7 @@ Private Function AddSubItemPumps_possuiParametroPreenchido(parametro As String, 
 
     Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+                         "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
                          "where object_id_ = '" & id & "'" & _
                          "order by b.eparef")
 
@@ -1316,7 +1316,7 @@ Public Function AddSubItemValves(id As String, diametro As String)
     
     Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
         "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
-        "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
+        "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
         "where object_id_ = '" & id & "'")
     While Not Rs.EOF
         Select Case Rs.Fields("EPAREF").Value
