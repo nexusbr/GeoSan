@@ -202,14 +202,16 @@ Sub AbrirEstruturaExporteRede()
     rsPumps.Fields.Append "id", adVarChar, 255
     rsPumps.Fields.Append "node1", adVarChar, 255
     rsPumps.Fields.Append "node2", adVarChar, 255
-    rsPumps.Fields.Append "parameters", adVarChar, 255
-    rsPumps.Fields.Append "potencia", adVarChar, 255
+    rsPumps.Fields.Append "parameters", adVarChar, 255              'Aqui vai ou POWER ou HEAD e os demais parâmetros SPEED e/ou PATTERN. Uma das seguintes propriedades: POWER ou HEAD tem que ser fornecidas para caracterizar a bomba. Utilize a propriedade POWER se não for possível obter uma curva da bomba. As restantes palavras-chave são opcionais.
+    rsPumps.Fields.Append "power", adVarChar, 255                   'POWER - valor da potência para uma energia de bombeamento constante, hp (kW)
     rsPumps.Fields.Append "carga", adVarChar, 255
     rsPumps.Fields.Append "vazao", adVarChar, 255
     rsPumps.Fields.Append "curvaRendimento1", adVarChar, 255
-    rsPumps.Fields.Append "curvaBomba", adVarChar, 255
+    rsPumps.Fields.Append "head", adVarChar, 255                    'HEAD - ID da curva que descreve a vazão vs altura de elevação para a bomba
     rsPumps.Fields.Append "curvaRendimento2", adVarChar, 255
-    rsPumps.Fields.Append "Description", adVarChar, 255
+    rsPumps.Fields.Append "speed", adVarChar, 255                   'SPEED - regulação de velocidade (regulação de velocidade usual é 1.0, 0 significa que a bomba está desligada)
+    rsPumps.Fields.Append "pattern", adVarChar, 255
+    rsPumps.Fields.Append "description", adVarChar, 255             'PATTERN - ID do padrão temporal que descreve a variação da propriedade Regulação de Velocidade (SPEED) com o tempo
     rsPumps.Open
     
     'válvulas
@@ -583,8 +585,8 @@ Public Function RsPumps_adicionaBomba(no As String, conta_no As Integer)
     Else
        rsPumps.Fields("Node1").Value = no & "A"
        rsPumps.Fields("Node2").Value = no
-       rsPumps.Fields("potencia").Value = "10"
     End If
+    AddSubItemPumps (no)                            'Adiciona os sub itens para a bomba (curva)
 End Function
 
 'Adiciona os dados da válvula para poder exportar depois para o EPANET
@@ -815,6 +817,28 @@ Private Function GravaDadosDoNoOuTrecho(rsGenerico As ADODB.Recordset, posicaoDa
     Close #1
 End Function
 
+'Imprime os dados da bomba a ser exportado, no arquivo de exportação do EPANET
+'
+'
+'
+Private Function GravaDadosDaBomba(rsGenerico As ADODB.Recordset)
+    Dim str As String
+    
+    str = ""
+    Open FrmEPANET.txtArquivo.Text For Append As #1
+    While Not rsGenerico.EOF
+        str = rsGenerico.Fields("id").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+        str = str + rsGenerico.Fields("node1").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+        str = str + rsGenerico.Fields("node2").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+        str = str + rsGenerico.Fields("parameters").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+        str = str + ";" + rsGenerico.Fields("description").Value & Chr(vbKeyTab) & Chr(vbKeyTab)
+        Print #1, str
+        str = ""
+        rsGenerico.MoveNext
+    Wend
+    Close #1
+End Function
+
 'Gera o arquivo de saída .INP que o Epanet lê
 'Recupera os dados do cursor em memoria e cria o arquivo .INP
 '#########################################################################
@@ -881,9 +905,9 @@ Public Function GeraArquivo_de_Saida()
     
     rsPumps.Filter = ""                                                                 'grava no arquivo as Pumps
     If rsPumps.RecordCount > 0 Then
-        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsPumps, str)
+        str = "ID                  Node1               Node2               Parameters"
         Call ImprimeCabecalho("[PUMPS]", str)
-        Call GravaDadosDoNoOuTrecho(rsPumps, posicaoDaDescricao)
+        Call GravaDadosDaBomba(rsPumps)
     End If
 
     rsValves.Filter = ""                                                                'grava no arquivo as Valves
@@ -975,14 +999,56 @@ Public Function GeraArquivo_de_Saida()
     End If
     rsPatterns.Close
     Set rsPatterns = Nothing
-    Dim b As Integer
+    
+    rsCurves.Filter = ""                                                               'grava no arquivo as Curves
+    If rsCurves.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsCurves, str)
+        Call ImprimeCabecalho("[CURVES]", str)
+        Call GravaDadosDoNoOuTrecho(rsCurves, posicaoDaDescricao)
+    End If
+
+    rsCoordinates.Filter = ""                                                               'grava no arquivo as Coordinates
+    If rsCoordinates.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsCoordinates, str)
+        Call ImprimeCabecalho("[COORDINATES]", str)
+        Call GravaDadosDoNoOuTrecho(rsCoordinates, posicaoDaDescricao)
+    End If
+
+    rsVertices.Filter = ""                                                                  'grava no arquivo as Vertices
+    If rsVertices.RecordCount > 0 Then
+        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsVertices, str)
+        Call ImprimeCabecalho("[VERTICES]", str)
+        Call GravaDadosDoNoOuTrecho(rsVertices, posicaoDaDescricao)
+    End If
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Close #1
+        Close #2
+        Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
+        Print #2, Now & "  - Sub GeraArquivo_de_Saida() - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
+        Close #2
+        MsgBox "Um posssível erro foi identificado na rotina 'GeraArquivo_de_Saida()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+    End If
+End Function
+
+'Lê a tabela com as curvas cadastradas pelo usuário e exporta as mesmas para o EPANET
+'esta rotina não foi implementada e testada ainda
+'
+'
+'
+Private Function LeCurvasEGravaNoArquivoParaExportacaoEPANET()
+Dim b As Integer
     Dim MyArray_x() As String
     Dim MyArray_y() As String
     Dim rsCurves As ADODB.Recordset
+    Dim str As String
     
     Set rsCurves = conn.Execute("Select * from x_Curves order by tipo")
 
-    'grava no arquivo as Curves
+    rsCurves.Filter = ""
     If rsCurves.EOF = False Then
         With rsCurves
             str = "ID       X-Value     Y-Value"
@@ -1021,33 +1087,8 @@ Public Function GeraArquivo_de_Saida()
     End If
     rsCurves.Close
     Set rsCurves = Nothing
-
-    rsCoordinates.Filter = ""                                                               'grava no arquivo as Coordinates
-    If rsCoordinates.RecordCount > 0 Then
-        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsCoordinates, str)
-        Call ImprimeCabecalho("[COORDINATES]", str)
-        Call GravaDadosDoNoOuTrecho(rsCoordinates, posicaoDaDescricao)
-    End If
-
-    rsVertices.Filter = ""                                                                  'grava no arquivo as Vertices
-    If rsVertices.RecordCount > 0 Then
-        posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsVertices, str)
-        Call ImprimeCabecalho("[VERTICES]", str)
-        Call GravaDadosDoNoOuTrecho(rsVertices, posicaoDaDescricao)
-    End If
-
-Trata_Erro:
-    If Err.Number = 0 Or Err.Number = 20 Then
-        Resume Next
-    Else
-        Close #1
-        Close #2
-        Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
-        Print #2, Now & "  - Sub GeraArquivo_de_Saida() - Linha: " & intLinhaCod & " - " & Err.Number & " - " & Err.Description
-        Close #2
-        MsgBox "Um posssível erro foi identificado na rotina 'GeraArquivo_de_Saida()':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
-    End If
 End Function
+
 
 'Adiciona os parâmetros entrados em um reservatório de nível variável RNV
 '
@@ -1133,20 +1174,29 @@ End Sub
 '
 Public Function AddSubItemPumps(id As String)
    Dim Rs As ADODB.Recordset
+   Dim curvaAltura As Double                            'altura (carga) para gerar a curva automaticamente, caso o usuário possua somente altura e vazão para a bomba
+   Dim curvaVazao As Double                             'vazão para gerar a curva automaticamente, caso o usuário possua somente altura e vazão para a bomba
+   Dim curva As String                                  'nome da curva da bomba
+   Dim speed As String                                  'regulação de velocidade (regulação de velocidade usual é 1.0, 0 significa que a bomba está desligada)
+   Dim pattern As String                                'ID do padrão temporal que descreve a variação da propriedade Regulação de Velocidade (SPEED) com o tempo
+   Dim power As String                                  'valor da potência para uma energia de bombeamento constante, hp (kW)
+   Dim head As String                                   'ID da curva que descreve a vazão vs altura de elevação para a bomba
    
    Set Rs = conn.Execute("Select b.eparef, w.value_, b.description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
                          "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and cast(w.value_ as INT)=s.value_ " & _
                          "where object_id_ = '" & id & "'" & _
                          "order by b.eparef")
-                         
-    rsPumps.Fields("potencia").Value = FormataStringNumerica("0")                                   'inicializa com zero ou nulo, caso não existem valores preenchidos
-    rsPumps.Fields("carga").Value = FormataStringNumerica("0")
-    rsPumps.Fields("vazao").Value = FormataStringNumerica("0")
-    rsPumps.Fields("curvaRendimento1").Value = " "
-    rsPumps.Fields("curvaBomba").Value = " "
-    rsPumps.Fields("curvaRendimento2").Value = " "
-                         
+                                        
+    rsPumps.Fields("parameters").Value = " "
+    rsPumps.Fields("power").Value = FormataStringNumerica("9999")                                   'inicializa com zero ou nulo, caso não existem valores preenchidos
+    rsPumps.Fields("carga").Value = FormataStringNumerica("9999")
+    rsPumps.Fields("vazao").Value = FormataStringNumerica("9999")
+    rsPumps.Fields("speed").Value = FormataStringNumerica("9999")
+    rsPumps.Fields("pattern").Value = ""
+    rsPumps.Fields("head").Value = ""
+    rsPumps.Fields("description").Value = " "
+            
     parametrosPreenchidos = ""
     If AddSubItemPumps_possuiParametroPreenchido("POWER", id) = True Then
         parametrosPreenchidos = "POWER"
@@ -1161,37 +1211,56 @@ Public Function AddSubItemPumps(id As String)
             Case "POWER"                                                                             'Usuário só tem a potência da bomba
                 Do While Not Rs.EOF
                     Select Case Rs.Fields("EPAREF").Value
-                       Case "POWER"
-                          rsPumps.Fields("potencia").Value = " POWER " & Rs.Fields("VALUE_").Value
+                        Case "POWER"
+                            power = IIf(Rs.Fields("VALUE_").Value = "0", " ", " POWER " & Rs.Fields("VALUE_").Value)
+                        Case "SPEED"
+                            speed = IIf(Rs.Fields("VALUE_").Value = "0", " ", " SPEED " & Rs.Fields("VALUE_").Value)
+                        Case "PATTERN"
+                            pattern = IIf(Rs.Fields("VALUE_").Value = "0", " ", " PATTERN " & Rs.Fields("VALUE_").Value)
                         Case "DESC"
-                          rsPumps.Fields("Description").Value = Rs.Fields("VALUE_").Value
+                          rsPumps.Fields("description").Value = Rs.Fields("VALUE_").Value
                     End Select
                     Rs.MoveNext
                 Loop
+                rsPumps.Fields("parameters").Value = power & speed & pattern
             Case "CARGA"                                                                          'Usuário só tem a carga (altura) e vazão da bomba, podendo ter a curva de rendimento
                 Do While Not Rs.EOF
                     Select Case Rs.Fields("EPAREF").Value
                         Case "CARGA"
-                           rsCurves.Fields("X-Value").Value = Rs.Fields("VALUE_").Value
+                            curvaAltura = Rs.Fields("VALUE_").Value
                         Case "VAZAO"
-                           rsCurves.Fields("Y-Value").Value = Rs.Fields("VALUE_").Value
-                           AddCurve "C" & str(id), rsCurves.Fields("X-Value").Value, rsCurves.Fields("Y-Value").Value
-                        Case "RENDIM"
-                           rsPumps.Fields("curvaRendimento1").Value = " HEAD " & Rs.Fields("VALUE_").Value
-                           
+                            curvaVazao = Rs.Fields("VALUE_").Value
+                        Case "SPEED"
+                            speed = IIf(Rs.Fields("VALUE_").Value = "0", " ", " SPEED " & Rs.Fields("VALUE_").Value)
+                        Case "PATTERN"
+                            pattern = IIf(Rs.Fields("VALUE_").Value = "0", " ", " PATTERN " & Rs.Fields("VALUE_").Value)
+                        Case "DESC"
+                          rsPumps.Fields("description").Value = Rs.Fields("VALUE_").Value
                     End Select
                     Rs.MoveNext
                 Loop
-            Case "CURBOMBA"                                                                           'Usuário tem a curva da bomba, podendo ter a curva de rendimento da bomba também
+                If curvaAltura = 0 Or curvaVazao = 0 Then                                           'os parâmetros não foram preenchidos pelo usuário, quando deveriam ser os dois preenchidos para poder gerar a curva, neste caso não exportará a curva da bomba
+                    rsPumps.Fields("parameters").Value = " "
+                Else                                                                                'foram preenchidos
+                    curva = "C" & Replace(str(id), " ", "")
+                    AddCurve curva, curvaAltura, curvaVazao
+                    rsPumps.Fields("parameters").Value = " HEAD " & curva & speed & pattern
+                End If
+            Case "CURBOMBA"                                                                         'Usuário tem a curva da bomba, podendo ter a curva de rendimento da bomba também
                 Do While Not Rs.EOF
                     Select Case Rs.Fields("EPAREF").Value
                         Case "CURBOMBA"
-                           rsPumps.Fields("curvaBomba").Value = Rs.Fields("VALUE_").Value
-                        Case "CURREND"
-                           rsPumps.Fields("curvaRendimento2").Value = Rs.Fields("VALUE_").Value
+                           head = IIf(Rs.Fields("VALUE_").Value = "0", " ", " HEAD " & Rs.Fields("VALUE_").Value)
+                        Case "SPEED"
+                            speed = IIf(Rs.Fields("VALUE_").Value = "0", " ", " SPEED " & Rs.Fields("VALUE_").Value)
+                        Case "PATTERN"
+                            pattern = IIf(Rs.Fields("VALUE_").Value = "0", " ", " PATTERN " & Rs.Fields("VALUE_").Value)
+                        Case "DESC"
+                          rsPumps.Fields("description").Value = Rs.Fields("VALUE_").Value
                     End Select
                     Rs.MoveNext
                 Loop
+                rsPumps.Fields("parameters").Value = head & speed & pattern
         End Select
     End If
     Rs.Close
