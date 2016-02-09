@@ -159,7 +159,6 @@ Function ExportaParaEpanet()
                             Select Case strTipoComp
                                 Case "PUMP"
                                     Call banco.RsPumps_adicionaBomba(no, conta_no)                      'adiciona os dados da bomba para poder exportar depois para o EPANET
-                                    Call banco.AddSubItemPumps(no)                                      'Adiciona os sub itens para a bomba (curva)
                                 Case "VALVE"
                                     Call banco.RsValves_adicionaValvula(no)                             'adiciona os dados da válvula para poder exportar depois para o EPANET
                                 Case "VALVE2"
