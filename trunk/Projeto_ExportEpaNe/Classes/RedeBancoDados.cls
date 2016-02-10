@@ -911,7 +911,7 @@ Public Function GeraArquivo_de_Saida()
     End If
 
     rsValves.Filter = ""                                                                'grava no arquivo as Valves
-    If rsPumps.RecordCount > 0 Then
+    If rsValves.RecordCount > 0 Then
         posicaoDaDescricao = GeraCabecalhoComPosicaoColunaDescricao(rsValves, str)
         Call ImprimeCabecalho("[VALVES]", str)
         Call GravaDadosDoNoOuTrecho(rsValves, posicaoDaDescricao)
@@ -1371,7 +1371,7 @@ Private Function FormataStringNumerica(valor As String) As String
    Dim val As Double
    Dim valStr As String
    
-   val = CDbl(valor)
+   val = CDbl(Replace(valor, ".", ","))
    valStr = CStr(val)
    valStr = Format(valStr, "0.0")
    FormataStringNumerica = Replace(valStr, ",", ".")
