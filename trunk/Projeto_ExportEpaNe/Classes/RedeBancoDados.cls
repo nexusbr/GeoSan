@@ -682,8 +682,8 @@ End Function
 '
 Public Function RsTanks_adicionaReservatorioNivelVariavel(no As String)
     rsTanks.AddNew
-    rsTanks.Fields("ID").Value = "RNV" & no
-    rsTanks.Fields("Elevation").Value = FormataStringNumerica(rsNosTmp("cota").Value)
+    rsTanks.Fields("ID").Value = no
+    rsTanks.Fields("Elevation").Value = FormataStringNumerica(rsNosTmp("cota").Value, "0.0")
     AdicionaSubItensReservatorioNivelVariavel no
 End Function
 
@@ -693,7 +693,7 @@ End Function
 '
 Public Function RsReservois_adicionaReservatorioNivelFixo(no As String)
     rsReservoirs.AddNew
-    rsReservoirs.Fields("ID").Value = "RNF" & no
+    rsReservoirs.Fields("ID").Value = no
     AdicionaSubItensReservatorioNivelFixo no
 End Function
 
@@ -1097,17 +1097,18 @@ End Function
 Private Sub AdicionaSubItensReservatorioNivelVariavel(id As String)
    Dim Rs As ADODB.Recordset
    Dim CURVE As String
+   Dim numeroCurvaBomba As String
 
    Set Rs = conn.Execute("Select b.eparef, w.value_, b.Description_ from watercomponentsdata w " & _
                          "INNER JOIN watercomponentssubtypes b on b.id_subtype=w.id_subtype and b.id_type=w.id_type " & _
                          "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
                          "where object_id_ = '" & id & "'")
    
-   rsTanks.Fields("MaxLevel").Value = FormataStringNumerica("0")                                                         'inicializa com zero ou nulo, caso não existem valores preenchidos
-   rsTanks.Fields("MinLevel").Value = FormataStringNumerica("0")
-   rsTanks.Fields("InitLevel").Value = FormataStringNumerica("0")
-   rsTanks.Fields("Diameter").Value = FormataStringNumerica("0")
-   rsTanks.Fields("MinVol").Value = FormataStringNumerica("0")
+   rsTanks.Fields("MaxLevel").Value = FormataStringNumerica("0", "0.0")                                                         'inicializa com zero ou nulo, caso não existem valores preenchidos
+   rsTanks.Fields("MinLevel").Value = FormataStringNumerica("0", "0.0")
+   rsTanks.Fields("InitLevel").Value = FormataStringNumerica("0", "0.0")
+   rsTanks.Fields("Diameter").Value = FormataStringNumerica("0", "0.0")
+   rsTanks.Fields("MinVol").Value = FormataStringNumerica("0", "0.0")
    rsTanks.Fields("VolCurve").Value = " "
    rsTanks.Fields("Description").Value = " "
    
@@ -1115,17 +1116,18 @@ Private Sub AdicionaSubItensReservatorioNivelVariavel(id As String)
       Select Case Rs.Fields("EPAREF").Value
       
          Case "NMAXIMO"
-            rsTanks.Fields("MaxLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+            rsTanks.Fields("MaxLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value, "0.0")
          Case "NMINIMO"
-            rsTanks.Fields("MinLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+            rsTanks.Fields("MinLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value, "0.0")
          Case "NINICIAL"
-            rsTanks.Fields("InitLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+            rsTanks.Fields("InitLevel").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value, "0.0")
          Case "DIAMETER"
-            rsTanks.Fields("Diameter").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+            rsTanks.Fields("Diameter").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value, "0.0")
          Case "VOLUME"
-            rsTanks.Fields("MinVol").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+            rsTanks.Fields("MinVol").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value, "0.0")
          Case "VOLCURVE"
-            rsTanks.Fields("VolCurve").Value = FormataStringNumerica(Rs.Fields("VALUE_").Value)
+            numeroCurvaBomba = FormataStringNumerica(Rs.Fields("VALUE_").Value, "")
+            rsTanks.Fields("VolCurve").Value = IIf(numeroCurvaBomba = "0", " ", "C" & numeroCurvaBomba)                         'pois se for zero tem que deixar em branco, senão pensa que é a curva zero, C0
          Case "DESC"
             rsTanks.Fields("Description").Value = Rs.Fields("VALUE_").Value
       End Select
@@ -1149,7 +1151,7 @@ Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
                          "LEFT JOIN WaterComponentsSelections s on s.id_subtype=w.id_subtype and s.id_type=w.id_type and w.value_=s.value_ " & _
                          "where object_id_ = '" & id & "'")
    
-   rsReservoirs.Fields("Head").Value = FormataStringNumerica(rsNosTmp("cota").Value)          'inicializa com a cota caso não existem valores preenchidos em head
+   rsReservoirs.Fields("Head").Value = FormataStringNumerica(rsNosTmp("cota").Value, "")          'inicializa com a cota caso não existem valores preenchidos em head
    rsReservoirs.Fields("Pattern").Value = " "
    rsReservoirs.Fields("Description").Value = " "
    
@@ -1157,7 +1159,7 @@ Private Sub AdicionaSubItensReservatorioNivelFixo(id As String)
       Select Case Rs.Fields("EPAREF").Value
          Case "HEAD"
             cota = CDbl(rsNosTmp("cota").Value) * CDbl(Rs.Fields("VALUE_").Value)
-            rsReservoirs.Fields("Head").Value = FormataStringNumerica(CStr(cota))
+            rsReservoirs.Fields("Head").Value = FormataStringNumerica(CStr(cota), "0.0")
          Case "PATTERN"
             rsReservoirs.Fields("Pattern").Value = Rs.Fields("VALUE_").Value
          Case "DESC"
@@ -1189,10 +1191,10 @@ Public Function AddSubItemPumps(id As String)
                          "order by b.eparef")
                                         
     rsPumps.Fields("parameters").Value = " "
-    rsPumps.Fields("power").Value = FormataStringNumerica("9999")                                   'inicializa com zero ou nulo, caso não existem valores preenchidos
-    rsPumps.Fields("carga").Value = FormataStringNumerica("9999")
-    rsPumps.Fields("vazao").Value = FormataStringNumerica("9999")
-    rsPumps.Fields("speed").Value = FormataStringNumerica("9999")
+    rsPumps.Fields("power").Value = FormataStringNumerica("9999", "")                                   'inicializa com zero ou nulo, caso não existem valores preenchidos
+    rsPumps.Fields("carga").Value = FormataStringNumerica("9999", "")
+    rsPumps.Fields("vazao").Value = FormataStringNumerica("9999", "")
+    rsPumps.Fields("speed").Value = FormataStringNumerica("9999", "")
     rsPumps.Fields("pattern").Value = ""
     rsPumps.Fields("head").Value = ""
     rsPumps.Fields("description").Value = " "
@@ -1250,7 +1252,7 @@ Public Function AddSubItemPumps(id As String)
                 Do While Not Rs.EOF
                     Select Case Rs.Fields("EPAREF").Value
                         Case "CURBOMBA"
-                           head = IIf(Rs.Fields("VALUE_").Value = "0", " ", " HEAD " & Rs.Fields("VALUE_").Value)
+                           head = IIf(Rs.Fields("VALUE_").Value = "0", " ", " HEAD " & FormataStringNumerica(Rs.Fields("VALUE_").Value, ""))
                         Case "SPEED"
                             speed = IIf(Rs.Fields("VALUE_").Value = "0", " ", " SPEED " & Rs.Fields("VALUE_").Value)
                         Case "PATTERN"
@@ -1367,12 +1369,12 @@ End Function
 '
 '
 '
-Private Function FormataStringNumerica(valor As String) As String
+Private Function FormataStringNumerica(valor As String, formato As String) As String
    Dim val As Double
    Dim valStr As String
    
    val = CDbl(Replace(valor, ".", ","))
    valStr = CStr(val)
-   valStr = Format(valStr, "0.0")
+   valStr = Format(valStr, formato)
    FormataStringNumerica = Replace(valStr, ",", ".")
 End Function
