@@ -578,7 +578,7 @@ End Function
 '
 Public Function RsPumps_adicionaBomba(no As String, conta_no As Integer)
     rsPumps.AddNew
-    rsPumps.Fields("id").Value = no
+    rsPumps.Fields("id").Value = "B" & no
     If conta_no = 1 Then
        rsPumps.Fields("Node1").Value = no          'NESTE TRECHO É DEFINIDO O SENTIDO DA BOMBA
        rsPumps.Fields("Node2").Value = no & "A"    'A ORDEM DE NO E NOA INFLUENCIA NO SENTIDO
@@ -682,7 +682,7 @@ End Function
 '
 Public Function RsTanks_adicionaReservatorioNivelVariavel(no As String)
     rsTanks.AddNew
-    rsTanks.Fields("ID").Value = no
+    rsTanks.Fields("ID").Value = "RNV" & no
     rsTanks.Fields("Elevation").Value = FormataStringNumerica(rsNosTmp("cota").Value)
     AdicionaSubItensReservatorioNivelVariavel no
 End Function
@@ -693,7 +693,7 @@ End Function
 '
 Public Function RsReservois_adicionaReservatorioNivelFixo(no As String)
     rsReservoirs.AddNew
-    rsReservoirs.Fields("ID").Value = no
+    rsReservoirs.Fields("ID").Value = "RNF" & no
     AdicionaSubItensReservatorioNivelFixo no
 End Function
 
@@ -1296,7 +1296,7 @@ End Function
 
 Private Function AddCurve(id As String, x As Double, y As Double)
     rsCurves.AddNew
-    rsCurves.Fields("ID").Value = id
+    rsCurves.Fields("ID").Value = "C" & id
     rsCurves.Fields("X-Value").Value = x
     rsCurves.Fields("Y-Value").Value = y
 End Function
