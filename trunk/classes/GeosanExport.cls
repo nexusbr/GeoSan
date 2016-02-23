@@ -296,20 +296,50 @@ Trata_Erro:
        ErroUsuario.Registra "GeosanExport", "CriaTabelaNos-Não consegue criar a tabela no banco de dados com o comando: " & str, CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Sub
+'Verifica se existe conexão com o banco de dados comercial
+'
+'
+'
+Private Function ExisteConexaoBancoComercial() As Boolean
+    Dim str As String
+    Dim rs As New ADODB.Recordset
+    On Error GoTo Trata_Erro:
+
+    str = "SELECT * FROM NXGS_V_LIG_COMERCIAL"
+    rs.Open str, Conn, adOpenDynamic, adLockOptimistic      'abre a conexão
+    If rs.EOF = True Then
+        ExisteConexaoBancoComercial = False
+    Else
+        ExisteConexaoBancoComercial = True
+    End If
+    rs.Close
+    
+Trata_Erro:
+    ExisteConexaoBancoComercial = False                     'deu erro, então não existe a conexão com o banco comercial
+End Function
+
+
+
+
 'Insere todos dos dados de todas as redes na tabela de atributos de redes GS_REDES
 '
+'retorna verdadeiro se conseguiu inserir os consumidores
 '
-Public Sub InsereConsumidores()
+Public Function InsereConsumidores() As Boolean
     On Error GoTo Trata_Erro
     Dim rs As New ADODB.Recordset
     Dim str As String
     Dim data As String
     Dim frm As New frmProgressBar
-    Dim obj_id, NRO_LIG, NROL_SDV, INSCLOTE, CONS_LPS, TIPOC, COD_LOG, ENDERECO, NUM_CASA As String    'textos já preparados para inserir consumidores
+    Dim obj_id, NRO_LIG, NROL_SDV, INSCLOTE, CONS_LPS, TIPOC, COD_LOG, ENDERECO, NUM_CASA As String     'textos já preparados para inserir consumidores
     Dim COMPLLOG, BAIRRO, HIDROM, COD_CONS, CODCONSDV, CONSUM, TEL_RES As String
     Dim TEL_COM, ECONOM, DATAIMP, DATAIMPE, ROTALEIT, GRUPOL, ROTLEIT, SEQLEI As String
-    Dim AUTOC, CONSUFAT, CONMED, MESC, ANO, CONSFAT As String                             'Não utilizados no momento
+    Dim AUTOC, CONSUFAT, CONMED, MESC, Ano, CONSFAT As String                                           'Não utilizados no momento
     
+    If ExisteConexaoBancoComercial = False Then                                                         'não localizou a tabela comercial de consumidores
+        InsereConsumidores = False
+        Exit Function
+    End If
     frm.Show , FrmMain
     frm.ProgressBar1.Min = 0
     str = "SELECT COUNT(*) FROM RAMAIS_AGUA_LIGACAO"
@@ -328,7 +358,8 @@ Public Sub InsereConsumidores()
             Screen.MousePointer = vbNormal
             rs.Close
             Unload frm
-            Exit Sub
+            InsereConsumidores = False
+            Exit Function
         End If
         'prepara textos já concatenados para redes longas e curtas
         obj_id = rs.Fields("Object_id_").value
@@ -360,7 +391,7 @@ Public Sub InsereConsumidores()
         CONSFAT = ""
         CONMED = ""
         MESC = ""
-        ANO = ""
+        Ano = ""
         'prepara insert com todos os dados da querie acima
         str = "INSERT INTO GS_CONSUMIDORES (OBJECT_ID_, NRO_LIG,NROL_SDV, INSCLOTE,"
         str = str + " AUTO, CONS_LPS, TIPO,"
@@ -380,22 +411,24 @@ Public Sub InsereConsumidores()
         str = str + "' , '" + TEL_RES + "' , '" + TEL_COM + "' , '" + ECONOM
         str = str + "' , '" + DATAIMP + "' , '" + DATAIMPE + "' , '" + ROTALEIT
         str = str + "' , '" + GRUPOL + "' , '" + ROTLEIT + "' , '" + SEQLEI
-        str = str + "' , '" + CONSFAT + "' , '" + CONMED + "' , '" + MESC + "' , '" + ANO + "' )"
+        str = str + "' , '" + CONSFAT + "' , '" + CONMED + "' , '" + MESC + "' , '" + Ano + "' )"
         Conn.execute (str)              'insere a linha
         rs.MoveNext                     'próxima
         frm.ProgressBar1.value = frm.ProgressBar1.value + 1
     Loop
     rs.Close
     Unload frm
-    Exit Sub
+    InsereConsumidores = True
+    Exit Function
     
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        InsereConsumidores = False
+        ErroUsuario.Registra "GeosanExport", "InsereConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
-End Sub
+End Function
 'Insere todos dos dados de todas as redes na tabela de atributos de redes GS_REDES
 '
 '
@@ -407,6 +440,7 @@ Public Sub InsereRedes()
     Dim frm As New frmProgressBar
     Dim textoAcima, textoAbaixo, textoAbaixoCurtoLinha1, textoAbaixoCurtoLinha2             'textos já preparados para colocar na rede, o curto é para quando o segumento de rede for muito pequeno
     Dim diametroExterno, diametroInterno As String                                          'para facilitar a criação da querie Insert
+    Dim profundidadeInicial, profundidadeFinal As String                                    'profundidades com ponto decimal
     
     frm.Show , FrmMain
     frm.ProgressBar1.Min = 0
@@ -440,6 +474,8 @@ Public Sub InsereRedes()
         textoAbaixoCurtoLinha2 = "Ø" + CStr(Format((rs.Fields("InternalDiameter").value), "#"))
         diametroExterno = CStr(FormatNumber((IIf(IsNull(rs.Fields("ExternalDiameter").value), 0, rs.Fields("ExternalDiameter").value)), 0))
         diametroInterno = "Ø" + CStr(FormatNumber((rs.Fields("InternalDiameter").value), 0))
+        profundidadeInicial = Replace(CStr(rs.Fields("InitialTubeDeepness").value), ",", ".")
+        profundidadeFinal = Replace(CStr(rs.Fields("FinalTubeDeepness").value), ",", ".")
         
         'prepara a coluna Data de Instalação
         If IsNull(rs.Fields("DateInstallation").value) Then
@@ -458,7 +494,7 @@ Public Sub InsereRedes()
         str = str + "Values "
         str = str + "( '" + rs.Fields("Object_id_").value + "' ," + CStr(rs.Fields("id_Type").value) + ", '" + rs.Fields("Description_").value + "' "
         str = str + ", '" + rs.Fields("Specification_").value + "' ," + CStr(rs.Fields("InitialGroundHeight").value) + "," + CStr(rs.Fields("FinalGroundHeight").value)
-        str = str + "," + CStr(rs.Fields("InitialTubeDeepness").value) + "," + CStr(rs.Fields("FinalTubeDeepness").value) + ", '" + diametroInterno
+        str = str + "," + profundidadeInicial + "," + profundidadeFinal + ", '" + diametroInterno
         str = str + "' , '" + diametroExterno + "' ," + CStr(rs.Fields("InitialComponent").value) + "," + CStr(rs.Fields("FinalComponent").value)
         str = str + "," + CStr(rs.Fields("Thickness").value) + "," + CStr(rs.Fields("Material").value) + ", '" + rs.Fields("MaterialName").value + "' "
         str = str + "," + Replace(CStr(rs.Fields("LENGTH").value), ",", ".") + "," + Replace(CStr(rs.Fields("LengthCalculated").value), ",", ".") + "," + CStr(rs.Fields("Supplier").value)
@@ -482,7 +518,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "InsereRedes", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+       ErroUsuario.Registra "GeosanExport", "InsereRedes", CStr(Err.Number), CStr(Err.Description) & " - " & str & " - ", True, glo.enviaEmails
     End If
 End Sub
 'Insere todos dos dados de todas os nós na tabela de atributos de redes GS_NOS
