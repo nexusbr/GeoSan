@@ -416,30 +416,27 @@ End Function
 ' JUNCTION, PUMP, RNF, REGISTER, VALVE ou RNV
 'Isto é feito pois é necessário saber o que é o nó para dar o tratamento correto na exportação para o EPANET
 '
-'
-'
-'Public Function EspecificacaoDoTipoDeNo(Object_id_no As String) As Boolean
-'    Dim strTipoComp As String                                                           'Variável que receberá o tipo de componente (Junction, valve,pump...)
-'    rsNosTmp.Filter = "id='" & no & "'"                                                 'Seleciona no Cursor rsNosTmp o nó igual o valor de NO
-'    If RsNosTmpTerminoDeLer = False Then                                                'Se não terminou de ler todos os nós
-'        strTipoComp = ""
-'        If blnRsWaterCompTypes = True Then
-'            rsWaterCompTypes.MoveFirst
-'            Do While Not rsWaterCompTypes.EOF = True
-'                If rsNosTmp.Fields("Tipo").Value = rsWaterCompTypes!id_type Then
-'                    strTipoComp = rsWaterCompTypes!SPECIFICATION_
-'                    Exit Do
-'                End If
-'                rsWaterCompTypes.MoveNext
-'            Loop
-'        End If
-'End Function
 
 'Obtem o tipo de nó temporário do trecho de rede
 '
 '
 Public Function RsNosTmp_obtemTipoDeNo() As Integer
+    On Error GoTo Trata_Erro
     RsNosTmp_obtemTipoDeNo = rsNosTmp.Fields("Tipo").Value
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Close #1
+        Close #2
+        Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
+        
+        Print #2, Now & "  - Function RsNosTmp_obtemTipoDeNo - nó com problema: " & rsNosTmp.Filter & " - " & Err.Number & " - " & Err.Description
+        Close #2
+        MsgBox "Existe um nó inicial ou final na rede 'Waterlines' que não existem em 'Watercomponents' - nó numero: " & rsNosTmp.Filter & " - " & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+    End If
+    
 End Function
 
 'Verifica se terminou de ler todos os nós de rsNosTmp, que é um vetor temporário com todos
@@ -547,12 +544,14 @@ End Function
 Public Function RsWaterCompTypes_tipoDeEspecificacao() As String
     Dim strTipoComp As String
     strTipoComp = ""
-    If RsWaterCompTypes_ExitemParametros = True Then                                      'a tabela de componentes não está vazia sem nenhuma linha
+    If RsWaterCompTypes_ExitemParametros = True Then     'a tabela de componentes não está vazia sem nenhuma linha
         rsWaterCompTypes_MoveParaPrimeiroTipoDeComponente
         Do While Not rsWaterCompTypes_TerminouDeLerTiposDeComponentes()                   'encontra a especificação da componente - enquanto estiver lendo os tipos de componentes de rede existentes
-            If RsNosTmp_obtemTipoDeNo = RsWaterCompTypes_obtemTipoDeComponente Then       'compara a componente do nó selecionado com a existente na tabela de tipos de componentes
-                strTipoComp = RsWaterCompTypes_obtemEspecificacao                         'pega a especificação pois encontrou a mesma
-                Exit Do                                                                   'já encontrou a especificação, sai do loop
+            If RsNosTmpTerminoDeLer = False Then                                          'não terminou de ler RsNosTmp
+                If RsNosTmp_obtemTipoDeNo = RsWaterCompTypes_obtemTipoDeComponente Then   'compara a componente do nó selecionado com a existente na tabela de tipos de componentes
+                    strTipoComp = RsWaterCompTypes_obtemEspecificacao                     'pega a especificação pois encontrou a mesma
+                    Exit Do                                                               'já encontrou a especificação, sai do loop
+                End If
             End If
             RsWaterCompTypes_moveParaProximoTipoDeComponente
         Loop
