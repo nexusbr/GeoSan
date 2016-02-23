@@ -1,12 +1,12 @@
 VERSION 5.00
 Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
-Object = "{2CCABA93-B681-4E7F-8047-BD4D623301BA}#1.0#0"; "TeComImport.dll"
 Object = "{C51C74EC-6107-4A01-8400-40B53BB20D42}#1.0#0"; "TeComExport.dll"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager2.ocx"
 Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
+Object = "{2CCABA93-B681-4E7F-8047-BD4D623301BA}#1.0#0"; "TeComImport.dll"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
    Caption         =   "  NEXUS - GeoSan"
@@ -296,7 +296,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "13:50"
+            TextSave        =   "13:18"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1865,12 +1865,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.FileName, .FilterIndex - 1
            End If
         End With
     Else
@@ -2211,6 +2211,7 @@ Private Sub mnuExporta_GeoSan_Click()
     Dim prefixoArquivo As String                                                                            'prefixo com as datas, dos arquivos shp que serão exportados
     Dim nomeCompleto As String
     Dim nomeExportar As String
+    Dim existemConsumidoresParaExportar As Boolean
   
     varGlobais.pararExecucao = False                            'indica que iniciará sem sem informar que deverá parar a execução
     diretorio = arquivo.SelecionaDiretorio
@@ -2226,24 +2227,26 @@ Private Sub mnuExporta_GeoSan_Click()
     'exporta consumidores
     exp.InsereTabAtributoConsumidores
     exp.CriaTabelaConsumidores
-    exp.InsereConsumidores
+    existemConsumidoresParaExportar = exp.InsereConsumidores    'insere os consumidores na tabela GS_CONSUMIDORES, para poder a partir dela exportar para shp
     If varGlobais.pararExecucao = True Then                     'usuário selecionou para parar tudo
         Exit Sub
     End If
-    exp.AtivaExportacaoConsumidores
-    conexao.Open Conn
-    TeExport2.Provider = 1
-    TeExport2.connection = conexao
-    FrmMain.sbStatusBar.Panels(2).Text = "Criando shape de consumidores. Favor aguardar ..."            'mostra na barra de status o andamento da exportação
-    nomeExportar = nomeCompleto & "gsConsumidores.shp"
-    retorno = TeExport2.exportSHP(nomeExportar, "RAMAIS_AGUA", "GS_CONSUMIDORES")
-    Screen.MousePointer = vbNormal
-    If retorno Then
-        'MsgBox "Exportação shape de ramais realizada com sucesso"
-    Else
-        MsgBox "Falha na exportação dos consumidores"
+    If existemConsumidoresParaExportar = True Then              'se a tabela GS_CONSUMIDORES foi preechida com todos os consumidores, exporta o shape.
+        exp.AtivaExportacaoConsumidores
+        conexao.Open Conn
+        TeExport2.Provider = 1
+        TeExport2.connection = conexao
+        FrmMain.sbStatusBar.Panels(2).Text = "Criando shape de consumidores. Favor aguardar ..."            'mostra na barra de status o andamento da exportação
+        nomeExportar = nomeCompleto & "gsConsumidores.shp"
+        retorno = TeExport2.exportSHP(nomeExportar, "RAMAIS_AGUA", "GS_CONSUMIDORES")
+        Screen.MousePointer = vbNormal
+        If retorno Then
+            'MsgBox "Exportação shape de ramais realizada com sucesso"
+        Else
+            MsgBox "Falha na exportação dos consumidores"
+        End If
+        conexao.Close
     End If
-    conexao.Close
     
     'exporta ramais
     exp.InsereTabAtributoRamais
