@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "07.00.49"
+#define AppVersionFile  "07.00.50
 
 [Setup]
 AppName=GeoSan
@@ -26,6 +26,7 @@ OutputBaseFilename={#SetupBaseName + AppVersionFile}
 DisableDirPage=yes              
 ;para não aparecer o nome do Grupo no menu Início do Windows para o usuário selecionar
 DisableProgramGroupPage=yes
+ArchitecturesAllowed=x86
 
 [Language]
 MessagesFile=compiler:BrazilianPortuguese.isl
