@@ -120,16 +120,16 @@ Public Sub CriaTabelaConsumidores()
     'Mes
     'ANO
     
-    str = "CREATE TABLE GS_CONSUMIDORES (OBJECT_ID_ nvarchar(250) NULL, NRO_LIG varchar(50) NULL,NROL_SDV varchar(50), INSCLOTE varchar(50) NULL,"
-    str = str + " AUTO varchar(10), CONS_LPS varchar(24) NULL, TIPO varchar(20) NULL,"
-    str = str + " COD_LOG varchar(30) NULL, ENDERECO varchar(250) NULL, NUM_CASA varchar (15) NULL,"
-    str = str + " COMPLLOG varchar(60) NULL, BAIRRO varchar(150) NULL, HIDROM varchar(30) NULL,"
-    str = str + " COD_CONS varchar(11) NULL, CODCONSDV varchar(11) NULL, CONSUM varchar(150) NULL,"
-    str = str + " TEL_RES varchar(20) NULL, TEL_COM varchar(20) NULL, ECONOM varchar(10) NULL,"
-    str = str + " DATAIMP varchar(30), DATAIMPE varchar(30),"
-    str = str + " ROTALEIT varchar(5) NULL, GRUPOL varchar(5) NULL, ROTLEIT varchar(5) NULL,"
-    str = str + " SEQLEI varchar(10) NULL,"
-    str = str + " CONSFAT varchar(15) NULL, CONMED varchar(15) NULL, MES varchar(2), ANO varchar(2))"
+    str = "CREATE TABLE GS_CONSUMIDORES (OBJECT_ID_ nvarchar(250) NULL, NRO_LIG nvarchar(50) NULL,NROL_SDV nvarchar(50), INSCLOTE nvarchar(50) NULL,"
+    str = str + " AUTO nvarchar(10), CONS_LPS nvarchar(24) NULL, TIPO nvarchar(20) NULL,"
+    str = str + " COD_LOG nvarchar(30) NULL, ENDERECO nvarchar(250) NULL, NUM_CASA nvarchar (15) NULL,"
+    str = str + " COMPLLOG nvarchar(60) NULL, BAIRRO nvarchar(150) NULL, HIDROM nvarchar(30) NULL,"
+    str = str + " COD_CONS nvarchar(11) NULL, CODCONSDV nvarchar(11) NULL, CONSUM nvarchar(150) NULL,"
+    str = str + " TEL_RES nvarchar(20) NULL, TEL_COM nvarchar(20) NULL, ECONOM nvarchar(10) NULL,"
+    str = str + " DATAIMP nvarchar(30), DATAIMPE nvarchar(30),"
+    str = str + " ROTALEIT nvarchar(50) NULL, GRUPOL nvarchar(10) NULL, ROTLEIT nvarchar(10) NULL,"
+    str = str + " SEQLEI nvarchar(10) NULL,"
+    str = str + " CONSFAT nvarchar(15) NULL, CONMED nvarchar(15) NULL, MES nvarchar(2), ANO nvarchar(2))"
     'conforme o tipo de banco de dados
     Select Case frmCanvas.TipoConexao
         Case 1, 2, 3
@@ -313,6 +313,7 @@ Private Function ExisteConexaoBancoComercial() As Boolean
         ExisteConexaoBancoComercial = True
     End If
     rs.Close
+    Exit Function
     
 Trata_Erro:
     ExisteConexaoBancoComercial = False                     'deu erro, então não existe a conexão com o banco comercial
@@ -336,6 +337,7 @@ Public Function InsereConsumidores() As Boolean
     Dim TEL_COM, ECONOM, DATAIMP, DATAIMPE, ROTALEIT, GRUPOL, ROTLEIT, SEQLEI As String
     Dim AUTOC, CONSUFAT, CONMED, MESC, Ano, CONSFAT As String                                           'Não utilizados no momento
     
+    InsereConsumidores = True
     If ExisteConexaoBancoComercial = False Then                                                         'não localizou a tabela comercial de consumidores
         InsereConsumidores = False
         Exit Function
@@ -381,7 +383,7 @@ Public Function InsereConsumidores() As Boolean
         CONSUM = Replace(IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value), Chr(39), " ")
         TEL_RES = IIf(IsNull(rs.Fields("TEL_RES").value), "", rs.Fields("TEL_RES").value)
         TEL_COM = IIf(IsNull(rs.Fields("TEL_COM").value), "", rs.Fields("TEL_COM").value)
-        ECONOM = CStr(FormatNumber(IIf(IsNull(rs.Fields("ECONOMIAS").value), "", rs.Fields("ECONOMIAS").value), 0))
+        ECONOM = CStr(FormatNumber(IIf(IsNull(rs.Fields("ECONOMIAS").value), 0, rs.Fields("ECONOMIAS").value), 0))
         DATAIMP = CStr(IIf(IsNull(rs.Fields("DATA_IMPLANTACAO_AGUA").value), "", rs.Fields("DATA_IMPLANTACAO_AGUA").value))
         DATAIMPE = CStr(IIf(IsNull(rs.Fields("DATA_IMPLANTACAO_ESGOTO").value), "", rs.Fields("DATA_IMPLANTACAO_ESGOTO").value))
         ROTALEIT = CStr(IIf(IsNull(rs.Fields("ROTA_LEITURA").value), "", rs.Fields("ROTA_LEITURA").value))
@@ -426,7 +428,7 @@ Trata_Erro:
         Resume Next
     Else
         InsereConsumidores = False
-        ErroUsuario.Registra "GeosanExport", "InsereConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        ErroUsuario.Registra "GeosanExport", "InsereConsumidores - sql: " & str & " - ", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
     End If
 End Function
 'Insere todos dos dados de todas as redes na tabela de atributos de redes GS_REDES
@@ -605,7 +607,7 @@ Public Sub InsereRamais()
     Dim data As String
     Dim frm As New frmProgressBar
     Dim distanciaTestada, distanciaLado, comprimentoRamal, profundidadeRamal As String           'textos já preparados para colocar no ramal
-    Dim posicionamentoLote, id, codigoLogradouro As String                                       'para facilitar a criação da querie Insert
+    Dim posicionamentoLote, ID, codigoLogradouro As String                                       'para facilitar a criação da querie Insert
     
     frm.Show , FrmMain
     frm.ProgressBar1.Min = 0
@@ -630,8 +632,8 @@ Public Sub InsereRamais()
         comprimentoRamal = Replace(CStr(IIf(IsNull(rs.Fields("COMPRIMENTO_RAMAL").value), "0", rs.Fields("COMPRIMENTO_RAMAL").value)), ",", ".")
         profundidadeRamal = Replace(CStr(IIf(IsNull(rs.Fields("PROFUNDIDADE_RAMAL").value), "0", rs.Fields("PROFUNDIDADE_RAMAL").value)), ",", ".")
         posicionamentoLote = CStr(IIf(IsNull(rs.Fields("POSICIONAMENTO_LOTE").value), "0", rs.Fields("POSICIONAMENTO_LOTE").value))
-        id = CStr(rs.Fields("ID").value)
-        FrmMain.sbStatusBar.Panels(2).Text = "Insere ramal: " & id                              'apresenta na barra de status o andamento da inserção
+        ID = CStr(rs.Fields("ID").value)
+        FrmMain.sbStatusBar.Panels(2).Text = "Insere ramal: " & ID                              'apresenta na barra de status o andamento da inserção
         codigoLogradouro = CStr(IIf(IsNull(rs.Fields("COD_LOGRAD").value), " ", rs.Fields("COD_LOGRAD").value))
         str = "INSERT INTO GS_RAMAIS (object_id_, objidtre, codlog,"
         str = str + " distTest, distLado, compram,"
@@ -639,7 +641,7 @@ Public Sub InsereRamais()
         str = str + " Values "
         str = str + "( '" + rs.Fields("OBJECT_ID_").value + "' , '" + rs.Fields("OBJECT_ID_TRECHO").value + "' , '" + codigoLogradouro + "' "
         str = str + ", '" + distanciaTestada + "' ," + distanciaLado + "," + comprimentoRamal
-        str = str + "," + profundidadeRamal + "," + posicionamentoLote + "," + id
+        str = str + "," + profundidadeRamal + "," + posicionamentoLote + "," + ID
         str = str + ", '" + rs.Fields("DATA_LOG").value + "' , '" + rs.Fields("USUARIO_LOG").value + "' )"
         Conn.execute (str)              'insere a linha
         rs.MoveNext                     'próxima
