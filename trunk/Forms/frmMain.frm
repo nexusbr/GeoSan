@@ -296,7 +296,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "13:18"
+            TextSave        =   "21:54"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -2246,6 +2246,8 @@ Private Sub mnuExporta_GeoSan_Click()
             MsgBox "Falha na exportação dos consumidores"
         End If
         conexao.Close
+    Else
+        ErroUsuario.Registra "FrmMain", "Exporta_Consumidores", CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails
     End If
     
     'exporta ramais
