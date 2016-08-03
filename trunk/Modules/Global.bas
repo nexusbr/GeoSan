@@ -200,7 +200,7 @@ Public Sub Main()
     End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "07.00.51"
+    Versao_Geo = "07.00.53"
     glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
     SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -455,7 +455,7 @@ Public Sub Main()
     exp.AtivaRamaisGeoSan                                                   'precisa ativar o te_representation, uma vez que na exportação que pode ter ocorrido ou ter sido cancelada, pode ter sido apagado
     cGeoDatabase.configura Conn, typeconnection, usuario.UseName            'aqui ele inicializa a conexão com o banco de dados, com TeDatabase, para fazer todas as operações necessárias ao longo de toda a aplicação
     Set atualizaAplicacao = New CAtualiza                                   'para atualizar o GeoSanIni.exe se necessário
-    retornoAtualizaAplicacao = atualizaAplicacao.AtualizaAplicacaoLocal     'retorna verdadeiro se atualizou com sucesso, falso se houve uma falha em localização de algum arquivo
+    'retornoAtualizaAplicacao = atualizaAplicacao.AtualizaAplicacaoLocal     'retorna verdadeiro se atualizou com sucesso, falso se houve uma falha em localização de algum arquivo
     
 pulaConexaoComercial:
     momento = ""
@@ -1385,10 +1385,10 @@ End Function
 '   ConectaBanco = False
 'End Function
 
-Public Function GetCboListIndex(id As Long, mCbo As ComboBox) As Integer
+Public Function GetCboListIndex(ID As Long, mCbo As ComboBox) As Integer
    Dim a As Integer
    For a = 0 To mCbo.ListCount - 1
-       If mCbo.ItemData(a) = id Then
+       If mCbo.ItemData(a) = ID Then
          GetCboListIndex = a
          Exit Function
        End If
