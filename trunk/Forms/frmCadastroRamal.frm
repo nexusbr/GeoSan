@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form FrmCadastroRamal 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Cadastro de Ramal de Água"
@@ -570,9 +570,14 @@ Dim count2, count3 As Integer
 Public Sub init(TipoRamal As String, m_object_id_ramal As String, m_tcs As TeCanvas, m_tdbramais As TeDatabase, m_tdbtrecho As TeDatabase, m_object_id_lote As String, m_object_id_trecho As String)
 
 On Error GoTo Trata_Erro
+    Dim frmCadRamalErro As String
+    frmCadRamalErro = 0
+    
     Me.MousePointer = vbHourglass
-    Me.Show                                     'Mostra a caixa de diálogo de cadastrar ramais, pois caso a pesquisa anterior seja muito ampla ele fica no comando de desenhar ramal e se o usuário seleciona um terceiro ponto, ocorrerá um erro de cadastro de ramal. Mostra simplesmente para fornecer um feedback para o usuário
+    'Me.Hide
+    'Me.Show                                     'Mostra a caixa de diálogo de cadastrar ramais, pois caso a pesquisa anterior seja muito ampla ele fica no comando de desenhar ramal e se o usuário seleciona um terceiro ponto, ocorrerá um erro de cadastro de ramal. Mostra simplesmente para fornecer um feedback para o usuário
     'Verifica se os ramais estão associados aos polígonos dos lotes. Antigamente o GeoSan tinha as ligações associadas aos lotes
+    frmCadRamalErro = "1"
     If ReadINI("RamaisFiltroLotes", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
         'Não, as ligações não estão associadas ao polígono do lote
         Me.chkExecFiltroPorLote.value = 0
@@ -580,7 +585,7 @@ On Error GoTo Trata_Erro
         'Sim, as ligações estão associadas ao polígono do lote
         Me.chkExecFiltroPorLote.value = 1
     End If
-      
+    frmCadRamalErro = "2"
     'Verifica se existe algum tipo de filtro ativado para ramais
     If ReadINI("RamaisFiltro", "Ativado", App.path & "\CONTROLES\GEOSAN.ini") <> "SIM" Then
         'Não existem filtros ativados para ramais
@@ -589,10 +594,10 @@ On Error GoTo Trata_Erro
         'Sim, existem filtros ativados para ramais
         Me.chkExecPreFiltro.value = 1
     End If
-
+    frmCadRamalErro = "3"
     'Verifica se as ligações serão consultadas pela associação das mesmas aos lotes
     VALOR = ReadINI("RAMAIS", "CONSULTAR_LIGAÇÕES", App.path & "\CONTROLES\GEOSAN.ini")
-    
+    frmCadRamalErro = "4"
     'Caso tenha sido retornado um valor válido sobre a forma de consulta das ligações, se serão pelo lote ou não
     If VALOR = "" Or VALOR <> "SIM" Or VALOR <> "NÃO" Then
         'Salva no arquivo de inicilização do GeoSan que elas não são consultadas pelo lote
@@ -601,12 +606,12 @@ On Error GoTo Trata_Erro
         'Avisa que a consulta das ligações não será pelo polígono do lote
         VALOR = "NÃO"
     End If
-   
+    frmCadRamalErro = "5"
     'Configura a visulização da caixa de diálogo de ligações pelo lote
     If VALOR = "NÃO" Then 'no caso de SQL consutar ligações está desabilitado
         cmdConsultarLigacoes.Visible = False
     End If
-
+    frmCadRamalErro = "6"
     'MUDA OS NOMES DAS TABELAS EQUIPARANDO COM OS TIPOS
     'Configura o nome das tabelas que serão acessadas, no caso de esgoto e no caso de água
     If TipoRamal = "ESGOTO" Then
@@ -623,7 +628,7 @@ On Error GoTo Trata_Erro
       TB_Ligacoes = "RAMAIS_AGUA_LIGACAO"       'Informações sobre as ligações de água
       TB_comercial = "NXGS_V_LIG_COMERCIAL"     'Informações sobre os dados das ligações de água. Geralmente uma vista para o sistema comercial
     End If
-
+    frmCadRamalErro = "7"
         'Faz a verificação de que tipo de usuário está acessando o sistema para poder habilitar ou desabilitar a opção de alterar/salvar os dados da caixa de diálogo
         Dim ga As String
         Dim ge As String
@@ -635,7 +640,7 @@ On Error GoTo Trata_Erro
         ge = "USRFUN"
         gi = "SYSTEMUSERS"
         go = "OBJECT_ID_"
-    
+    frmCadRamalErro = "8"
         'Se o usuário for um visitante ele não pode alterar/salvar os dados da caixa de diálogo, somente pode consultar
         Set rs = New ADODB.Recordset
         
@@ -655,7 +660,7 @@ On Error GoTo Trata_Erro
             End If
         End If
         rs.Close
-
+    frmCadRamalErro = "9"
     'LoozeXP1.InitIDESubClassing
     object_id_lote = m_object_id_lote
     object_id_ramal = m_object_id_ramal
@@ -663,7 +668,7 @@ On Error GoTo Trata_Erro
     Set tcs = m_tcs
     Set tdbramais = m_tdbramais
     Set tdbtrecho = m_tdbtrecho
-   
+   frmCadRamalErro = "10"
     If object_id_ramal <> "" Then ' RAMAL EXISTENTE
         'RETORNA ATRIBUTOS DO RAMAL
         Me.Caption = Me.Caption & " - Cod.: " & object_id_ramal
@@ -677,7 +682,7 @@ On Error GoTo Trata_Erro
             'Procura em um banco SQLServer ou Oracle
             rs.Open ("SELECT * FROM  " + """" + TB_Ramais + """" + "  WHERE " + """" + go + """" + "  = '" & object_id_ramal & "'"), Conn, adOpenDynamic, adLockOptimistic
         End If
-      
+      frmCadRamalErro = "11"
         'Caso tenha encontrado algum ramal
         If rs.EOF = False Then
             'Obtem alguns dados do ramal
@@ -697,11 +702,11 @@ On Error GoTo Trata_Erro
                 Case 4
                     optDireito = True
             End Select
-      
+      frmCadRamalErro = "12"
             Me.lblRede.Caption = rs!Object_id_trecho
             Me.lblUsuarioData.Caption = "Cadastrado por: " & rs.Fields("USUARIO_LOG").value & " em " & rs.Fields("DATA_LOG").value
         End If
-        
+        frmCadRamalErro = "13"
         rs.Close
         Set rs = Nothing
         'Agora vamos carregar os dados das ligações para serem apresentados na caixa de diálogo
@@ -710,14 +715,14 @@ On Error GoTo Trata_Erro
         Me.lblRede.Caption = ramal_Object_id_trecho
         optDesconhecido = True
     End If
-   
+   frmCadRamalErro = "14"
     If Me.lvLigacoes.ListItems.count > 0 Then
         'Me.cmdConsultarLigacoes.Enabled = True 'DESATIVADO PARA CORRECÇÃO DAS QUERYS DO SQL SERVER
     Else
         If Me.chkExecPreFiltro.value = 1 Then
             PESQUISA = ReadINI("RamaisFiltro", "PESQUISA", App.path & "\CONTROLES\GEOSAN.ini")
             VALOR = ReadINI("RamaisFiltro", "VALOR", App.path & "\CONTROLES\GEOSAN.ini")
-            
+            frmCadRamalErro = "15"
             If PESQUISA = "NUM_LIGAÇÃO" Then
                 Me.optNumLigacao.value = True
                 Me.txtNumLigacao = VALOR
@@ -744,19 +749,21 @@ On Error GoTo Trata_Erro
         End If
     End If
     Me.MousePointer = vbDefault
+    frmCadRamalErro = "16"
     Me.Hide                                     'Esconde a caixa de diálogo pois já forneceu o feedback para o usuário
     Me.Show vbModal                             'Mostra novamente, mas como modal agora para que o usuário selecione os hidrômetros ligados ao ramal
+    frmCadRamalErro = "17"
     Exit Sub
     
 Trata_Erro:
 If Err.Number = 0 Or Err.Number = 20 Then
     Resume Next
 ElseIf Err.Number = -2147467259 Then
-    PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
+    PrintErro CStr(Me.Name), "Public Sub Init: " + frmCadRamalErro, CStr(Err.Number), CStr(Err.Description), True
     Me.MousePointer = vbDefault
     End
 Else
-    PrintErro CStr(Me.Name), "Public Sub Init", CStr(Err.Number), CStr(Err.Description), True
+    PrintErro CStr(Me.Name), "Public Sub Init:: " + frmCadRamalErro, CStr(Err.Number), CStr(Err.Description), True
     Me.MousePointer = vbDefault
 End If
 End Sub

@@ -789,14 +789,17 @@ Public Sub AtivaRamaisGeoSan()
     On Error GoTo Trata_Erro
     Dim str As String
     Dim conexao As New ADODB.connection
+    Dim localErro As String
     
     conexao.Open Conn
     'apaga todas as representações de consumidores
     str = "DELETE FROM te_representation where layer_id = 7"
+    localErro = str
     Conn.execute (str)
     'insere a representação de pontos para poder exportar o shape. Assim a Te_export sabe o que exportar
     str = "INSERT INTO te_representation (layer_id, geom_type, geom_table) "
     str = str + "values (7, 4, 'Points7') "
+    localErro = str
     Conn.execute (str)
     'insere a representação de linhas para poder exportar o shape. Assim a Te_export sabe o que exportar
     str = "INSERT INTO te_representation (layer_id, geom_type, geom_table) "
@@ -809,7 +812,10 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        Dim descricaoErro As String
+        
+        descricaoErro = CStr(Err.Description) + " - '" + localErro + "'"
+        ErroUsuario.Registra "GeosanExport", "AtivaRamaisGeoSan", CStr(Err.Number), descricaoErro, True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)
@@ -820,13 +826,16 @@ End Sub
 Public Sub AtivaExportacaoConsumidores()
     On Error GoTo Trata_Erro
     Dim str As String
+    Dim localErro As String
     
     'apaga todas as representações de consumidores
+    localErro = "DELETE FROM te_representation where layer_id = 7"
     str = "DELETE FROM te_representation where layer_id = 7"
     Conn.execute (str)
     'insere a representação de pontos para poder exportar o shape. Assim a Te_export sabe o que exportar
     str = "INSERT INTO te_representation (layer_id, geom_type, geom_table) "
     str = str + "values (7, 4, 'Points7') "
+    localErro = str
     Conn.execute (str)
     Exit Sub
     
@@ -834,7 +843,10 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        Dim descricaoErro As String
+        
+        descricaoErro = CStr(Err.Description) + " - '" + localErro + "'"
+        ErroUsuario.Registra "GeosanExport", "AtivaExportacaoConsumidores", CStr(Err.Number), descricaoErro, True, glo.enviaEmails
     End If
 End Sub
 'Na versão 3.3.1 do Terraview não é possível exportar um layer que possua mais de uma representação (texto + ponto por exemplo)

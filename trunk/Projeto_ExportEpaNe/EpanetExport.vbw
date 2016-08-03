@@ -1,8 +1,8 @@
-FrmEPANET = 0, 0, 0, 0, C, 88, 88, 1212, 820, C
-Inicio = 44, 44, 1237, 776, C
-frmOdometro = 0, 0, 0, 0, C, 154, 154, 1278, 886, C
-ModExporte = 0, 0, 0, 0, C
-Rugosidade = 0, 0, 0, 0, C
-TrechosRedeEpanet = 66, 66, 1259, 798, C
+FrmEPANET = 41, 16, 785, 724, C, 130, 74, 823, 548, C
+Inicio = 13, 12, 918, 559, C
+frmOdometro = 88, 88, 768, 580, C, -271, 95, 853, 827, C
+ModExporte = 30, 25, 896, 708, C
+Rugosidade = 29, 47, 709, 539, C
+TrechosRedeEpanet = 34, 18, 888, 715, 
 LogExportacao = 0, 0, 0, 0, C
-RedeBancoDados = 22, 22, 1401, 819, C
+RedeBancoDados = 26, 12, 900, 709, 
