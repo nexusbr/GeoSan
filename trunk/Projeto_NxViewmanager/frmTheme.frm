@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmTheme 
    BorderStyle     =   4  'Fixed ToolWindow
@@ -281,20 +281,20 @@ Begin VB.Form frmTheme
       TabCaption(1)   =   "Linhas"
       TabPicture(1)   =   "frmTheme.frx":0020
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fralines(0)"
-      Tab(1).Control(1)=   "fralines(1)"
+      Tab(1).Control(0)=   "fralines(1)"
+      Tab(1).Control(1)=   "fralines(0)"
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Pontos"
       TabPicture(2)   =   "frmTheme.frx":003C
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "frapoints(1)"
-      Tab(2).Control(1)=   "frapoints(0)"
+      Tab(2).Control(0)=   "frapoints(0)"
+      Tab(2).Control(1)=   "frapoints(1)"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "Textos"
       TabPicture(3)   =   "frmTheme.frx":0058
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "fratexts(1)"
-      Tab(3).Control(1)=   "fratexts(0)"
+      Tab(3).Control(0)=   "fratexts(0)"
+      Tab(3).Control(1)=   "fratexts(1)"
       Tab(3).ControlCount=   2
       Begin VB.Frame fratexts 
          Caption         =   "Exemplo:"
@@ -1107,7 +1107,7 @@ Trata_Erro:
        Open App.Path & "GeoSanLog.txt" For Append As #1
        Print #1, Now & " - ViewManager.ctl - Public Function Init - " & Err.Number & " - " & Err.Description
        Close #1
-       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
+       MsgBox "Um posssível erro foi identificado (Function NxViewManagerInit):" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo " + App.Path + " GeoSanLog.txt com informações desta ocorrência.", vbInformation
     End If
 End Function
 
@@ -1994,20 +1994,7 @@ Private Sub cmdModificar_Click()
     Dim conexao As New ADODB.Connection
     Dim Filtro As String
     
-    If TypeConn = 4 Then
-        'caso seja Postgres
-        mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\GEOSAN.ini")
-        mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\GEOSAN.ini")
-        mBANCO = ReadINI("CONEXAO", "BANCO", App.Path & "\GEOSAN.ini")
-        mUSUARIO = ReadINI("CONEXAO", "USUARIO", App.Path & "\GEOSAN.ini")
-        Senha = ReadINI("CONEXAO", "SENHA", App.Path & "\GEOSAN.ini")
-        usuario = ReadINI("CONEXAO", "USER", App.Path & "\GEOSAN.ini")
-        decriptada = FunDecripta(Senha)
-        strConn = "DRIVER={PostgreSQL Unicode}; DATABASE=" + mBANCO + "; SERVER=" + mSERVIDOR + "; PORT=" + mPORTA + "; UID=" + mUSUARIO + "; PWD=" + decriptada + "; ByteaAsLongVarBinary=1;"
-        conexao.Open strConn
-    End If
-    If cmdModificar.Caption = "Modificar" Then
-        'Caso tenha selecionado o botão indicando que deseja alterar o filtro de pesquisa
+    If cmdModificar.Caption = "Modificar" Then                                          'Caso tenha selecionado o botão indicando que deseja alterar o filtro de pesquisa
         Me.chkFiltro.Value = 0
         Me.chkFiltro.Enabled = True
         Me.cboColunas.Text = ""
@@ -2017,8 +2004,7 @@ Private Sub cmdModificar_Click()
         Me.cboOperador.Text = ""
         Me.cboOperador2.Text = ""
         Me.chkFiltraData.Value = 0
-        If ThemeName2 = "SEWERLINES" Or ThemeName2 = "SEWERCOMPONENTS" Then
-            'se for esgoto ou nó de esgoto
+        If ThemeName2 = "SEWERLINES" Or ThemeName2 = "SEWERCOMPONENTS" Then             'se for esgoto ou nó de esgoto
             Me.txtDataInicio.Enabled = True
             Me.txtDataFim.Enabled = True
             Me.Label5.Enabled = True
@@ -2045,13 +2031,7 @@ Private Sub cmdModificar_Click()
         a = "NXGS_FILT_TEMA"            'nesta tabela estão armazenados todos os filtros selecionados por todos os usuários, os quais estão associados a um tema da tabela [theme_id]
         b = "THEME_ID"
         'localiza o filtro que foi anteriormente entrado pelo usuário na caixa de diálogo, o qual está associado a um tema (theme_id)
-        If TypeConn <> 4 Then
-            'caso SQLServer ou Oracle
-            rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
-        Else
-            'caso Postgres
-            rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
-        End If
+        rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
         If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
             rs.AddNew
             rs!theme_id = intTema
@@ -2059,48 +2039,23 @@ Private Sub cmdModificar_Click()
             rs.Close
             Dim aa As String
             Dim bb As String
-            If TypeConn <> 4 Then
-                rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
-            Else
-                rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
-            End If
+            rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
         End If
-        If TypeConn <> 4 Then
-            'se SQLServer ou Oracle
-            If rs.EOF = False Then
-                'Atualiza na tabela [NXGS_FILT_TEMA] os filtros 1 e 2, o filtro 3 não está atualizando, é sempre zerado
-                'Isto registra apenas para cada usuário do GeoSan o filtro que está utilizando, não implica em nenhuma mudança de visualização
-                If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
-                    rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
-                Else
-                    rs!FILT_1 = ""
-                End If
-                If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
-                    rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
-                Else
-                    rs!FILT_2 = ""
-                End If
-                rs!FILT_3 = ""
-                rs.Update
+        If rs.EOF = False Then
+            'Atualiza na tabela [NXGS_FILT_TEMA] os filtros 1 e 2, o filtro 3 não está atualizando, é sempre zerado
+            'Isto registra apenas para cada usuário do GeoSan o filtro que está utilizando, não implica em nenhuma mudança de visualização
+            If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
+                rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
+            Else
+                rs!FILT_1 = ""
             End If
-        Else
-            'se Postgres
-            If rs.EOF = False Then
-                'Atualiza na tabela [NXGS_FILT_TEMA] os filtros 1 e 2, o filtro 3 não está atualizando, é sempre zerado
-                'Isto registra apenas para cada usuário do GeoSan o filtro que está utilizando, não implica em nenhuma mudança de visualização
-                If Me.chkFiltro.Value = 1 And Me.cboColunas.Text <> "" And Me.cboOperador.Text <> "" And Me.cboFiltro.Text <> "" Then
-                    rs!FILT_1 = Me.cboColunas.Text & ";" & Me.cboOperador.Text & ";" & Me.cboFiltro.Text
-                Else
-                    rs!FILT_1 = ""
-                End If
-                If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
-                    rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
-                Else
-                    rs!FILT_2 = ""
-                End If
-                rs!FILT_3 = ""
-                rs.Update
+            If Me.chkFiltro.Value = 1 And Me.cboColunas2.Text <> "" And Me.cboOperador2.Text <> "" And Me.cboFiltro2.Text <> "" Then
+                rs!FILT_2 = Me.cboColunas2.Text & ";" & Me.cboOperador2.Text & ";" & Me.cboFiltro2.Text
+            Else
+                rs!FILT_2 = ""
             End If
+            rs!FILT_3 = ""
+            rs.Update
         End If
         rs.Close
         'OS FILTROS 1 E 2 SÃO SALVOS PELO COMANDO ABAIXO
@@ -2114,7 +2069,8 @@ Private Sub cmdModificar_Click()
             '
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX AQUI ESTÁ O PROBLEMA ELE ACHA QUE É RAMAL E NAO NÓ
             '
-            If (FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS") And ThemeName2 <> "WATERCOMPONENTS" Then    'RAMAIS_AGUA_LIGACAO
+            ' retirado do if abaixo FILT = "TIPO" Or
+            If (FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS") And ThemeName2 <> "WATERCOMPONENTS" Then     'RAMAIS_AGUA_LIGACAO
                 tabela = "RAMAIS_AGUA_LIGACAO"
             ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
                 tabela = "RAMAIS_AGUA"
@@ -2147,20 +2103,12 @@ Private Sub cmdModificar_Click()
             Dim a12, a13 As String
             a12 = Retorna(Me.cboColunas.Text)
             a13 = RetornaID(Me.cboColunas.Text, Me.cboFiltro.Text)
-            If TypeConn <> 4 Then
-                Filtro = "object_id in (select object_id_ from " & tabela & " WHERE " + a12 + sinal & "'" & a13 & "'"
-            Else
-                Filtro = """" + a + """" + " in (select " + """" + aaa + """" + " from " + """" + tabela + """" + " WHERE" + """" + a12 + """" + sinal & "'" & a13 & "'"
-            End If
+            Filtro = "object_id in (select object_id_ from " & tabela & " WHERE " + a12 + sinal & "'" & a13 & "'"
             If Me.cboOperador2.Text <> "" Then
                 'adiciona o segunto filtro
-                If TypeConn <> 4 Then
-                    a12 = Retorna(Me.cboColunas2.Text)
-                    a13 = RetornaID2(Me.cboColunas2.Text, Me.cboFiltro2.Text)
-                    Filtro = Filtro + "AND " + a12 + sinal2 & "'" & a13 & "')"
-                Else
-                    Filtro = Filtro + "AND " + """" + a12 + """" + sinal2 & "'" & a13 & "')"
-                End If
+                a12 = Retorna(Me.cboColunas2.Text)
+                a13 = RetornaID2(Me.cboColunas2.Text, Me.cboFiltro2.Text)
+                Filtro = Filtro + "AND " + a12 + sinal2 & "'" & a13 & "')"
                 If Me.cboColunas.Text = "" Or Me.cboFiltro = "" Or Me.cboOperador.Text = "" Then
                     Filtro = ""
                 End If
@@ -2174,13 +2122,8 @@ Private Sub cmdModificar_Click()
             a = "te_theme"
             b = "theme_id"
             'abre a conexão com a tabela de themas, onde existe a cláusula Where a ser preenchida
-            If TypeConn <> 4 Then
-                'se SQLServer ou Oracle
-                rs.Open "SELECT * FROM TE_THEME WHERE THEME_ID = " & intTema, conn, adOpenDynamic, adLockOptimistic
-            Else
-                'se Postgres
-                rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & " ' ", conexao, adOpenDynamic, adLockOptimistic
-            End If
+            'se SQLServer ou Oracle
+            rs.Open "SELECT * FROM TE_THEME WHERE THEME_ID = " & intTema, conn, adOpenDynamic, adLockOptimistic
             'verifica se retornou pelo menos uma linha, deve retornar apenas uma, e então atualiza o filtro na cláusula where da tabela de temas, TE_THEME
             If rs.EOF = False Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
                 rs!generate_attribute_where = Filtro
@@ -2226,32 +2169,17 @@ Private Sub cmdModificar_Click()
                         Dim rsTheme As New ADODB.Recordset
                         a = "te_theme"
                         b = "theme_id"
-                        If TypeConn <> 4 Then
-                            rsTheme.Open "SELECT * FROM te_theme WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
-                        Else
-                            rsTheme.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & "'", conexao, adOpenKeyset, adLockOptimistic
-                        End If
+                        rsTheme.Open "SELECT * FROM te_theme WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
                         If rsTheme.EOF = False Then
                             a = "NXGS_FILT_TEMA"
                             b = "THEME_ID"
-                            If TypeConn <> 4 Then
-                                rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
-                                If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
-                                    rs.AddNew
-                                    rs!theme_id = intTema
-                                    rs.Update
-                                    rs.Close
-                                    rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = '" & intTema & "'", conn, adOpenKeyset, adLockOptimistic
-                                End If
-                            Else
-                                rs.Open "SELECT * FROM " + a + " WHERE " + b + " = " & intTema, conexao, adOpenDynamic, adLockOptimistic
-                                If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
-                                    rs.AddNew
-                                    rs!theme_id = intTema
-                                    rs.Update
-                                    rs.Close
-                                    rs.Open "SELECT * FROM " + """" + a + """" + " WHERE " + """" + b + """" + " = '" & intTema & "'", conexao, adOpenDynamic, adLockOptimistic
-                                End If
+                            rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = " & intTema, conn, adOpenKeyset, adLockOptimistic
+                            If rs.EOF = True Then ' se EOF = true significa que não existe ainda o thema no filtro.. é criado então
+                                rs.AddNew
+                                rs!theme_id = intTema
+                                rs.Update
+                                rs.Close
+                                rs.Open "SELECT * FROM NXGS_FILT_TEMA WHERE theme_id = '" & intTema & "'", conn, adOpenKeyset, adLockOptimistic
                             End If
                             If (rsTheme!generate_attribute_where & "a") = "a" Then 'testa se esta vazio, caso sim é salvo apenas o filtro de data
                                 rsTheme!generate_attribute_where = sGENERATE_ATTRIBUTE_WHERE
@@ -2631,114 +2559,86 @@ End Function
 'End Sub
 
 Private Sub cboColunas_Click()
-On Error GoTo Trata_Erro
-   
-   Dim a As String
-Dim b As String
-Dim c As String
+    On Error GoTo Trata_Erro
+    Dim a As String
+    Dim b As String
+    Dim c As String
 
-   Me.cboFiltro.Clear
-   If LayerAtivo = "RAMAIS_AGUA" Then
-      
-      'POSSIBILIDADE DE FILTROS POR:
-      'cboColunas.AddItem "TIPO"
-      'cboColunas.AddItem "HIDROMETRADO"
-      'cboColunas.AddItem "ECONOMIAS"
-      'cboColunas.AddItem "CONSUMO_LPS"
-      'cboColunas.AddItem "DISTANCIA_TESTADA"
-      'cboColunas.AddItem "DISTANCIA_LADO"
-      'cboColunas.AddItem "COMPRIMENTO_RAMAL"
-      'cboColunas.AddItem "PROFUNDIDADE_RAMAL"
-      'cboColunas.AddItem "USUARIO_LOG"
-      
-      FILT = Me.cboColunas.Text
-      
-      If FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS" Then 'RAMAIS_AGUA_LIGACAO
-         
-         tabela = "RAMAIS_AGUA_LIGACAO"
-      
-      ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
-      
-         tabela = "RAMAIS_AGUA"
-         
-      End If
-      
-      Set rs = New ADODB.Recordset
-      
-
-   If TypeConn <> 4 Then
-      rs.Open "SELECT DISTINCT " & Me.cboColunas.Text & " FROM " & tabela & " order by " & Me.cboColunas.Text, conn, adOpenForwardOnly, adLockReadOnly
-      Else
-      
-        rs.Open "SELECT DISTINCT " + """" + Me.cboColunas.Text + """" + " FROM " + """" + tabela + """" + "order by " + """" + Me.cboColunas.Text + """", conn, adOpenDynamic, adLockOptimistic
-   
-      End If
-      If rs.EOF = False Then
-         Do While Not rs.EOF
-            If Len(rs.Fields(0).Value) > 0 Then
-               Me.cboFiltro.AddItem rs.Fields(0).Value
-            End If
-            rs.MoveNext
-         Loop
-      End If
-   
-   
-   Else
-       Dim RsRef As ADODB.Recordset
-       cboFiltro.Clear
-       If cboColunas.ListIndex <> -1 Then
-           If UCase(cboColunas.Text) = "USUÁRIO" Then
-
-
-a = "USRLOG"
-b = "SYSTEMUSERS"
-c = "USRLOG"
-   If TypeConn <> 4 Then
-   
-    Set rs = conn.Execute("SELECT USRLOG FROM SYSTEMUSERS ORDER BY USRLOG")
-    
+    Me.cboFiltro.Clear
+    If LayerAtivo = "RAMAIS_AGUA" Then
+        'POSSIBILIDADE DE FILTROS POR:
+        'cboColunas.AddItem "TIPO"
+        'cboColunas.AddItem "HIDROMETRADO"
+        'cboColunas.AddItem "ECONOMIAS"
+        'cboColunas.AddItem "CONSUMO_LPS"
+        'cboColunas.AddItem "DISTANCIA_TESTADA"
+        'cboColunas.AddItem "DISTANCIA_LADO"
+        'cboColunas.AddItem "COMPRIMENTO_RAMAL"
+        'cboColunas.AddItem "PROFUNDIDADE_RAMAL"
+        'cboColunas.AddItem "USUARIO_LOG"
+        FILT = Me.cboColunas.Text
+        If FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS" Then 'RAMAIS_AGUA_LIGACAO
+            tabela = "RAMAIS_AGUA_LIGACAO"
+        ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
+            tabela = "RAMAIS_AGUA"
+        End If
+        Set rs = New ADODB.Recordset
+        If TypeConn <> 4 Then
+            rs.Open "SELECT DISTINCT " & Me.cboColunas.Text & " FROM " & tabela & " order by " & Me.cboColunas.Text, conn, adOpenForwardOnly, adLockReadOnly
+        Else
+            rs.Open "SELECT DISTINCT " + """" + Me.cboColunas.Text + """" + " FROM " + """" + tabela + """" + "order by " + """" + Me.cboColunas.Text + """", conn, adOpenDynamic, adLockOptimistic
+        End If
+        If rs.EOF = False Then
+            Do While Not rs.EOF
+                If Len(rs.Fields(0).Value) > 0 Then
+                    Me.cboFiltro.AddItem rs.Fields(0).Value
+                End If
+                rs.MoveNext
+            Loop
+        End If
     Else
-               Set rs = conn.Execute("SELECT " + """" + a + """" + " FROM " + """" + b + """" + " ORDER BY " + """" + c + """" + "")
-               
-               End If
-               If Not rs.EOF Then
+        Dim RsRef As ADODB.Recordset
+        cboFiltro.Clear
+        If cboColunas.ListIndex <> -1 Then
+            If UCase(cboColunas.Text) = "USUÁRIO" Then
+                a = "USRLOG"
+                b = "SYSTEMUSERS"
+                c = "USRLOG"
+                If TypeConn <> 4 Then
+                    Set rs = conn.Execute("SELECT USRLOG FROM SYSTEMUSERS ORDER BY USRLOG")
+                Else
+                    Set rs = conn.Execute("SELECT " + """" + a + """" + " FROM " + """" + b + """" + " ORDER BY " + """" + c + """" + "")
+                End If
+                If Not rs.EOF Then
                     While Not rs.EOF
                         cboFiltro.AddItem rs!USRLOG
                         rs.MoveNext
                     Wend
-               End If
-   
-           Else
-
-
-a = "X_MANAGERPROPERTIES"
-b = "TABLENAMEIN"
-c = "FIELDNAMERIN"
-   If TypeConn <> 4 Then
-               Set rs = conn.Execute("Select * from X_ManagerProperties Where Upper(TableNamein)='" & UCase(tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)) & _
-                           "' and Upper(FieldNameRin) ='" & UCase(cboColunas.Text) & "'")
-               Else
-              ' Dim d2 As String
-'d2 = "Select * from " + """" + a + """" + " Where" + """" + b + """" + "='" & tvm.getLayerNameFromTheme(tvm.getactiveview, ThemeName) + _
-              '             "' and " + c + " ='" & cboColunas.Text & "'"
-              ' MsgBox d2
-              
-               Set rs = conn.Execute("Select * from " + """" + a + """" + " Where" + """" + b + """" + "='" + tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName) + "' and " + """" + c + """" + " ='" & cboColunas.Text & "'")
-                           
-               End If
-               
-              ' Dim a33 As String
-            ' a33 = "Select * from " + """" + a + """" + " Where" + """" + b + """" + "='" & tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName) + _
-                     '  "' and " + """" + c + """" + " ='" & cboColunas.Text & "'"
-               
-'MsgBox "ARQUIVO DEBUG SALVO"
-'WritePrivateProfileString "A", "A", a33, App.Path & "\DEBUG.INI"
-               If Not rs.EOF Then
-
-   If TypeConn <> 4 Then
-                    Set RsRef = conn.Execute("SELECT * FROM " & rs!TABLENAMEOUT)
+                End If
+            Else
+                a = "X_MANAGERPROPERTIES"
+                b = "TABLENAMEIN"
+                c = "FIELDNAMERIN"
+                If TypeConn <> 4 Then
+                    Set rs = conn.Execute("Select * from X_ManagerProperties Where Upper(TableNamein)='" & UCase(tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName)) & _
+                    "' and Upper(FieldNameRin) ='" & UCase(cboColunas.Text) & "'")
+                Else
+                    ' Dim d2 As String
+                    'd2 = "Select * from " + """" + a + """" + " Where" + """" + b + """" + "='" & tvm.getLayerNameFromTheme(tvm.getactiveview, ThemeName) + _
+                    '             "' and " + c + " ='" & cboColunas.Text & "'"
+                    ' MsgBox d2
+                    Set rs = conn.Execute("Select * from " + """" + a + """" + " Where" + """" + b + """" + "='" + tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName) + "' and " + """" + c + """" + " ='" & cboColunas.Text & "'")
+                End If
+                ' Dim a33 As String
+                ' a33 = "Select * from " + """" + a + """" + " Where" + """" + b + """" + "='" & tvm.getLayerNameFromTheme(tvm.getActiveView, ThemeName) + _
+                '  "' and " + """" + c + """" + " ='" & cboColunas.Text & "'"
+                'MsgBox "ARQUIVO DEBUG SALVO"
+                'WritePrivateProfileString "A", "A", a33, App.Path & "\DEBUG.INI"
+                If Not rs.EOF Then
+                    If TypeConn <> 4 Then
+                        Set RsRef = conn.Execute("SELECT * FROM " & rs!TABLENAMEOUT)
                     Else
-                    Set RsRef = conn.Execute("SELECT * FROM " + """" + UCase(rs!TABLENAMEOUT) + """")
+                        Set RsRef = conn.Execute("SELECT * FROM " + """" + UCase(rs!TABLENAMEOUT) + """")
                     End If
                     While Not RsRef.EOF
                         cboFiltro.AddItem RsRef(1)
@@ -2746,30 +2646,26 @@ c = "FIELDNAMERIN"
                         RsRef.MoveNext
                     Wend
                     RsRef.Close
-               End If
-               
-           End If
-       Else
-           cboOperador.ListIndex = -1
-           cboFiltro.Clear
-       End If
-   End If
-   
-   rs.Close
-   conn.Close
-   conn.Open
-   
-   Set RsRef = Nothing
-   Set rs = Nothing
-    
-Exit Sub
-Trata_Erro:
-If Err.Number = 0 Or Err.Number = 20 Then
-   Resume Next
-Else
-   MsgBox Err.Number & " - " & Err.Description
-End If
+                End If
+            End If
+        Else
+            cboOperador.ListIndex = -1
+            cboFiltro.Clear
+        End If
+    End If
+    rs.Close
+    conn.Close
+    conn.Open
+    Set RsRef = Nothing
+    Set rs = Nothing
+    Exit Sub
 
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+       Resume Next
+    Else
+       MsgBox Err.Number & " - " & Err.Description
+    End If
 End Sub
 
 
