@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{91488A85-7250-4842-8681-87818334B791}#1.0#0"; "NxViewManager2.ocx"
 Begin VB.Form FrmPesquisaCliente 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Pesquisa"
@@ -17,10 +17,9 @@ Begin VB.Form FrmPesquisaCliente
    StartUpPosition =   2  'CenterScreen
    Begin NxViewManager.ViewManager ViewManager1 
       Height          =   375
-      Left            =   5640
+      Left            =   6120
       TabIndex        =   8
       Top             =   4560
-      Visible         =   0   'False
       Width           =   1215
       _ExtentX        =   2143
       _ExtentY        =   661
@@ -281,11 +280,11 @@ m = "_LIGACAO"
    End Select
    End With
    
-   Lv.ListItems.Clear
-   Lv.ColumnHeaders.Clear
+   lv.ListItems.Clear
+   lv.ColumnHeaders.Clear
    
    For a = 0 To rs.Fields.count - 1
-      Lv.ColumnHeaders.Add , , UCase(rs.Fields(a).Name)
+      lv.ColumnHeaders.Add , , UCase(rs.Fields(a).Name)
    Next
    If rsA Is Nothing Then Set rsA = New ADODB.Recordset
    
@@ -293,14 +292,14 @@ m = "_LIGACAO"
       If rsA.State = 1 Then
          rsA.Filter = "NRO_LIGACAO='" & rs.Fields("NRO_LIGACAO").value & "'"
          If rsA.EOF Then
-            Set itmx = Lv.ListItems.Add(, , IIf(IsNull(rs(0).value), "", UCase(rs(0).value)))
+            Set itmx = lv.ListItems.Add(, , IIf(IsNull(rs(0).value), "", UCase(rs(0).value)))
             For a = 1 To rs.Fields.count - 1
                itmx.SubItems(a) = IIf(IsNull(rs(a).value), "", UCase(rs(a).value))
             Next
             itmx.Tag = Left(rs.Fields(rs.Fields.count - 1).value, 11)
          End If
       Else
-         Set itmx = Lv.ListItems.Add(, , IIf(IsNull(rs(0).value), "", UCase(rs(0).value)))
+         Set itmx = lv.ListItems.Add(, , IIf(IsNull(rs(0).value), "", UCase(rs(0).value)))
          For a = 1 To rs.Fields.count - 1
             itmx.SubItems(a) = IIf(IsNull(rs(a).value), "", UCase(rs(a).value))
          Next

@@ -4,9 +4,9 @@ Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
 Object = "{C51C74EC-6107-4A01-8400-40B53BB20D42}#1.0#0"; "TeComExport.dll"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{D21E4F0D-5F4A-4897-9502-979E04C5FAF5}#1.1#0"; "NxViewManager2.ocx"
 Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Object = "{2CCABA93-B681-4E7F-8047-BD4D623301BA}#1.0#0"; "TeComImport.dll"
+Object = "{91488A85-7250-4842-8681-87818334B791}#1.0#0"; "NxViewManager2.ocx"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
    Caption         =   "  NEXUS - GeoSan"
@@ -131,21 +131,21 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   7515
+      Height          =   6615
       Left            =   6090
-      ScaleHeight     =   7515
+      ScaleHeight     =   6615
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   510
+      Top             =   1410
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
-         Height          =   855
-         Left            =   480
+         Height          =   1095
+         Left            =   600
          TabIndex        =   11
-         Top             =   3360
-         Width           =   1215
-         _ExtentX        =   2143
-         _ExtentY        =   1508
+         Top             =   3960
+         Width           =   1455
+         _ExtentX        =   2566
+         _ExtentY        =   1931
       End
       Begin TECOMEXPORTLibCtl.TeExport TeExport2 
          Left            =   2880
@@ -296,7 +296,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "21:54"
+            TextSave        =   "10:59"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -312,13 +312,13 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   510
+      Height          =   1410
       Left            =   0
       TabIndex        =   7
       Top             =   0
       Width           =   10035
       _ExtentX        =   17701
-      _ExtentY        =   900
+      _ExtentY        =   2487
       ButtonWidth     =   820
       ButtonHeight    =   794
       ImageList       =   "ImageList4"
@@ -1865,12 +1865,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.FileName, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
            End If
         End With
     Else
