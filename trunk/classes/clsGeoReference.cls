@@ -836,6 +836,7 @@ Public Function GetLayerID(LayerName_ As String) As Integer
         rs.Close
         Set rs = Nothing
     End If
+    Exit Function
     
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -1682,6 +1683,8 @@ End Function
 ' LayerName - nome do layer
 '
 Public Function GetLayerTypeReference(LayerName As String) As LayerTypeRefence
+    On Error GoTo Trata_Erro
+    
     Dim rs As ADODB.Recordset, layer_id As Integer
     
     layer_id = GetLayerID(LayerName)                            'obtem o id do layer
@@ -1699,6 +1702,14 @@ Public Function GetLayerTypeReference(LayerName As String) As LayerTypeRefence
     End If
     rs.Close
     Set rs = Nothing
+    Exit Function
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        PrintErro "clsGeoReference", "Public Function GetLayerTypeReference", CStr(Err.Number), CStr(Err.Description), True
+    End If
 End Function
 
 Public Function GetLayerNameByTypeReference(Refence As LayerTypeRefence) As String

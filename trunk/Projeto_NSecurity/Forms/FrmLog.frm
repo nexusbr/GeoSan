@@ -74,7 +74,7 @@ Begin VB.Form FrmLog
       Width           =   2040
    End
    Begin VB.Label Label2 
-      BackColor       =   &H80000009&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Usuário"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -85,6 +85,7 @@ Begin VB.Form FrmLog
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      ForeColor       =   &H00000000&
       Height          =   315
       Left            =   180
       TabIndex        =   5
@@ -92,7 +93,7 @@ Begin VB.Form FrmLog
       Width           =   900
    End
    Begin VB.Label Label4 
-      BackColor       =   &H80000009&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Senha"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -103,6 +104,7 @@ Begin VB.Form FrmLog
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      ForeColor       =   &H00000000&
       Height          =   315
       Left            =   180
       TabIndex        =   4
