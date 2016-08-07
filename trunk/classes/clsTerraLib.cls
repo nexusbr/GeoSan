@@ -148,7 +148,8 @@ Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
                 Exit Function
         End Select
     End With
-       
+    Exit Function
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -602,11 +603,11 @@ Public Function SaveInDatabase() As Boolean
                         If tcs.getSelectCount(GetGeometrySELECTed()) = 1 Then
                             varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
                             SaveNetWorkAttributesSingle GetGeometrySELECTed()
-                            If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
-                                Conn.CommitTrans
-                            Else
-                                Conn.RollbackTrans
-                            End If
+'                            If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza - Comentado pois não tinha o begin transaction. Estes commits precisam ser reescritos
+'                                Conn.CommitTrans
+'                            Else
+'                                Conn.RollbackTrans
+'                            End If
                         ElseIf tcs.getSelectCount(GetGeometrySELECTed()) > 1 Then
                             varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
                             SaveNetWorkAttributesMultiple GetGeometrySELECTed()
@@ -649,6 +650,8 @@ On Error GoTo Trata_Erro
    ElseIf tcs.getSelectCount(texts) > 0 Then
       GetGeometrySELECTed = texts
    End If
+   Exit Function
+   
 Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
       Resume Next
@@ -903,7 +906,7 @@ Trata_Erro:
     End If
 End Function
 
-Private Function NewObject(LayerName As String, id As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
+Private Function NewObject(LayerName As String, ID As Long, object_id As String, Geometry As TypeGeometry, Optional compr As Double) As Boolean
 On Error GoTo Trata_Erro
    Dim LenghtCalc As Double
    Dim rsNew As ADODB.Recordset
@@ -917,7 +920,7 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
+    strsql = "INSERT INTO " & LayerName & " (LINE_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
      Else
      a = "OBJECT_ID_"
       b = "LINE_ID"
@@ -926,7 +929,7 @@ On Error GoTo Trata_Erro
       e = "HIDROMETRADO"
       f = "LENGTHCALCULATED"
      
-      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
+      strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
      End If
 
 
@@ -948,7 +951,7 @@ On Error GoTo Trata_Erro
          Conn.execute "Update " + """" + LayerName + """" + " set " + """" + f + """" + " = '" & Replace(Round(compr, 2), ",", ".") & "' where " + """" + a + """" + " = '" & object_id & "'"
          End If
       'CHAMA O MÉTODO DE CRIAR TEXTOS
-      InsertTextAttributesLine LayerName, id, object_id
+      InsertTextAttributesLine LayerName, ID, object_id
 
    
    ElseIf Geometry = points Then
@@ -958,14 +961,14 @@ On Error GoTo Trata_Erro
 
      If frmCanvas.TipoConexao <> 4 Then
          
-    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & id & ",'" & id & "')"
+    strsql = "INSERT INTO " & LayerName & " (COMPONENT_ID,OBJECT_ID_) VALUES (" & ID & ",'" & ID & "')"
      Else
       a = "OBJECT_ID_"
       b = "COMPONENT_ID"
       c = "INSCRICAO_LOTE"
      
      
-     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & id & "','" & id & "')"
+     strsql = "INSERT INTO " + """" + LayerName + """" + " (" + """" + b + """" + "," + """" + a + """" + ") VALUES ('" & ID & "','" & ID & "')"
      End If
       
       
@@ -973,7 +976,7 @@ On Error GoTo Trata_Erro
      
       Conn.execute (strsql)
       If cgeo.GetTypeText(LayerName) = 2 Then
-         cgeo.InsertTextInPoint id, object_id, LayerName, 0, 0
+         cgeo.InsertTextInPoint ID, object_id, LayerName, 0, 0
       End If
     
    End If

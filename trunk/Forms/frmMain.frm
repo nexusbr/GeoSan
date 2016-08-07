@@ -2,17 +2,17 @@ VERSION 5.00
 Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
 Object = "{C51C74EC-6107-4A01-8400-40B53BB20D42}#1.0#0"; "TeComExport.dll"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{1A397116-3057-40EE-9ECA-6FA4CC1E5FC3}#1.0#0"; "NexusPM4.ocx"
 Object = "{2CCABA93-B681-4E7F-8047-BD4D623301BA}#1.0#0"; "TeComImport.dll"
 Object = "{91488A85-7250-4842-8681-87818334B791}#1.0#0"; "NxViewManager2.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm FrmMain 
    BackColor       =   &H8000000C&
    Caption         =   "  NEXUS - GeoSan"
    ClientHeight    =   8445
-   ClientLeft      =   165
-   ClientTop       =   735
+   ClientLeft      =   225
+   ClientTop       =   855
    ClientWidth     =   10035
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "FrmMain"
@@ -131,12 +131,12 @@ Begin VB.MDIForm FrmMain
    Begin VB.PictureBox pctSfondo 
       Align           =   4  'Align Right
       BorderStyle     =   0  'None
-      Height          =   6615
+      Height          =   7515
       Left            =   6090
-      ScaleHeight     =   6615
+      ScaleHeight     =   7515
       ScaleWidth      =   3945
       TabIndex        =   1
-      Top             =   1410
+      Top             =   510
       Width           =   3945
       Begin NxViewManager.ViewManager ViewManager1 
          Height          =   1095
@@ -296,7 +296,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "10:59"
+            TextSave        =   "15:37"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -312,13 +312,13 @@ Begin VB.MDIForm FrmMain
    End
    Begin MSComctlLib.Toolbar tbToolBar 
       Align           =   1  'Align Top
-      Height          =   1410
+      Height          =   510
       Left            =   0
       TabIndex        =   7
       Top             =   0
       Width           =   10035
       _ExtentX        =   17701
-      _ExtentY        =   2487
+      _ExtentY        =   900
       ButtonWidth     =   820
       ButtonHeight    =   794
       ImageList       =   "ImageList4"
@@ -1865,12 +1865,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With CDL
+        With Cdl
            .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile Cdl.FileName, .FilterIndex - 1
            End If
         End With
     Else
@@ -2412,45 +2412,40 @@ End Sub
 '
 '
 Public Sub SizeControls()
-On Error GoTo Trata_Erro
-   'pctSfondo lado esquerdo do gerenciador de propriedades
-   With TabStrip1       'tab superior com as opções de tree e propriedades
-      .Height = IIf(pctSfondo.Height < .Top, 100, pctSfondo.Height - .Top)
-      .Width = IIf(pctSfondo.Width < .Left, 100, pctSfondo.Width - .Left)
-   End With
-   With Manager1        'gerenciador de propriedades
-      .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
-      .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
-      .Resize pctSfondo.Width - 400, pctSfondo.Height - 1400
-      .Top = 1340
-      .Left = 300
-   End With
-   With ViewManager1    'gerenciador de tree
-      .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
-      .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
-      .Top = 1350
-      .Left = 300
-   End With
-   picSplitter.Height = pctSfondo.Height        'separador das duas colunas do gerenciador de propriedades
-   imgSplitter.Height = pctSfondo.Height        'outro separador
-   
-   cmdClose.Left = pctSfondo.Width - 300        'ícone X de fechar
-   cmdClose.Top = pctSfondo.Top - 350
-   FrameEscala.Width = pctSfondo.Width - 300    'label da escala de visualização
-   txtEscala.Width = pctSfondo.Width - 2350     'texto da escala de visualização
-
+    On Error GoTo Trata_Erro
+                                                                                        'a variável pctSfondo representa o lado esquerdo do gerenciador de propriedades
+    With TabStrip1                                                                      'é a tab superior com as opções de tree e propriedades
+        .Height = IIf(pctSfondo.Height < .Top, 100, pctSfondo.Height - .Top)
+        .Width = IIf(pctSfondo.Width < .Left, 100, pctSfondo.Width - .Left)
+    End With
+    With Manager1                                                                       'gerenciador de propriedades
+        .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
+        .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
+        .Resize pctSfondo.Width - 400, pctSfondo.Height - 1400
+        .Top = 1340
+        .Left = 300
+    End With
+    With ViewManager1                                                                   'gerenciador de tree
+        .Width = IIf(pctSfondo.Width < .Left, 10, pctSfondo.Width - (.Left + 100))
+        .Height = IIf(pctSfondo.Height < .Top, 10, pctSfondo.Height - (.Top + 100))
+        .Top = 1350
+        .Left = 300
+    End With
+    picSplitter.Height = pctSfondo.Height                                               'separador das duas colunas do gerenciador de propriedades
+    imgSplitter.Height = pctSfondo.Height                                               'outro separador
+    cmdClose.Left = pctSfondo.Width - 300                                               'ícone X de fechar
+    cmdClose.Top = pctSfondo.Top - 350
+    FrameEscala.Width = pctSfondo.Width - 300                                           'label da escala de visualização
+    txtEscala.Width = pctSfondo.Width - 2350                                            'texto da escala de visualização
+    Exit Sub
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     ElseIf Err.Number = 380 Then
-         Exit Sub
+        Exit Sub
     Else
-    
-      PrintErro CStr(Me.Name), "Public Sub SizeControls()", CStr(Err.Number), CStr(Err.Description), True
-      
-      
+        PrintErro CStr(Me.Name), "Public Sub SizeControls()", CStr(Err.Number), CStr(Err.Description), True
     End If
-
 End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)

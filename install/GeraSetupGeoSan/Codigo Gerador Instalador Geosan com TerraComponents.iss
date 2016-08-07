@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "07.01.00"
+#define AppVersionFile  "07.01.02"
 
 [Setup]
 AppName=GeoSan
@@ -236,5 +236,5 @@ Source: "ArquivosInstGeoSan\MSWINSCK.OCX"; DestDir: "{sys}"; CopyMode: alwaysski
 
 [Icons]
 ;Name: "{group}\My Program"; Filename: "{app}\MyProg.exe"
-Name: "{commonprograms}\GeoSan"; Filename: "{app}\GeoSanIni.exe"
-Name: "{commondesktop}\GeoSan";  Filename: "{app}\GeoSanIni.exe"
+Name: "{commonprograms}\GeoSan"; Filename: "{app}\GeoSan.exe"
+Name: "{commondesktop}\GeoSan";  Filename: "{app}\GeoSan.exe"

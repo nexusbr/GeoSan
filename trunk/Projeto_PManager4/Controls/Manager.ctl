@@ -9,7 +9,8 @@ Begin VB.UserControl Manager
    ScaleWidth      =   4755
    Begin VB.TextBox txtInput 
       Alignment       =   1  'Right Justify
-      BorderStyle     =   0  'None
+      BackColor       =   &H0080FFFF&
+      ForeColor       =   &H00000000&
       Height          =   225
       Left            =   3570
       TabIndex        =   2
@@ -19,7 +20,9 @@ Begin VB.UserControl Manager
       Width           =   1035
    End
    Begin VB.ListBox LstOpt 
-      Height          =   1425
+      BackColor       =   &H0080FFFF&
+      ForeColor       =   &H00000000&
+      Height          =   840
       Index           =   0
       Left            =   2970
       TabIndex        =   1
@@ -29,9 +32,9 @@ Begin VB.UserControl Manager
    End
    Begin VB.PictureBox Pic 
       Appearance      =   0  'Flat
-      BackColor       =   &H80000005&
+      BackColor       =   &H0080FFFF&
       BorderStyle     =   0  'None
-      ForeColor       =   &H80000008&
+      ForeColor       =   &H00000000&
       Height          =   240
       Index           =   0
       Left            =   1170
@@ -54,11 +57,16 @@ Begin VB.UserControl Manager
       _Version        =   393216
       Rows            =   1
       FixedRows       =   0
-      BackColorFixed  =   -2147483639
-      BackColorBkg    =   16777215
-      GridColor       =   12648384
-      GridColorFixed  =   12648384
-      GridLinesFixed  =   1
+      BackColor       =   12648447
+      ForeColor       =   0
+      BackColorFixed  =   65535
+      ForeColorFixed  =   0
+      BackColorSel    =   32896
+      BackColorBkg    =   65535
+      GridColorFixed  =   12632256
+      GridLines       =   3
+      GridLinesFixed  =   3
+      AllowUserResizing=   3
    End
 End
 Attribute VB_Name = "Manager"
@@ -1365,66 +1373,56 @@ Trata_Erro:
 
 End Sub
 
+'Muda o tamanho da lateral com as propriedades das redes
+'
+'
+'
 Public Sub Resize(mwith As Double, mheight As Double)
-
-   On Error GoTo Trata_Erro
-   Dim a As Integer
-   Dim intMomento As Integer
-   Dim strMomento As Integer
-   
-'    Close #1
-'    Open App.Path & "\Monitoramento.txt" For Append As #1
-'    Print #1, Now & " - PManager4.DLL - Manager - Public Sub Resize - " & mwith & " - " & mheight
-'    Close #1
-   
-   If mwith > 14000 Or mwith < 0 Then Exit Sub
-   If mheight > 14000 Or mheight < 0 Then Exit Sub
-   
-   Grid.ScrollBars = flexScrollBarNone
-   Grid.Width = mwith
-   Grid.Height = mheight
-   Grid.ColWidth(0) = mwith / 100 * 60
-   
-   If Grid.Height \ Grid.RowHeight(0) = Grid.Rows And Grid.Height Mod Grid.RowHeight(0) >= 75 Then
-      Grid.ColWidth(1) = (mwith) / 100 * 38.5
-   ElseIf Grid.Height \ Grid.RowHeight(0) <= Grid.Rows Then
-      Grid.ColWidth(1) = (mwith - 800) / 100 * 38.5
-   Else
-      Grid.ColWidth(1) = mwith / 100 * 38.5
-   End If
-
-   'Grid.ColWidth(1) = mwith / 100 * 38.5
-   
-   txtInput.Width = Grid.ColWidth(1)
-   If Itens.Count > 0 Then
-
-      For a = (Grid.Rows - 1) To 0 Step -1
-
-         If Itens.Item(a + 1).Selection_ Then
-            Grid.Row = a
-            Pic(a).Left = Grid.CellLeft + Grid.CellWidth - Pic(a).Width + Grid.Left
-            Pic(a).Top = 242 * (a - Grid.TopRow) + 20 'Grid.CellTop + Grid.Top
-            LstOpt(a).Width = Grid.CellWidth
-            LstOpt(a).Left = Grid.CellLeft + Grid.Left
-            LstOpt(a).Top = 242 * (a - (Grid.TopRow - 1)) 'Grid.RowPos(A) + 270 + Grid.Top
-         End If
-      Next
-   End If
-   Grid.ScrollBars = flexScrollBarBoth
-   
-   Exit Sub
+    On Error GoTo Trata_Erro
+    Dim a As Integer
+    Dim intMomento As Integer
+    Dim strMomento As Integer
+    
+    Grid.AllowUserResizing = flexResizeBoth
+    If mwith > 14000 Or mwith < 0 Then Exit Sub
+    If mheight > 14000 Or mheight < 0 Then Exit Sub
+    Grid.ScrollBars = flexScrollBarNone
+    Grid.Width = mwith
+    Grid.Height = mheight
+    Grid.ColWidth(0) = mwith / 100 * 50
+    If Grid.Height \ Grid.RowHeight(0) = Grid.Rows And Grid.Height Mod Grid.RowHeight(0) >= 75 Then
+        Grid.ColWidth(1) = (mwith) / 100 * 48.5
+    ElseIf Grid.Height \ Grid.RowHeight(0) <= Grid.Rows Then
+        Grid.ColWidth(1) = (mwith - 800) / 100 * 48.5
+    Else
+    Grid.ColWidth(1) = mwith / 100 * 48.5
+    End If
+    txtInput.Width = Grid.ColWidth(1)
+    If Itens.Count > 0 Then
+        For a = (Grid.Rows - 1) To 0 Step -1
+            If Itens.Item(a + 1).Selection_ Then
+                Grid.Row = a
+                Pic(a).Left = Grid.CellLeft + Grid.CellWidth - Pic(a).Width + Grid.Left
+                Pic(a).Top = 242 * (a - Grid.TopRow) + 20 'Grid.CellTop + Grid.Top
+                LstOpt(a).Width = Grid.CellWidth
+                LstOpt(a).Left = Grid.CellLeft + Grid.Left
+                LstOpt(a).Top = 242 * (a - (Grid.TopRow - 1)) 'Grid.RowPos(A) + 270 + Grid.Top
+            End If
+        Next
+    End If
+    Grid.ScrollBars = flexScrollBarBoth
+    Exit Sub
 
 Trata_Erro:
-   If Err.Number = 0 Or Err.Number = 20 Then
-      Resume Next
-   Else
-      Grid.ScrollBars = flexScrollBarBoth
-      Open App.Path & "\GeoSanLog.txt" For Append As #1
-      Print #1, Now & " - PManager4.DLL - Manager - Public Sub Resize - " & intMomento & " - " & strMomento & " - " & Err.Number & " - " & Err.Description
-      Close #1
-      MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
-   End If
-   
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Grid.ScrollBars = flexScrollBarBoth
+        Open App.Path & "\GeoSanLog.txt" For Append As #1
+        Print #1, Now & " - PManager4.DLL - Manager - Public Sub Resize - " & intMomento & " - " & strMomento & " - " & Err.Number & " - " & Err.Description
+        Close #1
+        MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
+    End If
 End Sub
 
 Private Sub Grid_Scroll()
