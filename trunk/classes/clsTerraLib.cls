@@ -573,53 +573,30 @@ End Function
 '
 Public Function SaveInDatabase() As Boolean
     On Error GoTo Trata_Erro
+    Dim USR As String
+    
     With tcs
-        'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
-        Select Case TerraEvent
-            'caso o usuario esteja desenhando uma ou mais geometrias, salva as geometrias
-            Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys
+        Select Case TerraEvent                                                                  'A variavel TerraEvent determina o evento/funcão que o usuário está utilizando
+            Case tg_DrawNetWorkline, tg_MoveNetWorkNode, tg_DrawNetWorkNode, tg_DrawGeometrys   'caso o usuario esteja desenhando uma ou mais geometrias, salva as geometrias
                 tcs.saveOnMemory
-                varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
-                'Conn.BeginTrans
                 tcs.SaveInDatabase
-                If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
-                    'Conn.CommitTrans - foram retiradas estas linhas pois estava dando erro na primeira vez que movia o nó
-                Else
-                    'Conn.RollbackTrans
-                End If
                 Screen.MousePointer = vbHourglass
-                'Conn.BeginTrans
-                Dim USR As String
-                ' Exit Sub
-                'Conn.CommitTrans
                 Screen.MousePointer = vbNormal
-            Case tg_SelectObject
-                'Caso o ususario estiver apenas consultando os atribuitos de uma ou mais geometria
-                'Salva apenas os atributos
+            Case tg_SelectObject                                                                'Caso o ususario estiver apenas consultando os atribuitos de uma ou mais geometria. Salva apenas os atributos
                 Select Case cgeo.GetLayerTypeReference(tcs.getCurrentLayer)
                     Case LayerTypeRefence.OUTROS
                         MsgBox "Somente leitura", vbExclamation
                     Case Else
                         If tcs.getSelectCount(GetGeometrySELECTed()) = 1 Then
-                            varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
+                            varGlobais.realizaCommit = True                                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
                             SaveNetWorkAttributesSingle GetGeometrySELECTed()
-'                            If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza - Comentado pois não tinha o begin transaction. Estes commits precisam ser reescritos
-'                                Conn.CommitTrans
-'                            Else
-'                                Conn.RollbackTrans
-'                            End If
                         ElseIf tcs.getSelectCount(GetGeometrySELECTed()) > 1 Then
-                            varGlobais.realizaCommit = True                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
+                            varGlobais.realizaCommit = True                                     'indica que está tudo ok para realizar commit. Se algo ocorrer de errado a partir do saveInDatabase ou mesmo nas propriedades, volta como falso e ai não faz nada
                             SaveNetWorkAttributesMultiple GetGeometrySELECTed()
-                            If varGlobais.realizaCommit = True Then             'se estiver tudo ok, finaliza
-                                Conn.CommitTrans
-                            Else
-                                Conn.RollbackTrans
-                            End If
                         End If
                 End Select
                 .plotView
-            Case tg_MoveNetWorkVertice      'está movendo apenas um vértice da rede de água
+            Case tg_MoveNetWorkVertice                                                          'está movendo apenas um vértice da rede de água
 '                tcs.saveOnMemory
 '                tcs.SaveInDatabase
 '                tcs.plotView
