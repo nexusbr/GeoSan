@@ -281,20 +281,20 @@ Begin VB.Form frmTheme
       TabCaption(1)   =   "Linhas"
       TabPicture(1)   =   "frmTheme.frx":0020
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fralines(1)"
-      Tab(1).Control(1)=   "fralines(0)"
+      Tab(1).Control(0)=   "fralines(0)"
+      Tab(1).Control(1)=   "fralines(1)"
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Pontos"
       TabPicture(2)   =   "frmTheme.frx":003C
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "frapoints(0)"
-      Tab(2).Control(1)=   "frapoints(1)"
+      Tab(2).Control(0)=   "frapoints(1)"
+      Tab(2).Control(1)=   "frapoints(0)"
       Tab(2).ControlCount=   2
       TabCaption(3)   =   "Textos"
       TabPicture(3)   =   "frmTheme.frx":0058
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "fratexts(0)"
-      Tab(3).Control(1)=   "fratexts(1)"
+      Tab(3).Control(0)=   "fratexts(1)"
+      Tab(3).Control(1)=   "fratexts(0)"
       Tab(3).ControlCount=   2
       Begin VB.Frame fratexts 
          Caption         =   "Exemplo:"
@@ -313,7 +313,6 @@ Begin VB.Form frmTheme
             _ExtentX        =   2408
             _ExtentY        =   2037
             _Version        =   393217
-            Enabled         =   -1  'True
             TextRTF         =   $"frmTheme.frx":0074
          End
       End
@@ -2070,7 +2069,7 @@ Private Sub cmdModificar_Click()
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX AQUI ESTÁ O PROBLEMA ELE ACHA QUE É RAMAL E NAO NÓ
             '
             ' retirado do if abaixo FILT = "TIPO" Or
-            If (FILT = "TIPO" Or FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS") And ThemeName2 <> "WATERCOMPONENTS" Then     'RAMAIS_AGUA_LIGACAO
+            If (FILT = "HIDROMETRADO" Or FILT = "ECONOMIAS" Or FILT = "CONSUMO_LPS") And ThemeName2 <> "WATERCOMPONENTS" Then     'RAMAIS_AGUA_LIGACAO
                 tabela = "RAMAIS_AGUA_LIGACAO"
             ElseIf FILT = "DISTANCIA_TESTADA" Or FILT = "DISTANCIA_LADO" Or FILT = "COMPRIMENTO_RAMAL" Or FILT = "PROFUNDIDADE_RAMAL" Or FILT = "USUARIO_LOG" Then
                 tabela = "RAMAIS_AGUA"
