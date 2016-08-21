@@ -148,10 +148,10 @@ Public Enum mSaveType
    Multiples_Line = 3
 End Enum
 Public Enum TypeGeometry
-   Polyguns = 1
-   points = 4
-   lines = 2
-   texts = 128
+   Polyguns = 1         'TePOLYGONS
+   points = 4           'TePOINTS
+   lines = 2            'TeLINES
+   texts = 128          'TeTEXT
 End Enum
 Enum TipoRelatorio
    RedeMaterialDiametro = 0
@@ -200,7 +200,7 @@ Public Sub Main()
     End If
     'Configura a versão atual do GeoSan
     Versao_Geo = App.Major & "." & App.Minor & "." & App.Revision
-    Versao_Geo = "07.01.04"
+    Versao_Geo = "07.02.00"
     glo.diretorioGeoSan = App.path                                                                  'salva globalmente o caminho onde encontra-se o GeoSan.exe
     SaveLoadGlobalData glo.diretorioGeoSan + "/controles/variaveisGlobais.txt", True                'salva em um arquivo todas as variáveis globais para poderem ser acessadas por outras aplicações
     connn = ""
@@ -1428,7 +1428,7 @@ Function capturaRede(ByVal LayName As String, ByVal tcs As TeCanvas, ByRef allSE
    Dim n As String
    Dim o As String
    
-   If Not frm.init(tipo) Then Exit Function
+   If Not frm.Init(tipo) Then Exit Function
    Set frm = Nothing
    '########################
    'Captura todos os nós selecionados
@@ -2536,7 +2536,7 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
        " From " & LayerName & " c " & _
        " left join " & LayerName & "Types t on t.id_type=c.id_type "
    If Filtro Then
-      str = str & frmFilterReport.init()
+      str = str & frmFilterReport.Init()
    End If
    str = str & " Group By Description_ "
    
@@ -2571,7 +2571,7 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
   If frmCanvas.TipoConexao <> 4 Then
   
    If Filtro Then
-      str = str & frmFilterReport.init()
+      str = str & frmFilterReport.Init()
       
       
    End If
@@ -2582,7 +2582,7 @@ Public Function GeraRelatorioHtm_ComponentsRede(LayerName As String, Optional Fi
    If Filtro Then
      
       
-       str = "SELECT CASE WHEN " + """" + "DESCRIPTION_" + """" + "IS NULL THEN 'Desconhecido'  Else " + """" + "DESCRIPTION_" + """" + " END " + """" + "TIPO" + """" + ", count(*) as " + """" + "QTDE" + """" + "   From " + """" + UCase(LayerName) + """" + "   left join " + """" + UCase(LayerName) + "TYPES" + """" + " on   " + """" + UCase(LayerName) + "TYPES" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + UCase(LayerName) + """" + "." + """" + "ID_TYPE" + """" + frmFilterReport.init() + " group by " + """" + "DESCRIPTION_" + """" + ""
+       str = "SELECT CASE WHEN " + """" + "DESCRIPTION_" + """" + "IS NULL THEN 'Desconhecido'  Else " + """" + "DESCRIPTION_" + """" + " END " + """" + "TIPO" + """" + ", count(*) as " + """" + "QTDE" + """" + "   From " + """" + UCase(LayerName) + """" + "   left join " + """" + UCase(LayerName) + "TYPES" + """" + " on   " + """" + UCase(LayerName) + "TYPES" + """" + "." + """" + "ID_TYPE" + """" + "=" + """" + UCase(LayerName) + """" + "." + """" + "ID_TYPE" + """" + frmFilterReport.Init() + " group by " + """" + "DESCRIPTION_" + """" + ""
    'MsgBox str
    End If
    End If

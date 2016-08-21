@@ -28,6 +28,7 @@ Public Enum LayerTypeRefence
    AMARRACAO = 10
    LOTES = 11
    OUTROS = 12
+   CONSUMIDOR_GPS = 13
 End Enum
 
 Dim a As String
@@ -1688,15 +1689,13 @@ Public Function GetLayerTypeReference(LayerName As String) As LayerTypeRefence
     Dim rs As ADODB.Recordset, layer_id As Integer
     
     layer_id = GetLayerID(LayerName)                            'obtem o id do layer
-    g = "GS_LAYER_CONFIG"                                       'para adequar a sintaxe do banco de dados utilizado
-    h = "LAYER_ID"                                              'para adequar a sintaxe do banco de dados utilizado
-    If frmCanvas.TipoConexao <> 4 Then
-        Set rs = Conn.execute("SELECT * from gs_layer_config where layer_id=" & layer_id)
-    Else
-        Set rs = Conn.execute("SELECT * from " + """" + g + """" + " where " + """" + h + """" + "='" & layer_id & "'")
-    End If
+    Set rs = Conn.execute("SELECT * from gs_layer_config where layer_id=" & layer_id)
     If rs.EOF Then
-        GetLayerTypeReference = 0
+        If LayerName = "NXGS_V_LIG_COMERCIAL_GPS" Then          'este if foi adicionado para considerar a leitura dos pontos GPS, no endSelect de um ponto, mas esta função endSelect deve ser revisada
+            GetLayerTypeReference = CONSUMIDOR_GPS              'informa que o layer de referência é um ponto GPS
+        Else
+            GetLayerTypeReference = 0
+        End If
     Else
        GetLayerTypeReference = rs.Fields("type_reference").value
     End If
