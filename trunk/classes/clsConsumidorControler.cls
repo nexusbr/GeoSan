@@ -79,6 +79,8 @@ Public Function InsereTexto(objIdPontoGPS As String)
          Conn.execute gpsConsumidorSql
          tdbcon.getCenterGeometry CLng(objIdPontoGPS), objIdPontoGPS, tpPOINTS, coordXcentroGeometria, coordYcentroGeometria    'localiza as coordenadas X e Y do ponto GPS selecionado
          tdbcon.InsertTextInDatabase objIdPontoGPS, numeroCasa, 1, coordXcentroGeometria, coordYcentroGeometria, 0, TeHorzLeft, TeHorzLeft, True
+         gpsConsumidorSql = "UPDATE NXGS_V_LIG_COMERCIAL_GPS SET USUARIO_LOG = '" & strUser & "', DATA_LOG = '" & Format(Now, "DD/MM/YY HH:MM") & "', DATALOG = GETDATE() WHERE " & ObtemNomeColunaObjId("NXGS_V_LIG_COMERCIAL_GPS") & " = '" & objIdPontoGPS & "'"                  'atualiza quem realizou a última modificação na posição do consumidor
+         Conn.execute (gpsConsumidorSql)
          tcs.plotView
 End Function
 
