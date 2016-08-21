@@ -41,6 +41,7 @@ Public Enum TypeGeometryEvent
    tg_DrawRamal = 9
    tg_InsertDoc = 10
    tg_MoveNetWorkVertice = 11
+   tg_MoveGpsPoint = 12
 End Enum
 
 Private LayerReference As String, rs As ADODB.Recordset
@@ -557,6 +558,7 @@ Public Function OnRamal(X As Double, Y As Double, object_id_ramal As String) As 
     Else
         frm.init "ESGOTO", object_id_ramal, tcs, tdb, tdbcon, object_id_lote, ""
     End If
+    Exit Function
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -600,6 +602,11 @@ Public Function SaveInDatabase() As Boolean
 '                tcs.saveOnMemory
 '                tcs.SaveInDatabase
 '                tcs.plotView
+            Case tg_MoveGpsPoint
+                tcs.saveOnMemory
+                tcs.SaveInDatabase
+                Screen.MousePointer = vbHourglass
+                Screen.MousePointer = vbNormal
         End Select
     End With
     Exit Function

@@ -29,7 +29,7 @@ Begin VB.Form frmCanvas
       Top             =   5400
    End
    Begin VB.Frame Frame1 
-      BackColor       =   &H80000009&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Ajustar Escala"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -63,7 +63,7 @@ Begin VB.Form frmCanvas
       End
    End
    Begin VB.Frame fraRedes 
-      BackColor       =   &H80000009&
+      BackColor       =   &H00FFFFFF&
       Caption         =   "Tamanho das Redes"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -95,7 +95,7 @@ Begin VB.Form frmCanvas
          Width           =   1935
       End
       Begin VB.Label Label2 
-         BackColor       =   &H80000009&
+         BackColor       =   &H00FFFFFF&
          Caption         =   "Segunda"
          Height          =   255
          Left            =   120
@@ -104,7 +104,7 @@ Begin VB.Form frmCanvas
          Width           =   1935
       End
       Begin VB.Label Label1 
-         BackColor       =   &H80000009&
+         BackColor       =   &H00FFFFFF&
          Caption         =   "Primeira"
          Height          =   255
          Left            =   150
@@ -169,6 +169,7 @@ Public Position_X As Double, Position_Y As Double
 Private mUserName As String, ViewName As String
 Private xmin, ymin, xmax, ymax, LastEvent As TypeGeometryEvent
 Dim Tc As New clsTerraConfig, Tr As New clsTerraLib, LastDocument As String, tempo As Date
+Dim lastGpsObjIdPointSelected As String                                                              'guarda o object_id do último ponto GPS selecionado
 Dim CLIQUE_RAMAL As Integer
 Dim intQtdLinhasNaCoordenada As Integer
 Dim postg As Integer
@@ -201,6 +202,7 @@ Dim con As New ADODB.connection
 Dim strConn As String
 Dim count2 As Integer
 Dim conexao As New ADODB.connection
+Dim cConsumidor As New clsConsumidorControler
 
 'Constantes utilizadas na função ConvertTwipsToPixels para converter pixel para milímetro
 Const WU_LOGPIXELSX = 88
@@ -358,7 +360,7 @@ End Function
 ' Conn - conexão realizada
 ' username - nome do usuário que logou no GeoSan
 '
-Public Function init(Conn As ADODB.connection, username As String) As Boolean
+Public Function Init(Conn As ADODB.connection, username As String) As Boolean
     On Error GoTo Trata_Erro
     Dim rs As ADODB.Recordset
     Dim linha As Integer
@@ -515,7 +517,9 @@ Public Function init(Conn As ADODB.connection, username As String) As Boolean
             FrmMain.Tag = Int(FrmMain.Tag) + 1
         End If
     End If
-    'Teste  - para chamar as classes de teste de mover ramais pode retirar
+    Set cConsumidor.tcs = TCanvas                        'aqui foi feito diferente, para os controles de métodos e evendos do TeCanvas sejam executados diretamente dentro da classe e na classe clsTerralib, fazendo assim uma separação e melhor orientação a objetos
+    Set cConsumidor.tdbcon = TeDatabase2                 'seta e TeDatabase2 passa ser valor para a variável cConsumidor.tdbcon
+    Exit Function
     
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
@@ -525,57 +529,6 @@ Trata_Erro:
         End
     End If
 End Function
-
-'Sub CorrigeBug()
-'On Error GoTo Trata_Erro
-'   Dim rs As New ADODB.Recordset, a As Integer, x As Double, y As Double
-'   TeDatabase2.setCurrentLayer "watercomponents"
-'   With TeDatabase1
-'      .setCurrentLayer "WATERLINES"
-'      rs.Open "SELECT object_id_,initialcomponent,finalcomponent, lower_x,lower_y from waterlines inner join lines38 on object_id=object_id_ where initialcomponent= 0 or finalcomponent =0", Conn, adOpenKeyset, adLockOptimistic
-'      While Not rs.EOF
-'         For a = 0 To 1
-'            .getPointOfLine 0, rs("object_id_").value, a, x, y
-'            If TeDatabase2.locateGeometryXY(x, y, tpPOINTS) = 1 Then
-'               If a = 0 Then
-'                  rs("initialcomponent").value = TeDatabase2.objectIds(0)
-'               Else
-'                  rs("finalcomponent").value = TeDatabase2.objectIds(0)
-'               End If
-'            Else
-'                TCanvas.setCurrentLayer "WATERLINES"
-'                TCanvas.setWorld x - 500, y - 500, x + 500, y + 500
-'                'TCanvas.Object = rs("object_id_").value
-'                'TCanvas.SELECT
-'
-'                TCanvas.setDetachedLineStyle 3, 1, RGB(255, 255, 0), True
-'                TCanvas.addDetachedIds tpLINES, , rs("object_id_").value
-'                TCanvas.plotView
-'
-'                MsgBox "O trecho:" & rs("object_id_").value & " que está marcado apresenta inconscistência nos 'NÓS' que o sistema não pode corrigir automáticamente, remova e desenhe novamente.", vbExclamation
-'                Exit Sub
-'            End If
-'         Next
-'         rs.Update
-'         rs.MoveNext
-'      Wend
-'      rs.Close
-'   End With
-'   Set rs = Nothing
-'   Set Tr.cgeo.tdb = TeDatabase1
-'   Set Tr.cgeo.tdbcon = TeDatabase2
-'   Tr.cgeo.AddAtributesLinesOut "WATERLINES"
-'Trata_Erro:
-'    If Err.Number = 0 Or Err.Number = 20 Then
-'       Resume Next
-'    Else
-'       Open App.path & "\Controles\GeoSanLog.txt" For Append As #1
-'       Print #1, Now & " " & strUser & " " & Versao_Geo & " - frmCanvas - Sub CorrigeBug - " & " - " & Err.Number & " - " & Err.Description
-'       Close #1
-'       MsgBox "Um posssível erro foi identificado:" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo GeoSanLog.txt com informações desta ocorrência.", vbInformation
-'    End If
-'End Sub
-
 
 Private Sub cmdConfEscala_Click()
 On Error GoTo Trata_Erro
@@ -805,7 +758,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
                             TCanvas.clearSelectItens 0                     'desmarca se há item selecionado
                             'é aqui com o comando Tr.DrawNetWorkLine onde é ativado o início do desenho da rede (veja esta rotina na classe clsTerralib em Public Function DrawNetWorkLine)
                             If Tr.DrawNetWorkLine = True Then              'chama a classe drawnetworkline para iniciar o desenho da linha. Public Function DrawNetWorkLine(Optional mback As Boolean) As Boolean
-                                frmNetWorkLegth.init TCanvas, FrmMain
+                                frmNetWorkLegth.Init TCanvas, FrmMain
                                 FrmMain.ViewManager1.LoadImageSnap Tr.cgeo.GetReferenceLayer(.getCurrentLayer), mOnSnapLock
                                 FrmMain.TabStrip1.Tabs(2).Selected = True
                             Else
@@ -840,7 +793,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
                                 TCanvas.Select
                                 object_ids = FrmProcess.FindValvulas(Trecho, TCanvas)   'Tr.CGeo.SELECTRede TCanvas.getSELECTObjectId(0, lines)
                                 If object_ids <> "" Then
-                                    frmConsumidoresDesabastecidos.init object_ids
+                                    frmConsumidoresDesabastecidos.Init object_ids
                                 End If
                             Else
                                 MsgBox "Selecione 1 trecho de rede de agua para esta função.", vbInformation, ""
@@ -853,16 +806,20 @@ Public Sub Tb_SELECT(ByVal Button As String)
                         Case "ksearchattribute"
                             Tr.SearchGeomtryForAttribute
                         Case "ksave"
-                            Tr.SaveInDatabase
-                            If FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrUnpressed Then
-                                With TCanvas
-                                    .Normal
-                                    .Select: Tr.TerraEvent = tg_SelectObject
-                                    .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
-                                End With
+                            If cConsumidor.TerraEvent = tg_MoveGpsPoint Then        'este if foi colocado pois é uma melhora no código para separar as ações por classes distintas
+                                cConsumidor.SaveInDatabase
+                            Else
+                                Tr.SaveInDatabase
+                                If FrmMain.tbToolBar.Buttons("kdrawnetworkline").value = tbrUnpressed Then
+                                    With TCanvas
+                                        .Normal
+                                        .Select: Tr.TerraEvent = tg_SelectObject
+                                        .clearEditItens 1: .clearEditItens 2: .clearEditItens 4: .clearEditItens 128
+                                    End With
+                                End If
+                                'TCanvas.plotView  2013-05-01 - retirado pois após desenhar uma rede ele plotava a vista 3 vezes
+                                LoadToolsBar
                             End If
-                            'TCanvas.plotView  2013-05-01 - retirado pois após desenhar uma rede ele plotava a vista 3 vezes
-                            LoadToolsBar
                         Case "kdrawintersection"
                             Tr.DrawInterSection
                         Case "kdrawline"
@@ -875,6 +832,9 @@ Public Sub Tb_SELECT(ByVal Button As String)
                             TCanvas.drawPolygon
                         Case "kMoveVertice"
                             Tr.moveVertice: Tr.TerraEvent = tg_MoveNetWorkVertice       'chama clsTerralib.MoveVertice e informa o evento que está realizando, para iniciar o método de movimentação do vértice da rede e salvar na memória quem são os ramais conectados a mesma
+                        Case "kMoveConsumidorGPS"
+                            cConsumidor.TerraEvent = tg_MoveGpsPoint                    'informa a classe cConsumidor que agora é um evento de mover um consumidor para outra posição
+                            cConsumidor.Move
                     End Select
                 Else
                     MsgBox "Nenhum plano está ativo. Selecione antes o plano de informação que deseja realizar esta operação.", vbExclamation
@@ -882,7 +842,7 @@ Public Sub Tb_SELECT(ByVal Button As String)
         End Select
         'comprimento da linha
         If Tr.TerraEvent = tg_DrawNetWorkline Then
-            frmNetWorkLegth.init TCanvas, FrmMain
+            frmNetWorkLegth.Init TCanvas, FrmMain
             Dim Lh As Double
             TCanvas.getLengthOfLastSegmentOfLine Lh
             frmNetWorkLegth.txtLength.Text = Lh
@@ -911,102 +871,6 @@ Private Sub TCanvas_onArea(ByVal value As Double)
    TCanvas.ToolTipText = "Área: " & Format(value, "0.00") & " m²"
 
 End Sub
-
-'Public Function CarregaPoligonoVirtual(redeIn As Boolean, redeCross As Boolean, ramalIn As Boolean, ramalCross As Boolean) As Boolean
-'
-'   Dim i As Long
-'
-'   'GRAVA EM ARQUIVO TXT O NOME DO USUARIO QUE FEZ O POLIGONO PARA QUE A EXPORTAÇÃO EPANET SAIBA QUAL USUÁRIO QUE CRIOU
-'    Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\Controles\UserLog.txt" For Output As #3
-'    Print #3, strUser
-'    Close #3
-'
-'   With TeDatabase1
-'      '.UserName = UserName
-'      .Provider = typeconnection
-'      .Connection = Conn
-'      .setCurrentLayer "WATERLINES"
-'   End With
-'
-'
-'   If redeIn = True Then
-'      'CARREGA NA VARIAVEL TOTAL A QUANTIDADE DE LINHAS QUE ESTÃO CONTIDADAS NO POLÍGONO
-'      lngTotalRedesDentro = TeDatabase1.Within(geo, tpPOLYGONS, tpLINES)
-'
-'      If lngTotalRedesDentro > 0 Then
-'
-'         ReDim Preserve ArrRedesDentro(lngTotalRedesDentro) 'REDIMENSIONA O ARRAY
-'
-'         FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1: FrmMain.ProgressBar1.Max = lngTotalRedesDentro
-'
-'         For i = 0 To lngTotalRedesDentro - 1
-'            DoEvents
-'            ArrRedesDentro(i) = TeDatabase1.objectIds(i)
-'            FrmMain.ProgressBar1.value = i + 1
-'         Next
-'
-'      End If
-'
-'   End If
-'
-'   If redeCross = True Then
-'      'CARREGA NA VARIAVEL TOTAL A QUANTIDADE DE LINHAS QUE ESTÃO NA DIVISA DO POLÍGONO
-'      lngTotalRedesDivisa = TeDatabase1.Crosses(geo, tpPOLYGONS, tpLINES)
-'
-'      If lngTotalRedesDivisa > 0 Then
-'
-'         FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1: FrmMain.ProgressBar1.Max = lngTotalRedesDentro
-'
-'         For i = 0 To lngTotalRedesDivisa - 1
-'            DoEvents
-'            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabase1.objectIds(i) & "','" & strUser & "',1)")
-'            FrmMain.ProgressBar1.value = i + 1
-'         Next
-'
-'      End If
-'
-'   End If
-'
-'
-'   ' ************************** CARREGANDO RAMAIS
-'
-'   'LIMPA A TABELA POLIGONO_SELECAO ELIMINANDO A SELECAO ANTERIOR DO USUÁRIO
-'    Conn.execute ("DELETE FROM POLIGONO_SELECAO WHERE USUARIO = '" & strUser & "' AND TIPO = 1")
-'
-'   TeDatabase1.setCurrentLayer "RAMAIS_AGUA"
-'   If ramalIn = True Then
-'
-'      lngTotalRamaisDentro = TeDatabase1.Within(geo, tpPOLYGONS, tpLINES)
-'
-'      If lngTotalRamaisDentro > 0 Then
-'         FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1: FrmMain.ProgressBar1.Max = lngTotalRamaisDentro
-'
-'         For i = 0 To lngTotalRamaisDentro - 1
-'            DoEvents
-'            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabase1.objectIds(i) & "','" & strUser & "',2)")
-'            FrmMain.ProgressBar1.value = i + 1
-'         Next
-'      End If
-'
-'   End If
-'
-'   If ramalCross = True Then
-'
-'      lngTotalRamaisDivisa = TeDatabase1.Crosses(geo, tpPOLYGONS, tpLINES)
-'
-'      If lngTotalRamaisDivisa > 0 Then
-'         FrmMain.ProgressBar1.Visible = True: FrmMain.ProgressBar1.value = 1: FrmMain.ProgressBar1.Max = lngTotalRamaisDentro
-'
-'         For i = 0 To lngTotalRamaisDivisa - 1
-'            DoEvents
-'            Conn.execute ("INSERT INTO POLIGONO_SELECAO (OBJECT_ID_,USUARIO,TIPO) VALUES ( '" & TeDatabase1.objectIds(i) & "','" & strUser & "',2)")
-'            FrmMain.ProgressBar1.value = i + 1
-'         Next
-'      End If
-'
-'   End If
-'
-'End Function
 
 'Rotina que ao selecionar duplo clique do mouse, vai identificar todas as redes que estão dentro do polígono finalizado.
 '
@@ -1142,6 +1006,10 @@ Private Sub TCanvas_onBeginPlotView()
 End Sub
 
 
+
+Private Sub TCanvas_onEndMoveGeometries(ByVal distance As Double, ByVal deltaX As Double, ByVal deltaY As Double)
+    cConsumidor.InsereTexto lastGpsObjIdPointSelected
+End Sub
 
 ' Evento que é disparado quando é terminado de mover o vértice de uma linha, no caso um trecho de rede de água
 ' Como terminou de mover o vértice da rede, tem agora que salvar a rede na nova posição e recalcular o
@@ -1285,9 +1153,10 @@ On Error GoTo Trata_Erro
    Dim strDistrito As String
    Dim IdDistrito As Integer
 
-   Dim i As Integer, j As Integer, VarObj As String, frm As New FrmAssociation
+   Dim i As Integer, j As Integer, VarObj As String
+   Dim frm As New FrmAssociation                                                            'formulário para a associação de documentos a pontos no mapa
    With FrmMain.Manager1
-      If TCanvas.getSelectCount(2) Or TCanvas.getSelectCount(4) Or TCanvas.getSelectCount(1) Then
+      If TCanvas.getSelectCount(lines) Or TCanvas.getSelectCount(points) Or TCanvas.getSelectCount(Polyguns) Then            'retorna quantas geometrias foram selecionadas do tipo linha, ponto ou polígono e com isso verrifica se foram selecionadas uma destas geometrias
          .GridEnabled True: .GridVisibled True
          Select Case Tr.cgeo.GetLayerTypeReference(TCanvas.getCurrentLayer)
             
@@ -1322,7 +1191,7 @@ On Error GoTo Trata_Erro
                If TCanvas.getSelectCount(points) = 1 Then
                   If LastDocument <> TCanvas.getSelectObjectId(0, points) Then
                      LastDocument = TCanvas.getSelectObjectId(0, points)
-                     frm.init TCanvas.getSelectObjectId(0, points), TCanvas, TeDatabase1
+                     frm.Init TCanvas.getSelectObjectId(0, points), TCanvas, TeDatabase1
                      LastDocument = ""
                   Else
                     LastDocument = ""
@@ -1340,15 +1209,23 @@ On Error GoTo Trata_Erro
                   .LoadDefaultProperties TCanvas.getSelectObjectId(0, 128), TCanvas.getCurrentLayer, False
                End If
                FrmMain.TabStrip1.Tabs(2).Selected = True
-            
-            
+                       
             Case LayerTypeRefence.Poligonos
+                idPoligonSel = TCanvas.getSelectGeoId(0, 1)
+                strLayerAtivo = TCanvas.getCurrentLayer
                
-
-              ' idPoligonSel = TCanvas.getSelectObjectId(0, 1)
-                 idPoligonSel = TCanvas.getSelectGeoId(0, 1)
-               strLayerAtivo = TCanvas.getCurrentLayer
-               
+            Case LayerTypeRefence.CONSUMIDOR_GPS
+                Dim consumidorObject_id As String
+                
+                consumidorObject_id = TCanvas.getSelectObjectId(0, points)                                          'obtem o object_id do ponto selecionado
+                If TCanvas.getSelectCount(points) = 1 Then                                                          'retorna o número de pontos GPS selecionados no Canvas e que estão em memória
+                    lastGpsObjIdPointSelected = consumidorObject_id                                                 'é um novo ponto GPS selecionado, então salva o object_id do mesmo na memória
+                    FrmMain.sbStatusBar.Panels(1).Text = cConsumidor.ObtemEnderecoCompleto(consumidorObject_id)     'Mostra o endereço na barra de status para o usuário saber o que selecionou
+                Else
+                    MsgBox ("Selecionou mais de um ponto GPS, selecione novamente.")
+                End If
+                strLayerAtivo = TCanvas.getCurrentLayer
+                
             ' Caso esteja tratando um ramal
             Case LayerTypeRefence.RAMAIS_AGUA, LayerTypeRefence.RAMAIS_ESGOTO
                Set Tr.tcs = TCanvas
@@ -1464,6 +1341,9 @@ Private Sub TCanvas_onKeyPress(ByVal key As Long)
         Case 83, 115            'S ou s
             TCanvas.horizontalPan 50
             TCanvas.redraw                          'para que o comando de seleção de polígono continue aparecendo
+        Case 81, 113            'q ou Q              para mover um ponto gps
+            cConsumidor.TerraEvent = tg_MoveGpsPoint                    'informa a classe cConsumidor que agora é um evento de mover um consumidor para outra posição
+            cConsumidor.Move
     End Select
     Exit Sub
 
@@ -1516,7 +1396,7 @@ Private Sub TCanvas_onLine(ByVal distance As Double)
     If Tr.TerraEvent = tg_DrawRamal Then 'SE ESTA DESENHANDO RAMAL
         Tr.OnRamal Position_X, Position_Y, ""
     End If
-
+    Exit Sub
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -1571,7 +1451,7 @@ Private Function LoadThemes() 'ViewName As String)
  
       Screen.MousePointer = vbNormal
       If Tr.TerraEvent = tg_DrawNetWorkline Then
-         frmNetWorkLegth.init TCanvas, FrmMain
+         frmNetWorkLegth.Init TCanvas, FrmMain
          Dim Lh As Double
          TCanvas.getLengthOfLastSegmentOfLine Lh
          frmNetWorkLegth.txtLength.Text = Lh
@@ -1716,7 +1596,7 @@ Private Sub TCanvas_onMouseDown(ByVal Button As Long, ByVal X As Double, ByVal Y
         Case Else       'nenhuma das anteriores
 
     End Select
-
+    Exit Sub
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -1773,7 +1653,8 @@ Private Sub TCanvas_onMouseMove(ByVal X As Double, ByVal Y As Double, ByVal lat 
     'Else
         'FrmMain.sbStatusBar.Panels(1).Text = ""
     'End If
-
+    Exit Sub
+    
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
@@ -1890,6 +1771,8 @@ On Error GoTo Trata_Erro
 '      TCanvas.getLengthOfLastSegmentOfLine Lh 'aqui dá erro qd não tenho o segmento de uma linha
 '      frmNetWorkLegth.txtLength.Text = Lh
    End If
+   Exit Sub
+   
 Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
