@@ -308,7 +308,7 @@ Begin VB.MDIForm FrmMain
             AutoSize        =   2
             Object.Width           =   3519
             MinWidth        =   3528
-            TextSave        =   "19:26"
+            TextSave        =   "14:59"
          EndProperty
          BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   2
@@ -1893,12 +1893,12 @@ Private Sub mnuImagem_Click()
 
     'Se nao houver canvas aberto não é possivel exportar nada...
     If FrmMain.Tag > 0 Then
-        With Cdl
+        With CDL
            .FileName = ""
            .Filter = "Bitmap (*.bmp)|*.bmp | GIF (*.gif) | *.gif | JPG (*.jpg) | *.jpg | PNG (*.png) | *.png | TIF (*.tif) | *.tif"
            .ShowOpen
            If .FileName <> "" Then
-              ActiveForm.TCanvas.saveImageToFile Cdl.FileName, .FilterIndex - 1
+              ActiveForm.TCanvas.saveImageToFile CDL.FileName, .FilterIndex - 1
            End If
         End With
     Else
