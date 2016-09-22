@@ -749,7 +749,6 @@ Public Sub Tb_SELECT(ByVal Button As String)
                     Set Tr.tdbcon = TeDatabase2                          'seta e TeDatabase2 passa ser valor para a variável Tr.tdbcon
                     Set Tr.tdbconref = TeDatabase3                       'seta e TeDatabase3 passa ser valor para a variável Tr.tdbconref
                     Set Tr.CtrlMgr = FrmMain.Manager1                    'CtrlMgr recebe o form.Manager1
-                                                                         'TCanvas.getRepresentationTheme(
                     Select Case Button ' selecione uma das opções
                         Case "kCalcularArea"
                             TCanvas.calculateArea
@@ -864,6 +863,10 @@ Trata_Erro:
     End If
 End Sub
 
+
+Private Sub TCanvas_GotFocus()
+    TCanvas.setSelPoint 1, 4, vbMagenta         'configura o ponto de seleção para tamanho 1, quadrado (4), e cor magenta
+End Sub
 
 Private Sub TCanvas_onArea(ByVal value As Double)
 

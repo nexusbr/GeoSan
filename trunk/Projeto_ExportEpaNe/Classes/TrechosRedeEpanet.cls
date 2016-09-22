@@ -105,6 +105,10 @@ Function ExportaParaEpanet()
     Dim idLinha As String
     Dim idNo As String
     
+    Open "C:\Program Files\GeoSan\Controles\testeExportacaoEpanet.txt" For Append As #20
+    Print #20, "Início"
+    Close #20
+    
     contadorTrechos = 0                                                                                 'Informa que o contador de trechos exportados é zero
     If (az <> 10) Then
         mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\CONTROLES\GEOSAN.ini")
@@ -147,8 +151,14 @@ Function ExportaParaEpanet()
                    NoF = no
                 End If
                 If banco.RsNosExportados_esteNoJaFoiExportado(no) = False Then                          'se o nó não foi exportado ainda
+                    Open "C:\Program Files\GeoSan\Controles\testeExportacaoEpanet.txt" For Append As #20
+                    Print #20, "No exportado: " + no
+                    Close #20
                     banco.RsNosTmp_filtraPorNo (no)                                                     'filtra para pegar os dados somente do nó que está sendo lido
                     strTipoComp = banco.RsWaterCompTypes_tipoDeEspecificacao                            'Obter a especificação para poder processar a exportação conforme o tipo de nó
+                    Open "C:\Program Files\GeoSan\Controles\testeExportacaoEpanet.txt" For Append As #20
+                    Print #20, "Tipo de componente recebido: " + strTipoComp + " para o nó: " + no
+                    Close #20
                     If banco.RsWaterCompTypes_ExitemParametros = True Then
                         Select Case strTipoComp                                 'Seleciona do processo a ser usado para o tipo do nó
                             'Case No_Bombas, No_Valvulas, No_Valvulas_99 'Especial nó
@@ -345,8 +355,8 @@ Sub AbrirEstruturaExporteRede()
     rsTrechosExportados.Fields.Append "id", adVarChar, 255
     rsTrechosExportados.Open
     
-    RsTrechos.Fields.Append "id", adVarChar, 255
-    RsTrechos.Open
+    rsTrechos.Fields.Append "id", adVarChar, 255
+    rsTrechos.Open
     
     'lista de nós exportados
     rsNosExportados.Fields.Append "id", adVarChar, 255
@@ -406,14 +416,14 @@ On Error GoTo Trata_Erro
           .Fields("X").Value = rsNos.Fields("x").Value
           .Fields("Y").Value = rsNos.Fields("y").Value
           .Fields("Tipo").Value = IIf(IsNull(rsNos.Fields("id_type").Value), 0, rsNos.Fields("id_type").Value)
-          If rsNos.Fields("ID_TYPE").Value = No_Valvulas Then
-             Select Case rsNos.Fields("SubTypeValve").Value
-                Case 4, 0
-                   .Fields("Tipo").Value = 1
-                Case Else
-                   .Fields("Tipo").Value = 99
-             End Select
-          End If
+'          If rsNos.Fields("ID_TYPE").Value = No_Valvulas Then
+'             Select Case rsNos.Fields("SubTypeValve").Value
+'                Case 4, 0
+'                   .Fields("Tipo").Value = 1
+'                Case Else
+'                   .Fields("Tipo").Value = 99
+'             End Select
+'          End If
             .Fields("Cota").Value = IIf(IsNull(rsNos.Fields("GROUNDHEIGHT").Value), 0, rsNos.Fields("GROUNDHEIGHT").Value)
             .Fields("Demanda").Value = IIf(IsNull(rsNos.Fields("demand").Value), 0, rsNos.Fields("demand").Value)
             .Fields("Padrao").Value = IIf(IsNull(rsNos.Fields("PATTERN").Value), 0, rsNos.Fields("PATTERN").Value)
