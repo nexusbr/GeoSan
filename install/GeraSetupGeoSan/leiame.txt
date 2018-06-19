@@ -1,0 +1,8 @@
+Preparação do instalador do Geosan
+---------------------------------
+
+Data: 01/11/2011
+
+Para geração do instaldor do Geosan deve-se utilizar o software freeware Inno Setup Compiler. O instaldor deste software está disponível no arquivo isetup-5.4.2.exe.
+
+Abra o arquivo Código Gerador Instalador Geosan com TerraComponents.iss e configure o novo instalador conforme nova versão do Geosan gerada.

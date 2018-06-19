@@ -1,0 +1,6 @@
+VBGROUP 5.0
+StartupProject=..\GeoSan.vbp
+Project=..\Projeto_NxConnection\Connection.vbp
+Project=..\Projeto_NxUsers\NexusUsers.vbp
+Project=..\Projeto_NSecurity\NSecurity.vbp
+Project=..\Projeto_NxViewmanager\NxViewManager.vbp

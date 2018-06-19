@@ -1,0 +1,8 @@
+FrmEPANET = 41, 16, 785, 724, C, 130, 74, 823, 548, C
+Inicio = 13, 12, 918, 559, 
+frmOdometro = 88, 88, 768, 580, C, -271, 95, 853, 827, C
+ModExporte = 30, 25, 896, 708, 
+Rugosidade = 29, 47, 709, 539, C
+TrechosRedeEpanet = 34, 18, 1316, 924, 
+LogExportacao = 0, 0, 0, 0, C
+RedeBancoDados = 43, 5, 1475, 1010, 

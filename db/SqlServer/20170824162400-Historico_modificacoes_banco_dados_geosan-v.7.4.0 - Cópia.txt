@@ -1,0 +1,173 @@
+USE [nome_do_banco_de_dados]
+GO
+
+/****** Object:  Table [dbo].[GS_NOS]    Script Date: 08/24/2017 16:07:17 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[GS_NOS](
+    [object_id_] [nvarchar](50) NOT NULL,
+    [idtipo] [int] NULL,
+    [idsubtipo] [int] NULL,
+    [valor] [varchar](50) NULL,
+    [estado] [int] NULL,
+    [localiza] [int] NULL,
+    [cota] [float] NULL,
+    [notacao] [nvarchar](50) NULL,
+    [demanda] [float] NULL,
+    [datainst] [varchar](50) NULL,
+    [descric] [varchar](25) NULL,
+    [especif] [varchar](50) NULL,
+    [x] [float] NULL,
+    [y] [float] NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+USE [nome_do_banco_de_dados]
+GO
+
+/****** Object:  Table [dbo].[GS_REDES]    Script Date: 08/24/2017 16:09:36 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[GS_REDES](
+    [object_id_] [nvarchar](255) NOT NULL,
+    [idtipo] [int] NULL,
+    [tiporede] [varchar](25) NULL,
+    [especifi] [varchar](100) NULL,
+    [altinic] [float] NULL,
+    [altfinal] [float] NULL,
+    [profinic] [float] NULL,
+    [proffin] [float] NULL,
+    [diamint] [varchar](25) NULL,
+    [diamext] [varchar](25) NULL,
+    [noinic] [int] NULL,
+    [nofinal] [int] NULL,
+    [espessur] [float] NULL,
+    [material] [int] NULL,
+    [matnome] [nvarchar](50) NOT NULL,
+    [comprim] [float] NULL,
+    [compcalc] [float] NULL,
+    [forneced] [int] NULL,
+    [forempre] [nvarchar](40) NOT NULL,
+    [localiza] [int] NULL,
+    [locanome] [nvarchar](25) NOT NULL,
+    [estado] [int] NULL,
+    [estnome] [nvarchar](25) NOT NULL,
+    [validinf] [int] NULL,
+    [rugosid] [float] NOT NULL,
+    [setor] [float] NOT NULL,
+    [datainst] [varchar](25) NULL,
+    [ladorua] [smallint] NULL,
+    [ladodesc] [varchar](50) NOT NULL,
+    [distdiv] [numeric](18, 2) NULL,
+    [problema] [smallint] NULL,
+    [usuario] [varchar](50) NULL,
+    [datausu] [varchar](50) NULL,
+    [data] [varchar](25) NOT NULL,
+    [fabrican] [numeric](18, 0) NULL,
+    [fabrnome] [nvarchar](40) NOT NULL,
+    [LINE_ID] [int] NULL,
+    [txtacm] [varchar](50) NULL,
+    [txtab] [varchar](50) NULL,
+    [angulol] [float] NULL,
+    [txtabl1] [varchar](50) NULL,
+    [txtabl2] [varchar](50) NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+USE [nome_do_banco_de_dados]
+GO
+
+/****** Object:  Table [dbo].[GS_RAMAIS]    Script Date: 08/24/2017 16:10:44 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[GS_RAMAIS](
+    [object_id_] [nvarchar](255) NULL,
+    [objidtre] [nvarchar](255) NULL,
+    [codlog] [int] NULL,
+    [distTest] [numeric](18, 2) NULL,
+    [distLado] [numeric](18, 2) NULL,
+    [compram] [numeric](18, 2) NULL,
+    [profram] [numeric](18, 2) NULL,
+    [poslote] [int] NULL,
+    [id] [int] NOT NULL,
+    [datalog] [varchar](30) NULL,
+    [usulog] [varchar](30) NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+USE [nome_do_banco_de_dados]
+GO
+
+/****** Object:  Table [dbo].[GS_CONSUMIDORES]    Script Date: 08/24/2017 16:12:58 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GS_CONSUMIDORES](
+    [OBJECT_ID_] [nvarchar](250) NULL,
+    [NRO_LIG] [nvarchar](50) NULL,
+    [NROL_SDV] [nvarchar](50) NULL,
+    [INSCLOTE] [nvarchar](50) NULL,
+    [AUTO] [nvarchar](10) NULL,
+    [CONS_LPS] [nvarchar](24) NULL,
+    [TIPO] [nvarchar](20) NULL,
+    [COD_LOG] [nvarchar](30) NULL,
+    [ENDERECO] [nvarchar](250) NULL,
+    [NUM_CASA] [nvarchar](15) NULL,
+    [COMPLLOG] [nvarchar](60) NULL,
+    [BAIRRO] [nvarchar](150) NULL,
+    [HIDROM] [nvarchar](30) NULL,
+    [COD_CONS] [nvarchar](11) NULL,
+    [CODCONSDV] [nvarchar](11) NULL,
+    [CONSUM] [nvarchar](150) NULL,
+    [TEL_RES] [nvarchar](20) NULL,
+    [TEL_COM] [nvarchar](20) NULL,
+    [ECONOM] [nvarchar](10) NULL,
+    [DATAIMP] [nvarchar](30) NULL,
+    [DATAIMPE] [nvarchar](30) NULL,
+    [ROTALEIT] [nvarchar](50) NULL,
+    [GRUPOL] [nvarchar](10) NULL,
+    [ROTLEIT] [nvarchar](10) NULL,
+    [SEQLEI] [nvarchar](10) NULL,
+    [CONSFAT] [nvarchar](15) NULL,
+    [CONMED] [nvarchar](15) NULL,
+    [MES] [nvarchar](2) NULL,
+    [ANO] [nvarchar](2) NULL
+) ON [PRIMARY]
+
+GO

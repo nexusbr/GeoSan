@@ -1,0 +1,264 @@
+DATA           20/04/2013 08:42:24 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         Function ApagaPointsSemWatercomponents, tipo de erro: 
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 09:08:09 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 09:39:02 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         Function ApagaPointsSemWatercomponents, tipo de erro: 
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 09:39:05 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 09:45:39 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 10:01:57 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 10:07:55 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 10:14:39 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 10:22:46 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 10:29:41 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         Function VefificaUnicidadeNos, tipo de erro: 
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 10:35:25 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         Function VefificaUnicidadeNos, tipo de erro: 
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 13:21:59 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           20/04/2013 13:41:25 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         13
+DESCRIÇÃO      Type mismatch
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           22/04/2013 09:45:52 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near ','.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           22/04/2013 09:46:53 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near ','.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           22/04/2013 09:49:44 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         3265
+DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           22/04/2013 09:51:13 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         3265
+DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           22/04/2013 09:53:13 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         3265
+DESCRIÇÃO      Item cannot be found in the collection corresponding to the requested name or ordinal.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           23/04/2013 08:09:58 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operation is not allowed when the object is closed.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           23/04/2013 08:49:07 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         3704
+DESCRIÇÃO      Operation is not allowed when the object is closed.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 09:43:48 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Erro de conexão com base de dados: Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=geosan_curso;Data Source=192.168.0.16 no arquivo: D:\Desenv\GEOSAN_VB6_B\trunk\Projeto_ValidaBase\Controles\GeoSan.ini
+LINHA          0
+MOTIVO         -2147467259
+DESCRIÇÃO      [DBNETLIB][ConnectionOpen (Connect()).]SQL Server does not exist or access denied.
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 09:45:12 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 09:47:08 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: Sem registro erro
+LINHA          0
+MOTIVO         52
+DESCRIÇÃO      Bad file name or number
+
+-----------------------------------------------------------------------------------------------------
+
+DATA           01/05/2013 10:01:23 
+USUÁRIO        
+VERSÃO         
+MÓDULO         FormuarioPrincipal
+EVENTO         ProcessaBancoDados_Click(), tipo de erro: 
+LINHA          0
+MOTIVO         -2147217900
+DESCRIÇÃO      Incorrect syntax near '='.
+
+-----------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,8 @@
+14/05/2012
+
+Esta versão de instalação e artefatos de instalação são baseados 
+nos ARTEFATOS DE INSTALAÇÃO da versão 06.00.07.00
+
+O código fonte da mesma é o da versão 06.00.04.00 e não foi testado
+até o momento para a geração dos artefatos de instalação da versão
+06.00.07.00

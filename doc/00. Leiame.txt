@@ -1,0 +1,1252 @@
+GeoSan - Notas de Liberação
+Versão para Windows
+
+02-07-2013 - GeoSan 06.10.27
+
+Para realização de testes na atualização automática.
+GeoSanIni v 01.01.07
+
+02-07-2013 - GeoSan 06.10.26
+
+Incorporada a atualização do GeoSanIni.exe no GeoSan e corrigida atualização
+do mesmo no GeoSanIni.exe
+GeoSanIni v 01.01.07
+
+02-07-2013 - GeoSan 06.10.25
+
+Corrigidas as mensagens e realizadas atualizações de bugs
+GeoSanIni v 01.01.05
+
+01-07-2013 - GeoSan 06.10.24
+
+Atualizado o novo instalável do GeoSan que atualiza automaticamente o software.
+GeoSanIni v 01.01.04
+
+01-07-2013 - GeoSan 06.10.22
+
+Desenvolvida rotina para atualizar automativamente o GeoSan e suas
+componentes. 
+GeoSanIni v 01.01.03
+
+20-06-2013 - GeoSan 06.10.21
+
+Em alguns computadores o GeoSan não apresentava os relatórios de quantidades.
+Foram inseridas rotinas de controle de erro.
+Criada classe para localização automática dos diretórios do Windows.
+Gerado executável de instalação para liberação.
+
+19-06-2013 - GeoSan 06.10.20
+
+Corrigido bug de ao alterar um atributo de uma rede já desenhada, ele
+apresentava um erro de linha sem nós, quando na verdade não deveria apresentar
+este erro. Estava salvando novamente a linha existente.
+
+19-06-2013 - GeoSan 06.10.19
+
+Geração de novo instalador GeoSan.
+
+19-06-2013 - GeoSan 06.10.18
+
+Commit de todas as atualizações, para geração do novo executável.
+
+10-06-2013 - GeoSan 06.10.17
+
+Commit inicial da versão de atualização automática do GeoSan.
+
+10-06-2013 - GeoSan 06.10.16
+
+Atualizadas mensagens e versão
+
+10-06-2013 - GeoSan 06.10.15
+
+Foram inseridas rotinas para gestão de erros no caso de uma lentidão na rede
+para que as mesmas informem onde o mesmo pode estar ocorrendo.
+
+10-06-2013 - GeoSan 06.10.14
+
+Cotas de esgoto quando movia a rede não estavam sendo atualizadas. Corrigido.
+Correção de bugs em redes de água relacionados as mudanças em esgoto.
+
+10-06-2013 - GeoSan 06.10.13
+
+Corrigido bug de ao desenhar uma rede de esgoto, não inseria a cota Z do
+terreno automaticament.
+
+30-05-2013 - GeoSan 06.10.12
+
+Corrigido bug em que algumas vezes não mostrava os consumidores desabastecidos
+quando existiam colunas com valores nulos.
+
+30-05-2013 - GeoSan 06.10.11
+
+Criado método para obter obj_ids dos nós de uma rede.
+Implementada funcionalidade que ao mover um nó a cota do mesmo é sempre
+atualizada.
+
+30-05-2013 - GeoSan 06.10.10
+
+Realizados testes nas rotinas de localização de textos e consumidores e
+funcionaram normalmente. É apenas necessário manter a atenção que quando em
+desenvolvimento o arquivo FTema.txt, que contem os temas ativos do usuário,
+pode estar sendo acessado em c:\arquivos de programas\geosan\controles e não no
+diretório de desenvolvimento.
+
+Revisados e reformatados ambos os códigos de localização de consumidores e
+textos onde foram colocadas rotinas de controle de erro.
+
+30-05-2013 - GeoSan 06.10.09
+
+Versão do GeoSan fechada para implementação.
+
+Foram detectadas as seguintes não conformidades:
+
+1. Revisar as ícones de procura para verificar se realmente localiza e estão
+eficientes.
+
+2. Ao cadastrar uma nova ligação, revisar a procura.
+
+3. Quando move uma rede ou insere um nó na mesma a cota não é atualizada.
+
+4. Quando apaga um ponto de um documento associado, são mostrados dois 
+plotviews. Deve existir apenas um.
+
+30-05-2013 - GeoSan 06.10.08
+
+Atualizadas as teclas de zoom. Selecionando CRTL e as setas ele faz zoom sem
+sair do comando se seleção de um polígono. O polígono continua visível após
+o zoom. Funciona com PGUP e PGDOWN e com a rodinha do mouse.
+Funciona com as letras A, Z, S e W
+
+Colocados tooltips e alterado o texto da caixa de diálogo de relatórios de
+seleção por polígono e atualizada figura no manual.
+
+30-05-2013 - GeoSan 06.10.07
+
+Atualizada a querie padrão em GS_QUERYS_CLIENT de número 22 com o seguinte SQL
+
+SELECT n.NRO_LIGACAO AS LIGAÇÃO, n.CLASSIFICACAO_FISCAL AS INSCRIÇÃO, n.ENDERECO AS ENDEREÇO, n.NUM_CASA AS NÚMERO_CASA, n.COMPL_LOGRADOURO AS COMPLEMENTO, n.BAIRRO, n.HIDROMETRO, n.CONSUMIDOR, n.TIPO AS CONSUMIDOR, n.ECONOMIAS, n.HIDROMETRADO,n.DATA_IMPLANTACAO_AGUA AS DATA_IMPLANTAÇÃO_ÁGUA, n.DATA_IMPLANTACAO_ESGOTO AS DATA_IMPLANTAÇÃO_ESGOTO,n.ROTA_LEITURA,n.GRUPO_LEITURA, n.ROTEIRO_LEITURA, n.SEQUENCIA_LEITURA FROM NXGS_V_LIG_COMERCIAL n WHERE n.NRO_LIGACAO_SEM_DV IN(SELECT r.NRO_LIGACAO / 10 FROM RAMAIS_AGUA_LIGACAO r INNER JOIN POLIGONO_SELECAO p ON r.OBJECT_ID_ = p.OBJECT_ID_ WHERE  p.USUARIO =
+
+personalizados. Pois se consulta com o dígito verificador a vista demora para
+retornar.
+
+Corrigida a movimentação dos campos para cima e para baixo no relatório por
+seleção.
+
+23-05-2013 - Geosan 06.10.06
+
+Inserida classe que converte consumos l/s m3/mes.
+
+Inserida caixa de diálogo que permite exportar os consumos em um determinado
+mês e ano.
+
+Inseridas opções de seleção de diretório e arquivo onde necessitavam de
+seleção.
+
+Realizados mais testes e corrigidos bugs.
+
+23-05-2013 - Geosan 06.10.05
+
+Implementada função de barra de status onde apresenta o andamento da
+atualização das cotas.
+
+Implementada funcionalidade que possibilita o usuário cancelar uma operacão
+de atualizar cotas ou exportar shape, que são demoradas, pressionando a tecla
+ESC.
+
+Implementadas e revisadas funções de controle de erro.
+
+Realizados testes.
+
+23-05-2013 - Geosan 06.10.04
+
+Desenvolvida função que calcula a cota do no do trecho da rede automaticamente
+enquanto o usuário desenha a rede.
+
+Necessário verificar performance e controle de erro para esta funcionalidade.
+
+Necessário implementar função de barra de progresso para atualizar todas as
+cotas.
+
+23-05-2013 - Geosan 06.10.03
+
+Finalização da funcionalidade de cálculo da cota Z para todos os nós.
+
+É necessário desenvolver a funcionalidade para cálculo enquanto o usuário
+desenha.
+
+Necessário acertar a interface com o usuário.
+
+23-05-2013 - Geosan 06.10.02
+
+Início do desenvolvimento da Cota Z.
+
+
+23-05-2013 - GeoSan 06.10.01
+Atualizada a base de dados padrão geosan_curso
+Atualizado o número da versão do GeoSan na tabela NX_BASE
+Atualizada a ícone de entrada do GeoSan, criando um arquivo novo com o
+Resource file editor.
+
+23-05-2013 - Geosan 06.10.01
+Gerado novo instalável para testes. Alterada ícone do GeoSan e do FrmMain.
+
+23-05-2013 - GeoSan 06.10.00
+Gerado a versão de instalação de testes
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Em detalhes foram realizados os seguintes commits:
+
+Realizada formatação no código do PManager4.
+Inserida funcionalidade de desenho de cálculo de distâncias.
+Feitas modificações nas tolerâncias
+Acerto do código do NexusPM4 para ficar mais legível (necessita finalizar)
+Corrigida a tolerancia de snap e drawNetworkLine para a devida localização
+das extremidades de rede.
+Melhorado a documentação do código que corrige a tolerância.
+Testes de modificação das ícones
+Atualizadas as ícones.
+Feitas rotinas inicias de movimentação geométrica.
+Realizado diagrama de sequencia de mover um nó da rede.
+Inserido texto da licenca de uso das ícones.
+Criada classe para tratar movimentação de geometrias.
+Commit das alterações feitas, está com bug no TeDatabase1 e 4
+Mudadas as ícones do menu em 32x32 antes de mudar para
+24x24 o tamanho das mesmas.
+Corrigido bug na função delete que ocorria quando ia apagar uma ramal e
+selecionava apenas o ramal, sem selecionar o hidrômetro (ponto).
+Realizadas as modificações para mover mais de um ramal, só que move somente
+de um único trecho. Não move do(s) outro(s) trecho(s).
+Realizadas modificações para mover todos os ramais de várias redes ao mesmo
+tempo.
+Finalizada função de mover ramais está funcionando. Iniciada mofificação no tratamento
+de erros.
+Finalizada rotina que apresenta erros e envia automativamente e-mail para a
+NEXUS informando o erro ocorrido.
+Inserida em todas as classes novas e em dois eventos do frmCanvas este novo
+controle de mensagens de erro.
+Realizados alguns testes bem básicos e aparentemente funcionou a movimentação
+de ramais junto com os trechos de redes.
+Realizada rotina de envio de erros por email automaticamente.
+Revisada a exportação para shape.
+Implementada funcionalidade no arquivo geosan.ini para enviar erros por email
+
+[EMAIL]
+EMAILDESTINATARIO=tec@nexusbr.com
+EMAILREMETENTE=NEXUS <tec@nexusbr.com>
+ENDERECOSMTP=smtp.gmail.com
+PORTASMTP=465
+USUARIOSMTP=tec@nexusbr.com
+SENHASMTP=xxxxxxxx
+SSLSMTP=TRUE
+
+Assim agora é possível ao ocorrer um erro no GeoSan, ser enviado um email para
+a NEXUS com a informação do mesmo.
+
+Para solucionar bloqueios da porta SMTP pelo Firewall da empresa, o cliente
+poderá configurar no arquivo GEOSAN.INI suas opções de email e este será
+enviado para um email interno da empresa, o qual fará um redirecionamento
+para o email tec@nexusbr.com, da NEXUS.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+23-05-2013 - rev. 91
+
+Implementada funcionalidade no arquivo geosan.ini para enviar erros por email
+
+[EMAIL]
+EMAILDESTINATARIO=tec@nexusbr.com
+EMAILREMETENTE=NEXUS <tec@nexusbr.com>
+ENDERECOSMTP=smtp.gmail.com
+PORTASMTP=465
+USUARIOSMTP=tec@nexusbr.com
+SENHASMTP=xxxxxxxx
+SSLSMTP=TRUE
+
+Assim agora é possível ao ocorrer um erro no GeoSan, ser enviado um email para
+a NEXUS com a informação do mesmo.
+
+Para solucionar bloqueios da porta SMTP pelo Firewall da empresa, o cliente
+poderá configurar no arquivo GEOSAN.INI suas opções de email e este será
+enviado para um email interno da empresa, o qual fará um redirecionamento
+para o email tec@nexusbr.com, da NEXUS.
+
+21-05-2013 - rev. 90
+
+Realizada rotina de envio de erros por email automaticamente.
+Revisada a exportação para shape.
+
+20-05-2013 - rev. 89
+
+Finalizada rotina que apresenta erros e envia automativamente e-mail para a
+NEXUS informando o erro ocorrido.
+Inserida em todas as classes novas e em dois eventos do frmCanvas este novo
+controle de mensagens de erro.
+Realizados alguns testes bem básicos e aparentemente funcionou a movimentação
+de ramais junto com os trechos de redes.
+
+20-05-2013 - rev. 88
+
+Função de mover ramais está funcionando. Iniciada mofificação no tratamento
+de erros.
+
+19-05-2013 - rev. 87
+
+Realizadas modificações para mover todos os ramais de várias redes ao mesmo
+tempo.
+
+18-05-2013 - rev. 86
+
+Realizadas as modificações para mover mais de um ramal, só que move somente
+de um único trecho. Não move do(s) outro(s) trecho(s).
+
+18-05-2013 - rev. 85
+
+Corrigido bug na função delete que ocorria quando ia apagar uma ramal e
+selecionava apenas o ramal, sem selecionar o hidrômetro (ponto).
+
+Agora aparece uma mensagem para o usuário, solicitando a seleção dos dois.
+
+Ainda falta:
+
+1. Tratar quando tem mais de um ramal no trecho
+2. quando a distância do ramal ao início do trecho, calculada, cai fora do
+segumento do trecho (entre os pontos inicia e final)
+
+18-05-2013 - rev. 84
+
+Pronto, agora as linhas dos ramais estão chegando corretamente no trecho de rede
+Precisa agora:
+
+1. Tratar quando tem mais de um ramal no trecho
+2. quando a distância do ramal ao início do trecho, calculada, cai fora do
+segumento do trecho (entre os pontos inicia e final)
+
+18-05-2013 - rev. 83
+
+Aparentemente as rotinas de mover ramal iniciaram o funcionamento. Só está
+trocando a coordenada inicial do trecho pela final. Os ramais voltaram a
+aparecer depois que foi acertado no banco de dados o box que estava no infinito
+no layer de RAMAIS_AGUA na tabela te_layer.
+
+18-05-2013 - rev. 82
+
+Feitas alterações nas classes de mover ramal. Existe bug que os ramais não
+aparecem na visualização
+
+17-05-2013 - rev. 81
+
+Corrigido o bug do TeDatabase4 o qual foi retirado e iniciada a implementação
+da rotina de mover ramais.
+
+15-05-2013 - rev. 80
+
+Commit agora com as classes e documentação novas do branch de mover ramais
+com rede
+
+14-05-2013 - rev. 79
+
+Agora com as ícones todas colocadas e funcionando.
+
+23-05-2013 - GeoSan 06.09.17
+
+Em resumo, foi finalizada a função de mover nó de rede junto com os ramais.
+Implementada a rotina de envio de erros por email.
+Modificadas as ícones.
+
+14-05-2013 - rev. 78
+
+Funcionou o gerenciador de propriedades com as ícones no tamanho 24x24.
+O que tinha que realizar era diminuir o tamanho da caixa de diálogo e deixar
+as ícones em duas fileiras. Ai elas funcionam de primeira sem necessidade de
+dar um resize na janela toda para aparecer corretamente o gerenciador de
+propriedades.
+
+14-05-2013 - rev. 77
+
+Versão funcionando com as ícones do menu em 32x32 antes de mudar para
+24x24 o tamanho das mesmas.
+
+02-05-2013 - GeoSan 06.09.17
+
+Foram alterados na tabela WaterComponentsTypes os valores na coluna 
+Specification_ conforme abaixo, ficando:
+
+Exportação para EPANET - coluna Specification_
+REGISTER - exporta como um nó normal
+VALVE - exporta como válvula
+RNF - exporta como reservatório nível fixo, com a cota
+RNV - exporta como reservatório nível variável, com a cota
+POÇO PROFUNDO - exporta como reservatório nível fixo, com a cota
+BOOSTER - exporta como bomba
+
+Simulação de desabastecimento - coluna Specification_
+REGISTER - indica ponto de parada
+
+id_Type	Description_	Specification_
+0	DESC.				JUNCTION
+1	ADAPTADOR			JUNCTION
+2	ATUADOR				JUNCTION
+3	BOMBA				PUMP
+4	BOOSTER				PUMP
+5	CAP					JUNCTION
+6	CAPTAÇÃO AGUA BRUTA	JUNCTION
+7	CRUZETA				JUNCTION
+8	CURVA 11-15			JUNCTION
+9	CURVA 22-30			JUNCTION
+10	CURVA 45			JUNCTION
+11	CURVA 90			JUNCTION
+12	DESCARGA			JUNCTION
+13	ELEVATORIA DE AGUA	JUNCTION
+14	FILTRO				JUNCTION
+15	HIDRANTE			JUNCTION
+16	HIDRÔMETRO			JUNCTION
+17	JUNÇÃO				JUNCTION
+18	JUNTA DE ADAPTAÇÃO	JUNCTION
+19	LUVA				JUNCTION
+20	MACRO MEDIDOR		JUNCTION
+21	MEDIDOR DE NÍVEL	JUNCTION
+22	MEDIDOR PRESSÃO		JUNCTION
+23	MEDIDOR VAZÃO		JUNCTION
+24	NÃO IDENTIFICADO	JUNCTION
+25	POÇO PROFUNDO		RNF
+26	REDUÇÃO				JUNCTION
+27	REGISTRO			REGISTER
+28	RNV					RNV
+29	TE					JUNCTION
+30	VALVULA RETENÇÃO	JUNCTION
+31	VENTOSA				JUNCTION
+32	VRP					VALVE
+35	REG. FIXO			JUNCTION
+36	RNF					RNF
+
+Foi gerado o executável de instalação desta versão.
+
+Para desenhar uma bomba e a mesma ser exportada com o sentido correto, é
+necessário que os dois trechos de rede o anterior ao nó e o posterior ao mesmo
+sejam desenhados no sentido de operação da mesma. Alterada esta informação no
+manual do usuário do GeoSan.
+
+01-05-2013 - GeoSan 06.09.16
+
+Foram alterados na tabela WaterComponentsTypes os valores na coluna 
+Specification_ conforme abaixo, ficando:
+
+Exportação para EPANET - coluna Specification_
+REGISTER - exporta como um nó normal
+VALVE - exporta como válvula
+RNF - exporta como reservatório
+REGSECTOR - Eliminado
+
+Simulação de desabastecimento - coluna Specification_
+REGISTER - indica ponto de parada
+REGSECTOR - Eliminado
+
+id_Type	Description_	Specification_
+0	DESC.				JUNCTION
+1	ADAPTADOR			JUNCTION
+2	ATUADOR				JUNCTION
+3	BOMBA				PUMP
+4	BOOSTER				JUNCTION
+5	CAP					JUNCTION
+6	CAPTAÇÃO AGUA BRUTA	JUNCTION
+7	CRUZETA				JUNCTION
+8	CURVA 11-15			JUNCTION
+9	CURVA 22-30			JUNCTION
+10	CURVA 45			JUNCTION
+11	CURVA 90			JUNCTION
+12	DESCARGA			JUNCTION
+13	ELEVATORIA DE AGUA	JUNCTION
+14	FILTRO				JUNCTION
+15	HIDRANTE			JUNCTION
+16	HIDRÔMETRO			JUNCTION
+17	JUNÇÃO				JUNCTION
+18	JUNTA DE ADAPTAÇÃO	JUNCTION
+19	LUVA				JUNCTION
+20	MACRO MEDIDOR		JUNCTION
+21	MEDIDOR DE NÍVEL	JUNCTION
+22	MEDIDOR PRESSÃO		JUNCTION
+23	MEDIDOR VAZÃO		JUNCTION
+24	NÃO IDENTIFICADO	JUNCTION
+25	POÇO PROFUNDO		JUNCTION
+26	REDUÇÃO				JUNCTION
+27	REGISTRO			REGISTER
+28	RESERVATÓRIO		RNF
+29	TE					JUNCTION
+30	VALVULA RETENÇÃO	JUNCTION
+31	VENTOSA				JUNCTION
+32	VRP					VALVE
+35	REG. FIXO			JUNCTION
+36	REG. SETOR			REGSECTOR
+
+Foi modificado no código para simulação de consumidores desabastecidos para
+ele parar sempre nos elementos tipos REGISTER e não VALVE como estava.
+
+Foi gerado o executável de instalação desta versão.
+
+01-05-2013 - GeoSan 06.09.15
+Corrigido bug de abertura de arquivo log do ValidaBase que estava sem.
+
+Realizada documentação dos eventos de desenhar redes e salvar redes.
+
+Todas as rotinas de eventos de desenho de redes foram documentadas e foi feita
+uma revisão na tolerância de localização. Foi verificado que quando existem nós
+muito pertos um do outro, pode acontecer de ao desenhar uma rede perto deles ele
+desenhar iniciando no local onde o usuário selecionou, mas ele acabar pegando o
+no da outra rede. Algumas vezes desenhando o trecho de rede sem um nó, pois
+utilizou o nó da rede que está perto. Será verificada uma solução para esta 
+questão.
+
+O que foi verificado é que diminuindo as tolerâncias este erro é minimizado, mas
+fazendo isso, fica as vezes difícil de localizar um nó existente para desenhar
+uma rede sendo necessário afastar o zoom para poder selecioná-lo.
+
+28-04-2013 - GeoSan 06.09.14
+Modificado o diretório de onde são salvos os relatórios para salvar no diretório
+Meus Documentos do usuário.
+
+28-04-2013 - GeoSan 06.09.13
+Corrigida e melhorada a função que abre arquivos com a aplicação associada a
+extensão do mesmo.
+
+Foi criada uma nova classe (clsAbreArquivo) para esta tarefa.
+
+27-04-2013 - GeoSan 06.09.12
+GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
+TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO)
+
+Foi realizada a alteração na tabela WaterComponentsTypes e alterado onde consta
+RESERVATÓRIO para a especificação de RNF, na coluna Specification_. Ficando a tabela como apresentado
+abaixo. 
+
+É necessário verificar como ficarão os RNV e RNF.
+
+id_Type	Description_	Specification_
+0	DESC.				JUNCTION
+1	ADAPTADOR			JUNCTION
+2	ATUADOR				JUNCTION
+3	BOMBA				PUMP
+4	BOOSTER				JUNCTION
+5	CAP					JUNCTION
+6	CAPTAÇÃO AGUA BRUTA	JUNCTION
+7	CRUZETA				JUNCTION
+8	CURVA 11-15			JUNCTION
+9	CURVA 22-30			JUNCTION
+10	CURVA 45			JUNCTION
+11	CURVA 90			JUNCTION
+12	DESCARGA			JUNCTION
+13	ELEVATORIA DE AGUA	JUNCTION
+14	FILTRO				JUNCTION
+15	HIDRANTE			JUNCTION
+16	HIDRÔMETRO			JUNCTION
+17	JUNÇÃO				JUNCTION
+18	JUNTA DE ADAPTAÇÃO	JUNCTION
+19	LUVA				JUNCTION
+20	MACRO MEDIDOR		JUNCTION
+21	MEDIDOR DE NÍVEL	JUNCTION
+22	MEDIDOR PRESSÃO		JUNCTION
+23	MEDIDOR VAZÃO		JUNCTION
+24	NÃO IDENTIFICADO	JUNCTION
+25	POÇO PROFUNDO		JUNCTION
+26	REDUÇÃO				JUNCTION
+27	REGISTRO			JUNCTION
+28	RESERVATÓRIO		RNF
+29	TE					JUNCTION
+30	VALVULA RETENÇÃO	JUNCTION
+31	VENTOSA				JUNCTION
+32	VRP					VALVE
+35	REGISTRO FIXO		VALVE
+
+27-04-2013 - GeoSan 06.09.11
+Corrigido bug de geraão de relatórios que não apareciam devido as novas versões
+do Windows lancadas. Foi feito de forma que ele chama o browser padrão do
+usuário para abrir arquivos .html
+
+27-04-2013 - GeoSan 06.09.10
+Na exportação para o EPANET foi incluído o diâmetro da rede na válvula, que
+estava vindo com o padrão do EPANET.
+
+25-04-2013 - GeoSan 06.09.09
+Feitas alterações no ValidaBase para encontrar nós soltos nas redes que por
+ventura possam existir. Isto estava afetando a simulação de consumidores 
+desabastecidos.
+
+20-04-2013 - GeoSan 06.09.08
+Foi modificado na simulação de consumidores desabastecidos para parar em 
+válvulas e não em registros. Feita modificação no código e no banco de dados.
+
+Quando for REGSECTOR (registro fixo), para EPANET é uma válvula e para encontrar registros
+ele deve parar no mesmo.
+
+Ficou da seguinte forma: Ele percorre a rede ate encontrar um REGISTRO FIXO ou
+VRP, quando encontra, para. Nos demais ele continua.
+
+Existe um bug em que quando você cancela a operação de localizar os consumidores
+desabastecidos, nas próximas simulações você precisa entrar e sair do software
+novamente. Não cancelando, funciona várias vezes normalmente.
+
+18-04-2013 - GeoSan 06.09.07
+Na exportação para o EPANET estava ocorrendo erro de time-out. O problema era
+a falta de um índice. Foi acrescentada uma linha de log da exportação.
+Inserida criação de índice 
+CREATE NONCLUSTERED INDEX [ObjectId] ON [dbo].[POLIGONO_SELECAO] 
+(
+	[OBJECT_ID_] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+
+18-04-2013 - GeoSan 06.09.06
+Corrigida mensagem de erro e atualizado o banco de dados modelo do curso.
+Dados de usuários foram embaralhados e retirados dados principais.
+
+17-04-2013 - GeoSan 06.09.05
+Gerada versão instalável.
+Projetos em que as componentes foram recompiladas
+Projeto_ExportEpaNe - Exporte EPANet.exe
+Projeto_NxViewmanager - NxViewManager2.ocx
+Projeto_ValidaBase - ValidaBase.exe
+
+Dependências
+GeoSan.exe
+\trunk\Projeto_NxConnection\NexusConnection.dll - 13/07/11 - 11:15
+\trunk\Projeto_NxUsers\NUsers.dll - 08/04/11 - 15:55 
+Componentes
+\trunk\Projeto_NxViewmanager\NxViewManager2.ocx - 17/04/13 - 17:20
+\trunk\Projeto_PManager4\NexusPM4.ocx - 08/04/11 - 16:54
+
+Exporte EPANet.exe
+\trunk\Projeto_NxConnection\NexusConnection.dll - 13/07/11 - 11:15
+
+NxViewManager2.ocx
+não há
+
+ValidaBase.exe
+não há
+
+16-04-2013 - GeoSan 06.09.04
+Corrigido bug que quando o usuário fazia um zoom extremamente longe no mapa o
+canvas apresentava um erro de número 6 ao mover o mouse em frmCanvas.frm
+na rotina TCanvas - onMouseMove. Era um overflow na conta de subtração da
+posição do mouse (xOld - X).
+
+
+27-03-2013 - GeoSan 06.09.03
+Atendimento ao requisito de exportar somente valvulas redutoras de pressão - 
+VRP. Nos registros, descargas, etc. exportar somente como nó.
+
+Quando gera o relatório, sai da aplicação.
+
+Ao exportar uma válvula ele não considera o diâmetro da tubulação, vem como
+o diâmetro padrão do EPANET, tem que pegar o diametro da tubulação e colocar
+na válvula - 
+
+Na simulação de fechamento de rede, ele tem que parar sempre no registro,
+ignorar o registro fixo e não parar na válvula. Verificar o funcionamento.
+
+Foi realizada a correção da simulação de consumidores desabastecidos até
+encontrar um registro. 
+Foram alterados dados na tabela WATERCOMPONETSTYPES
+É necessário atualizar o modelo de banco de dados integrando com as alterações
+realizadas na última atualização para exportar para shp.
+
+A tabela deve ficar da seguinte forma:
+
+id_Type	Description_	Specification_
+0	DESC.				JUNCTION
+1	ADAPTADOR			JUNCTION
+2	ATUADOR				JUNCTION
+3	BOMBA				PUMP
+4	BOOSTER				JUNCTION
+5	CAP					JUNCTION
+6	CAPTAÇÃO AGUA BRUTA	JUNCTION
+7	CRUZETA				JUNCTION
+8	CURVA 11-15			JUNCTION
+9	CURVA 22-30			JUNCTION
+10	CURVA 45			JUNCTION
+11	CURVA 90			JUNCTION
+12	DESCARGA			JUNCTION
+13	ELEVATORIA DE AGUA	JUNCTION
+14	FILTRO				JUNCTION
+15	HIDRANTE			JUNCTION
+16	HIDRÔMETRO			JUNCTION
+17	JUNÇÃO				JUNCTION
+18	JUNTA DE ADAPTAÇÃO	JUNCTION
+19	LUVA				JUNCTION
+20	MACRO MEDIDOR		JUNCTION
+21	MEDIDOR DE NÍVEL	JUNCTION
+22	MEDIDOR PRESSÃO		JUNCTION
+23	MEDIDOR VAZÃO		JUNCTION
+24	NÃO IDENTIFICADO	JUNCTION
+25	POÇO PROFUNDO		JUNCTION
+26	REDUÇÃO				JUNCTION
+27	REGISTRO			JUNCTION
+28	RESERVATÓRIO		JUNCTION
+29	TE					JUNCTION
+30	VALVULA RETENÇÃO	JUNCTION
+31	VENTOSA				JUNCTION
+32	VRP					VALVE
+35	REGISTRO FIXO		VALVE
+
+26-03-2013 - GeoSan 06.09.02
+COMENTÁRIOS
+Foram feitas correções nas chamadas diretas para o diretório 
+c:\arquivos de programas\GeoSan
+onde foi criada um tipo de dado glo o qual armazenará a partir de hoje todas
+as variáveis globais.
+Também o glo é salvo no disco para que possam ser recuperadas por outros módulos
+do GeoSan, como o NxViewManager. É necessário ainda tirar no furturo o hard
+code inicial do diretório "c:\arquivos de programas\GeoSan"
+
+O arquivo FTema.txt possui uma lista de todos os temas ativos do usuário e vista
+bem como as cláusulas de filtro where, caso existam.
+
+Sempre ao exportar deve-se lembrar que a exportação utiliza sempre o nome
+do usuário ativo que está registrado no arquivo UserLog.txt no diretório
+"Controles"
+
+ATENDIMENTO AOS REQUISITOS DE EXPORTAÇÃO EPANET
+1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
+descargas, etc. exportar somente como nó. 
+Para atender a este requisito foi-se na tabela WATERCOMPONETSTYPES e na coluna
+"Description_" onde a linha constava como REGISTRO, foi modificada a coluna 
+"Specification_" de VALVE para JUNCTION. Assim o exportador entenderá que todo
+o registro é um nó.
+Em VRP mudou-se de JUNCTION para VALVE, então ele passou a entender uma VRP como
+válvula e exportará como válvula.
+O mesmo foi feito para REGISTRO FIXO colocando como VALVE.
+A exportação funcionou com sucesso sem necessidade de alteração do código.
+
+1-A - Existem registros que por serem de divisão de setor de abastecimento que
+ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
+fechado ai ele deve ser exportado. 
+Ao utilizar o GeoSan o registro de divisão de setor de abastecimento devem ser
+cadastrados como REGISTRO FIXO. Na exportação ele exportará como válvula.
+
+
+19-03-2013 - GeoSan 06.09.01
+Novos requisitos levantados:
+
+1 - Exportar somente valvulas redutoras de pressão - VRP. Nos registros, 
+descargas, etc. exportar somente como nó. 
+
+1-A - Existem registros que por serem de divisão de setor de abastecimento que
+ai é necessário exportar o mesmo. Pode ser considerado que se o registro estiver
+fechado ai ele deve ser exportado. A propriedade do mesmo tem que vir sempre
+como fechado. 
+
+2 - Não exportar redes desativadas para o EPANET, onde o ESTADO da rede esteja
+como fora de operação.
+
+3 - GeoSan não está exportando o RESERVATÓRIO (no código está RNV-RESERVATÓRIOS 
+TANKS] e RNF-CAPTACAO DE ÁGUA [RESERVOIRS]) e no dado está como RESERVATÓRIO) , 
+BOOSTER(é uma bomba o nome correto, no código está como PUMP) para o EPANET
+
+4 - Como vai fazer no caso da BOMBA para especificar o sentido da mesma, pois
+ela é um nó. Quando seleciono BOMBA no GeoSan, não aparecem os parâmetros da
+mesma para serem preenchidos. Se não fornecer ele adota uma curva genérica.
+O sentido é necessário verificar como entrar no GeoSan.
+
+5 - Definir forma em que será colocado o sentido de uma BOMBA ou VÁLVULA 
+RETENTORA
+
+6 - Definir uma forma de associar e entrar os dados de uma curva de bomba, 
+curva de rendimento de uma bomba, curva de volume de reservatório (para aqueles
+reservatórios em forma de taça, ou qualquer tipo de obra de arte), curva de 
+rendimento da bomba, curva de perdas para VÁLVULA GENÉRICA (conforme a abertura
+da válvula existe uma curva de perda de carga, em um dos eixos é cumprimento e
+no outro unidade de vazão)
+
+7 - Inserir duas novas ícones, uma CURVAS e outra PADRÕES (temporais). Posso 
+ter várias curvas de padrão de consumo, cidade, indústrica, hospital.
+
+8 - A simulação utiliza apenas um padrão, mas no arquivo .inp posso ter vários
+padrões. Posso associar em um nó um padrão de consumo específico, se nenhuma 
+informação estiver no nó, utiliza o padrão de consumo default.
+
+9 - Já existe um campo no nó que é o padrão de consumo que está sempre indo 
+como zero e que está exportando.
+
+10 - Inserir botão para colocar os CONTROLES. IF, etc. Caixa de diálogo
+que facilita entrar os controles.
+
+11 - Quando seleciona RESERVATÓRIO teria que abrir outros campos como DIAMETRO 
+(equivalente), ALTURA MÁXIMA (altura do reservatório) - 1 que assim tem a 
+ALTURA INICIAL (que inicia a lamina dágua no reservatório para simulação)
+
+12 - Possibilitar o sistema simular hidraulicamente com as demandas de consumo
+espeficiadas pelo usuário do GeoSan.
+
+02-01-2013 - GeoSan 06.09.00
+Criados os índices para as tabelas contendo dados das ligações. Lembrando que
+este índice deve ser criado na vista do banco de dados comercial. Aqui foi
+criado para testar a exportação Web
+
+CREATE NONCLUSTERED INDEX [NXGS_V_LIG_COMERCIAL_NUM_LIGACAO] ON [dbo].[NXGS_V_LIG_COMERCIAL] 
+(
+	[NRO_LIGACAO] ASC,
+	[NRO_LIGACAO_SEM_DV] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+CREATE NONCLUSTERED INDEX [NXGS_V_LIG_COM_CONSUMO_MEDIO_NRO_LIGACAO] ON [dbo].[NXGS_V_LIG_COM_CONSUMO_MEDIO] 
+(
+	[NRO_LIGACAO] ASC,
+	[NRO_LIGACAO_SEM_DV] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+
+
+11-12-2012 - GeoSan 06.08.02
+
+VALIDABASE
+Inserida a função ApagaPointsSemWatercomponents que elimina todos os nós de rede
+(POINTS2) que não possuem atributos associados.
+
+Inserida a função VefificaUnicidadeNos que verifica se para cada atributo de nó
+existe um object_id da geometria deste nó.
+
+GEOSAN
+Inserido item no menu que exporta os dados do GeoSan para o formato shape
+mnuExporta_GeoSan_Click(). 
+Esta rotina desnormaliza as tabelas torre para uma tabela de atributos única
+com todas as informações de nós e redes de água.
+
+Para apoiar a exportação foi criada a classe GeoSanExport e seus respectivos
+métodos.
+
+
+
+
+04-12-2012 - GeoSan 06.08.01
+Corrigida não conformidade para os filtros de dados de ramais que não estavam 
+funcionando.
+
+Para alterar a localização de onde se encontra o banco de dados comercial, 
+basta alterar o link de conexão com o banco de dados na tabela GS_PARAMETERS.
+Por exemplo:
+Provider=SQLOLEDB.1;Password=Nexus243;Persist Security Info=True;User ID=sa;Initial Catalog=valinhosgeosan3;Data Source=192.168.0.16
+Caso não possua acesso ao banco de dados comercial, vc pode colocar os dados
+do banco de dados comercial nas tabelas
+
+NXGS_V_LIG_COMERCIAL
+NXGS_V_LIG_COMERCIAL_CONSUMO
+NXGS_V_LIG_COM_CONSUMO_MEDIO
+
+não se esquecendo de renomear as vistas, pois a ligação com o banco comercial
+é realizada através destas vistas.
+
+
+
+
+29-11-2012 - GeoSan 06.08.00
+Gerada nova versão final de liberação.
+
+Foi detectado que em uma simulação de manobra que inicia por um nó de trecho que
+é um registro, ele para a localização dos demais trechos conectados.
+Foi inserido um "continue for" para corrigir esta não conformidade.
+
+Uma válvula é quando eu posso abrir a mesma progressivamente determinando a
+quantidade de água que irá passar pela mesma. Uma válvula não possui o status de
+aberto, fechado ou desconhecido.
+Um registro é quando posso somente abrir e fechar o mesmo. Ele possui o status
+de aberto, fechado ou desconhecido, que pode ser preenchido pelo usuário.
+
+Correção da lista de consumidores desabastecidos que estava incorreta.
+
+Criados/atualizados índices das tabelas, ficando da seguinte forma:
+________________________________________________________________________________
+Tabela RAMAIS_AGUA_LIGACAO
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [IDX_RAMAIS_AGUA_LIGACAO_NRO_LIGACAO]    Script Date: 11/29/2012 11:03:28 ******/
+CREATE NONCLUSTERED INDEX [IDX_RAMAIS_AGUA_LIGACAO_NRO_LIGACAO] ON [dbo].[RAMAIS_AGUA_LIGACAO] 
+(
+	[NRO_LIGACAO] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [IDX_RAMAIS_AGUA_LIGACAO_OBJECT_ID]    Script Date: 11/29/2012 11:03:47 ******/
+CREATE NONCLUSTERED INDEX [IDX_RAMAIS_AGUA_LIGACAO_OBJECT_ID] ON [dbo].[RAMAIS_AGUA_LIGACAO] 
+(
+	[OBJECT_ID_] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+
+Na exportação para o Epanet foi alterado para o registro estar sempre aberto 
+quando não estiver preechido, inserindo o atrubuto [STATUS], pois isto auxilia
+a simulação no Epanet, sem que o usuário tenha que abrir todos os registros 
+para poder simular.
+
+28-11-2012 - GeoSan 06.00.07.14
+Atualizada a template do banco de dados SQLServer onde foram incluídos os
+índices.
+
+28-11-2012 - GeoSan 06.00.07.13
+Atualizadas as rugozidades no módulo EpanetExport.
+Sempre que alguma linha for alterada na tabela X_Material, as rugosidades
+deverão ser revistas
+
+Foi verificado que ocorriam erros de Timeout Expired, foi alterada a rotina
+de manipulação de erros, melhorados os logs para apresentarem mais informações
+e criados os seguintes índices:
+________________________________________________________________________________
+Tabela WaterLines
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [object_id]    Script Date: 11/28/2012 20:13:29 ******/
+CREATE NONCLUSTERED INDEX [object_id] ON [dbo].[WaterLines] 
+(
+	[object_id_] ASC,
+	[Material] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+Tabela X_Material
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [IDMATERIAL]    Script Date: 11/28/2012 20:16:23 ******/
+CREATE NONCLUSTERED INDEX [IDMATERIAL] ON [dbo].[X_Material] 
+(
+	[MaterialID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+Tabela POLIGONO_SELECAO
+
+USE [valinhosgeosan]
+GO
+
+/****** Object:  Index [OBJECT_ID]    Script Date: 11/28/2012 20:17:41 ******/
+CREATE NONCLUSTERED INDEX [OBJECT_ID] ON [dbo].[POLIGONO_SELECAO] 
+(
+	[OBJECT_ID_] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+________________________________________________________________________________
+
+Foi formatada a tabulação da rotina responsável por selecionar um setor.
+
+27-11-2012 - GeoSan 06.00.07.12
+Gerado novo arquivo de instalação com todas componentes atualizadas.
+
+Inclusa nova componente VB6.OLB
+
+
+27-11-2012 - GeoSan 06.00.07.12
+Gerado arquivo de instalação com todas componentes atualizadas.
+
+Atualizados a caixa de salvamento de arquivo texto com a lista dos consumidores
+desabastecidos para que pré-apresente o nome do arquivo, filtro e posicione no
+diretório de documentos do usuário ativo.
+
+Inserida no GeoSan a rotina GetMyDocumentsDirectory() que retorna o caminho do
+diretório de documentos do usuário. Foi copiada do EpanetExport.
+
+
+27-11-2012 - GeoSan 06.00.07.11
+Atualização de rotinas de exportação dos consumidores afetados por uma manobra 
+na rede de água.
+Foi atualizada rotina de apresentação de erros.
+
+A querie na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 18, esta foi modificada
+de:
+
+SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO = LI.NRO_LIGACAO
+
+para
+
+SELECT LI.NRO_LIGACAO, (LI.ENDERECO + '-' + ISNULL(LI.NUM_CASA,'') + '-' +  ISNULL(LI.COMPL_LOGRADOURO,'') + '-' + ISNULL(LI.BAIRRO,'')) as Endereco, LI.CONSUMIDOR, LI.TEL_RES AS TELRES, LI.TEL_COM AS TELCOM FROM NXGS_V_LIG_COMERCIAL LI INNER JOIN gs_temp G ON G.NRO_LIGACAO /10 = NRO_LIGACAO_SEM_DV
+
+pois quando ele procurava na vista NXGS_V_LIG_COMERCIAL o NRO_LIGACAO, este
+continha o dígito verificador e por isso demorava mais para processar.
+Desta forma foi dividido por 10 e utilizada a coluna do banco comercial sem o
+dígito verificador.
+Os testes foram feitos e o problema deixou de ocorrer, pois ela rodou mais
+rápido sem sobrecarregar o sistema.
+
+Foram acertadas as tubulações em algumas localizações do código.
+
+Foi atualizada a template do banco de dados SQLServer. É necessário verificar
+estas alterações para os outros bancos de dados.
+
+
+27-11-2012 - GeoSan 06.00.07.10
+Atualizadas as rugosidades para os materiais de 7 a 11 de forma a exportar as 
+mesmas que não estavam sendo exportadas
+Atualizado o diretório para onde é exportado o arquivo do Epanet que apresentava
+erro no nome, utilizava My Documents e foi modificado para o diretório Documents
+do usuário ativo.
+
+27-11-2012 - GeoSan 06.00.07.09
+Verificado na consulta de endereços que quando uma coluna vem com valor nulo e
+soma a outras colunas contendo valores no SQLServer, o valor final fica nulo.
+Desta forma na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2, esta foi modificada
+de:
+
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+
+para
+
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", ISNULL( LI."ENDERECO",'')  + ' - ' + ISNULL(LI."NUM_CASA",'') + ' - ' + ISNULL( LI."BAIRRO",'') As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+
+a comparação ISNULL, substitui o nulo por '' o que faz a coluna ENDERECO
+aparecer com os respecitivos dados quando uma das colunas conter valores nulos.
+
+Foi alterada a template do banco de dados SQLServer
+
+27-11-2012 - GeoSan 06.00.07.08
+Atualizada rotina que gerencia erros no ValidaBase para que indique de forma
+mais apropriada quando não encontra o banco de dados na rede.
+Atualizada rotina que gerencia erros no GeoSan para que indique de forma
+apropriada a localização do arquivo de erros.
+
+
+27-11-2012 - GeoSan 06.00.07.07
+O arquivo 00. Leiame.txt foi unificado. Ele é registrado inicialmente na pasta
+doc e copiado, quando finalizado, para a de instalação em 
+\install\GeraSetupGeoSan\ArquivosInstGeoSan
+
+
+27-11-2012 - GeoSan 06.00.07.07
+Atualizada a subrotina Main() onde foi colocado o número da versão atual no 
+início da mesma, facilitando a alteração da mesma para cada modificação.
+Foi formatado o código (tabulações) para que ficasse mais legível.
+
+
+27-11-2012 - GeoSan 06.00.07.07
+Verificou-se que ao selecionar Arquivo-Atualizar Consumos e Distribuir Demandas,
+e selecionar Atualizar com o Consumo Médio das Ligações cadastradas, que a
+querie demorava muito para processar.
+Ao investigar o motivo verificou-se que no processamento da querie abaixo que
+acessa a vista do sistema comercial, NXGS_V_LIG_COM_CONSUMO_MEDIO, que a coluna
+NRO_LIGACAO provavelmente não possui índice o que acarreta uma grande demora no
+processamento, aparecendo uma mensagem de erro indicando time-out.
+
+UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO
+
+Desta forma a querie foi alterada, retirando-se o digito verificador da coluna 
+RAMAIS_AGUA_LIGACAO da tabela do GeoSan RAMAIS_AGUA_LIGACAO, dividindo-se por 10
+e utilizamos a coluna da vista do sistema comercial NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV, a qual não possui o dígito verificador.
+
+UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = (NXGS_V_LIG_COM_CONSUMO_MEDIO.CONSUMO_MEDIO * 0.00038580246) FROM NXGS_V_LIG_COM_CONSUMO_MEDIO WHERE RAMAIS_AGUA_LIGACAO.NRO_LIGACAO / 10 = NXGS_V_LIG_COM_CONSUMO_MEDIO.NRO_LIGACAO_SEM_DV
+
+Desta forma ela processou em menos de um minuto. Provavelmente o dígito
+verificador estava sendo calculado para cada número de ligação na vista do
+sistema comercial e isso causava lentidão.
+
+Foi alterada a rotina de erro, para que apresente o erro encontrado de forma
+mais completa, auxiliando assim o progamador a localizar a razão da ocorrência
+do mesmo.
+
+É necessário corrigir e testar estas queries para os outros bancos de dados
+Oracle e Postgres, conforme tabelas comerciais dos demais clientes.
+
+Para testar esta correção foi zerado o consumo com a querie (SQL Management):
+UPDATE RAMAIS_AGUA_LIGACAO SET CONSUMO_LPS = 0 
+Consultados os consumos para verificar se estavam zerados mesmo com a querie:
+SELECT TOP 1000 [OBJECT_ID_]
+      ,[NRO_LIGACAO]
+      ,[INSCRICAO_LOTE]
+      ,[AUTO]
+      ,[CONSUMO_LPS]
+      ,[TIPO]
+      ,[ECONOMIAS]
+      ,[HIDROMETRADO]
+  FROM [valinhosgeosan].[dbo].[RAMAIS_AGUA_LIGACAO]
+Rodado o GeoSan com a função Arquivo-Atualizar Consumos e Distribuir Demandas,
+e seleção da opção Atualizar com o Consumo Médio das Ligações cadastradas.
+E consultados os consumos novamente com a mesma querie acima, para verificar as
+modificações.
+
+Para testar a o funcionamento da retirada do último dígito verificador do número
+da ligação, foi rodada a querie:
+SELECT TOP 10 CONSUMO_LPS, NRO_LIGACAO/10, NRO_LIGACAO FROM RAMAIS_AGUA_LIGACAO
+
+23-11-2012 - GeoSan 06.00.07.07
+Na consulta de ligações associadas aos ramais de água foi retirada a consulta
+por lotes. No banco de dados na tabela GS_QUERYS_CLIENT, coluna QUERY_ID = 2
+onde QUERYSTRING é:
+A palavra endereço estava também com cedilha como ENDEREÇO, o que causava erro.
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."CLASSIFICACAO_FISCAL" in (@CLASSIFICACAO_FISCAL) OR LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+mudado para
+SELECT LI."NRO_LIGACAO", LI."CLASSIFICACAO_FISCAL", LI."TIPO", LI."ENDERECO"  + ' - ' + LI."NUM_CASA" + ' - ' + LI."BAIRRO" As ENDERECO, LI."COMPL_LOGRADOURO" As COMPLEMENTO, LI."CONSUMIDOR",  LI."COD_LOGRADOURO" as "CODLOGRAD" FROM "NXGS_V_LIG_COMERCIAL" LI WHERE (LI."NRO_LIGACAO" in (@NRO_LIGACAO))
+
+
+04-10-2012 - GeoSan 06.00.07.05
+
+Foi realizada a revisão no código no formulário FrmCadastroRamal, colocados 
+diversos comentários.
+Foi alterada uma linha no banco de dados. Consultar o arquivo db\historico de 
+alteracoes banco de dados.txt
+Corrigida a questão de acesso dos consumidores em banco local, que não estava 
+acessando. 
+
+04-09-2012 - GeoSan 06.00.07.04
+Atualizada a querie que distribui as demandas de consumo médio do software
+comercial para os ramais das ligações de água.
+Gerado novo executável para instalação do GeoSan.
+
+03-09-2012 - GeoSan 06.00.07.03
+Atualizada a querie que distribui o consumo médio nos ramais
+A mesma continha um innerJoin que não era necessário e tornava
+a execução da mesma mais lenta.
+
+
+
+Geosan 6.0.7 - Notas de Liberação
+Versão para Windows
+
+10/02/2012
+
+
+1. PRÉ-REQUISITOS DE INSTALAÇãO
+
+Você deve atender os seguintes requisitos para realizar a instalação do GeoSan:
+
+1.1. Sistema operacional Windows XP Professional (SP3)
+
+1.2. Fechar todos os programas e desabilitar o software antivirus que estejam em
+funcionamento, antes de começar a instalação, habilitando-os novamente somente
+após o término da instalação.
+
+1.3. Possuir privilégios administrativos no sistema operacional da máquina
+cliente onde instalará o GeoSan.
+
+2. PROCEDIMENTOS PARA INSTALAÇÃO
+
+
+Instale os componentes e softwares na seguinte ordem:
+
+	1 - Instalar o aplicativo: - WindowsInstaller 3.1-v2-x86.exe (Caso o computador já tenha uma versão mais recente
+deste aplicativo, é lançado uma mensagem de erro que é normal.)
+
+        2 - Instalar o aplicativo: - Vcredist_x86.exe
+
+	3 - Instalar o aplicativo: - Componente C++ Geosan.exe
+
+	4 - Desinstalar todas as versoções do Terracomponents (Painel de controle), caso ja exista. 
+	    Instalar o aplicativo: - TerraComponents 3.3.1.13.msi
+
+        5 - Instalar o aplicativo: - MDAC_TYP.EXE
+
+
+	6 - Instalar o aplicativo: - Instalador Geosan 6.0.7.exe 
+
+       
+
+	7 - Configurar permissões totais de Escrita/Leitura/Gravação na pasta do Geosan (C:\Arquivos de Programas\Geosan) para todos usuários logados.
+
+
+
+
+3. EXECUÇÃO DO GEOSAN
+
+	1 - Iniciar o GeoSan pelo atalho da área de trabalho.	
+
+	2 - Caso seja a primeira instalação do Geosan no computador, aparecerá uma mensagem informando que não 
+	    encontrou o banco de dados. Selecione Ok.
+
+	2.1 - Aparecerá uma caixa de diálogo perguntando onde está o banco de dados.
+		a. Selecionar tipo de conexão como: SQLServer
+		b. Digitar o nome do banco
+		c. Digitar o nome do servidor
+		d. Digitar o nome do usuário
+		e. Digitar a senha
+
+	3. Entre com o nome do usuário administrador e senha do GeoSan:
+	Usuário: Administrador
+	Senha: Senha
+
+	4. O sistema irá abrir. Consulte o Manual do Usuário para obter detalhes da operação do sistema.
+
+	
+Correções e alterações incluídas de acordo com a versão:
+
+6.0.7 - Correção da função de habilitação do sistema usuário tipo visitante e visualizador
+
+6.0.6 - Correção da função de apresentação das informações do endereço de consumidores na janela de cadastro de ramais.
+
+6.0.5 - Compatibilidade com banco de dados SQLServer 2008
+
+6.0.0   Compatibilidade com o banco de dados Postgresql.
+
+5.9.8   a.) Correção da funcionalidade Localizar Consumidores (Nome), 
+	b.) Correção da funcionalidadeEncontrar Válvulas, 
+	c.) Correção da funcionalidade Carregar Polígono e Apresentar Consumidores
+
+5.9.7   a.) Correção da funcionalidade de cadastro de redes de drenagem
+
+
+5.9.6	a.) Corrigida funcionalidade Localizar Válvulas
+	
+	b.) Habilitada a funcionalidade Localizar Válvulas para o usuário tipo visitante
+
+5.9.5   a.) O uso arquivo Geosan.cfg foi descontinuado. As informações de conexão com o banco de dados são agora lidas do arquivo Geosan.ini.
+
+	b.) A ferramenta Polígono de seleção copia também os OBJECT_ID dos nós de redes de água para a tabela POLIGINO_SELEÇÃO.
+
+
+
+5.9.4	a.) Pesquisa de consumidores/ramais pelo número de ligação ou pelo nome do consumidor
+	
+	b.) Novo relatório de Ramais de Água permitindo que o cliente defina as informações do relatório 
+
+	c.) Filtro no tema de Ramais de Água por Tipo, Hidrometrado, Economias, Consumo LPS, Distância Testada, 
+	    Distância Lado, Comprimento Ramal, Profunfidade Ramal ou Usuário
+
+	d.) Definição da escala do mapa através do menu: Mapa > Definir Escala ou digitando a escala diretamente no campo Escala
+
+	e.) Pesquisa automática pelo numreo de IPTU da Geometria do Lote para cadastramento de consumidores
+	
+	f.) Incorporado o uso de arquivo tipo .ini para salvamento de parâmetros do usuário na máquina
+
+	g.) Usuário tipo visitante pode inserir e consultar documentos
+
+	h.) Cálculo da área formada por 3 ou mais pontos criados através de polígono. Mapa > Calcular Área (m²)
+	
+	i.) Painel de Status com novas informações:
+		Mostra o comprimento da rede ao desenhar
+		Mostra o código identificador da rede ao salvar a rede
+		Mostra o código identificador do componente ao inserir componente na rede
+		Mostra valor da área em m² quando a ferramenta de medição de área é selecionada
+
+	j.) Módulo de Impressão: Correção para permitir ajuste de escala
+
+	k.) Módulo de Impressão: Correção para exibir temas com limite de exibição maior que zero
+
+
+
+5.9.3	a.) Reabilitada a função de exportar imagens;
+	
+	b.) Reabilitada a função de localização de textos;
+	
+	c.) Modificado código incluindo tratamento de erro diferenciado na função de atualização automática da base de dados.
+
+
+
+5.9.2	a.) Cadastramento de Ramais de Esgoto;
+
+	b.) Possibilidade de salvar o mapa ativo como figura nos formatos BMP, GIF, JPG, PNG ou TIF;
+	
+	c.) Módulo de impressão:
+	    Possibilidade de impressão de mapas e figuras nos formatos A0, A1, A2, A3, A4 e A5.
+
+
+
+5.9.0	a.) Novo relatório indicador de produtividade de Rede de Esgoto
+	
+	b.) Peças de Redes de Esgoto:
+	    Modificada a quantidade de campos utilizada no cálculo da diferença de Cota Terreno e Cota Profundidade PV
+	    Agora está limitada a 3 casas depois do ponto decimal e após esse valor ocorre arredendamento do valor.
+
+	c.) Nova funcionalidade no desenho de redes de água e esgoto para não permitir o desenho de uma rede sobre 
+	    outra rede com mesma peça inicial e mesma peça final.
+
+
+

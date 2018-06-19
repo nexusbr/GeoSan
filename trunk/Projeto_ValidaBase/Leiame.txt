@@ -1,0 +1,46 @@
+Código
+------
+2012-11-27 - Esta versão do Leiame.txt não é mais atualizada. Passou a ser atualizada no 00. Leiame.txt que está localizada na pasta \doc\00. Leiame.txt junto com as alterações do GeoSan
+
+Versão 01.00.01 - 10/11/2012 - Melhorias com relação ao arquivo de log realizadas
+
+
+No dia 01/04/2009 foi encaminhado o código do valida base em arquivo texto;
+
+A partir desta referencia de código foi criado um novo projeto;
+
+
+
+Abaixo é apresentado o histórico de executáveis disponíveis nos emails, como forma de apresentar uma referência de datas para o código:
+
+
+
+A versão do Valida base completa com os 13 processos de verificação(*) foi encaminhada por email em 18/05/2009. 
+Este é o arquivo "01. Analise_Base_Geosan.zip";
+
+No dia 03/09/2009 foi encaminhado por email o arquivo zip "Analise_Base_Geosan8.zip" relacionado ao script de criação da tabela do validabase; Não existe nehum comentário sobre a atualização do sistema. Pode ser que seja apenas um envio da mesma versão anterior com o script da criação da tabela. De qualquer forma esta versão foi registrada no histório.
+Este é o arquivo "02. Analise_Base_Geosan8.zip";
+
+
+Em 13/10/2009 foi encaminhada uma versão completa compatível com Oracle;
+Este é o arquivo "03. Valida_Base_9.2.rar";
+
+No dia 11/01/2010 foi encaminhado por email uma nova versão com opções de verificações na rede de esgoto;
+Esta é a versão "04. ValidaBase_11_DAE_Jundiai.rar"
+
+
+(*) Os processos do valida base são:
+1.	ANÁLISE DE LINHAS SEM GEOMETRIA
+2.	ANÁLISE DE COMPONENTES SEM GEOMETRIA
+3.	ANÁLISE DE COMPONENTES DUPLICADOS
+4.	ANÁLISE DE LINHAS DUPLICADAS
+5.	ANÁLISE DE LINHAS SEM ATRIBUTOS
+6.	ANÁLISE DE COMPONENTES SEM ATRIBUTOS
+7.	ANÁLISE DE CORREÇÃO DE TEXTOS (CORRESPONDÊNCIA DE TEXTOS COM
+CORREÇÕES DOS SCRIPTS ANTERIORES)
+8.	ANÁLISE DE RELAÇÃO COMPONENTE INICIAL DA REDE COM REDE
+9.	ANÁLISE DE RELAÃO COMPONENTE FINAL DA REDE COM REDE
+10.	ANÁLISE DE COMPRIMENTO DAS REDES DE ÁGUA
+11.	ANÁLISE DE COMPONENTES PRÓXIMOS / SOBREPOSTOS
+12.	ANÁLISE DE TRECHOS DE REDE DOS RAMAIS DE AGUA
+13.	ANÁLISE DE CORRESPONDÊNCIA DE COORDENADAS REDES E COMPONENTES.

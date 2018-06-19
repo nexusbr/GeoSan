@@ -1,0 +1,199 @@
+Instruções para configuração das infomações no banco de dados.
+06/01/2011
+
+Após a instalação do banco de dados, estas instruções devem ser seguidas para que o sistema funcione corretamente.
+ 
+
+1 - Configuração da string de conexão de banco de dados
+----------------------------------------------------------
+
+A tabela GS_PARAMETRES deve ser atualizada com as seguintes informações:
+
+	- O campo STRING_CONNECTION_SECUNDARY deve ser preenchido com a string de conexão do banco de dados do sistema. A string de conexão é composta pelas informações de endereço do servidor, usuário e senha de acesso ao banco. Estas infomrações deve estar disponíveis para preenchimento. Verifique com o administrador local do banco de dados para obter estas informações.
+
+	- O modelo da conexão é apresentado:
+
+POSTGRES
+
+Sintaxe:
+"DRIVER={PostgreSQL Unicode}; DATABASE=NOMEDOBANCO; SERVER=ENDEREÇO_SERVIDOR; PORT=PORTA; UID=USUÁRIO; PWD=SENHA; ByteaAsLongVarBinary=1"
+
+Exemplo:
+"DRIVER={PostgreSQL Unicode}; DATABASE=banco_geosan; SERVER=localhost; PORT=5432; UID=Administrador; PWD=secreta; ByteaAsLongVarBinary=1"
+
+Para a execução da atualização, pode-se utilizar o aplicativo gerenciador da base de dados e executar o comando sql:
+
+
+UPDATE "GS_PARAMETERS"
+   SET "String_Connection_Secundary" = 'DRIVER={PostgreSQL Unicode}; DATABASE=NOMEDOBANCO; SERVER=ENDEREÇO_SERVIDOR; PORT=PORTA; UID=USUÁRIO; PWD=SENHA; ByteaAsLongVarBinary=1'
+
+
+SQLSERVER
+
+Sintaxe:
+Provider=SQLOLEDB.1;Password=senha;Persist Security Info=True;User ID=usuario;Initial Catalog=nome do banco;Data Source=local
+
+Exemplo:
+Provider=SQLOLEDB.1;Password=geosan;Persist Security Info=True;User ID=geosan;Initial Catalog=geosan;Data Source=localhost
+
+
+Para a execução da atualização, pode-se utilizar o aplicativo gerenciador da base de dados e executar o comando sql:
+
+
+UPDATE GS_PARAMETERS
+   SET String_Connection_Secundary = 'DRIVER={PostgreSQL Unicode}; DATABASE=NOMEDOBANCO; SERVER=ENDEREÇO_SERVIDOR; PORT=PORTA; UID=USUÁRIO; PWD=SENHA; ByteaAsLongVarBinary=1'
+
+
+
+----ORACLE
+
+Sintaxe:
+Provider=OraOLEDB.Oracle.1;Password=senha;Persist Security Info=True;User ID=usuario;Data Source=nome_do_serviço;Extended Properties=
+
+Exemplo:
+Provider=OraOLEDB.Oracle.1;Password=geosan;Persist Security Info=True;User ID=geosan;Data Source=servidor07;Extended Properties=		
+
+
+Para a execução da atualização, pode-se utilizar o aplicativo gerenciador da base de dados e executar o comando sql:
+
+UPDATE GS_PARAMETERS
+   SET String_Connection_Secundary = 'DRIVER={PostgreSQL Unicode}; DATABASE=NOMEDOBANCO; SERVER=ENDEREÇO_SERVIDOR; PORT=PORTA; UID=USUÁRIO; PWD=SENHA; ByteaAsLongVarBinary=1'
+
+
+
+2 - Configuração das coordenadas do quadrante da área da região geográfica utilizada
+-------------------------------------------------------------------------------------
+
+O primeiro passo é obter as coordenadas geográficas do quadrante envolvente da área do município.
+
+Definidos os valores de lower_x, lower_y, upper_x, upper_y, os mesmos devem ser atualizados nas tabelas de configuração do sistema.
+
+As tabelas de configuração das coordenadas do sistema são:
+
+te_layer, 
+te_representation,
+te_theme,
+te_view
+
+
+Para a execução da atualização, pode-se utilizar o aplicativo gerenciador da base de dados e executar o comando sql:  
+(SQL SERVER e ORACLE).
+
+Substituir a infomação valor da coordenada pelo seu valor correspondente. Exemplo : lower_y = 744882
+
+
+update te_layer set lower_x = valor  da coordenada; 
+update te_layer set lower_y = valor  da coordenada; 
+update te_layer set upper_x = valor  da coordenada; 
+update te_layer set upper_y = valor  da coordenada;
+
+update te_representation  set lower_x = valor  da coordenada; 
+update te_representation  set lower_y = valor  da coordenada; 
+update te_representation  set upper_x = valor  da coordenada; 
+update te_representation  set upper_y = valor  da coordenada;
+
+update te_view set lower_x = valor  da coordenada; 
+update te_view set lower_y = valor  da coordenada; 
+update te_view set upper_x = valor  da coordenada; 
+update te_view set upper_y = valor  da coordenada;
+
+update te_theme set lower_x = valor  da coordenada; 
+update te_theme set lower_y = valor  da coordenada; 
+update te_theme set upper_x = valor  da coordenada;
+update te_theme set upper_y = valor  da coordenada;
+
+
+
+Para a execução da atualização, pode-se utilizar o aplicativo gerenciador da base de dados e executar o comando sql:  (POSTGRESQL)
+
+
+Substituir a infomação valor da coordenada pelo seu valor correspondente. Exemplo : "lower_y" = '744882'
+
+update "te_layer" set "lower_x" = 'valor  da coordenada'; 
+update "te_layer" set "lower_y" = 'valor  da coordenada'; 
+update "te_layer" set "upper_x" = 'valor  da coordenada'; 
+update "te_layer" set "upper_y" = 'valor  da coordenada';
+
+update "te_representation"  set "lower_x" = 'valor  da coordenada'; 
+update "te_representation"  set "lower_y" = 'valor  da coordenada'; 
+update "te_representation"  set "upper_x" = 'valor  da coordenada';
+update "te_representation"  set "upper_y" = 'valor  da coordenada';
+
+update "te_view" set "lower_x" = 'valor  da coordenada';
+update "te_view" set "lower_y" = 'valor  da coordenada';
+update "te_view" set "upper_x" = 'valor  da coordenada';
+update "te_view" set "upper_y" = 'valor  da coordenada';
+
+update "te_theme" set "lower_x" = 'valor  da coordenada';
+update "te_theme" set "lower_y" = 'valor  da coordenada';
+update "te_theme" set "upper_x" = 'valor  da coordenada';
+update "te_theme" set "upper_y" = 'valor  da coordenada';
+
+
+
+
+3 - Configuração das tabelas de informações do sistema comercial
+------------------------------------------------------------------ 
+
+
+As tabelas com informações comerciais armazenam as informações referentes aos clientes da operadora de saneamento.  Os dados preenchidos nestas  tabelas estruturam o funcionamento das funcionalidades de integração do cadastro técnico e comercial. 
+
+As tabelas são:
+NXGS_V_LIG_COMERCIAL
+NXGS_V_LIG_COMERCIAL_CONSUMO
+NXGS_V_LIG_COM_CONSUMO_MEDIO
+
+Destinção dos campos da tabela NXGS_V_LIG_COMERCIAL:
+    
+NRO_LIGACAO: Número da ligação de água
+CLASSIFICACAO_FISCAL:Número de identificação do lote no qual a ligação está cadastrada (ex: Inscrição Imobiliária, Setor/Quadra/Lote, )
+COD_LOGRADOURO:Código do Logradouro do endereço do Lote/Ligação
+ENDERECO:Endereço do lote/ligação
+NUM_CASA:Número da casa  no qual a ligação está inserida
+COMPL_LOGRADOURO:Complemento do endereço
+BAIRRO:Bairro do endereço
+HIDROMETRO:Código do Hidrômetro - Equipamento
+COD_CONSUMIDOR:Código de Identificação do Consumidor
+CONSUMIDOR:Nome do Consumidor
+TEL_RES:Telefone residencial do consumidor
+TEL_COM:Telefone comercial do consumidor
+TIPO:Tipo da Ligação (Ligada, Suprimida, Cortada, Potencial, Factível, etc ...)
+ECONOMIAS:Número de Economias existentes na ligação
+HIDROMETRADO:Ligação Hidrometrada (Sim/Não)
+GRUPO_FATURAMENTO:Grupo de faturamento o qual a ligação pertence
+ROTA_LEITURA:Rota de leitura a qual a ligação pertence
+
+Destinção dos campos da tabela NXGS_V_LIG_COMERCIAL_CONSUMO:
+
+NRO_LIGACAO:Número da Ligação
+CONSUMO_FATURADO:Consumo Faturado
+CONSUMO_MEDIDO:Consumo Medido
+MÊS:Mês faturado
+ANO: Ano faturado
+
+Destinção dos campos da tabela NXGS_V_LIG_COM_CONSUMO_MEDIO:
+
+NRO_LIGACAO: Número da Ligação
+CONSUMO_MEDIO:Consumo Médio Calculado.
+
+
+Estas tabelas poderão ser preenchidas com as informações do sistema comercial. Quando preenchidas estes dados ficarão disponíveis no Geosan.
+
+Uma outra forma de implementar esta integração é configurando-se um database link entre os bancos comercial e geosan e em seguida  criar views em correspondência às tabelas apresentadas. Cada tabela e seus campos corresponderão a uma view, com os mesmos campos. Para isso, as tabelas devem ser renomeadas e as views receberem os nomes estabelecidos para as tabelas.
+
+Com a configuração de views, ao invés das tabelas, a integração entre os sistema comercial e Geosan se dará em tempo real, ou seja quando houver a alteração de informações no sistema comercial, os dados atualizados estarão disponíveis automaticamente na base de dados do Geosan.
+
+Para a configuração de views verifique as especificações técnicas do banco de dados local bem como instruções de manipulação  de banco necessárias para tal implementação.
+
+
+
+
+
+
+
+
+
+
+
+
+

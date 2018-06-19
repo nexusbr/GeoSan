@@ -1,0 +1,1 @@
+sqlcmd -S192.168.0.5 -Ugeodaev -Pnxsdaev -dvalinhosgeosan -id:\minhaquerie.sql -od:\resultado.txt

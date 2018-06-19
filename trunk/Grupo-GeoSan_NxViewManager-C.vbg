@@ -1,0 +1,4 @@
+VBGROUP 5.0
+StartupProject=GeoSan.vbp
+Project=Projeto_NxViewmanager\NxViewManager.vbp
+Project=Projeto_ExportEpaNe\EpanetExport.vbp
