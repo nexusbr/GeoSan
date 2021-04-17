@@ -1,19 +1,19 @@
 VERSION 5.00
 Object = "{18576B0E-A129-4A50-9930-59E18A6FE5E1}#1.0#0"; "TeComCanvas.dll"
-Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Object = "{87AC6DA5-272D-40EB-B60A-F83246B1B8D7}#1.0#0"; "TeComDatabase.dll"
+Object = "{9AB389E7-EAED-4DBF-941D-EB86ED1F9A76}#1.0#0"; "TeComConnection.dll"
 Object = "{EE78E37B-39BE-42FA-80B7-E525529739F7}#1.0#0"; "TeComViewDatabase.dll"
 Begin VB.Form frmCanvas 
    Caption         =   "Mapa"
-   ClientHeight    =   5955
+   ClientHeight    =   5952
    ClientLeft      =   60
-   ClientTop       =   450
+   ClientTop       =   456
    ClientWidth     =   7680
    Icon            =   "frmCanvas.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   5955
+   ScaleHeight     =   5952
    ScaleWidth      =   7680
    WindowState     =   2  'Maximized
    Begin TECOMCANVASLibCtl.TeCanvas TCanvas 
@@ -33,7 +33,7 @@ Begin VB.Form frmCanvas
       Caption         =   "Ajustar Escala"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   8.25
+         Size            =   7.8
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -67,7 +67,7 @@ Begin VB.Form frmCanvas
       Caption         =   "Tamanho das Redes"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   8.25
+         Size            =   7.8
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -233,7 +233,7 @@ Private Sub InsereLigacaoNoRamalSelecionado(object_id_ramalSelecionado As Long, 
         Conn.BeginTrans
         debugCodigoErro = "0"
         Set rsInsereRamaisAguaLigacao = New ADODB.Recordset
-        strAbreConexaoInsereRamaisAguaLigacao = "SELECT NRO_LIGACA, VOL_FATURA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_331 = " + CStr(object_id_consumidoreSelecionado)
+        strAbreConexaoInsereRamaisAguaLigacao = "SELECT NRO_LIGACA, VOL_FATURA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_272 = " + CStr(object_id_consumidoreSelecionado)
         debugCodigoErro = "1 - Select: " & strAbreConexaoInsereRamaisAguaLigacao
         rsInsereRamaisAguaLigacao.Open strAbreConexaoInsereRamaisAguaLigacao, Conn, adOpenKeyset, adLockOptimistic, adCmdText
         
@@ -251,12 +251,12 @@ Private Sub InsereLigacaoNoRamalSelecionado(object_id_ramalSelecionado As Long, 
         '3 - Apaga NX GPS
         debugCodigoErro = "2"
         Set rsApagaLigacaoGpsCadastrada = New ADODB.Recordset
-        strApagaLigacaoGpsCadastrada = "SELECT NRO_LIGACA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_331 = " + CStr(object_id_consumidorSelecionado)
+        strApagaLigacaoGpsCadastrada = "SELECT NRO_LIGACA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_272 = " + CStr(object_id_consumidorSelecionado)
         rsApagaLigacaoGpsCadastrada.Open strAbreConexaoInsereRamaisAguaLigacao, Conn, adOpenKeyset, adLockOptimistic, adCmdText
-        strApagaLigacaoGpsCadastrada = "DELETE FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_331 = " + CStr(object_id_consumidorSelecionado)
+        strApagaLigacaoGpsCadastrada = "DELETE FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_272 = " + CStr(object_id_consumidorSelecionado)
         Conn.execute (strApagaLigacaoGpsCadastrada)
         debugCodigoErro = "3"
-        strApagaGeometriaDaLigacaoGpsCadastrada = "DELETE FROM POINTS331 WHERE object_id = " + CStr(object_id_consumidoreSelecionado)
+        strApagaGeometriaDaLigacaoGpsCadastrada = "DELETE FROM POINTS272 WHERE object_id = " + CStr(object_id_consumidoreSelecionado)
         Conn.execute (strApagaGeometriaDaLigacaoGpsCadastrada)
         rsApagaLigacaoGpsCadastrada.Close
         Conn.CommitTrans
@@ -399,7 +399,7 @@ Private Sub InsereRamalLigacaoGPS(object_id_ligacaoGPS As Long, object_id_rede A
         debugCodigoErro = "4"
         dataCadastroLigacao = Now
         Set rsInsereRamaisAguaLigacao = New ADODB.Recordset
-        strAbreConexaoInsereRamaisAguaLigacao = "SELECT NRO_LIGACA, VOL_FATURA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_331 = " + CStr(object_id_consumidorSelecionado)
+        strAbreConexaoInsereRamaisAguaLigacao = "SELECT NRO_LIGACA, VOL_FATURA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_272 = " + CStr(object_id_consumidorSelecionado)
         debugCodigoErro = "5 - Select: " & strAbreConexaoInsereRamaisAguaLigacao
         rsInsereRamaisAguaLigacao.Open strAbreConexaoInsereRamaisAguaLigacao, Conn, adOpenKeyset, adLockOptimistic, adCmdText
         'Inicia a atualização de RAMAIS_AGUA com todos os dados
@@ -415,12 +415,12 @@ Private Sub InsereRamalLigacaoGPS(object_id_ligacaoGPS As Long, object_id_rede A
         '6 - Apaga NX GPS
         debugCodigoErro = "6"
         Set rsApagaLigacaoGpsCadastrada = New ADODB.Recordset
-        strApagaLigacaoGpsCadastrada = "SELECT NRO_LIGACA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_331 = " + CStr(object_id_consumidorSelecionado)
+        strApagaLigacaoGpsCadastrada = "SELECT NRO_LIGACA FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_272 = " + CStr(object_id_consumidorSelecionado)
         rsApagaLigacaoGpsCadastrada.Open strAbreConexaoInsereRamaisAguaLigacao, Conn, adOpenKeyset, adLockOptimistic, adCmdText
-        strApagaLigacaoGpsCadastrada = "DELETE FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_331 = " + CStr(object_id_consumidorSelecionado)
+        strApagaLigacaoGpsCadastrada = "DELETE FROM NXGS_V_LIG_COMERCIAL_GPS WHERE object_id_272 = " + CStr(object_id_consumidorSelecionado)
         Conn.execute (strApagaLigacaoGpsCadastrada)
         debugCodigoErro = "7"
-        strApagaGeometriaDaLigacaoGpsCadastrada = "DELETE FROM POINTS331 WHERE object_id = " + CStr(object_id_consumidorSelecionado)
+        strApagaGeometriaDaLigacaoGpsCadastrada = "DELETE FROM POINTS272 WHERE object_id = " + CStr(object_id_consumidorSelecionado)
         Conn.execute (strApagaGeometriaDaLigacaoGpsCadastrada)
         rsApagaLigacaoGpsCadastrada.Close
         Conn.CommitTrans
