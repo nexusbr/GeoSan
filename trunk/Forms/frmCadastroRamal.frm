@@ -830,6 +830,8 @@ End Function
 '
 Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
     On Error GoTo Trata_Erro
+    Dim posicaoErro as String
+    Dim strErro as String
     Dim str As String
     Dim itmx As ListItem
     Dim strIni As String
@@ -913,6 +915,8 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
     Me.lblResultado.Caption = "Localizadas " & i & " referencias"
     If str <> "" Then
         Set rs = New ADODB.Recordset
+        posicaoErro = "01"
+        strErro = str
         rs.Open str, Conn, adOpenForwardOnly, adLockOptimistic
         If rs.EOF = False Then
             'CARREGA NO FORM TODAS AS LIGAÇÕES DISPONIVEIS COM BASE NO PRÉ FILTRO
@@ -962,6 +966,8 @@ saida:
                 str = "SELECT " & iniREF_NROLIGACAO & " AS " + """" + "NRO_LIGACAO" + """" + " FROM " & iniTabela
                 str = str & " WHERE LOTE_ID = '" & idAutoLote & "' AND " & iniREF_NROLIGACAO & " <> '0'"
                 Set rs = New ADODB.Recordset
+                posicaoErro = "02"
+                strErro = str
                 rs.Open str, Conn, adOpenKeyset, adLockOptimistic
                 str = ""
                 strLigacoes = ""
@@ -980,6 +986,8 @@ saida:
                         str = strIni & " WHERE " + """" + ma + """" + " IN ('" & strLigacoes & "') AND " + """" + ma + """" + " NOT IN (SELECT " + """" + ma + """" + " FROM " + """" + TB_Ligacoes + """" + ")"
                     End If
                     Set rs = New ADODB.Recordset
+                    posicaoErro = "03"
+                    strErro = str
                     rs.Open str, Conn, ReadOnly, adLockOptimistic
                     If rs.EOF = False Then
                     Do While Not rs.EOF And blnCancelar = False
@@ -1017,9 +1025,9 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     ElseIf Err.Number = -2147467259 Then
-        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro (-2147467259)", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro (-2147467259)", CStr(Err.Number), "Posição erro: " + posicaoErro + " String erro: " + strErro + " - " + CStr(Err.Description), True, glo.enviaEmails
     Else
-        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        ErroUsuario.Registra "FrmCadastroRamal", "Carrega_PreFiltro", CStr(Err.Number), CStr(Err.Number), "Posição erro: " + posicaoErro + " String erro: " + strErro + " - " + CStr(Err.Description), True, glo.enviaEmails
     End If
 
 End Function
