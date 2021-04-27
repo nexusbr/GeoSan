@@ -837,6 +837,10 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
     Dim TIPO_R As String
     Dim TB_Ligacao As String
     Dim strLigacoes As String
+    Dim enderecoCompleto As String
+    Dim enderecoStr As String
+    Dim numeroImovel As String
+    Dim complementoImovel As String
     'HIDROMETRADAS E FICTÍCIAS
     Dim RS_NRO_LIGACAO As New ADODB.Recordset
     Dim ma As String
@@ -861,18 +865,18 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
     mf = "HIDROMETRADO"
     mg = "NXGS_V_LIG_COMERCIAL"
     mh = "NXGS_V_LIG_COMERCIAL_E"
-    mj = "RAMAIS_ESGOTO_LIGACAO"
     Set rs = New ADODB.Recordset
     If tcs.getCurrentLayer = "RAMAIS_AGUA" Then
         'SELECIONA A TABELA OU VIEW QUE POSSUI DADOS DOS CONSUMIDORES DE AGUA
         TIPO_R = "AGUA"
         TB_Ligacoes = "RAMAIS_AGUA_LIGACAO"
-        strIni = "SELECT CONVERT(nvarchar(50), NRO_LIGACAO) as NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL"
+    mj = "RAMAIS_ESGOTO_LIGACAO"
+        strIni = "SELECT CONVERT(nvarchar(50), NRO_LIGACAO) as NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, NUM_CASA, COMPL_LOGRADOURO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL"
     Else
         'SELECIONA A TABELA OU VIEW QUE POSSUI DADOS DOS CONSUMIDORES DE ESGOTO
         TIPO_R = "ESGOTO"
         TB_Ligacoes = "RAMAIS_ESGOTO_LIGACAO"
-        strIni = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL_E"
+        strIni = "SELECT NRO_LIGACAO, CLASSIFICACAO_FISCAL, ENDERECO, NUM_CASA, COMPL_LOGRADOURO, CONSUMIDOR, COD_LOGRADOURO as " + """" + "CODLOGRAD" + """" + ", TIPO, ECONOMIAS, HIDROMETRADO FROM NXGS_V_LIG_COMERCIAL_E"
     End If
     str = "" 'LIMPA A STRING DE COMANDO
     If Me.optNumLigacao.value = True And Trim(Me.txtNumLigacao) <> "" Then
@@ -917,8 +921,12 @@ Private Function Carrega_PreFiltro(ByVal ComLotes As Boolean)
                 DoEvents
                 'Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("NRO_LIGACAO").value)
                 Set itmx = lvLigacoes.ListItems.Add(, , rs.Fields("CLASSIFICACAO_FISCAL").value)
+                numeroImovel = IIf(IsNull(rs.Fields("NUM_CASA").value), "", rs.Fields("NUM_CASA").value)
+                complementoImovel = IIf(IsNull(rs.Fields("COMPL_LOGRADOURO").value), "", rs.Fields("COMPL_LOGRADOURO").value)
+                enderecoStr = IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
+                enderecoCompleto = enderecoStr + ", " + numeroImovel + " - " + complementoImovel
                 itmx.SubItems(1) = IIf(IsNull(rs.Fields("NRO_LIGACAO").value), "", rs.Fields("NRO_LIGACAO").value)
-                itmx.SubItems(2) = IIf(IsNull(rs.Fields("ENDERECO").value), "", rs.Fields("ENDERECO").value)
+                itmx.SubItems(2) = enderecoCompleto
                 itmx.SubItems(3) = IIf(IsNull(rs.Fields("CONSUMIDOR").value), "", rs.Fields("CONSUMIDOR").value)
                 'incluído para mostrar o tipo da ligação
                 itmx.SubItems(4) = IIf(IsNull(rs.Fields("TIPO").value), "", rs.Fields("TIPO").value)
