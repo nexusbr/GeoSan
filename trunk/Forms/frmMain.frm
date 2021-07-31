@@ -1014,7 +1014,7 @@ Begin VB.MDIForm FrmMain
          Caption         =   "Exporta consumidores, redes, ramais e nós no formato .shp"
       End
       Begin VB.Menu mnuAtualizaCotas 
-         Caption         =   "Atualiza todas as cotas de todos os nós"
+         Caption         =   "Atualiza todas cotas dos nós de água e esgoto"
       End
       Begin VB.Menu mnuAutoLogin 
          Caption         =   "Logar Automaticamente"
@@ -1450,11 +1450,14 @@ End Sub
 '
 Private Sub mnuAtualizaCotas_Click()
      Dim setaZs As New CAcertaZsDosNos
+     Dim setaZsNosEsgoto as New CAcertaZsDosNosEsgoto
      
      varGlobais.pararExecucao = False               'indica que iniciará sem sem informar que deverá parar a execução
      FrmMain.Timer1.Enabled = True                  'habilita o timer
-     setaZs.AtribuiZs                               'chama método para atualizar todas as cotas da cidade toda
+     setaZs.AtribuiZs                               'chama método para atualizar todas as cotas das redes de água da cidade toda
+     setaZsNosEsgoto.AtribuiZs                      'chama método para atualizar todas as cotas das redes de esgoto da cidade toda
      FrmMain.Timer1.Enabled = False                 'deshabilita o timer
+     FrmMain.sbStatusBar.Panels(2).Text = "Fim dos cálculos"
 End Sub
 
 Private Sub mnuAtualizaNumCasaGps_Click()

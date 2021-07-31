@@ -140,7 +140,7 @@ Public Function ObtemZ(xNo As Double, yNo As Double, object_Id_No As String) As 
     'obtem agora as cotas dos 4 pontos do MDT
     mensagemDeErro = mensagemDeErro + "Nó com obj_id = " & object_Id_No & " coord. x = " & CStr(Round(xNo, 2)) & " coord. y = " & CStr(Round(yNo, 2)) & "MDT com obj_ids: ObjId1 = " & idObjPonto1 & ", ObjId2 = " & idObjPonto2 & ", ObjId3 = " & idObjPonto3 & ", ObjId4 = " & idObjPonto4
     If idObjPonto1 = Null Or idObjPonto2 = Null Or idObjPonto3 = Null Or idObjPonto4 = Null Then                                        'verifica se ele encontrou os nós do MDT, pois se não encontra não adianta realizar o cálculo
-        ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails, mensagemDeErro   'não exibe mensagem para o usuário
+        ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), False, False, mensagemDeErro             'não exibe mensagem para o usuário
         ObtemZ = 0                                                                                                                      'retorna sem calcular a cota Z
     Else                                                                                                                                'encontrou
         rs.Open "SELECT * from MDT where " & nomeColunaObjIdMdt & " = " & idObjPonto1, Conn, adOpenKeyset, adLockOptimistic
@@ -176,7 +176,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
     Resume Next
     Else
-    ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails, mensagemDeErro
+    ErroUsuario.Registra "CObtemZdoNo", "ObtemZ", CStr(Err.Number), CStr(Err.Description), False, False, mensagemDeErro
     End If
 End Function
 ' Obtem o z de um nó a partir do Object_id do nó
@@ -214,6 +214,6 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "CObtemZdoNo", "CObtemZFromObjIdNo", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        ErroUsuario.Registra "CObtemZdoNo", "CObtemZFromObjIdNo", CStr(Err.Number), CStr(Err.Description), False, False
     End If
 End Function

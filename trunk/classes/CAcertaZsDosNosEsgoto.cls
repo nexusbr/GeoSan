@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "CAcertaZsDosNos"
+Attribute VB_Name = "CAcertaZsDosNosEsgoto"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -34,7 +34,8 @@ Public Sub AtribuiZs()
     
     Screen.MousePointer = vbHourglass
     Set RSNos = New ADODB.Recordset
-    RSNos.Open "Select x, y, object_id from Points2", Conn, adOpenKeyset, adLockOptimistic
+    RSNos.Open "Select x, y, object_id from Points4", Conn, adOpenKeyset, adLockOptimistic
+    arquivoExportacao = diretorio & "\GeoSan_atualização_cotas_esgoto.txt"
     retorno = cGeoDatabase.geoDatabase.setCurrentLayer("mdt")                                                       'ativa o layer do MDT
     If retorno = False Then
         Screen.MousePointer = vbNormal
@@ -54,12 +55,12 @@ Public Sub AtribuiZs()
         zNo = getZNo.ObtemZ(xNo, yNo, objIdNo)
         RSNos.MoveNext
         Set rsAtributoNos = New ADODB.Recordset
-        rsAtributoNos.Open "SELECT GROUNDHEIGHT FROM WATERCOMPONENTS WHERE OBJECT_ID_ = " & objIdNo, Conn, adOpenKeyset, adLockOptimistic
-        FrmMain.sbStatusBar.Panels(2).Text = " Z nó água " & objIdNo & " calculado = " & zNo & " "
+        rsAtributoNos.Open "SELECT GROUNDHEIGHT FROM SEWERCOMPONENTS WHERE OBJECT_ID_ = " & objIdNo, Conn, adOpenKeyset, adLockOptimistic
+        FrmMain.sbStatusBar.Panels(2).Text = " Z nó esgoto " & objIdNo & " calculado = " & zNo & " "
         rsAtributoNos.Close
         zNoStr = CStr(zNo)                          'converte a cota do no para string para poder atualizar no SQL como ponto
         zNoStr = Replace(zNoStr, ",", ".")          'troca a vírgula por ponto
-        Conn.execute "UPDATE WATERCOMPONENTS SET GROUNDHEIGHT = " & zNoStr & " WHERE OBJECT_ID_ = " & objIdNo
+        Conn.execute "UPDATE SEWERCOMPONENTS SET GROUNDHEIGHT = " & zNoStr & " WHERE OBJECT_ID_ = " & objIdNo
     Loop
     Screen.MousePointer = vbNormalObtemZ
     Exit Sub
@@ -69,7 +70,7 @@ Trata_Erro:
         Resume Next
     Else
         Screen.MousePointer = vbNormal
-        ErroUsuario.Registra "CAcertaZsDosNos", "AtribuiZs", CStr(Err.Number), CStr(Err.Description), False, False
+        ErroUsuario.Registra "CAcertaZsDosNosEsgoto", "AtribuiZs", CStr(Err.Number), CStr(Err.Description), False, False
     End If
 End Sub
 
