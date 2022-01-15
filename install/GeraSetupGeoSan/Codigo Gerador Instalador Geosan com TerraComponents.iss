@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "08.02.00"
+#define AppVersionFile  "08.01.02"
 
 [Setup]
 AppName=GeoSan

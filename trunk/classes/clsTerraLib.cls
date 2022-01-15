@@ -989,13 +989,18 @@ End Function
 Private Function InsertTextAttributesLine(LayerName As String, geom_id As Long, object_id As String) As Boolean
     On Error GoTo Trata_Erro
     Dim Length As Double, Diameter As String, Material As String, CotaIni As Double, CotaFim As Double
+
+    If cgeo.GetTypeText(tcs.getCurrentLayer) = 1 Then       ' redes de água
+        a = "X_MATERIAL"
+    Else                                                    ' redes de esgoto ou drenagem
+        a = "X_MATERIAL_ESGOTO"
+    End If
     
-    a = "X_MATERIAL"
     b = "MATERIAL"
     c = "MATERIALID"
     d = "OBJECT_ID_"
     If frmCanvas.TipoConexao <> 4 Then
-        Set rs = Conn.execute("SELECT * From  " & tcs.getCurrentLayer & " left JOIN x_Material on material=materialid where object_id_='" & object_id & "'")
+        Set rs = Conn.execute("SELECT * From  " & tcs.getCurrentLayer & " left JOIN " & a & " on material=materialid where object_id_='" & object_id & "'")
     Else
         'MsgBox "ARQUIVO DEBUG SALVO"
         'WritePrivateProfileString "A", "A", "SELECT * From  " + """" + tcs.getCurrentLayer + """" + " left JOIN " + """" + a + """" + " on" + """" + b + """" + "=" + """" + c + """" + " where " + """" + d + """" + "='" & object_id & "'", App.path & "\DEBUG.INI"
