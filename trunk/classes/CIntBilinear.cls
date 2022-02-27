@@ -50,7 +50,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-        ErroUsuario.Registra "CIntBilinear", "CalcInterpolacao - divisão por zero no MDT", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+        ErroUsuario.Registra "CIntBilinear", "CalcInterpolacao - divisão por zero no MDT", CStr(Err.Number), CStr(Err.Description), False, glo.enviaEmails
     End If
 End Function
 
