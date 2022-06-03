@@ -4,5 +4,10 @@ VerificaDlls
 
 # Arquivos específicos
 isetup-5.4.2.exe
-trunk\GeoSan.exe
+GeoSan.exe
+install/GeraSetupGeoSan/ArquivosInstGeoSan/GeoSan.exe
+trunk/GeoSan.exe
+install/GeraSetupGeoSan/Output
 install\GeraSetupGeoSan\ArquivosInstGeoSan\GeoSan.exe
+trunk\GeoSan.exe
+install\GeraSetupGeoSan\Output

@@ -164,7 +164,7 @@ Trata_Erro:
 End Function
 ' Entra neste evento logo após selecionado um nó da rede para ser movido para uma nova posição.
 ' Ele checa se foi selecionado mais de um nó pois é permitido mover somente um nó por vez
-' Se estiver tudo OK então adiciona o layer de snap, referência e ativa o comendo de mover nó de uma rede
+' Se estiver tudo OK então adiciona o layer de snap, referência e ativa o comando de mover nó de uma rede
 ' Entra neste evento antes de salvar no banco, com os dados originais
 '
 '
@@ -250,7 +250,7 @@ Trata_Erro:
     If Err.Number = 0 Or Err.Number = 20 Then
         Resume Next
     Else
-       ErroUsuario.Registra "clsTerralib", "MoveNetWorkNode", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+       ErroUsuario.Registra "clsTerralib", "MoveNetWorkNode", CStr(Err.Number), CStr(Err.Description) + " objIdTrecho: " + objIdTrecho + " objIdRamal: " + objIdRamal, True, glo.enviaEmails
     End If
    
 End Function

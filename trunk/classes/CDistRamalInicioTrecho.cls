@@ -49,6 +49,6 @@ Trata_Erro:
    If Err.Number = 0 Or Err.Number = 20 Then
        Resume Next
    Else
-      ErroUsuario.Registra "CDistRamalInicioTrecho", "Distancia", CStr(Err.Number), CStr(Err.Description), True, glo.enviaEmails
+      ErroUsuario.Registra "CDistRamalInicioTrecho", "Distancia", CStr(Err.Number), CStr(Err.Description) + " objIdTrecho: " + objIdTrecho + " objIdRamal: " + objIdRamal, True, glo.enviaEmails
    End If
 End Function
