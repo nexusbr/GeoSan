@@ -1,5 +1,5 @@
 #define SetupBaseName   "SetupGeoSan-v."
-#define AppVersionFile  "08.02.02"
+#define AppVersionFile  "08.03.00"
 
 [Setup]
 AppName=GeoSan
@@ -14,7 +14,7 @@ VersionInfoVersion={#AppVersionFile}
 VersionInfoTextVersion=GeoSan {#AppVersionFile}
 AppCopyright=NEXUS GeoEngenharia
 
-DefaultDirName=C:\Arquivos de Programas\GeoSan
+DefaultDirName=C:\Program Files\GeoSan
 DefaultGroupName=GeoSan
 UninstallDisplayIcon={app}\GeoSan.exe
 AppMutex=GeoSan
@@ -127,57 +127,57 @@ Source: "ArquivosInstGeoSan\vcredist_x86.exe"; DestDir: {tmp}; Flags: deleteafte
 ; CopyMode: alwaysoverwrite para sobrescrever tudo
 
 ;ARQUIVOS TERRALIB 4.2.0 - *******************************************************************************************************************
-Source: "ArquivosInstGeoSan\TeCom4.2.0\fbclient.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\gdal110.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\geotiff.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\iconv.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\intl.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libeay32.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libexpat.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libiconv-2.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libintl-2.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libmysql.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libpq.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libtiff.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\msadox.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcr71.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\oci.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\oledb32.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\oraociicus10.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\qt-mt338.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\qwt500.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\ssleay32.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib_ado.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib_shp.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib_spl.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\fbclient.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\gdal110.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\geotiff.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\iconv.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\intl.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libeay32.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libexpat.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libiconv-2.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libintl-2.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libmysql.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libpq.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libtiff.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\msadox.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcr71.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\oci.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\oledb32.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\oraociicus10.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\qt-mt338.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\qwt500.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\ssleay32.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib_ado.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib_shp.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\terralib_spl.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
 ; dos antigos
-Source: "ArquivosInstGeoSan\TeCom4.2.0\ijl15.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libiconv2.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\libxml2.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\msjava.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcp80.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcp80d.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcr80.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\shapelib.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\SIBPRO2.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\tiff.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\zlib.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
-Source: "ArquivosInstGeoSan\TeCom4.2.0\zlib1.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\ijl15.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libiconv2.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\libxml2.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\msjava.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcp80.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcp80d.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\msvcr80.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\shapelib.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\SIBPRO2.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\tiff.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\zlib.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
+Source: "ArquivosInstGeoSan\TeCom4.2.0\zlib1.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;
 
 ; dos antigos
-;Source: "ArquivosInstGeoSan\TeCom4.2.0\TECOMP~1.oca";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;  Flags: regserver noregerror
+;Source: "ArquivosInstGeoSan\TeCom4.2.0\TECOMP~1.oca";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite;  Flags: regserver noregerror
 
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComCanvas.dll";       DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComConnection.dll";   DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComDatabase.dll";     DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComExport.dll";       DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComGeometry.dll";     DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComImport.dll";       DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComNetwork.dll";      DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComPrinter.dll";      DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComViewDatabase.dll"; DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
-Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComViewManager.dll";  DestDir: "C:\Arquivos de Programas\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComCanvas.dll";       DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComConnection.dll";   DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComDatabase.dll";     DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComExport.dll";       DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComGeometry.dll";     DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComImport.dll";       DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComNetwork.dll";      DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComPrinter.dll";      DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComViewDatabase.dll"; DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
+Source: "ArquivosInstGeoSan\TeCom4.2.0\TeComViewManager.dll";  DestDir: "C:\Program Files\NEXUS\TeCom4.2.0"; CopyMode: alwaysoverwrite; Flags: regserver noregerror
 
 ;ARQUIVOS NEXUS - *************************************************************************************************************************
 Source: "ArquivosInstGeoSan\GeoSan.exe";          DestDir: "{app}";             CopyMode: alwaysoverwrite;
