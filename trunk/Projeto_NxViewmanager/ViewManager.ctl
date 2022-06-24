@@ -303,7 +303,7 @@ Private Sub LoadTheme()
     Dim i As String
     Dim j As String
 
-    Call SaveLoadGlobalData("C:\Arquivos de programas\GeoSan" + "\controles\variaveisGlobais.txt", False) 'Carrega as variáveis globais do GeoSan.exe
+    Call SaveLoadGlobalData("C:\Program Files\GeoSan" + "\controles\variaveisGlobais.txt", False) 'Carrega as variáveis globais do GeoSan.exe
     aa = "te_theme"
     b = "te_view"
     c = "theme_id"

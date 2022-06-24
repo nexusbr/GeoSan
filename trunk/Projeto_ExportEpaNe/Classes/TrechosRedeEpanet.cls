@@ -19,7 +19,7 @@ Private conBd As ADODB.Connection
 Private trechos As New TrechosRedeEpanet
 Private usuario_global As String
 Private conn_global As ADODB.Connection
-Private az As Integer
+Private leuDadosConexaoComBancoDeDados As Boolean       'Para saber se já leu as informações de como se conectar ao banco de dados e não ler novamente
 Private rsWaterCompTypes As New ADODB.Recordset         'RecordSet de referencia para consulta do tipo de componente
 Private blnRsWaterCompTypes As Boolean                  'Indicador para informar se a tabela RsWaterCompTypes foi carregada com registros
 Private strTipoComp As String                           'Variável que receberá o tipo de componente (Junction, valve,pump...)
@@ -80,6 +80,7 @@ End Function
 '
 '
 Function ExportaParaEpanet()
+    On Error GoTo Trata_Erro
     Dim no As String                                                    'Vaviavel que guadará o nó a ser processado
     Dim contadorTrechos As Integer                                      'para contar quantos trechos está exportando
     Dim mPROVEDOR As String
@@ -104,13 +105,15 @@ Function ExportaParaEpanet()
     Dim verticeInicial_x As Double, verticeInicial_y As Double, vertice_Y As Double, vertice_X As Double
     Dim idLinha As String
     Dim idNo As String
-    
+    Dim mensagemDeErro As String                                        'para informar o motivo de ter encontrado o erro
+
+    mensagemDeErro = ""
     Open "C:\Program Files\GeoSan\Controles\testeExportacaoEpanet.txt" For Append As #20
-    Print #20, "Início"
+    Print #20, "Início =========================================================="
     Close #20
     
     contadorTrechos = 0                                                                                 'Informa que o contador de trechos exportados é zero
-    If (az <> 10) Then
+    If (leuDadosConexaoComBancoDeDados = False) Then
         mSERVIDOR = ReadINI("CONEXAO", "SERVIDOR", App.Path & "\CONTROLES\GEOSAN.ini")
         mPORTA = ReadINI("CONEXAO", "PORTA", App.Path & "\CONTROLES\GEOSAN.ini")
         mBANCO = ReadINI("CONEXAO", "BANCO", App.Path & "\CONTROLES\GEOSAN.ini")
@@ -118,7 +121,10 @@ Function ExportaParaEpanet()
         Senha = ReadINI("CONEXAO", "SENHA", App.Path & "\CONTROLES\GEOSAN.ini")
         prov = ReadINI("CONEXAO", "PROVEDOR", App.Path & "\CONTROLES\GEOSAN.ini")
         decriptada = FunDecripta(Senha)
-        az = 10
+        leuDadosConexaoComBancoDeDados = true      
+        Open "C:\Program Files\GeoSan\Controles\testeExportacaoEpanet.txt" For Append As #20                                                     'Já leu, não precisa ler mais
+        Print #20, "Servidor: " + mSERVIDOR + " Porta: " + mPORTA + " Provedor: " + prov + " Banco: " + mBANCO + " Usuário: " + mUSUARIO + " Senha: " + decriptada
+        Close #20
     End If
     tb.Provider = Provider                                                                              'Configura o objeto tb(Tecomdatabase) que será usado para retornar para as variáveis lin_len, x e y seus valores para cada trecho
     tb.Connection = conn
@@ -207,6 +213,19 @@ Function ExportaParaEpanet()
         End If
         banco.Rs_trechosDeRede_moveParaProximo
     Loop
+    Exit Function
+
+Trata_Erro:
+    If Err.Number = 0 Or Err.Number = 20 Then
+        Resume Next
+    Else
+        Close #2
+        Open App.Path & "\LogErroExportEPANET.txt" For Append As #2
+        Print #2, Now & "-(TrechosRedeEpanet-ExportaParaEpanet)-" & Err.Number & "-" & Err.Description
+        Close #2
+        MsgBox "Um posssível erro foi identificado na rotina '(TrechosRedeEpanet-ExportaParaEpanet)':" & Chr(13) & Chr(13) & Err.Description & Chr(13) & Chr(13) & "Foi gerado na pasta do aplicativo o arquivo LogErroExportEPANET.txt com informações desta ocorrencia.", vbInformation
+        Exit Function
+    End If
 End Function
 
 'Converte um ponto (nó) em trecho.

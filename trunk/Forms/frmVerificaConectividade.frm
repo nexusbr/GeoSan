@@ -189,7 +189,7 @@ Private Sub Form_Load()
    TeDatabase1.Connection = Conn 'usa a variável global para identificar a conexão
    TeDatabase1.setCurrentLayer ("WATERLINES")
     
-    Text1.Text = "C:\Arquivos de Programas\Geosan\Controles\DiagosticoRede" & Format(Now, "HHMM") & ".txt"
+    Text1.Text = "C:\Program Files\Geosan\Controles\DiagosticoRede" & Format(Now, "HHMM") & ".txt"
 End Sub
 
 Private Sub cmdInciar_Click()

@@ -88,7 +88,7 @@ Public Function leConfiguracoesEmail()
     Dim configuracoes As CArquivoIni
     
     Set configuracoes = New CArquivoIni
-    configuracoes.dirGeoSanIni = "C:\Arquivos de programas\GeoSan\Controles"
+    configuracoes.dirGeoSanIni = "C:\Program Files\GeoSan\Controles"
     emailDestinatario = configuracoes.ReadINI("EMAIL", "EMAILDESTINATARIO")
     emailRemetente = configuracoes.ReadINI("EMAIL", "EMAILREMETENTE")
     enderecoSMTP = configuracoes.ReadINI("EMAIL", "ENDERECOSMTP")

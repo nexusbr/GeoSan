@@ -1,8 +1,8 @@
 Type=OleDll
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
-Reference=*\G{1BCD446E-7095-11D0-9C4E-00AA00BDD685}#1.0#0#..\..\..\..\..\Arquivos de programas\Microsoft Visual Studio\Common\Tools\APE\REGTOOL5.DLL#Registry Access Functions
-Reference=*\G{00000206-0000-0010-8000-00AA006D2EA4}#2.6#0#..\..\..\..\..\Arquivos de programas\Arquivos comuns\system\ado\msado26.tlb#Microsoft ActiveX Data Objects 2.6 Library
-Reference=*\G{4A40A2AA-DD1C-11CE-B7A6-00AA006EC3D4}#2.0#0#..\..\..\..\..\Arquivos de programas\Microsoft Visual Studio\Common\Tools\APE\ODBCTOOL.DLL#ODBC Driver & Data Source Name Functions
+Reference=*\G{1BCD446E-7095-11D0-9C4E-00AA00BDD685}#1.0#0#..\..\..\..\..\Program Files\Microsoft Visual Studio\Common\Tools\APE\REGTOOL5.DLL#Registry Access Functions
+Reference=*\G{00000206-0000-0010-8000-00AA006D2EA4}#2.6#0#..\..\..\..\..\Program Files\Arquivos comuns\system\ado\msado26.tlb#Microsoft ActiveX Data Objects 2.6 Library
+Reference=*\G{4A40A2AA-DD1C-11CE-B7A6-00AA006EC3D4}#2.0#0#..\..\..\..\..\Program Files\Microsoft Visual Studio\Common\Tools\APE\ODBCTOOL.DLL#ODBC Driver & Data Source Name Functions
 Object={F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0; COMDLG32.OCX
 Class=App; Classes\App.cls
 Form=Forms\FrmConnection.frm

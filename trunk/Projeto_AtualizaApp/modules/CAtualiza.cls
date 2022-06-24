@@ -22,7 +22,7 @@ Private Function LeConfiguracoes()
     
     Set conf = New CArquivoIni                                                              'leitura e escrita no arquivo GeoSan.ini
     Set carrega = New CDownload
-    conf.dirGeoSanIni = "C:\Arquivos de programas\GeoSan\Controles"
+    conf.dirGeoSanIni = "C:\Program Files\GeoSan\Controles"
     carrega.atualizacaoWeb = conf.ReadINI("ATUALIZACAO", "WEB")                             'se a atualização será realizada pela web ou não
     carrega.diretorioServidor = conf.ReadINI("ATUALIZACAO", "DIRETORIO")                    '\download\GeoSan
     carrega.portaWww = conf.ReadINI("ATUALIZACAO", "PORTAWWW")                              'porta do servidor na web em que estão os arquivos

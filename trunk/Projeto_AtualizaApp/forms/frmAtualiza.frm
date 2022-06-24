@@ -74,7 +74,7 @@ Attribute VB_Exposed = False
 '
 Private Sub fecha_Click()
     On Error GoTo Trata_Erro
-    Shell ("C:\Arquivos de programas\GeoSan\GeoSan.exe")
+    Shell ("C:\Program Files\GeoSan\GeoSan.exe")
     End
     
 Trata_Erro:

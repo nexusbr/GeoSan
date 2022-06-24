@@ -524,7 +524,9 @@ Public Function RsWaterCompTypes_ExitemParametros() As Boolean
     If rsWaterCompTypes.EOF = False Then
         RsWaterCompTypes_ExitemParametros = True
     Else
-        MsgBox "Não será possivel identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia.", vbExclamation, ""
+        Open "C:\Program Files\GeoSan\Controles\testeExportacaoEpanet.txt" For Append As #20
+        Print #20, "Não será possível identificar e exportar bombas e válvulas pois a tabela WATERCOMPONENTSTYPES está vazia."
+        Close #20
         RsWaterCompTypes_ExitemParametros = False
     End If
 End Function

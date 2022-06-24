@@ -945,7 +945,7 @@ Public Function Init(mtvm As Object, mtheme As String, mLayerName As String) As 
     Dim vetor As Variant
     Dim str As String
     'LoozeXP1.InitSubClassing
-    Call SaveLoadGlobalData("C:\Arquivos de programas\GeoSan" + "\controles\variaveisGlobais.txt", False) 'recupera as variáveis globais da aplicação principal do GeoSan
+    Call SaveLoadGlobalData("C:\Program Files\GeoSan" + "\controles\variaveisGlobais.txt", False) 'recupera as variáveis globais da aplicação principal do GeoSan
     Confirm = False
     Set tvm = mtvm
     LoadCboLine cboLineStyle

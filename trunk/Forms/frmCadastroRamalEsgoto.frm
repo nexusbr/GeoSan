@@ -526,7 +526,7 @@ Attribute VB_Exposed = False
 '        retval = Dir(App.path & "\Controles\FRamais.txt")
 '        If retval <> "" Then 'verifica se o arquivo existe na pasta
 '            Open App.path & "\Controles\FRamais.txt" For Input As #3
-'            'Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\Controles\FRamais.txt" For Input As #3
+'            'Open "C:\Program Files\GEOSAN\Controles\FRamais.txt" For Input As #3
 '            'Do While Not EOF(3) = True
 '            Do While Not EOF(3)
 '                 Line Input #3, str

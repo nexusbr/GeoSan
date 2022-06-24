@@ -599,7 +599,7 @@ On Error GoTo Trata_Erro
         retval = Dir(App.Path & "\Controles\FRamais.txt")
         If retval <> "" Then 'verifica se o arquivo existe na pasta
             Open App.Path & "\Controles\FRamais.txt" For Input As #3
-            'Open "C:\ARQUIVOS DE PROGRAMAS\GEOSAN\Controles\FRamais.txt" For Input As #3
+            'Open "C:\Program Files\GEOSAN\Controles\FRamais.txt" For Input As #3
             'Do While Not EOF(3) = True
             Do While Not EOF(3)
                  Line Input #3, str
