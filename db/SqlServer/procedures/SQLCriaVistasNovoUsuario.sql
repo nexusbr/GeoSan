@@ -1,10 +1,14 @@
 USE [geosan]
 GO
-/****** Object:  StoredProcedure [dbo].[SQLCriaVistasNovoUsuario]    Script Date: 20/07/2022 12:16:54 ******/
+
+/****** Object:  StoredProcedure [dbo].[SQLCriaVistasNovoUsuario]    Script Date: 09/26/2022 13:11:41 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
+
 
 -- =================================================================
 -- Author:		<José  Maria Villac Pinheiro>
@@ -14,7 +18,7 @@ GO
 -- nomeNovoUsuarioUSRNom - nome do usuário para onde serão copiadas as vistas
 -- permissaoDoUsuario - 1 - Administrador, 2 - Usuário, 3 - Visitante, 4 - Visualizador
 -- =================================================================
-ALTER PROCEDURE [dbo].[SQLCriaVistasNovoUsuario] @nomeUsuarioAtualUSRNom nvarchar(50) = NULL, @nomeNovoUsuarioUSRNom nvarchar(50) = NULL, @permissaoDoUsuario int = NULL
+CREATE PROCEDURE [dbo].[SQLCriaVistasNovoUsuario] @nomeUsuarioAtualUSRNom nvarchar(50) = NULL, @nomeNovoUsuarioUSRNom nvarchar(50) = NULL, @permissaoDoUsuario int = NULL
 AS
 BEGIN
 	DECLARE
@@ -83,7 +87,7 @@ BEGIN
 
 	BEGIN
 		INSERT INTO dbo.SystemUsers (USRLog, USRNom, USRFun, USRDep, USRPwd, USRExp, USRBrk, USRDATA)
-			SELECT @nomeNovoUsuarioUSRNom, @nomeNovoUsuarioUSRNom, @permissaoDoUsuario, 1, @nomeNovoUsuarioUSRNom, 0, 0, CONCAT(Right('0'+Convert(varchar(10), day(GETDATE())),2), Right('0'+Convert(varchar(10), month(GETDATE())),2),Right('0'+Convert(varchar(10), year(GETDATE())),4))
+			SELECT @nomeNovoUsuarioUSRNom, @nomeNovoUsuarioUSRNom, @permissaoDoUsuario, 1, @nomeNovoUsuarioUSRNom, 0, 0, Right('0'+Convert(varchar(10), day(GETDATE())),2) + Right('0'+Convert(varchar(10), month(GETDATE())),2) + Right('0'+Convert(varchar(10), year(GETDATE())),4)
 	END
 
 	DECLARE cursorVistasDoUsuario CURSOR FOR
@@ -156,3 +160,5 @@ BEGIN
 	CLOSE cursorVistasDoUsuario
 	DEALLOCATE cursorVistasDoUsuario
 END
+
+GO
