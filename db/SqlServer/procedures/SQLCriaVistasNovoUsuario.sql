@@ -83,7 +83,7 @@ BEGIN
 
 	BEGIN
 		INSERT INTO dbo.SystemUsers (USRLog, USRNom, USRFun, USRDep, USRPwd, USRExp, USRBrk, USRDATA)
-			SELECT @nomeNovoUsuarioUSRNom, @nomeNovoUsuarioUSRNom, @permissaoDoUsuario, 1, @nomeNovoUsuarioUSRNom, 0, 0, CONCAT(Right('0'+Convert(varchar(10), day(GETDATE())),2), Right('0'+Convert(varchar(10), month(GETDATE())),2),Right('0'+Convert(varchar(10), year(GETDATE())),4))
+			SELECT @nomeNovoUsuarioUSRNom, @nomeNovoUsuarioUSRNom, @permissaoDoUsuario, 1, @nomeNovoUsuarioUSRNom, 0, 0, COALESCE(Right('0'+Convert(varchar(10), day(GETDATE())),2),'') + COALESCE(Right('0'+Convert(varchar(10), month(GETDATE())),2),'') + COALESCE(Right('0'+Convert(varchar(10), year(GETDATE())),4),'')
 	END
 
 	DECLARE cursorVistasDoUsuario CURSOR FOR
